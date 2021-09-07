@@ -19,12 +19,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 		<!-- Navbar -->
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
-				<!-- Left navbar links -->
-				<ul class="navbar-nav">
-						<li class="nav-item">
-								<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-						</li>
-				</ul>
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
 
 
 		</nav>
@@ -70,10 +70,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 						<li class="nav-item">
                             <router-link to="dashboard" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                        Dashboard
-                                </p>
+                                <i class="nav-icon fas fa-tachometer-alt blue"></i>
+                                <p>Dashboard</p>
                             </router-link>
 						</li>
 
@@ -89,16 +87,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<a href="#" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Active Page</p>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="#" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Inactive Page</p>
-								</a>
+								<router-link to="/users" class="nav-link">
+									<i class="fas fa-users nav-icon"></i>
+									<p>Users</p>
+								</router-link>
 							</li>
 						</ul>
 					</li>
@@ -106,20 +98,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <li class="nav-item">
                             <router-link to="/profile" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
-                            <p>
-                                Profile
-                            </p>
+                            <p>Profile</p>
                         </router-link>
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-power-off"></i>
-                            <p>
-                                Logout
-                            </p>
+                        <a class="nav-link" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                            <i class="nav-icon fas fa-power-off red"></i>
+                            <p>{{ __('Logout') }}</p>
                         </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
+
+
+                    
+
                 </ul>
 			</nav>
 			<!-- /.sidebar-menu -->
@@ -135,6 +133,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<div class="content">
 			<div class="container-fluid">
                 <router-view></router-view>
+                
+                <!-- set progressbar -->
+                <vue-progress-bar></vue-progress-bar>
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content -->
