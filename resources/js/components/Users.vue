@@ -7,10 +7,11 @@
 					<h3 class="card-title">Users</h3>
 
 					<div class="card-tools">
-						<button class="btn btn-success" @click="newModal">
+						<button v-if="$can('user-create')" class="btn btn-success" @click="showCreateUserModal">
 							Add New <i class="fas fa-user-plus fa-fw"></i>
 						</button>
 					</div>
+					
 				</div>
 				<!-- /.card-header -->
 				<div class="card-body table-responsive p-0">
@@ -33,11 +34,11 @@
 									<td>{{ user.type | upText}}</td>
 									<td>{{ user.created_at | myDate }}</td>
 									<td>
-										<a href="#">
+										<a v-if="$can('user-edit')" href="#" @click="showEditUserModal(user)">
 											<i class="fa fa-edit blue"></i>
 										</a>
-										/
-										<a href="#" @click="deleteUser(user.id)">
+										
+										<a v-if="$can('user-delete')" href="#" @click="deleteUser(user.id)">
 											<i class="fa fa-trash red"></i>
 										</a>
 									</td>
@@ -52,16 +53,17 @@
 		</div>
 
 		<!-- Modal -->
-		<div class="modal fade" id="addNew" tabindex="-1" aria-labelledby="addNewLabel" aria-hidden="true">
+		<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="addNewLabel">Add New User</h5>
+						<h5 v-show="!editMode" class="modal-title" id="userModalLabel">Create New User</h5>
+						<h5 v-show="editMode" class="modal-title" id="userModalLabel">Edit User</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<form @submit.prevent="createUser">
+					<form @submit.prevent="editMode ? updateUser() : createUser()">
 						<div class="modal-body">
 							<div class="form-group">
 								<label for="name" class="form-label">Name</label>
@@ -100,7 +102,8 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-success">Create</button>
+							<button v-show="!editMode" type="submit" class="btn btn-success">Create</button>
+							<button v-show="editMode" type="submit" class="btn btn-primary">Update</button>
 						</div>
 					</form>
 				</div>
@@ -114,8 +117,10 @@ import Form from 'vform'
 export default {
 	data() {
 		return {
+			editMode: false,
 			users: {},
 			form: new Form({
+				id: '',
 				name: '',
 				email: '',
 				password: '',
@@ -126,28 +131,27 @@ export default {
 		}
 	},
 	methods: {
-		newModal(){
-			this.form.reset()
-			$('#addNew').modal('show')
-		},
-		editModal(user){
-			this.form.reset()
-			$('#addNew').modal('show')
-		},
 		loadUsers(){
+			console.log("dfgdfg");
+			
 			this.$Progress.start();
 			axios.get("api/user").then(({data}) => (this.users = data.data));
 			this.$Progress.finish();
 		},
 
+		showCreateUserModal(){
+			this.editMode = false;
+			this.form.reset()
+			$('#userModal').modal('show')
+		},
 		createUser() {
 			this.$Progress.start();
 			this.form.post('api/user')
 			.then(() => {
-				// we can listen to this event from anywhere
+				// success
 				Fire.$emit('usersChanged');
 
-				$('#addNew').modal('hide')
+				$('#userModal').modal('hide')
 				Toast.fire({
 					icon: 'success',
 					title: 'Added successfully'
@@ -156,9 +160,37 @@ export default {
 				this.$Progress.finish();
 			})
 			.catch(() => {
-
+				// error
+				this.$Progress.fail();
 			})
 		},
+
+		showEditUserModal(user){
+			this.editMode = true;
+			this.form.reset()
+			$('#userModal').modal('show')
+			this.form.fill(user)
+		},
+		updateUser(){
+			this.$Progress.start();
+			this.form.put('api/user/'+this.form.id)
+			.then(() => {
+				// success
+				Fire.$emit('usersChanged');
+				$('#userModal').modal('hide')
+				Swal.fire(
+					'Updated!',
+					'It has been updated.',
+					'success'
+				)
+				this.$Progress.finish();
+			})
+			.catch(() => {
+				// error
+				this.$Progress.fail();
+			})
+		},
+
 		deleteUser(id){
 			Swal.fire({
 				title: 'Are you sure?',
@@ -174,15 +206,17 @@ export default {
 					this.$Progress.start();
 					this.form.delete('api/user/'+id)
 					.then(() => {
+						// success
 						Fire.$emit('usersChanged');
 						Swal.fire(
 							'Deleted!',
-							'Your file has been deleted.',
+							'It has been deleted.',
 							'success'
 						)
 						this.$Progress.finish();
 					})
 					.catch(() => {
+						// error
 						Swal("Failed!", "There was something wrong.", "warning");
 					});
 				}
@@ -191,11 +225,16 @@ export default {
 	},
 
 	created() {
+		// console.log($getPermissions());
+		
+
 		this.loadUsers();
 		
 		Fire.$on('usersChanged', () => {
 			this.loadUsers();
 		});
+
+		
 	}
 }
 </script>

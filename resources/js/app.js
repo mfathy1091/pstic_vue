@@ -5,6 +5,9 @@ import moment from 'moment';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+import Permissions from './mixins/Permissions';
+Vue.mixin(Permissions);
+
 import VueProgressBar from 'vue-progressbar'
 const options = {
     color: '#bffaf3',
