@@ -31,7 +31,7 @@ class FileController extends Controller
             return ['data' => $file ];
         }
 
-        return ['data' => ''];
+        return ['data' => false];
     }
 
     public function getIndividuals($id)
@@ -40,10 +40,24 @@ class FileController extends Controller
 
         // if it exists
         if($file){
-            return ['data' => $file->individuals];
+            return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()];
         }
 
         return ['data' => ''];
+
+
+
+
+        // $file_number = $request->keyword;
+
+        // $individuals = Individual::query();
+
+        // $data = $individuals->with('file')->whereHas('file', function($q) use ($file_number){
+        //     return $q->where('number', '=', "%$file_number%");
+        // })->get();
+
+
+        // return response()->json($data); 
     }
     
 

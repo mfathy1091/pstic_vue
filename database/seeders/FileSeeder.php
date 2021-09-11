@@ -121,7 +121,7 @@ class FileSeeder extends Seeder
             [
                 'passport_number' => '958390473',
                 'file_id' => '2',
-                'individual_id' => '555-00112683',
+                'individual_id' => '555-00118684',
                 'name' => 'Mariam Hussien YASIN',
                 'age' => '4',
                 'gender_id' => '2',
