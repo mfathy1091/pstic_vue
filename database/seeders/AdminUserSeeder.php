@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
@@ -18,12 +16,12 @@ class AdminUserSeeder extends Seeder
             'password' => Hash::make('pstic12345'),
         ]);
     
-        $role = Role::create(['name' => 'Admin']);
+        // $role = Role::create(['name' => 'Admin']);
     
-        $permissions = Permission::pluck('id','id')->all();
+        // $permissions = Permission::pluck('id','id')->all();
     
-        $role->syncPermissions($permissions);
+        // $role->syncPermissions($permissions);
     
-        $user->assignRole([$role->id]);
+        // $user->assignRole([$role->id]);
     }
 }

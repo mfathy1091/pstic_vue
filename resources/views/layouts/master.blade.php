@@ -12,9 +12,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- CSRF Token -->
 			<meta name="csrf-token" content="{{ csrf_token() }}">
 			
-			<link rel="stylesheet" href="/css/app.css">
+			<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 	</head>
 	<body class="hold-transition sidebar-mini">
+
 	<div class="wrapper" id="app">
 
 			<!-- Navbar -->
@@ -70,7 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 							<li class="nav-item">
 								<router-link to="dashboard" class="nav-link">
-									<i class="nav-icon fas fa-tachometer-alt blue"></i>
+									<i class="nav-icon fas fa-tachometer-alt"></i>
 									<p>Dashboard</p>
 								</router-link>
 							</li>
@@ -87,24 +88,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</a>
 							
 							<ul class="nav nav-treeview">
-								@can('user-list')
+								{{-- @can('user-list') --}}
 								<li class="nav-item">
 									<router-link to="/users" class="nav-link">
 										<i class="fas fa-users nav-icon"></i>
 										<p>Users</p>
 									</router-link>
 								</li>
-								@endcan
+								{{-- @endcan --}}
 							</ul>
 							<ul class="nav nav-treeview">
-								@can('user-list')
 								<li class="nav-item">
 									<router-link to="/roles" class="nav-link">
-										<i class="fas fa-user-shield nav-icon"></i>
+										<i class="fas fa-shield-alt nav-icon"></i>
 										<p>Roles</p>
 									</router-link>
 								</li>
-								@endcan
+							</ul>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<router-link to="/nationalities" class="nav-link">
+										<i class="fas fa-minus nav-icon"></i>
+										<p>nationality</p>
+									</router-link>
+								</li>
+							</ul>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<router-link to="/referral-sources" class="nav-link">
+										<i class="fas fa-minus nav-icon"></i>
+										<p>Referral Sources</p>
+									</router-link>
+								</li>
+							</ul>
+						</li>
+
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="nav-icon fas fa-th"></i>
+								<p>
+									PSS<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<router-link to="/add-referral" class="nav-link">
+										<i class="fas fa-minus nav-icon"></i>
+										<p>Add Referral</p>
+									</router-link>
+								</li>
 							</ul>
 						</li>
 
@@ -176,7 +209,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		@endauth
 	</script>
 
-	<script src="/js/app.js"></script>
+	<script src="{{ asset('js/app.js') }}" defer></script>
 
 
 

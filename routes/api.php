@@ -19,6 +19,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:api')->group( function () {
+    Route::apiResources(['user'=> 'API\UserController']);
+    Route::apiResources(['role'=> 'API\RoleController']);
+    Route::apiResources(['permission'=> 'API\PermissionController']);
+    Route::apiResources(['nationalities'=> 'API\NationalityController']);
+    Route::apiResources(['relationships'=> 'API\RelationshipController']);
+    Route::apiResources(['referral-sources'=> 'API\ReferralSourceController']);
+    
+    // files
+    Route::get('files/exists/{n}', 'API\FileController@exists');
+    Route::get('files/get/{n}', 'API\FileController@get');
+    Route::get('files/{id}/individuals', 'API\FileController@getIndividuals');
 
-Route::apiResources(['user'=> 'API\UserController']);
-Route::apiResources(['role'=> 'API\UserController']);
+    // individuals
+    Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
+
+
+    
+    Route::get('abilities', 'AbilityController@index');
+    Route::get('ability/{id}', 'AbilityController@show');
+    Route::post('ability', 'AbilityController@store');
+    Route::put('ability', 'AbilityController@update');
+    Route::delete('ability/{id}', 'AbilityController@destroy');
+});
+
+
+
+
+

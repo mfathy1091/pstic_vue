@@ -1,3 +1,11 @@
+<style scoped>
+.badge{
+	font-size: 0.9rem;
+	margin-left: 2px;
+	
+}
+</style>
+
 <template>
 	<div class="container-fluid">
 		<div class="row mt-5">
@@ -7,7 +15,7 @@
 					<h3 class="card-title">Users</h3>
 
 					<div class="card-tools">
-						<button v-if="$can('user-create')" class="btn btn-success" @click="showCreateUserModal">
+						<button class="btn btn-success" @click="showCreateUserModal">
 							Add New <i class="fas fa-user-plus fa-fw"></i>
 						</button>
 					</div>
@@ -23,6 +31,7 @@
 								<th>Email</th>
 								<th>Type</th>
 								<th>Registered At</th>
+								<th>Roles</th>
 								<th>Modify</th>
 							</tr>
 						</thead>
@@ -34,11 +43,14 @@
 									<td>{{ user.type | upText}}</td>
 									<td>{{ user.created_at | myDate }}</td>
 									<td>
-										<a v-if="$can('user-edit')" href="#" @click="showEditUserModal(user)">
+										<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
+									</td>
+									<td>
+										<a href="#" @click="showEditUserModal(user)">
 											<i class="fa fa-edit blue"></i>
 										</a>
 										
-										<a v-if="$can('user-delete')" href="#" @click="deleteUser(user.id)">
+										<a href="#" @click="deleteUser(user.id)">
 											<i class="fa fa-trash red"></i>
 										</a>
 									</td>
@@ -84,8 +96,9 @@
 							</div>
 
 							<div class="form-group">
+								<label for="type" class="form-label">Type</label>
 								<select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-									<option value="">Select User Role</option>
+									<option value="">Select User Type</option>
 									<option value="admin">Admin</option>
 									<option value="user">Standard User</option>
 									<option value="author">Author</option>
@@ -94,6 +107,7 @@
 							</div>
 
 							<div class="form-group">
+								<label for="password" class="form-label">Password</label>
 								<input v-model="form.password" type="password" name="password" id="password"
 								class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
 								<has-error :form="form" field="password"></has-error>
@@ -131,9 +145,7 @@ export default {
 		}
 	},
 	methods: {
-		loadUsers(){
-			console.log("dfgdfg");
-			
+		loadUsers(){			
 			this.$Progress.start();
 			axios.get("api/user").then(({data}) => (this.users = data.data));
 			this.$Progress.finish();

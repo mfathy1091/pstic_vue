@@ -13,8 +13,48 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PermissionSeeder::class);
         $this->call(AdminUserSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(PermissionSeeder::class);
+
+
+        // $this->call(ReasonSeeder::class);
+        // $this->call(ServiceSeeder::class);
+        // $this->call(StatusSeeder::class);
+
+        // $this->call(RoleTableSeeder::class);
+
+        $this->call(NationalitySeeder::class);
+        // $this->call(GenderSeeder::class);
+
+        // $this->call(CitySeeder::class);
+        // $this->call(AreaSeeder::class);
+        // $this->call(DepartmentSeeder::class);
+        // $this->call(TeamSeeder::class);
+
+        // $this->call(JobTitleSeeder::class);
+        // $this->call(BudgetSeeder::class);
+        // $this->call(AdminUserSeeder::class);
+        // $this->call(UserSeeder::class);
+
+        $this->call(FileSeeder::class);
+        $this->call(ReferralSourceSeeder::class);
+        // $this->call(VulnerabilitySeeder::class);
+        // $this->call(EmergencyTypeSeeder::class);
+        
+        //$this->call(PssCaseSeeder::class);
+        //$this->call(ReferralSeeder::class);
+
+
+
+
+        $this->call(MonthSeeder::class);
+        //$this->call(RecordSeeder::class);
+        //$this->call(BeneficiarySeeder::class);
+
+        // $this->call(CaseTypeSeeder::class);
+        // $this->call(VulnerabilitySeeder::class);
+        //$this->call(FollowUpSeeder::class);
+        //$this->call(BenefitSeeder::class);
     }
 }
