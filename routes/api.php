@@ -33,6 +33,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('files/{id}/individuals', 'API\FileController@getIndividuals');
 
     // individuals
+    Route::apiResources(['individuals'=> 'API\IndividualController']);
     Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
 
 
