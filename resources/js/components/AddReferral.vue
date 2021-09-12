@@ -13,12 +13,12 @@
 			<form @submit.prevent="getFile">
 				<hr>
 				<div class="form-group">
-					<label for="searchInput" class="form-label">Enter the File Number</label>
-					<input id="searchInput" v-model="fileForm.searchInput" type="text" name="searchInput" class="form-control">
-					<HasError :form="fileForm" field="searchInput" />
+					<label for="file_number" class="form-label">Enter the File Number</label>
+					<input id="file_number" v-model="fileForm.file_number" type="text" name="file_number" class="form-control">
+					<HasError :form="fileForm" field="file_number" />
 				</div>
 
-				<button  type="submit" class="btn btn-primary">Check</button>
+				<button  type="submit" class="btn btn-primary">Add File</button>
 			</form>
 
 			<div v-if="showRegisterByFileNumberSection">
@@ -101,18 +101,18 @@
 				<br>
 				<br>
 
-				<!-- Modal -->
+				<!-- Registered Individual Modal -->
 				<div class="modal fade" id="individualModal" tabindex="-1" aria-labelledby="individualModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 v-show="!editMode" class="modal-title" id="individualModalLabel">Create New User</h5>
-								<h5 v-show="editMode" class="modal-title" id="individualModalLabel">Edit User</h5>
+								<h5 v-show="!individualEditMode" class="modal-title" id="individualModalLabel">Create New Individual</h5>
+								<h5 v-show="individualEditMode" class="modal-title" id="individualModalLabel">Edit Individual</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<form @submit.prevent="editMode ? updateIndividual() : createIndividual()">
+							<form @submit.prevent="individualEditMode ? updateIndividual() : createIndividual()">
 								<div class="modal-body">
 
 									<div class="form-group">
@@ -179,8 +179,40 @@
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-									<button v-show="!editMode" type="submit" class="btn btn-success">Create</button>
-									<button v-show="editMode" type="submit" class="btn btn-primary">Update</button>
+									<button v-show="!individualEditMode" type="submit" class="btn btn-success">Create</button>
+									<button v-show="individualEditMode" type="submit" class="btn btn-primary">Update</button>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- File Modal -->
+				<div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 v-show="!fileEditMode" class="modal-title" id="fileModalLabel">Create New File</h5>
+								<h5 v-show="fileEditMode" class="modal-title" id="fileModalLabel">Edit File</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<form @submit.prevent="fileEditMode ? updateFile() : createFile()">
+								<div class="modal-body">
+									
+									<div class="form-group">
+										<label for="file_number" class="form-label">Enter the File Number</label>
+										<input id="file_number" v-model="fileForm.file_number" type="text" name="file_number" class="form-control">
+										<HasError :form="fileForm" field="file_number" />
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+									<button v-show="!fileEditMode" type="submit" class="btn btn-success">Create</button>
+									<button v-show="fileEditMode" type="submit" class="btn btn-primary">Update</button>
 								</div>
 
 							</form>
@@ -198,18 +230,21 @@ import Form from 'vform'
 export default {
     data(){
         return {
-			editMode: false,
+			individualEditMode: false,
+			fileEditMode: false,
 			nationalities: {},
             register_type: '1',
             showCheckFileNumberField: true,
 			showRegisterByFileNumberSection: false,
+			showAddFileNumberSection: false,
             file: '',
             fileIndividuals: [],
 			directIndividual_id: '0',
 			relationships: [],
             
             fileForm: new Form({
-				searchInput: '',
+				id: '',
+				file_number: '',
 			}),
 			individualForm : new Form({
 				id: '',
@@ -242,7 +277,7 @@ export default {
 		},
         getFile(){
 			this.$Progress.start();
-			axios.get('api/files/get/'+this.fileForm.searchInput)
+			axios.get('api/files/get/'+this.fileForm.file_number)
             .then(({data}) => {
 					this.file = data.data
 					Fire.$emit('fileChanged');
@@ -253,6 +288,7 @@ export default {
 					this.showRegisterByFileNumberSection = true	
 				}else{
 					this.showRegisterByFileNumberSection = false
+					this.showCreateIndividualModal()
 				}
             })
 		},
@@ -281,7 +317,7 @@ export default {
 		},
 
         showCreateIndividualModal(){
-			this.editMode = false;
+			this.individualEditMode = false;
 			this.individualForm.reset()
 			$('#individualModal').modal('show')
 		},
@@ -307,7 +343,7 @@ export default {
 		},
 
 		showEditIndividualModal(individual){
-			this.editMode = true;
+			this.individualEditMode = true;
 			this.individualForm.reset()
 			$('#individualModal').modal('show')
 			this.individualForm.fill(individual)
@@ -349,6 +385,92 @@ export default {
 					.then(() => {
 						// success
 						Fire.$emit('fileIndividualsChanged');
+						Swal.fire(
+							'Deleted!',
+							'It has been deleted.',
+							'success'
+						)
+						this.$Progress.finish();
+					})
+					.catch(() => {
+						// error
+						Swal("Failed!", "There was something wrong.", "warning");
+					});
+				}
+			})
+		},
+
+		// File Methods
+		showCreateFileModal(){
+			this.fileEditMode = false;
+			this.fileForm.reset()
+			$('#fileModal').modal('show')
+		},
+		showEditFileModal(file){
+			this.fileEditMode = true;
+			this.fileForm.reset()
+			$('#fileModal').modal('show')
+			this.fileForm.fill(file)
+		},
+		createFile() {
+			this.$Progress.start();
+			this.fileForm.post('api/files')
+			.then(() => {
+				// success
+				Fire.$emit('fileChanged');
+
+				$('#fileModal').modal('hide')
+				Toast.fire({
+					icon: 'success',
+					title: 'Added successfully'
+				})
+				
+				this.$Progress.finish();
+			})
+			.catch(() => {
+				// error
+				this.$Progress.fail();
+			})
+		},
+
+
+		updateFile(){
+			this.$Progress.start();
+			this.fileForm.put('api/files/'+this.fileForm.id)
+			.then(() => {
+				// success
+				Fire.$emit('fileChanged');
+				$('#fileModal').modal('hide')
+				Swal.fire(
+					'Updated!',
+					'It has been updated.',
+					'success'
+				)
+				this.$Progress.finish();
+			})
+			.catch(() => {
+				// error
+				this.$Progress.fail();
+			})
+		},
+
+		deleteFile(id){
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			})
+			.then((result) => {
+				if (result.isConfirmed) {
+					this.$Progress.start();
+					this.fileForm.delete('api/files/'+id)
+					.then(() => {
+						// success
+						Fire.$emit('fileChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
