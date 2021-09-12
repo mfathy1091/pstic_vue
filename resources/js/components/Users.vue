@@ -1,6 +1,6 @@
 <style scoped>
 .badge{
-	font-size: 0.9rem;
+	font-size: 0.7rem;
 	margin-left: 2px;
 	
 }
@@ -29,7 +29,6 @@
 								<th>ID</th>
 								<th>Name</th>
 								<th>Email</th>
-								<th>Type</th>
 								<th>Registered At</th>
 								<th>Roles</th>
 								<th>Modify</th>
@@ -40,7 +39,6 @@
 									<td>{{ user.id }}</td>
 									<td>{{ user.name }}</td>
 									<td>{{ user.email }}</td>
-									<td>{{ user.type | upText}}</td>
 									<td>{{ user.created_at | myDate }}</td>
 									<td>
 										<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>

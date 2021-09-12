@@ -94,7 +94,10 @@ export default {
 	methods: {
 		loadNationalities(){
 			this.$Progress.start();
-			axios.get("api/nationalities").then(({data}) => (this.nationalities = data.data));
+			axios.get("/api/nationalities")
+			.then(({data}) => {
+				this.nationalities = data.data
+			});
 			this.$Progress.finish();
 		},
 

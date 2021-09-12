@@ -90,158 +90,165 @@
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label for="directIndividual_id" class="form-label">Choose Direct</label>
-					<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
-						<option value='0' disabled>Choose...</option>
-						<option v-for='individual in fileIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
-					</select>
-				</div>
-				<button class="btn btn-primary">Next</button>
+				<!-- Choose Direct Section -->
+				<form @submit.prevent="goToIndividualPage">							
+					<div class="form-group">
+						<label for="directIndividual_id" class="form-label">Choose Direct</label>
+						<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
+							<option value='0' disabled>Choose...</option>
+							<option v-for='individual in fileIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
+						</select>
+					</div>
+					<br>
+					<button type="submit" class="btn btn-primary">Next</button>
+				</form>
+
 				<br>
 				<br>
-
-				<!-- Registered Individual Modal -->
-				<div class="modal fade" id="individualModal" tabindex="-1" aria-labelledby="individualModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 v-show="!individualEditMode" class="modal-title" id="individualModalLabel">Create New Individual</h5>
-								<h5 v-show="individualEditMode" class="modal-title" id="individualModalLabel">Edit Individual</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<form @submit.prevent="individualEditMode ? updateIndividual() : createIndividual()">
-								<div class="modal-body">
-
-									<div class="form-group">
-										<label for="relationship_id" class="form-label">Relationship to PA</label>
-										<select name="relationship_id" v-model="individualForm.relationship_id" id="relationship_id" class="form-control" :class="{ 'is-invalid': individualForm.errors.has('relationship_id') }">
-											<option value='0' disabled>Choose...</option>
-											<option v-for='relationship in relationships' :value='relationship.id' :key="relationship.id">{{ relationship.name }}</option>
-										</select>
-										<HasError :form="individualForm" field="relationship_id" />
-									</div>
-									
-									<div class="form-group">
-										<label for="individual_id" class="form-label">File Individual ID</label>
-										<input id="individual_id" v-model="individualForm.individual_id" type="text" name="individual_id" class="form-control">
-										<HasError :form="individualForm" field="individual_id" />
-									</div>
-
-									<hr class="col-8 mt-5 mb-5">
-									
-									<div class="form-group">
-										<label for="name" class="form-label">Name</label>
-										<input id="name" v-model="individualForm.name" type="text" name="name" class="form-control">
-										<HasError :form="individualForm" field="name" />
-									</div>
-
-									<div class="form-group">
-										<label for="passport_number" class="form-label">Passport Number</label>
-										<input id="passport_number" v-model="individualForm.passport_number" type="text" name="passport_number" class="form-control">
-										<HasError :form="individualForm" field="passport_number" />
-									</div>
-
-									<div class="form-group">
-										<label for="age" class="form-label">Age</label>
-										<input id="age" v-model="individualForm.age" type="number" name="age" class="form-control" onwheel="return false;">
-										<HasError :form="individualForm" field="age" />
-									</div>
-
-									<div class="form-group">
-										<label for="gender_id" class="form-label">Gender</label>
-										<select name="gender_id" v-model="individualForm.gender_id" id="gender_id" class="form-control" :class="{ 'is-invalid': individualForm.errors.has('gender_id') }">
-											<option value='0' disabled>Choose...</option>
-											<option value="1">Male</option>
-											<option value="2">Female</option>
-										</select>
-										<has-error :form="individualForm" field="gender_id"></has-error>
-									</div>
-
-									<div class="form-group">
-										<label for="nationality_id" class="form-label">Nationality</label>
-										<select name="nationality_id" v-model="individualForm.nationality_id" id="nationality_id" class="form-control" :class="{ 'is-invalid': individualForm.errors.has('nationality_id') }">
-											<option value='0' disabled>Choose...</option>
-											<option v-for='nationaity in nationalities' :value='nationaity.id' :key="nationaity.id">{{ nationaity.name }}</option>
-										</select>
-										<has-error :form="individualForm" field="nationality_id"></has-error>
-									</div>
-
-									<div class="form-group">
-										<label for="current_phone_number" class="form-label">Current Phone Number</label>
-										<input id="current_phone_number" v-model="individualForm.current_phone_number" type="text" name="current_phone_number" class="form-control">
-										<HasError :form="individualForm" field="current_phone_number" />
-									</div>
-
-
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-									<button v-show="!individualEditMode" type="submit" class="btn btn-success">Create</button>
-									<button v-show="individualEditMode" type="submit" class="btn btn-primary">Update</button>
-								</div>
-
-							</form>
-						</div>
+			</div>
+		</div>
+		
+		<!-- Registered Individual Modal -->
+		<div class="modal fade" id="individualModal" tabindex="-1" aria-labelledby="individualModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 v-show="!individualEditMode" class="modal-title" id="individualModalLabel">Create New Individual</h5>
+						<h5 v-show="individualEditMode" class="modal-title" id="individualModalLabel">Edit Individual</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
-				</div>
+					<form @submit.prevent="individualEditMode ? updateIndividual() : createIndividual()">
+						<div class="modal-body">
 
-				<!-- File Modal -->
-				<div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 v-show="!fileEditMode" class="modal-title" id="fileModalLabel">Create New File</h5>
-								<h5 v-show="fileEditMode" class="modal-title" id="fileModalLabel">Edit File</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
+							<div class="form-group">
+								<label for="relationship_id" class="form-label">Relationship to PA</label>
+								<select name="relationship_id" v-model="individualForm.relationship_id" id="relationship_id" class="form-control" :class="{ 'is-invalid': individualForm.errors.has('relationship_id') }">
+									<option value='0' disabled>Choose...</option>
+									<option v-for='relationship in relationships' :value='relationship.id' :key="relationship.id">{{ relationship.name }}</option>
+								</select>
+								<HasError :form="individualForm" field="relationship_id" />
 							</div>
-							<form @submit.prevent="fileEditMode ? updateFile() : createFile()">
-								<div class="modal-body">
-									
-									<div class="form-group">
-										<label for="file_number" class="form-label">Enter the File Number</label>
-										<input id="file_number" v-model="fileForm.file_number" type="text" name="file_number" class="form-control">
-										<HasError :form="fileForm" field="file_number" />
-									</div>
+							
+							<div class="form-group">
+								<label for="individual_id" class="form-label">File Individual ID</label>
+								<input id="individual_id" v-model="individualForm.individual_id" type="text" name="individual_id" class="form-control">
+								<HasError :form="individualForm" field="individual_id" />
+							</div>
 
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-									<button v-show="!fileEditMode" type="submit" class="btn btn-success">Create</button>
-									<button v-show="fileEditMode" type="submit" class="btn btn-primary">Update</button>
-								</div>
+							<hr class="col-8 mt-5 mb-5">
+							
+							<div class="form-group">
+								<label for="name" class="form-label">Name</label>
+								<input id="name" v-model="individualForm.name" type="text" name="name" class="form-control">
+								<HasError :form="individualForm" field="name" />
+							</div>
 
-							</form>
+							<div class="form-group">
+								<label for="passport_number" class="form-label">Passport Number</label>
+								<input id="passport_number" v-model="individualForm.passport_number" type="text" name="passport_number" class="form-control">
+								<HasError :form="individualForm" field="passport_number" />
+							</div>
+
+							<div class="form-group">
+								<label for="age" class="form-label">Age</label>
+								<input id="age" v-model="individualForm.age" type="number" name="age" class="form-control" onwheel="return false;">
+								<HasError :form="individualForm" field="age" />
+							</div>
+
+							<div class="form-group">
+								<label for="gender_id" class="form-label">Gender</label>
+								<select name="gender_id" v-model="individualForm.gender_id" id="gender_id" class="form-control" :class="{ 'is-invalid': individualForm.errors.has('gender_id') }">
+									<option value='0' disabled>Choose...</option>
+									<option value="1">Male</option>
+									<option value="2">Female</option>
+								</select>
+								<has-error :form="individualForm" field="gender_id"></has-error>
+							</div>
+
+							<div class="form-group">
+								<label for="nationality_id" class="form-label">Nationality</label>
+								<select name="nationality_id" v-model="individualForm.nationality_id" id="nationality_id" class="form-control" :class="{ 'is-invalid': individualForm.errors.has('nationality_id') }">
+									<option value='0' disabled>Choose...</option>
+									<option v-for='nationaity in nationalities' :value='nationaity.id' :key="nationaity.id">{{ nationaity.name }}</option>
+								</select>
+								<has-error :form="individualForm" field="nationality_id"></has-error>
+							</div>
+
+							<div class="form-group">
+								<label for="current_phone_number" class="form-label">Current Phone Number</label>
+								<input id="current_phone_number" v-model="individualForm.current_phone_number" type="text" name="current_phone_number" class="form-control">
+								<HasError :form="individualForm" field="current_phone_number" />
+							</div>
+
+
 						</div>
-					</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+							<button v-show="!individualEditMode" type="submit" class="btn btn-success">Create</button>
+							<button v-show="individualEditMode" type="submit" class="btn btn-primary">Update</button>
+						</div>
+
+					</form>
 				</div>
 			</div>
 		</div>
 
+		<!-- File Modal -->
+		<div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 v-show="!fileEditMode" class="modal-title" id="fileModalLabel">Create New File</h5>
+						<h5 v-show="fileEditMode" class="modal-title" id="fileModalLabel">Edit File</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form @submit.prevent="fileEditMode ? updateFile() : createFile()">
+						<div class="modal-body">
+							
+							<div class="form-group">
+								<label for="file_number" class="form-label">Enter the File Number</label>
+								<input id="file_number" v-model="fileForm.file_number" type="text" name="file_number" class="form-control">
+								<HasError :form="fileForm" field="file_number" />
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+							<button v-show="!fileEditMode" type="submit" class="btn btn-success">Create</button>
+							<button v-show="fileEditMode" type="submit" class="btn btn-primary">Update</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
     </div>
 </template>
 <script>
 import Form from 'vform'
+import router from '../router'
 
 export default {
     data(){
         return {
-			individualEditMode: false,
-			fileEditMode: false,
-			nationalities: {},
-            register_type: '1',
+			register_type: '1',
             showCheckFileNumberField: true,
 			showRegisterByFileNumberSection: false,
 			showAddFileNumberSection: false,
+
+			individualEditMode: false,
+			fileEditMode: false,
+
             file: '',
             fileIndividuals: [],
 			directIndividual_id: '0',
 			relationships: [],
-            
+            nationalities: {},
+			
             fileForm: new Form({
 				id: '',
 				file_number: '',
@@ -275,23 +282,6 @@ export default {
 			axios.get("api/nationalities").then(({data}) => (this.nationalities = data.data));
 			this.$Progress.finish();
 		},
-        getFile(){
-			this.$Progress.start();
-			axios.get('api/files/get/'+this.fileForm.file_number)
-            .then(({data}) => {
-					this.file = data.data
-					Fire.$emit('fileChanged');
-					Fire.$emit('fileIndividualsChanged');
-					
-					this.$Progress.finish();
-				if(this.file){
-					this.showRegisterByFileNumberSection = true	
-				}else{
-					this.showRegisterByFileNumberSection = false
-					this.showCreateIndividualModal()
-				}
-            })
-		},
         getFileIndividuals(){
 			
 			if(this.file){
@@ -321,6 +311,12 @@ export default {
 			this.individualForm.reset()
 			$('#individualModal').modal('show')
 		},
+		showEditIndividualModal(individual){
+			this.individualEditMode = true;
+			this.individualForm.reset()
+			$('#individualModal').modal('show')
+			this.individualForm.fill(individual)
+		},
 		createIndividual() {
 			this.$Progress.start();
 			this.individualForm.post('api/individuals')
@@ -340,13 +336,6 @@ export default {
 				// error
 				this.$Progress.fail();
 			})
-		},
-
-		showEditIndividualModal(individual){
-			this.individualEditMode = true;
-			this.individualForm.reset()
-			$('#individualModal').modal('show')
-			this.individualForm.fill(individual)
 		},
 		updateIndividual(){
 			this.$Progress.start();
@@ -401,6 +390,25 @@ export default {
 		},
 
 		// File Methods
+		getFile(){
+			this.$Progress.start();
+			axios.get('api/files/get/'+this.fileForm.file_number)
+            .then(({data}) => {
+					this.file = data.data
+					Fire.$emit('fileChanged');
+					Fire.$emit('fileIndividualsChanged');
+					
+					this.$Progress.finish();
+				if(this.file){
+					this.showRegisterByFileNumberSection = true	
+				}else{
+					console.log('hi')
+					this.showRegisterByFileNumberSection = false
+					this.showCreateFileModal()
+				}
+            })
+		},
+
 		showCreateFileModal(){
 			this.fileEditMode = false;
 			this.fileForm.reset()
@@ -485,6 +493,9 @@ export default {
 				}
 			})
 		},
+		goToIndividualPage(){
+			router.push({ path: '/individuals/'+this.directIndividual_id })
+		}
     },
 	created(){
 		Fire.$on('fileChanged', () => {

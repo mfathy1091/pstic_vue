@@ -26,6 +26,18 @@ class IndividualController extends Controller
         return response()->json($data); 
     }
 
+
+    public function show($id)
+    {
+        $individual = Individual::with('file', 'relationship', 'gender', 'nationality')->findOrFail($id);
+
+        if($individual){
+            return ['data' => $individual];
+        }
+
+        return ['message' => 'Individual does not exist'];
+    }
+
     public function update(Request $request, $id)
     {
         $individual = Individual::findOrFail($id);
