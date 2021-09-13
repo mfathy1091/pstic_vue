@@ -94,7 +94,7 @@ export default {
 	methods: {
 		loadReferralSources(){			
 			this.$Progress.start();
-			axios.get("api/referral-sources").then(({data}) => (this.referralSources = data.data));
+			axios.get("/api/referral-sources").then(({data}) => (this.referralSources = data.data));
 			this.$Progress.finish();
 		},
 
@@ -105,7 +105,7 @@ export default {
 		},
 		createReferralSource() {
 			this.$Progress.start();
-			this.form.post('api/referral-sources')
+			this.form.post('/api/referral-sources')
 			.then(() => {
 				// success
 				Fire.$emit('referralSourcesChanged');
@@ -132,7 +132,7 @@ export default {
 		},
 		updateReferralSource(){
 			this.$Progress.start();
-			this.form.put('api/referral-sources/'+this.form.id)
+			this.form.put('/api/referral-sources/'+this.form.id)
 			.then(() => {
 				// success
 				Fire.$emit('referralSourcesChanged');
@@ -163,7 +163,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('api/referral-sources/'+id)
+					this.form.delete('/api/referral-sources/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('referralSourcesChanged');

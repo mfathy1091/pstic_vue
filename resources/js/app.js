@@ -2,8 +2,12 @@ require('./bootstrap');
 
 import Vue from 'vue';
 import router from './router'
+import store from './store'
 
 import moment from 'moment';
+
+
+
 
 import Permissions from './mixins/Permissions';
 Vue.mixin(Permissions);
@@ -72,5 +76,7 @@ window.Fire = new Vue();
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store,
 });
+

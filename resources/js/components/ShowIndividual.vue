@@ -1,56 +1,101 @@
 <template>
     <div>
-        <div class="card mt-3">
+
+        <!-- Individual Section -->
+        <div class="card mt-3" v-if="this.individual">
             <div class="card-header">
                 <h5 class="m-0">
                     {{ this.individual.name }}
                 </h5>
             </div>
-<div class="card" v-if="this.individual">
-    <div class="card-body">
-        <div class="form-group">
-            <strong>File Number:</strong>
-            {{ this.individual.file.number }}
-            <!-- <a href="{{route('files.show',$file.id)}}" class="ml-3 font-italic" role="button" aria-pressed="true">Show File</a> -->
-        </div>
-        
-        <div class="form-group">
-            <strong>Individual ID:</strong>
-            {{ this.individual.individual_id }}
-        </div>
-        
-        <div class="form-group">
-            <strong>Passport Number:</strong>
-            {{ this.individual.passport_number }}
+
+            <div class="card-body">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Individual ID</th>
+                                <th>Passport #</th>                     
+                                <th>Relationship</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Nationality</th>
+                                <th>Current Phone #</th>
+                                <th>Modify</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td>{{ this.individual.name }}</td>
+                                    <td>{{ this.individual.individual_id }}</td>
+                                    <td>{{ this.individual.passport_number }}</td>
+                                    <td>{{ this.individual.relationship.name}}</td>
+                                    <td>{{ this.individual.age }}</td>
+                                    <td>{{ this.individual.gender.name}}</td>
+                                    <td>{{ this.individual.nationality.name}}</td>
+                                    <td>{{ this.individual.current_phone_number }}</td>
+                                    <td>
+                                        <!-- <a href="#" @click="showEditIndividualModal(this.individual)">
+                                            <i class="fa fa-edit blue"></i>
+                                        </a>
+                                        
+                                        <a href="#" @click="deleteIndividual(this.individual.id)">
+                                            <i class="fa fa-trash red"></i>
+                                        </a> -->
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <strong>Age:</strong>
-            {{ this.individual.age }}
+        <!-- Referrals Section -->
+        <div class="card mt-3" v-if="this.referrals">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Referrals
+                </h3>
+
+                <div class="card-tools">
+                    <button class="btn btn-success" >
+                        <!-- @click="showCreateReferralModal" -->
+                        Add New
+                    </button>
+                </div>
+                
+            </div>
+
+            <div class="card-body">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Modify</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="referrals">
+                                <tr v-for="referral in referrals" :key="referral.id">
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <!-- <a href="#" @click="showEditIndividualModal(this.individual)">
+                                            <i class="fa fa-edit blue"></i>
+                                        </a>
+                                        
+                                        <a href="#" @click="deleteIndividual(this.individual.id)">
+                                            <i class="fa fa-trash red"></i>
+                                        </a> -->
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <strong>Gender:</strong>
-            {{ this.individual.gender.name }}
-        </div>
-
-        <div class="form-group">
-            <strong>Nationality:</strong>
-            {{ this.individual.nationality.name }}
-        </div>
-
-        <div class="form-group">
-            <strong>Relationship:</strong>
-            {{ this.individual.relationship.name }}
-        </div>
-
-        <div class="form-group">
-            <strong>Current Phone Number:</strong>
-            {{ this.individual.current_phone_number}}
-        </div>
-    </div>
-</div>
-        </div>
     </div>
 </template>
 <script>
@@ -58,6 +103,7 @@ export default {
     data() {
         return {
             individual: '',
+            referrals: [],
         }
     },
     methods: {

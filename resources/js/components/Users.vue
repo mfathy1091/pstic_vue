@@ -145,7 +145,7 @@ export default {
 	methods: {
 		loadUsers(){			
 			this.$Progress.start();
-			axios.get("api/user").then(({data}) => (this.users = data.data));
+			axios.get("/api/user").then(({data}) => (this.users = data.data));
 			this.$Progress.finish();
 		},
 
@@ -156,7 +156,7 @@ export default {
 		},
 		createUser() {
 			this.$Progress.start();
-			this.form.post('api/user')
+			this.form.post('/api/user')
 			.then(() => {
 				// success
 				Fire.$emit('usersChanged');
@@ -183,7 +183,7 @@ export default {
 		},
 		updateUser(){
 			this.$Progress.start();
-			this.form.put('api/user/'+this.form.id)
+			this.form.put('/api/user/'+this.form.id)
 			.then(() => {
 				// success
 				Fire.$emit('usersChanged');
@@ -214,7 +214,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('api/user/'+id)
+					this.form.delete('/api/user/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('usersChanged');

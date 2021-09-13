@@ -279,14 +279,14 @@ export default {
         },
 		getNationalities(){
 			this.$Progress.start();
-			axios.get("api/nationalities").then(({data}) => (this.nationalities = data.data));
+			axios.get("/api/nationalities").then(({data}) => (this.nationalities = data.data));
 			this.$Progress.finish();
 		},
         getFileIndividuals(){
 			
 			if(this.file){
 				this.$Progress.start();
-				axios.get('api/files/'+this.file.id+'/individuals')
+				axios.get('/api/files/'+this.file.id+'/individuals')
 				.then(({data}) => {
 					this.fileIndividuals = data.data
 				});
@@ -299,7 +299,7 @@ export default {
 
 		getRelationships(){
 			this.$Progress.start();
-			axios.get('api/relationships/')
+			axios.get('/api/relationships/')
             .then(({data}) => {
                 this.relationships = data.data
 			});
@@ -319,7 +319,7 @@ export default {
 		},
 		createIndividual() {
 			this.$Progress.start();
-			this.individualForm.post('api/individuals')
+			this.individualForm.post('/api/individuals')
 			.then(() => {
 				// success
 				Fire.$emit('fileIndividualsChanged');
@@ -339,7 +339,7 @@ export default {
 		},
 		updateIndividual(){
 			this.$Progress.start();
-			this.individualForm.put('api/individuals/'+this.individualForm.id)
+			this.individualForm.put('/api/individuals/'+this.individualForm.id)
 			.then(() => {
 				// success
 				Fire.$emit('fileIndividualsChanged');
@@ -370,7 +370,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.individualForm.delete('api/individuals/'+id)
+					this.individualForm.delete('/api/individuals/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('fileIndividualsChanged');
@@ -392,7 +392,7 @@ export default {
 		// File Methods
 		getFile(){
 			this.$Progress.start();
-			axios.get('api/files/get/'+this.fileForm.file_number)
+			axios.get('/api/files/get/'+this.fileForm.file_number)
             .then(({data}) => {
 					this.file = data.data
 					Fire.$emit('fileChanged');
@@ -422,7 +422,7 @@ export default {
 		},
 		createFile() {
 			this.$Progress.start();
-			this.fileForm.post('api/files')
+			this.fileForm.post('/api/files')
 			.then(() => {
 				// success
 				Fire.$emit('fileChanged');
@@ -444,7 +444,7 @@ export default {
 
 		updateFile(){
 			this.$Progress.start();
-			this.fileForm.put('api/files/'+this.fileForm.id)
+			this.fileForm.put('/api/files/'+this.fileForm.id)
 			.then(() => {
 				// success
 				Fire.$emit('fileChanged');
@@ -475,7 +475,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.fileForm.delete('api/files/'+id)
+					this.fileForm.delete('/api/files/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('fileChanged');

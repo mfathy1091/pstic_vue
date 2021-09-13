@@ -3,6 +3,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import ShowIndividual from './components/ShowIndividual'
+import Forms from './views/Forms'
+import usecom from './vuex/usecom'
 
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
@@ -13,7 +15,10 @@ let routes = [
     { path: '/add-referral', component: require('./components/AddReferral.vue').default },
 
     { path: '/profile', component: require('./components/Profile.vue').default },
-    { path: '/individuals/:id', component: ShowIndividual }
+    { path: '/individuals/check', component: require('./components/CheckIndividual.vue').default },
+    { path: '/individuals/:id', component: ShowIndividual },
+    { path: '/forms', component: Forms },
+    { path: '/testvuex', component: usecom },
 ]
 
 export default new Router({

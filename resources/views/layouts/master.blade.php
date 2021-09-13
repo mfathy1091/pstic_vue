@@ -133,7 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<router-link to="/add-referral" class="nav-link">
+									<router-link to="/individuals/check" class="nav-link">
 										<i class="fas fa-minus nav-icon"></i>
 										<p>Add Referral</p>
 									</router-link>

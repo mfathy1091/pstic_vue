@@ -108,7 +108,7 @@ export default {
 		},
 		createNationality() {
 			this.$Progress.start();
-			this.form.post('api/nationalities')
+			this.form.post('/api/nationalities')
 			.then(() => {
 				// success
 				Fire.$emit('nationalitiesChanged');
@@ -135,7 +135,7 @@ export default {
 		},
 		updateNationality(){
 			this.$Progress.start();
-			this.form.put('api/nationalities/'+this.form.id)
+			this.form.put('/api/nationalities/'+this.form.id)
 			.then(() => {
 				// success
 				Fire.$emit('nationalitiesChanged');
@@ -166,7 +166,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('api/nationalities/'+id)
+					this.form.delete('/api/nationalities/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('nationalitiesChanged');

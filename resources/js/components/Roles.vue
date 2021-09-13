@@ -123,21 +123,21 @@ export default {
 	methods: {
 		loadAbilities(){			
 			this.$Progress.start();
-			axios.get("api/abilities")
+			axios.get("/api/abilities")
 			.then(({data}) => (this.abilities = data.data));
 			this.$Progress.finish();
 		},
 
 		loadRoles(){			
 			this.$Progress.start();
-			axios.get("api/role")
+			axios.get("/api/role")
 			.then(({data}) => (this.roles = data.data));
 			this.$Progress.finish();
 		},
 
 		loadPermissions(){			
 			this.$Progress.start();
-			axios.get("api/permission")
+			axios.get("/api/permission")
 			.then(({data}) => (this.permissions = data.data));
 			this.$Progress.finish();
 		},
@@ -149,7 +149,7 @@ export default {
 		},
 		createRole() {
 			this.$Progress.start();
-			this.form.post('api/role')
+			this.form.post('/api/role')
 			.then(() => {
 				// success
 				Fire.$emit('rolesChanged');
@@ -176,7 +176,7 @@ export default {
 		},
 		updateRole(){
 			this.$Progress.start();
-			this.form.put('api/role/'+this.form.id)
+			this.form.put('/api/role/'+this.form.id)
 			.then(() => {
 				// success
 				Fire.$emit('rolesChanged');
@@ -207,7 +207,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('api/role/'+id)
+					this.form.delete('/api/role/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('rolesChanged');
