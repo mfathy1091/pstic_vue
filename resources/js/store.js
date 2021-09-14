@@ -8,11 +8,15 @@ export default new Vuex.Store({
     state : {
         counter: 1000,
         nationalities: [],
+        abilities: [],
     },
 
     getters: {
         getCounter(state){
             return state.counter
+        },
+        getAbilities(state){
+            return state.abilities
         },
         getCounterByHalf(state){
             return state.counter / 2
@@ -25,6 +29,15 @@ export default new Vuex.Store({
         changeCounterAction({commit}, data){
             commit('changeTheCounter', data)
         },
+        fetchAbilities({commit}){
+			// this.$Progress.start();
+			axios.get('/api/abilities')
+            .then(({data}) => {
+                this.abilities = data.data
+                commit('setAbilities', data.data)
+            });
+			// this.$Progress.finish();
+		},
         getNationalities({commit}){
 			// this.$Progress.start();
 			axios.get('/api/nationalities')
@@ -34,11 +47,15 @@ export default new Vuex.Store({
             });
 			// this.$Progress.finish();
 		},
+
     },
 
     mutations: {
         changeTheCounter(state, number){
             state.counter += number
+        },
+        setAbilities(state, abilities) {
+            state.abilities = abilities
         },
         setNationalities(state, nationalities) {
             state.nationalities = nationalities

@@ -6,6 +6,10 @@ import store from './store'
 
 import moment from 'moment';
 
+import { abilitiesPlugin } from '@casl/vue';
+import ability from './services/ability'
+// const ability = require('./defineAbility');
+Vue.use(abilitiesPlugin, ability)
 
 
 
@@ -25,9 +29,9 @@ const options = {
     autoRevert: true,
     location: 'top',
     inverse: false
-  }
+}
 
-  Vue.use(VueProgressBar, options)
+Vue.use(VueProgressBar, options)
 
 // import { Form, HasError, AlertError } from 'vform'
 import Form from 'vform'
@@ -38,7 +42,7 @@ import {
     AlertError,
     AlertErrors,
     AlertSuccess
-  } from 'vform/src/components/bootstrap5'
+} from 'vform/src/components/bootstrap5'
 
 Window.Form = Form
 Vue.component(HasError.name, HasError)
@@ -46,6 +50,8 @@ Vue.component(AlertError.name, AlertError)
 
 // import it
 import Swal from 'sweetalert2'
+import { subject } from '@casl/ability';
+
 window.Swal = Swal;
 // register it
 const Toast = Swal.mixin({
@@ -80,3 +86,22 @@ const app = new Vue({
     store,
 });
 
+
+
+
+axios.get('/api/abilities').then(response => {
+    Vue.prototype.Perm = window.Perms = response.data.data
+    // V= window.Perms;
+    console.log(Perms)
+    // ability.update(
+    //     [
+    //         {subject: 'User', actions: response.data.data}
+    //     ]
+    // )
+})
+
+// console.log('can read Post', ability.can('read', 'Post')) // true
+// console.log('can read User', ability.can('read', 'User')) // true
+// console.log('can update User', ability.can('update', 'User')) // true
+// console.log('can delete User', ability.can('delete', 'User')) // false
+// console.log('cannot delete User', ability.cannot('delete', 'User')) // true

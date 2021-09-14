@@ -522,7 +522,8 @@ export default {
 		},
 		goToIndividualPage(){
 			router.push({ path: '/individuals/'+this.directIndividual_id })
-		}
+		},
+
     },
 	created(){
 		Fire.$on('fileChanged', () => {

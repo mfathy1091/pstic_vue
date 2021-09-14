@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Referral extends Model
 {
-    protected $guarderd = [];
+    protected $fillable = [
+        'original_direct_individual_id',
+        'referral_source_id',
+        'referral_date',
+        'referring_person_name',
+        'referring_person_email',
+        'current_status_id',
+        'current_assigned_psw_id',
+    ];
 
     // Parent Tables
     public function file()

@@ -27,16 +27,19 @@ Route::middleware('auth:api')->group( function () {
     Route::apiResources(['relationships'=> 'API\RelationshipController']);
     Route::apiResources(['referral-sources'=> 'API\ReferralSourceController']);
     
-    // files
+    // Files
     Route::get('files/exists/{n}', 'API\FileController@exists');
     Route::get('files/get/{n}', 'API\FileController@get');
     Route::get('files/{id}/individuals', 'API\FileController@getIndividuals');
 
-    // individuals
+    // Individuals
     Route::apiResources(['individuals'=> 'API\IndividualController']);
     Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
+    // Route::get('individuals/{individual_id}/referrals/create', 'API\IndividualController@AddReferralToIndividual');
 
 
+    // Referrals
+    Route::apiResources(['referrals'=> 'API\ReferralController']);
     
     Route::get('abilities', 'AbilityController@index');
     Route::get('ability/{id}', 'AbilityController@show');

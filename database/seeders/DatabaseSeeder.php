@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         // $this->call(ReasonSeeder::class);
         // $this->call(ServiceSeeder::class);
-        // $this->call(StatusSeeder::class);
+        $this->call(StatusSeeder::class);
 
         // $this->call(RoleTableSeeder::class);
 

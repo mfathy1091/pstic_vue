@@ -59,10 +59,11 @@
                 </h3>
 
                 <div class="card-tools">
-                    <button class="btn btn-success" >
+                    <button class="btn btn-success" @click="gotToCreatePage">
                         <!-- @click="showCreateReferralModal" -->
                         Add New
                     </button>
+                    
                 </div>
                 
             </div>
@@ -99,6 +100,8 @@
     </div>
 </template>
 <script>
+import router from '../router'
+
 export default {
     data() {
         return {
@@ -116,7 +119,12 @@ export default {
             });
 			this.$Progress.finish();
             
-        }
+        },
+    	gotToCreatePage(){
+			router.push({ path: '/individuals/'+this.$route.params.id+'/referrals/create' })
+		},
+		
+
     },
     created (){
         this.getIndividual()

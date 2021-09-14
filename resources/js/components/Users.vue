@@ -14,7 +14,8 @@
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
 
-					<div class="card-tools">
+					<!-- v-if="$can('user_create')" -->
+					<div class="card-tools" v-if="$can('user_create')">
 						<button class="btn btn-success" @click="showCreateUserModal">
 							Add New <i class="fas fa-user-plus fa-fw"></i>
 						</button>

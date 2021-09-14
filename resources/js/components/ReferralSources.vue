@@ -64,7 +64,6 @@
 								<input id="name" v-model="form.name" type="text" name="name" class="form-control">
 								<HasError :form="form" field="name" />
 							</div>
-
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -92,7 +91,7 @@ export default {
 		}
 	},
 	methods: {
-		loadReferralSources(){			
+		getReferralSources(){			
 			this.$Progress.start();
 			axios.get("/api/referral-sources").then(({data}) => (this.referralSources = data.data));
 			this.$Progress.finish();
@@ -187,10 +186,10 @@ export default {
 		// console.log($getPermissions());
 		
 
-		this.loadReferralSources();
+		this.getReferralSources();
 		
 		Fire.$on('referralSourcesChanged', () => {
-			this.loadReferralSources();
+			this.getReferralSources();
 		});
 
 		

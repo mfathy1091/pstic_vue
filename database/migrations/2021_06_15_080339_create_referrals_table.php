@@ -15,16 +15,20 @@ class CreateReferralsTable extends Migration
     {
         Schema::create('referrals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('pss_case_id');
+            $table->unsignedBigInteger('original_direct_individual_id');
             $table->unsignedInteger('referral_source_id');
             $table->date('referral_date')->nullable();
             $table->string('referring_person_name');
             $table->string('referring_person_email');
+            
+            $table->unsignedBigInteger('current_status_id')->nullable();
+            $table->unsignedBigInteger('current_assigned_psw_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('pss_case_id')->references('id')->on('pss_cases')->onDelete('cascade');
             $table->foreign('referral_source_id')->references('id')->on('referral_sources')->onDelete('cascade');
-
+            $table->foreign('original_direct_individual_id')->references('id')->on('individuals')->onDelete('cascade');
+            $table->foreign('current_status_id')->references('id')->on('statuses')->onDelete('cascade');
+            $table->foreign('current_assigned_psw_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

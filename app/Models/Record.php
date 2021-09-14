@@ -11,9 +11,9 @@ class Record extends Model
 
 
     // parent tables
-    public function pssCase()
+    public function referral()
     {
-        return $this->belongsTo(PssCase::class, 'pss_case_id');
+        return $this->belongsTo(Referral::class, 'referral_id');
     }
     
 

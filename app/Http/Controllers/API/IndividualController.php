@@ -29,7 +29,7 @@ class IndividualController extends Controller
 
     public function show($id)
     {
-        $individual = Individual::with('file', 'relationship', 'gender', 'nationality')->findOrFail($id);
+        $individual = Individual::with('file', 'file.individuals', 'relationship', 'gender', 'nationality')->findOrFail($id);
 
         if($individual){
             return ['data' => $individual];
