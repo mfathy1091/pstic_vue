@@ -36,12 +36,13 @@ Route::middleware('auth:api')->group( function () {
     // Individuals
     Route::apiResources(['individuals'=> 'API\IndividualController']);
     Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
-    // Route::get('individuals/{individual_id}/referrals/create', 'API\IndividualController@AddReferralToIndividual');
+    Route::get('individuals/{individual}/referrals', 'API\Individual\ReferralController@index');
+
 
     // Referrals
     Route::apiResources(['referrals'=> 'API\ReferralController']);
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
-    Route::get('individuals/{individual_id}/referrals', 'API\ReferralController@getIndividualReferrals');
+    // Route::get('individuals/{individual_id}/referrals', 'API\ReferralController@getIndividualReferrals');
     
     Route::get('abilities', 'AbilityController@index');
     Route::get('ability/{id}', 'AbilityController@show');

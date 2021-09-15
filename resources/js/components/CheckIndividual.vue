@@ -90,18 +90,27 @@
 				</div>
 
 				<!-- Choose Direct Section -->
-				<form @submit.prevent="goToIndividualPage">							
-					<div class="form-group">
-						<label for="directIndividual_id" class="form-label">Choose Direct</label>
-						<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
-							<option value='0' disabled>Choose...</option>
-							<option v-for='individual in fileIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
-						</select>
-					</div>
-					<br>
-					<button type="submit" class="btn btn-primary">Next</button>
-				</form>
+				<ValidationObserver v-slot="{ handleSubmit }">
+					<form @submit.prevent="handleSubmit(goToCreateReferralPage)">
+						<!-- <ValidationProvider name="directIndividual_id" rules="required|numeric" v-slot="{ errors }">
+							<input v-model="directIndividual_id" type="text">
+							<span>{{ errors[0] }}</span>
+						</ValidationProvider> -->
+						
+						<ValidationProvider name="directIndividual_id" rules="required" v-slot="{ errors }">
+						<div class="form-group">
+							<label for="directIndividual_id" class="form-label">Choose Direct</label>
+							<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
+								<option v-for='individual in fileIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
+							</select>
+							<span class="text-danger">{{ errors[0] }}</span>
+						</div>
+						</ValidationProvider>
 
+						<br>
+						<button type="submit" class="btn btn-primary">Next</button>
+					</form>
+				</ValidationObserver>
 				<br>
 				<br>
 			</div>
@@ -243,7 +252,7 @@ export default {
 			fileEditMode: false,
             file: '',
             fileIndividuals: [],
-			directIndividual_id: '0',
+			directIndividual_id: '',
 			relationships: [],
             // nationalities: {},
 			
@@ -522,6 +531,10 @@ export default {
 		},
 		goToIndividualPage(){
 			router.push({ path: '/individuals/'+this.directIndividual_id })
+		},
+
+		goToCreateReferralPage(){
+			router.push({ path: '/individuals/'+this.directIndividual_id + '/referrals/create' })
 		},
 
     },

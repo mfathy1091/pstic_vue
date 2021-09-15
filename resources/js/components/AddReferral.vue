@@ -65,7 +65,6 @@
 
 						</div>
 						<div>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 							<button v-show="!referralEditMode" type="submit" class="btn btn-success">Create</button>
 							<button v-show="referralEditMode" type="submit" class="btn btn-primary">Update</button>
 						</div>
@@ -150,18 +149,21 @@ export default {
 				// success
 				// Fire.$emit('fileIndividualsChanged');
 				
-				goToIndividualPage()
+				
+				
 				Toast.fire({
 					icon: 'success',
 					title: 'Added successfully'
 				})
 				
 				this.$Progress.finish();
+				router.push({ path: '/individuals/'+this.directIndividual.id })
 			})
 			.catch(() => {
 				// error
 				this.$Progress.fail();
 			})
+			
 		},
 
 
@@ -187,7 +189,8 @@ export default {
 
 
 		goToIndividualPage(){
-			router.push({ path: '/individuals/'+this.directIndividual_id })
+			router.push({ path: '/individuals/'+this.directIndividual.id })
+			console.log(directIndividual.id)
 		},
 		
 

@@ -16,6 +16,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Individual ID</th>
+                                <th>File Number</th>
                                 <th>Passport #</th>                     
                                 <th>Relationship</th>
                                 <th>Age</th>
@@ -29,6 +30,7 @@
                                 <tr>
                                     <td>{{ this.individual.name }}</td>
                                     <td>{{ this.individual.individual_id }}</td>
+                                    <td>{{ this.individual.file.number }}</td>
                                     <td>{{ this.individual.passport_number }}</td>
                                     <td>{{ this.individual.relationship.name}}</td>
                                     <td>{{ this.individual.age }}</td>
@@ -52,7 +54,7 @@
         </div>
 
         <!-- Referrals Section -->
-        <div class="card mt-3" v-if="this.referrals">
+        <div class="card mt-3">
             <div class="card-header">
                 <h3 class="card-title">
                     Referrals
@@ -73,14 +75,15 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Referral Source</th>
+                                <th>Referral Date</th>
                                 <th>Modify</th>
                             </tr>
                         </thead>
-                        <tbody v-if="referrals">
-                                <tr v-for="referral in referrals" :key="referral.id">
-                                <tr>
-                                    <td></td>
+                        <tbody v-if="individualReferrals">
+                                <tr v-for="referral in individualReferrals" :key="referral.id">
+                                    <td>{{referral.referral_source.name}}</td>
+                                    <td>{{referral.referral_date}}</td>
                                     <td>
                                         <!-- <a href="#" @click="showEditIndividualModal(this.individual)">
                                             <i class="fa fa-edit blue"></i>
@@ -106,7 +109,6 @@ export default {
     data() {
         return {
             individual: '',
-            referrals: [],
             individualReferrals: [],
         }
     },
@@ -127,7 +129,7 @@ export default {
         
         getIndividualReferrals(){
             this.$Progress.start();
-            axios.get('/api/individuals/'+this.$route.params.id+'/referrals')
+            axios.get('/api/individuals/'+this.$route.params.id+'/referrals', { params: { individual_id: this.$route.params.id } })
             .then(({data}) => {
                 this.individualReferrals = data.data
             });
