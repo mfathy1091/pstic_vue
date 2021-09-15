@@ -12,6 +12,18 @@ use App\Models\Beneficiary;
 
 class ReferralController extends Controller
 {
+
+    public function show($id)
+    {
+        $referral = Referral::with('originalDirectIndividual', 'referralSource')->findOrFail($id);
+
+        if($referral){
+            return ['data' => $referral];
+        }
+
+        return ['message' => 'Individual does not exist'];
+    }
+
     public function store(Request $request)
     {
 

@@ -28,6 +28,11 @@ class Referral extends Model
         return $this->belongsTo(Individual::class, 'individual_id');
     }
     
+    public function originalDirectIndividual()
+    {
+        return $this->belongsTo(Individual::class, 'original_direct_individual_id');
+    }
+    
     public function referralSource()
     {
         return $this->belongsTo(ReferralSource::class, 'referral_source_id');

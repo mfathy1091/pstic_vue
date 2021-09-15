@@ -4,6 +4,7 @@ Vue.use(Router)
 
 import ShowIndividual from './components/ShowIndividual'
 import AddReferral from './components/AddReferral'
+import ShowReferral from './components/ShowReferral'
 import Forms from './views/Forms'
 import usecom from './vuex/usecom'
 
@@ -13,12 +14,12 @@ let routes = [
     { path: '/roles', component: require('./components/Roles.vue').default },
     { path: '/nationalities', component: require('./components/Nationalities.vue').default },
     { path: '/referral-sources', component: require('./components/ReferralSources.vue').default },
-    { path: '/add-referral', component: require('./components/AddReferral.vue').default },
 
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/individuals/check', component: require('./components/CheckIndividual.vue').default },
     { path: '/individuals/:id', component: ShowIndividual },
     { path: '/individuals/:id/referrals/create', component: AddReferral },
+    { path: '/referrals/:id', component: ShowReferral },
     { path: '/forms', component: Forms },
     { path: '/testvuex', component: usecom },
 ]

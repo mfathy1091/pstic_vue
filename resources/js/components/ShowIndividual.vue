@@ -85,6 +85,9 @@
                                     <td>{{referral.referral_source.name}}</td>
                                     <td>{{referral.referral_date}}</td>
                                     <td>
+                                        <a href="#" @click="goToShowReferralPage(referral)">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
                                         <!-- <a href="#" @click="showEditIndividualModal(this.individual)">
                                             <i class="fa fa-edit blue"></i>
                                         </a>
@@ -114,7 +117,6 @@ export default {
     },
     methods: {
         getIndividual(){
-            console.log("hi")
 			this.$Progress.start();
 			axios.get("/api/individuals/"+this.$route.params.id)
             .then(({data}) => {
@@ -123,9 +125,6 @@ export default {
 			this.$Progress.finish();
             
         },
-    	gotToCreatePage(){
-			router.push({ path: '/individuals/'+this.$route.params.id+'/referrals/create' })
-		},
         
         getIndividualReferrals(){
             this.$Progress.start();
@@ -136,7 +135,14 @@ export default {
             this.$Progress.finish();
 		},
 		
+        gotToCreatePage(){
+			router.push({ path: '/individuals/'+this.$route.params.id+'/referrals/create' })
+		},
 
+        goToShowReferralPage(referral){
+           // console.log('hello');
+		    router.push({ path: '/referrals/'+referral.id })
+		},
     },
     created (){
         this.getIndividual()
