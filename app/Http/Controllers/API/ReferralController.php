@@ -115,4 +115,10 @@ class ReferralController extends Controller
         return $referral;
     }
 
+    public function getIndividualReferrals(Request $request)
+    {
+        $referrals =  Referral::where('individual_id', $request->individual_id)->get();
+        return ['data' => $referrals];
+    }
+
 }

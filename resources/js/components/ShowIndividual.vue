@@ -107,6 +107,7 @@ export default {
         return {
             individual: '',
             referrals: [],
+            individualReferrals: [],
         }
     },
     methods: {
@@ -123,11 +124,21 @@ export default {
     	gotToCreatePage(){
 			router.push({ path: '/individuals/'+this.$route.params.id+'/referrals/create' })
 		},
+        
+        getIndividualReferrals(){
+            this.$Progress.start();
+            axios.get('/api/individuals/'+this.$route.params.id+'/referrals')
+            .then(({data}) => {
+                this.individualReferrals = data.data
+            });
+            this.$Progress.finish();
+		},
 		
 
     },
     created (){
         this.getIndividual()
+        this.getIndividualReferrals()
     }
 }
 </script>
