@@ -115,9 +115,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</ul>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<router-link to="/referral-sources" class="nav-link">
+									<router-link to="/referral_sources" class="nav-link">
 										<i class="fas fa-minus nav-icon"></i>
 										<p>Referral Sources</p>
+									</router-link>
+								</li>
+							</ul>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<router-link to="/referral_reasons" class="nav-link">
+										<i class="fas fa-minus nav-icon"></i>
+										<p>Referral Reasons</p>
 									</router-link>
 								</li>
 							</ul>

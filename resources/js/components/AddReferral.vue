@@ -92,6 +92,7 @@ export default {
 
 			referralSources: [],
             nationalities: [],
+			reasons: [],
 
 			referralForm : new Form({
 				id: '',
@@ -120,9 +121,14 @@ export default {
 			axios.get("/api/nationalities").then(({data}) => (this.nationalities = data.data));
 			this.$Progress.finish();
 		},
+		getReasons(){
+			this.$Progress.start();
+			axios.get("/api/reasons").then(({data}) => (this.reasons = data.data));
+			this.$Progress.finish();
+		},
 		getReferralSources(){			
 			this.$Progress.start();
-			axios.get("/api/referral-sources").then(({data}) => (this.referralSources = data.data));
+			axios.get("/api/referral_sources").then(({data}) => (this.referralSources = data.data));
 			this.$Progress.finish();
 		},
 
@@ -196,9 +202,10 @@ export default {
 
     },
 	created(){
-		this.getIndividual();
-		this.getReferralSources();
-		this.getNationalities();
+		this.getIndividual()
+		this.getReferralSources()
+		this.getNationalities()
+		this.getReasons()
 	}
 }
 </script>

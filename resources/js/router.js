@@ -13,7 +13,8 @@ let routes = [
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/roles', component: require('./components/Roles.vue').default },
     { path: '/nationalities', component: require('./components/Nationalities.vue').default },
-    { path: '/referral-sources', component: require('./components/ReferralSources.vue').default },
+    { path: '/referral_sources', component: require('./components/ReferralSources.vue').default },
+    { path: '/referral_reasons', component: require('./components/ReferralReasons.vue').default },
 
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/individuals/check', component: require('./components/CheckIndividual.vue').default },
