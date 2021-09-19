@@ -3,6 +3,7 @@
     cursor: pointer
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
     <div>  
@@ -75,6 +76,30 @@
 								<HasError :form="referralForm" field="referring_person_email" />
 							</div>
 
+                            <div class="form-group" v-if="reasons">
+								<label class="typo__label">Referral Reasons</label>
+								<multiselect 
+								v-model="referralForm.reasons" 
+								:options="reasons" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							</div>
+
+                            <div class="form-group">
+								<label for="referral_narrative_reason" class="form-label">Referral Narrative Reason</label>
+								<textarea class="form-control" rows="3" v-model="referralForm.referral_narrative_reason" name="referral_narrative_reason"></textarea>
+								<HasError :form="referralForm" field="referral_narrative_reason" />
+							</div>
+
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -94,17 +119,20 @@
 <script>
 import Form from 'vform'
 import Records from './Records.vue'
+import Multiselect from 'vue-multiselect'
 
 export default {
     name: 'ShowReferral',
     components: {
-        Records
+        Records,
+        Multiselect,
     },
 
     data() {
         
         return{
             referral: '',
+            reasons: [],
 
             referralEditMode: false,
             
@@ -114,11 +142,21 @@ export default {
                 referral_date: '',
                 referring_person_name: '',
                 referring_person_email: '',
-
+                referral_narrative_reason: '',
+                reasons: [],
             }),
         }
     },
     methods: {
+        getReferralReasons(){
+			this.$Progress.start();
+			axios.get("/api/referral_reasons")
+			.then(({data}) => {
+				this.reasons = data.data
+			});
+			this.$Progress.finish();
+		},
+
         getReferral(){
 			this.$Progress.start();
 			axios.get("/api/referrals/"+this.$route.params.id)
@@ -127,6 +165,8 @@ export default {
             });
 			this.$Progress.finish();
         },
+
+
 
         showEditReferralModal(){
 			this.editMode = true;
@@ -156,6 +196,7 @@ export default {
     },
 
     created (){
+        this.getReferralReasons()
         this.getReferral()
     }
 }

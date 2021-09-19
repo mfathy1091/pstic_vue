@@ -92,7 +92,7 @@ export default {
 		}
 	},
 	methods: {
-		loadReferralReasons(){
+		getReferralReasons(){
 			this.$Progress.start();
 			axios.get("/api/referral_reasons")
 			.then(({data}) => {
@@ -190,10 +190,10 @@ export default {
 		// console.log($getPermissions());
 		
 
-		this.loadReferralReasons();
+		this.getReferralReasons();
 		
 		Fire.$on('referralReasonsChanged', () => {
-			this.loadReferralReasons();
+			this.getReferralReasons();
 		});
 
 		
