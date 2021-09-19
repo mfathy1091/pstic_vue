@@ -15,6 +15,8 @@ class Individual extends Model
         return $this->belongsTo('App\Models\Nationality', 'nationality_id');
     }
 
+
+
     
     public function gender()
     {
@@ -32,6 +34,11 @@ class Individual extends Model
     public function scopeAgeRange($query, $from, $to)
     {
         return $query->whereBetween(['age', [$from, $to]]);
+    }
+
+    public function scopeRelatedFileIndividuals($query, $fileId)
+    {
+        return $query->where('file_id', $fileId);
     }
 
     public function relationship()

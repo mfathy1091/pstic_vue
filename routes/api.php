@@ -41,8 +41,10 @@ Route::middleware('auth:api')->group( function () {
     // Individuals
     Route::apiResources(['individuals'=> 'API\IndividualController']);
     Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
+    Route::get('individuals/{individual}/other_file_individuals', 'API\IndividualController@getOtherFileIndividuals');
     Route::get('individuals/{individual}/referrals', 'API\Individual\ReferralController@index');
 
+    
     // Beneficiaries
     Route::apiResources(['beneficiaries'=> 'API\BeneficiaryController']);
 

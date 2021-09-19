@@ -152,17 +152,13 @@ export default {
 
 
         getFileIndividuals(){
-			
-			if(this.file){
-				this.$Progress.start();
-				axios.get('/api/files/'+this.file.id+'/individuals')
-				.then(({data}) => {
-					this.fileIndividuals = data.data
-				});
-				this.$Progress.finish();
-			}else{
-				this.fileIndividuals = []
-			}
+			this.$Progress.start();
+			axios.get('/api/individuals/' + this.$route.params.id + '/other_file_individuals/')
+			.then(({data}) => {
+				this.fileIndividuals = data.data
+			});
+			this.$Progress.finish();
+
 		},
 
 		createReferral() {
@@ -219,10 +215,12 @@ export default {
 
     },
 	created(){
+		
 		this.getIndividual()
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReasons()
+		this.getFileIndividuals()
 	}
 }
 </script>

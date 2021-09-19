@@ -122,6 +122,36 @@ class IndividualController extends Controller
         return ['message' => 'Individual deleted'];
     }
 
+    public function getOtherFileIndividuals($individual_id)
+    {
+        $individual = Individual::findOrFail($individual_id);
+        $file = $individual->file;
+
+        // if it exists
+        if($individual){
+            // return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()];
+
+            // $users = User::all()->except($currentUser->id);
+            return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()->except($individual_id)];
+        }
+
+        return ['data' => ''];
+
+
+
+
+        // $file_number = $request->keyword;
+
+        // $individuals = Individual::query();
+
+        // $data = $individuals->with('file')->whereHas('file', function($q) use ($file_number){
+        //     return $q->where('number', '=', "%$file_number%");
+        // })->get();
+
+
+        // return response()->json($data); 
+    }
+
 }
 
 

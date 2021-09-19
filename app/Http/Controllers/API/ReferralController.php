@@ -16,7 +16,8 @@ class ReferralController extends Controller
 
     public function show($id)
     {
-        $referral = Referral::with('originalDirectIndividual', 
+        $referral = Referral::with(
+        'originalDirectIndividual', 
         'referralSource', 
         'reasons', 
         'records', 

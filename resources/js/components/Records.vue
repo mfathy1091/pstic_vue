@@ -35,11 +35,14 @@
                         
 
                         <div>
-                            <button class="btn btn-success">
-                                Modify Beneficiaries
-                            </button>
 
 
+                            <div class="row">
+                                <h5 class="align-middle p-0 m-0">Record Beneficiaries</h5>
+                                <button class="btn btn-success mb-6" @click="showAddBeneficiaryModal">
+                                    Modify Beneficiaries
+                                </button>
+                            </div>
                             
                             <!-- Beneficiaries -->
                             <div class="row">
@@ -185,6 +188,23 @@
                     <form @submit.prevent="beneficiaryEditMode ? updateBeneficiary() : createBeneficiary()">
                         <div class="modal-body">
 
+
+                            <div class="form-group" v-if="fileIndividuals">
+								<label class="typo__label">File Individuals</label>
+								<multiselect 
+								v-model="beneficiaryForm.individual_id" 
+								:options="fileIndividuals" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+								</multiselect>
+							</div>
+
                             <div class="form-group">
                                 <label for="beneficiary_id" class="form-label">Beneficiary</label>
                                 <select name="beneficiary_id" v-model="beneficiaryForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': beneficiaryForm.errors.has('beneficiary_id') }">
@@ -270,6 +290,7 @@ export default {
             beneficiaryEditMode: false,
             services: [],
             disabilities: [],
+            fileIndividuals: [],
 
             currentRecordId: '',
             currentRecord: {},
@@ -309,6 +330,19 @@ export default {
             this.getRecordBeneficiaries()
         },
         
+        getFileIndividuals(){
+			
+			if(this.file){
+				this.$Progress.start();
+				axios.get('/api/files/'+this.file.id+'/individuals')
+				.then(({data}) => {
+					this.fileIndividuals = data.data
+				});
+				this.$Progress.finish();
+			}else{
+				this.fileIndividuals = []
+			}
+		},
 
         getRecordBeneficiaries(){			
 			this.$Progress.start();
@@ -434,6 +468,7 @@ export default {
 
 		this.getServices()
         this.getDisabilities()
+        this.getFileIndividuals()
 		
 		Fire.$on('servicesChanged', () => {
 			this.getServices();
