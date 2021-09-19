@@ -4,14 +4,26 @@ import Vue from 'vue';
         
         data() {
             return{
-                PERMS: [],
+                abilities: [],
             }
         },
         methods: {
+            getAbitities(){
+                axios.get('/api/abilities')
+                .then(({data}) => {
+                    this.abilities = data.data
+                });
+
+            },
+                        
+            
             $can(permissionName) {
                 // this.PERMS = this.$Perm
                 // Permissions = [];
-                return this.PERMS.indexOf(permissionName) !== -1;
+                console.log('from mixin')
+                console.log(this.abilities)
+                return this.abilities.indexOf(permissionName) !== -1;
+                
                 // return this.foo.indexOf(permissionName) !== -1;
                 // console.log(window.Perms)
                 
@@ -20,9 +32,13 @@ import Vue from 'vue';
             // $getPermissions() {
             //     return this.Permissions;
             // }
+
+        },
+        mounted(){
+            this.getAbitities()
         },
         computed:{
-            foo: function () { this.PERMS = window.Perms }
+            
         }
     };
 </script>

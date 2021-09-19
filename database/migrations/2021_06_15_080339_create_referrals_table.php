@@ -20,6 +20,7 @@ class CreateReferralsTable extends Migration
             $table->date('referral_date')->nullable();
             $table->string('referring_person_name');
             $table->string('referring_person_email');
+            $table->text('referral_narrative_reason');
             
             $table->unsignedBigInteger('current_status_id')->nullable();
             $table->unsignedBigInteger('current_assigned_psw_id')->nullable();

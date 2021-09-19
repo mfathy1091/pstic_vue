@@ -6,10 +6,10 @@ import store from './store'
 
 import moment from 'moment';
 
-import { abilitiesPlugin } from '@casl/vue';
-import ability from './services/ability'
-// const ability = require('./defineAbility');
-Vue.use(abilitiesPlugin, ability)
+import { abilitiesPlugin } from '@casl/vue'
+import ability from './services/ability';
+Vue.use(abilitiesPlugin, ability);
+
 
 import { ValidationObserver } from 'vee-validate';
 import { ValidationProvider } from 'vee-validate/dist/vee-validate.full.esm';
@@ -18,8 +18,8 @@ Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('ValidationProvider', ValidationProvider);
 
 
-import Permissions from './mixins/Permissions';
-Vue.mixin(Permissions);
+// import Permissions from './mixins/Permissions';
+// Vue.mixin(Permissions);
 
 import VueProgressBar from 'vue-progressbar'
 const options = {
@@ -92,21 +92,25 @@ const app = new Vue({
 });
 
 
+var permissions = []
 
 
-axios.get('/api/abilities').then(response => {
-    Vue.prototype.Perm = window.Perms = response.data.data
-    // V= window.Perms;
-    console.log(Perms)
-    // ability.update(
-    //     [
-    //         {subject: 'User', actions: response.data.data}
-    //     ]
-    // )
-})
+
+Vue.prototype.$Perms = [1, 2, 3]
+
 
 // console.log('can read Post', ability.can('read', 'Post')) // true
 // console.log('can read User', ability.can('read', 'User')) // true
 // console.log('can update User', ability.can('update', 'User')) // true
 // console.log('can delete User', ability.can('delete', 'User')) // false
 // console.log('cannot delete User', ability.cannot('delete', 'User')) // true
+
+
+// axios.get('/api/abilities').then(response => {
+
+//     ability.update(
+//         [
+//             {subject: 'all', actions: response.data.data}
+//         ]
+//     )
+// })

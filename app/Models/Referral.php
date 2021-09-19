@@ -13,6 +13,7 @@ class Referral extends Model
         'referral_date',
         'referring_person_name',
         'referring_person_email',
+        'referral_narrative_reason',
         'current_status_id',
         'current_assigned_psw_id',
     ];
@@ -77,7 +78,10 @@ class Referral extends Model
         ->using(ReferralSection::class);
     }
 
-
+    public function records()
+    {
+        return $this->hasMany(Record::class)->orderBy('month_id', 'DESC');
+    }
 
     
 }

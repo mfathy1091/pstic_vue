@@ -22,4 +22,9 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class);
     }
+
+    public function permissions_ids()
+    {
+        return $this->belongsToMany(Permission::class)->get()->pluck('id');
+    }
 }

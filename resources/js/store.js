@@ -1,14 +1,35 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import axios from 'axios'
+import ability from './services/ability'
+
+const updateAbilities = (store) => {
+    ability.update(store.state.rules) // take rules from your state structure
+
+    return store.subscribe((mutation) => {
+        switch (mutation.type) {
+        case 'login':
+            ability.update(mutation.payload.rules)
+            break
+        case 'logout':
+            ability.update([{ actions: 'read', subject: 'all' }]) // read only mode
+            // or `ability.update([])` to remove all permissions
+            break
+        }
+    })
+}
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+    plugins: [
+        updateAbilities
+    ],
     state : {
         counter: 1000,
         nationalities: [],
         abilities: [],
+        rules: [],
     },
 
     getters: {

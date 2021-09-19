@@ -6,8 +6,15 @@
 }
 </style>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <template>
 	<div class="container-fluid">
+		<button class="btn btn-success" @click="checkPermission">
+			Check Permission
+		</button>
+		{{ nationalities }}
+
 		<div class="row mt-5">
 			<div class="col-md-12">
 				<div class="card">
@@ -15,7 +22,7 @@
 					<h3 class="card-title">Roles</h3>
 
 					<div class="card-tools">
-						<button class="btn btn-success" @click="showCreateRoleModal">
+						<button class="btn btn-success" @click="showCreateRoleModal" v-if="$can('user-list')">
 							Add Role
 						</button>
 					</div>
@@ -32,7 +39,7 @@
 								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody v-if="roles">
 								<tr v-for="role in roles" :key="role.id">
 									<td>{{ role.id }}</td>
 									<td>{{ role.name }}</td>
@@ -82,13 +89,34 @@
 							</div>
 
 
+							<div class="form-group" v-if="roles">
+								<label for="permissions" class="form-label">Permissions</label>
+								<select class="form-control" id="exampleFormControlSelect1" multiple v-model="form.permissions">
+									<option v-for="permission in permissions" :key="permission.id" :value="permission" >
+										{{ permission.name }}
+									</option>
+								</select>
+								<HasError :form="form" field="permissions" />
+							</div>
 
-							<select class="form-control" id="exampleFormControlSelect1" multiple v-model="form.permissions_ids">
-								<option v-for="permission in permissions" :key="permission.id" :value="permission.id" >
-									{{ permission.name }}
-								</option>
-							</select>
-					
+							
+							<div class="form-group" v-if="roles">
+								<label class="typo__label">Permissions</label>
+								<multiselect 
+								v-model="form.permissions" 
+								:options="permissions" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							</div>
 
 						</div>
 						<div class="modal-footer">
@@ -104,19 +132,23 @@
 </template>
 <script>
 import Form from 'vform';
+import Multiselect from 'vue-multiselect'
+import {mapActions, mapGetters} from 'vuex'
+// import PermissionsMixin from '../mixins/PermissionsMixin'
 
 export default {
-	
+	// mixins: [PermissionsMixin],
+	components: { Multiselect },
 	data() {
 		return {
 			abilities: {},
 			editMode: false,
 			roles: {},
-			permissions: {},
+			permissions: [],
 			form: new Form({
 				id: '',
 				name: '',
-				permissions_ids: [],
+				permissions: [],
 			})
 		}
 	},
@@ -130,7 +162,7 @@ export default {
 
 		loadRoles(){			
 			this.$Progress.start();
-			axios.get("/api/role")
+			axios.get("/api/roles")
 			.then(({data}) => (this.roles = data.data));
 			this.$Progress.finish();
 		},
@@ -144,12 +176,12 @@ export default {
 
 		showCreateRoleModal(){
 			this.editMode = false;
-			this.form.reset()
+			// this.form.reset()
 			$('#roleModal').modal('show')
 		},
 		createRole() {
 			this.$Progress.start();
-			this.form.post('/api/role')
+			this.form.post('/api/roles')
 			.then(() => {
 				// success
 				Fire.$emit('rolesChanged');
@@ -176,7 +208,7 @@ export default {
 		},
 		updateRole(){
 			this.$Progress.start();
-			this.form.put('/api/role/'+this.form.id)
+			this.form.put('/api/roles/'+this.form.id)
 			.then(() => {
 				// success
 				Fire.$emit('rolesChanged');
@@ -207,7 +239,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('/api/role/'+id)
+					this.form.delete('/api/roles/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('rolesChanged');
@@ -229,12 +261,40 @@ export default {
 				}
 			})
 		},
-	},
+		checkPermission(permissionName){
+			// return this.$Perms.indexOf(permissionName) !== -1;
+			//console.log('roles: ' + this.$Perms)
+			console.log(this.$can('user_list'))
+			// console.log(this.$nationalities)
+		},
 
+		getAbitities(){
+                axios.get('/api/abilities')
+                .then(({data}) => {
+                    this.abilities = data.data
+                });
+
+        },
+		$can(permissionName) {
+			return this.abilities.indexOf(permissionName) !== -1;
+			
+		},
+	},
+	computed: {
+        ...mapGetters({
+            'counter': 'getCounter',
+            'nationalities': 'getNationalitiesgetter',
+        })
+    },
+	mounted() {
+
+        this.$store.dispatch('getNationalities')
+    },
+	
 	created() {
 		// console.log($getPermissions());
 		
-		this.loadAbilities();
+		this.getAbitities();
 		this.loadRoles();
 		this.loadPermissions();
 

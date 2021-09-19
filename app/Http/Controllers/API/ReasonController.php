@@ -14,7 +14,10 @@ class ReasonController extends Controller
     public function index()
     {
         $reasons =  Reason::all();
-        return ['data' => $reasons];
+
+        return response()->json([
+            'data' => $reasons,
+        ]);
     }
 
 

@@ -9,13 +9,22 @@ use App\Models\Month;
 use App\Models\Referral;
 use App\Models\Record;
 use App\Models\Beneficiary;
+use App\Models\Reason;
 
 class ReferralController extends Controller
 {
 
     public function show($id)
     {
-        $referral = Referral::with('originalDirectIndividual', 'referralSource')->findOrFail($id);
+        $referral = Referral::with('originalDirectIndividual', 
+        'referralSource', 
+        'reasons', 
+        'records', 
+        'records.month', 
+        'records.status', 
+        'records.beneficiaries',
+        'records.beneficiaries.individual',
+        'records.beneficiaries.services.servicetype' )->findOrFail($id);
 
         if($referral){
             return ['data' => $referral];
@@ -34,6 +43,7 @@ class ReferralController extends Controller
             'referral_date' => 'required',
             'referring_person_name' => 'required',
             'referring_person_email' => 'required',
+            'referral_narrative_reason' => 'required',
             'current_status_id' => '',
             'current_assigned_psw_id' => '',
         ]);
@@ -45,6 +55,7 @@ class ReferralController extends Controller
             'referral_date' => $request->referral_date,
             'referring_person_name' => $request->referring_person_name,
             'referring_person_email' => $request->referring_person_email,
+            'referral_narrative_reason' => $request->referral_narrative_reason,
             'current_status_id' => $request->current_status_id,
             'current_assigned_psw_id' => $request->current_assigned_psw_id,
         ]);
@@ -73,12 +84,12 @@ class ReferralController extends Controller
     
 
         // insert referral reasons
-/*         $reasonsIds = $request->reasons_ids;
+        $reasonsIds = $request->reasons_ids;
         foreach($reasonsIds as $reasonId)
         {
             $reason = Reason::find($reasonId);
             $referral->reasons()->attach($reason);
-        } */
+        }
 
         /////* Insert Records *///////
         //$this->insertDefaultRecords($pssCase->id, $referralMonth);
@@ -111,7 +122,7 @@ class ReferralController extends Controller
 
 
             // Insert Indirect Individuals In Each Record
-            $indirectIndividualsIds = $request->indirect_individuals_ids;
+            $indirectIndividualsIds = $request->indirect_beneficiaries_ids;
             if(!empty($indirectIndividualsIds)){
                 foreach($indirectIndividualsIds as $indirectIndividualId)
                 {

@@ -8,7 +8,7 @@
 
 					<div class="card-tools">
 						<button class="btn btn-success" @click="showCreateNationalityModal">
-							Add New <i class="fas fa-nationality-plus fa-fw"></i>
+							Add New
 						</button>
 					</div>
 					
@@ -92,7 +92,7 @@ export default {
 		}
 	},
 	methods: {
-		loadNationalities(){
+		getNationalities(){
 			this.$Progress.start();
 			axios.get("/api/nationalities")
 			.then(({data}) => {
@@ -190,10 +190,10 @@ export default {
 		// console.log($getPermissions());
 		
 
-		this.loadNationalities();
+		this.getNationalities();
 		
 		Fire.$on('nationalitiesChanged', () => {
-			this.loadNationalities();
+			this.getNationalities();
 		});
 
 		

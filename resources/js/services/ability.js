@@ -11,11 +11,6 @@
 // };
 
 
-const { defineAbility } = require('@casl/ability');
+import { Ability } from '@casl/ability';
 
-module.exports = defineAbility((can, cannot) => {
-    // can('manage', 'all');
-    // cannot('delete', 'User');
-});
-
-
+export default new Ability()

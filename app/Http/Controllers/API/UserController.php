@@ -44,17 +44,19 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'type' => 'required',
         ]);
 
-        return User::create([
+        $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
-            'type' => $request['type'],
-            'bio' => $request['bio'],
             // 'photo' => $request['photo'],
             'password' => Hash::make($request['password']),
         ]);
+
+        $rolesIds = collect($request->input('roles'))->pluck('id');
+        $user->roles()->sync($rolesIds);
+
+        return $user;
     }
 
     /**
@@ -91,19 +93,19 @@ class UserController extends Controller
                 'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
                 // sometimes is like unrequired
                 'password' => 'sometimes|string|min:8',
-                'type' => 'required',
             ]);
 
             $user->update([
                 'name' => $request['name'],
                 'email' => $request['email'],
-                'type' => $request['type'],
-                'bio' => $request['bio'],
                 // 'photo' => $request['photo'],
                 
-                'password' => Hash::make($request['password']),
+                // 'password' => Hash::make($request['password']),
             ]);
-            
+
+            $rolesIds = collect($request->input('roles'))->pluck('id');
+            $user->roles()->sync($rolesIds);
+    
             return ['message' => 'User updated'];
         }
 
@@ -119,8 +121,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // delete the user
+        // if it exists
         if($user){
+            // detach first
+            $user->roles()->detach();
+            // then delete
             $user->delete();
         }
 

@@ -23,7 +23,7 @@
 								<HasError :form="referralForm" field="direct_individual_name" />
 							</div>
 
-								<div class="form-group">
+							<div class="form-group">
 								<label for="referral_source_id" class="form-label">Select Indirect Beneficiaries</label>
 								<select multiple name="referral_source_id" v-model="referralForm.indirect_beneficiaries_ids" id="referral_source_id" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('individual') }">
 									<option v-for='individual in directIndividual.file.individuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
@@ -63,6 +63,20 @@
 								<HasError :form="referralForm" field="referring_person_email" />
 							</div>
 
+							<div class="form-group">
+								<label for="reasons_ids" class="form-label">Referral Reason</label>
+								<select multiple name="reasons_ids" v-model="referralForm.reasons_ids" id="reasons_ids" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('reasons_ids') }">
+									<option v-for='reason in reasons' :value='reason.id' :key="reason.id">{{ reason.name }}</option>
+								</select>
+								<HasError :form="referralForm" field="reasons_ids" />
+							</div>
+
+							<div class="form-group">
+								<label for="referral_narrative_reason" class="form-label">Referral Narrative Reason</label>
+								<textarea class="form-control" rows="3" v-model="referralForm.referral_narrative_reason" name="referral_narrative_reason"></textarea>
+								<HasError :form="referralForm" field="referral_narrative_reason" />
+							</div>
+
 						</div>
 						<div>
 							<button v-show="!referralEditMode" type="submit" class="btn btn-success">Create</button>
@@ -100,8 +114,10 @@ export default {
 				referral_date: '',
 				referring_person_name: '',
 				referring_person_email: '',
+				referral_narrative_reason: '',
                 original_direct_individual_id: this.$route.params.id,
 				indirect_beneficiaries_ids : [],
+				reasons_ids: [],
             }),
         }
     },
@@ -118,12 +134,14 @@ export default {
         },
 		getNationalities(){
 			this.$Progress.start();
-			axios.get("/api/nationalities").then(({data}) => (this.nationalities = data.data));
+			axios.get("/api/nationalities")
+			.then(({data}) => {this.nationalities = data.data});
 			this.$Progress.finish();
 		},
 		getReasons(){
 			this.$Progress.start();
-			axios.get("/api/reasons").then(({data}) => (this.reasons = data.data));
+			axios.get("/api/referral_reasons")
+			.then(({data}) => {this.reasons = data.data});
 			this.$Progress.finish();
 		},
 		getReferralSources(){			
@@ -145,7 +163,6 @@ export default {
 			}else{
 				this.fileIndividuals = []
 			}
-
 		},
 
 		createReferral() {

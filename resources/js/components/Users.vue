@@ -6,8 +6,13 @@
 }
 </style>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <template>
 	<div class="container-fluid">
+		<button class="btn btn-success" @click="checkPermission">
+			Check Permission
+		</button>
 		<div class="row mt-5">
 			<div class="col-md-12">
 				<div class="card">
@@ -15,10 +20,8 @@
 					<h3 class="card-title">Users</h3>
 
 					<!-- v-if="$can('user_create')" -->
-					<div class="card-tools" v-if="$can('user_create')">
-						<button class="btn btn-success" @click="showCreateUserModal">
-							Add New <i class="fas fa-user-plus fa-fw"></i>
-						</button>
+					<div class="card-tools" v-if="$can('user_update')">
+						<button class="btn btn-success" @click="showCreateUserModal">Add New</button>
 					</div>
 					
 				</div>
@@ -78,38 +81,39 @@
 						<div class="modal-body">
 							<div class="form-group">
 								<label for="name" class="form-label">Name</label>
-								<input id="name" v-model="form.name" type="text" name="name" class="form-control">
-								<HasError :form="form" field="name" />
+								<input id="name" v-model="userForm.name" type="text" name="name" class="form-control">
+								<HasError :form="userForm" field="name" />
 							</div>
 
 							<div class="form-group">
 								<label for="email" class="form-label">Email</label>
-								<input id="email" v-model="form.email" type="email" name="email" class="form-control">
-								<HasError :form="form" field="email" />
+								<input id="email" v-model="userForm.email" type="email" name="email" class="form-control">
+								<HasError :form="userForm" field="email" />
 							</div>
 
-							<div class="form-group">
-								<label for="bio" class="form-label">Bio</label>
-								<input id="bio" v-model="form.bio" type="bio" name="bio" class="form-control">
-								<HasError :form="form" field="bio" />
-							</div>
-
-							<div class="form-group">
-								<label for="type" class="form-label">Type</label>
-								<select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-									<option value="">Select User Type</option>
-									<option value="admin">Admin</option>
-									<option value="user">Standard User</option>
-									<option value="author">Author</option>
-								</select>
-								<has-error :form="form" field="type"></has-error>
+							<div class="form-group" v-if="roles">
+								<label class="typo__label">Roles</label>
+								<multiselect 
+								v-model="userForm.roles"
+								:options="roles"
+								:multiple="true"
+								:close-on-select="false"
+								:clear-on-select="false" 
+								:preserve-search="true"
+								placeholder="Pick some"
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 							</div>
 
 							<div class="form-group">
 								<label for="password" class="form-label">Password</label>
-								<input v-model="form.password" type="password" name="password" id="password"
-								class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-								<has-error :form="form" field="password"></has-error>
+								<input v-model="userForm.password" type="password" name="password" id="password"
+								class="form-control" :class="{ 'is-invalid': userForm.errors.has('password') }">
+								<has-error :form="userForm" field="password"></has-error>
 							</div>
 
 						</div>
@@ -126,24 +130,37 @@
 </template>
 <script>
 import Form from 'vform'
+import Multiselect from 'vue-multiselect'
 
 export default {
+	components: { Multiselect },
 	data() {
 		return {
 			editMode: false,
 			users: {},
-			form: new Form({
+			roles: [],
+			userForm: new Form({
 				id: '',
 				name: '',
 				email: '',
 				password: '',
-				type: '',
-				bio: '',
 				photo: '',
+				roles: [],
 			})
 		}
 	},
 	methods: {
+		checkPermission(){
+			console.log(this.$can('user_list'))
+		},
+		loadRoles(){			
+			this.$Progress.start();
+			axios.get("/api/roles")
+			.then(({data}) => {
+				this.roles = data.data
+			});
+			this.$Progress.finish();
+		},
 		loadUsers(){			
 			this.$Progress.start();
 			axios.get("/api/user").then(({data}) => (this.users = data.data));
@@ -152,12 +169,12 @@ export default {
 
 		showCreateUserModal(){
 			this.editMode = false;
-			this.form.reset()
+			this.userForm.reset()
 			$('#userModal').modal('show')
 		},
 		createUser() {
 			this.$Progress.start();
-			this.form.post('/api/user')
+			this.userForm.post('/api/user')
 			.then(() => {
 				// success
 				Fire.$emit('usersChanged');
@@ -178,13 +195,13 @@ export default {
 
 		showEditUserModal(user){
 			this.editMode = true;
-			this.form.reset()
+			this.userForm.reset()
 			$('#userModal').modal('show')
-			this.form.fill(user)
+			this.userForm.fill(user)
 		},
 		updateUser(){
 			this.$Progress.start();
-			this.form.put('/api/user/'+this.form.id)
+			this.userForm.put('/api/user/'+this.userForm.id)
 			.then(() => {
 				// success
 				Fire.$emit('usersChanged');
@@ -215,7 +232,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('/api/user/'+id)
+					this.userForm.delete('/api/user/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('usersChanged');
@@ -239,7 +256,8 @@ export default {
 		// console.log($getPermissions());
 		
 
-		this.loadUsers();
+		this.loadUsers()
+		this.loadRoles()
 		
 		Fire.$on('usersChanged', () => {
 			this.loadUsers();

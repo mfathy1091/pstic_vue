@@ -23,14 +23,18 @@ class Beneficiary extends Model
 
 
 
-    public function benefits()
+    public function services()
     {
-        return $this->hasMany(Benefit::class);
+        return $this->hasMany(Service::class);
     }
 
     public function followUps()
     {
         return $this->hasMany(followUp::class);
+    }
+
+    public function beneficiaryDisabilities(){
+        return $this->belongsToMany(Disability::class);
     }
 
 
@@ -47,9 +51,9 @@ class Beneficiary extends Model
     //     return $this->belongsTo(Month::class, 'month_id');
     // }
 
-    // public function benefits()
+    // public function services()
     // {
-    //     return $this->belongsToMany(Benefit::class, 'benefits_beneficiaries', 'beneficiary_id', 'benefit_id');
+    //     return $this->belongsToMany(Service::class, 'services_beneficiaries', 'beneficiary_id', 'service_id');
 
     // }
 

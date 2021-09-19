@@ -91,7 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								{{-- @can('user-list') --}}
 								<li class="nav-item">
 									<router-link to="/users" class="nav-link">
-										<i class="fas fa-users nav-icon"></i>
+										<i class="fas fa-minus nav-icon"></i>
 										<p>Users</p>
 									</router-link>
 								</li>
@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
 									<router-link to="/roles" class="nav-link">
-										<i class="fas fa-shield-alt nav-icon"></i>
+										<i class="fas fa-minus nav-icon"></i>
 										<p>Roles</p>
 									</router-link>
 								</li>
@@ -129,7 +129,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									</router-link>
 								</li>
 							</ul>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<router-link to="/servicetypes" class="nav-link">
+										<i class="fas fa-minus nav-icon"></i>
+										<p>Service Types</p>
+									</router-link>
+								</li>
+							</ul>
 						</li>
+						
 
 						<li class="nav-item">
 							<a href="#" class="nav-link">

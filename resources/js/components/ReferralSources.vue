@@ -8,7 +8,7 @@
 
 					<div class="card-tools">
 						<button class="btn btn-success" @click="showCreateReferralSourceModal">
-							Add New <i class="fas fa-referralSource-plus fa-fw"></i>
+							Add New
 						</button>
 					</div>
 					

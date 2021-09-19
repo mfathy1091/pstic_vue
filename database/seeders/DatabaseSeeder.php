@@ -19,12 +19,14 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call(ReasonSeeder::class);
-        // $this->call(ServiceSeeder::class);
+        $this->call(ServicetypeSeeder::class);
         $this->call(StatusSeeder::class);
 
         // $this->call(RoleTableSeeder::class);
 
         $this->call(NationalitySeeder::class);
+        $this->call(DisabilitySeeder::class);
+        
         $this->call(GenderSeeder::class);
 
         // $this->call(CitySeeder::class);
@@ -55,6 +57,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(CaseTypeSeeder::class);
         // $this->call(VulnerabilitySeeder::class);
         //$this->call(FollowUpSeeder::class);
-        //$this->call(BenefitSeeder::class);
+        //$this->call(ServiceSeeder::class);
     }
 }

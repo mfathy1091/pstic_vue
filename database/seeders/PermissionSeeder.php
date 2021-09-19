@@ -25,6 +25,9 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'user_update',
             ],
+            [
+                'name' => 'user_list',
+            ],
         ];
 
         foreach($permissions as $n){

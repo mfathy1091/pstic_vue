@@ -39,9 +39,9 @@ class Record extends Model
         return $this->hasMany(Emergency::class);
     }
 
-    public function benefits()
+    public function services()
     {
-        return $this->hasMany(Benefit::class);
+        return $this->hasMany(Service::class);
     }
 
     public function beneficiaries()

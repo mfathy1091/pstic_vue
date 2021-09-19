@@ -38,9 +38,8 @@ class RoleController extends Controller
             'name' => $request['name'],
         ]);
         
-        $permissionsIds = $request->input('permissions_ids');
+        $permissionsIds = collect($request->input('permissions'))->pluck('id');
         $role->permissions()->sync($permissionsIds);
-
 
         return $role;
     }
@@ -81,7 +80,7 @@ class RoleController extends Controller
                 ]);
 
                 // then sync
-                $permissionsIds = $request->input('permissions_ids');
+                $permissionsIds = collect($request->input('permissions'))->pluck('id');
                 $role->permissions()->sync($permissionsIds);
             }
             
