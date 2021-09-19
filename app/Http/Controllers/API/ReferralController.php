@@ -24,7 +24,7 @@ class ReferralController extends Controller
         'records.status', 
         'records.beneficiaries',
         'records.beneficiaries.individual',
-        'records.beneficiaries.services.servicetype' )->findOrFail($id);
+        'records.beneficiaries.services' )->findOrFail($id);
 
         if($referral){
             return ['data' => $referral];

@@ -23,21 +23,21 @@ class Beneficiary extends Model
 
 
 
-    public function services()
-    {
-        return $this->hasMany(Service::class);
-    }
+
 
     public function followUps()
     {
         return $this->hasMany(followUp::class);
     }
 
-    public function beneficiaryDisabilities(){
+    public function disabilities(){
         return $this->belongsToMany(Disability::class);
     }
-
-
+    
+    public function services()
+    {
+        return $this->belongsToMany(Service::class);
+    }
 
     // public function pssCase()
     // {

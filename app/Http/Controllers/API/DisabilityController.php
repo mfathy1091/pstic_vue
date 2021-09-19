@@ -14,7 +14,7 @@ class DisabilityController extends Controller
     public function index()
     {
         $disabilities =  Disability::all();
-        return ['data' => $nationalities];
+        return ['data' => $disabilities];
     }
 
 

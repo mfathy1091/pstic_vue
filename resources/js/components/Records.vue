@@ -35,42 +35,64 @@
                         
 
                         <div>
-                            <button class="btn btn-success" @click="showAddBeneficiaryModal">
-                                Add Beneficiary
+                            <button class="btn btn-success">
+                                Modify Beneficiaries
                             </button>
 
 
                             
                             <!-- Beneficiaries -->
                             <div class="row">
-                                <div class="card m-2 col-md-6 col-12" v-for="beneficiary in record.beneficiaries" :key="beneficiary.id">
+                                <div class="card m-2 col-md-6 col-12" v-for="beneficiary in recordBeneficiaries" :key="beneficiary.id">
                                     <div class="card-header">
                                         <span class="mt-2">{{ beneficiary.individual.name }}</span>
                                         <span v-show="beneficiary.is_direct == 1" class="badge badge-pill badge-primary">Direct</span>
                                         <span @click="showEditBeneficiaryModal(beneficiary, record)"
-                                        id='clickableAwesomeFont'>
-                                            <i class="fa fa-edit blue"></i>
+                                        id='clickableAwesomeFont' class="ml-5">
+                                            <i class="fa fa-edit blue fa-lg"></i>
                                         </span>
+                                        <span @click="deleteBeneficiary(beneficiary.id)"
+                                        id='clickableAwesomeFont'>
+                                            <i class="fa fa-trash red"></i>
+                                        </span>
+
+                                        
                                     </div>
 
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col mb-2 d-flex flex-row">
-                                                <h6 class="text-muted mr-2">Provided Services</h6>
-                                                <span @click="showEditServiceModal(beneficiary, record)"
-                                                id='clickableAwesomeFont'>
-                                                    <i class="fa fa-edit blue"></i>
-                                                </span>
+                                            <div class="col mb-2">
+                                                <h6 class="text-muted mr-2">
+                                                    Provided Services
+                                                    <span @click="showEditServiceModal(beneficiary, record)"
+                                                    id='clickableAwesomeFont'>
+                                                    </span>
+                                                </h6>
 
-                                                <div class="ml-4">
+
+                                                <div class="ml-2">
                                                     <li v-for="service in beneficiary.services" :key="service.id">
-                                                        {{ service.service_type.name }}
+                                                        {{ service.name }}
                                                     </li>
                                                 </div>
                                             </div>
-                                            <div class="col mb-4" >
-                                                <h6 class="card-subtitle mb-2 text-muted">Emergencies</h6>
-                                                <i class="fa fa-plus-circle green fa-lg"></i>
+                                            <div class="col mb-2">
+                                                <h6 class="text-muted mr-2">
+                                                    Disabilities
+                                                </h6>
+                                                
+                                                <div class="ml-2">
+                                                    <li v-for="disability in beneficiary.disabilities" :key="disability.id">
+                                                        {{ disability.name }}
+                                                    </li>
+                                                </div>
+                                            </div>
+                                            <div class="col mb-2" >
+                                                <h6 class="card-subtitle mb-2 text-muted">
+                                                    Emergencies
+                                                    <!-- <i class="fa fa-plus-circle green fa-lg"></i> -->
+                                                </h6>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -118,11 +140,11 @@
                                 <input id="name" v-model="serviceForm.beneficiary_id" type="text" name="name" class="form-control" disabled>
                             </div>
 
-                            <div class="form-group" v-if="servicetypes">
+                            <div class="form-group" v-if="services">
 								<label class="typo__label">Services Provided</label>
 								<multiselect 
 								v-model="beneficiaryForm.services" 
-								:options="servicetypes" 
+								:options="services" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -151,8 +173,11 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!beneficiaryEditMode" class="modal-title" id="beneficiaryModalLabel">Add Beneficiary</h5>
-                        <h5 v-show="beneficiaryEditMode" class="modal-title" id="beneficiaryModalLabel">Edit Beneficiary</h5>
+                        <h5 v-show="!beneficiaryEditMode" class="modal-title" id="beneficiaryModalLabel">
+                            Add Beneficiary | 
+                            {{ this.currentRecord.month.name }}
+                            </h5>
+                        <h5 v-show="beneficiaryEditMode" class="modal-title" id="beneficiaryModalLabel">Edit Beneficiary {{ this.currentRecord.month.name }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -160,14 +185,6 @@
                     <form @submit.prevent="beneficiaryEditMode ? updateBeneficiary() : createBeneficiary()">
                         <div class="modal-body">
 
-                            <div class="form-group">
-                                <label for="beneficiary_id" class="form-label">Beneficiary</label>
-                                <select name="beneficiary_id" v-model="beneficiaryForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': beneficiaryForm.errors.has('beneficiary_id') }">
-                                    <option v-for='beneficiary in this.currentRecord.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
-                                </select>
-                                <HasError :form="beneficiaryForm" field="beneficiary_id" />
-                            </div>
-                            
                             <div class="form-group">
                                 <label for="beneficiary_id" class="form-label">Beneficiary</label>
                                 <select name="beneficiary_id" v-model="beneficiaryForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': beneficiaryForm.errors.has('beneficiary_id') }">
@@ -186,11 +203,27 @@
                                 <input id="name" v-model="beneficiaryForm.id" type="text" name="name" class="form-control" disabled>
                             </div>
 
-                            <div class="form-group" v-if="servicetypes">
+                            <div class="form-group" v-if="services">
 								<label class="typo__label">Services Provided</label>
 								<multiselect 
 								v-model="beneficiaryForm.services" 
-								:options="servicetypes" 
+								:options="services" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+								</multiselect>
+							</div>
+
+                            <div class="form-group" v-if="disabilities">
+								<label class="typo__label">Disabilities</label>
+								<multiselect 
+								v-model="beneficiaryForm.disabilities" 
+								:options="disabilities" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -235,25 +268,26 @@ export default {
         return{
             serviceEditMode: false,
             beneficiaryEditMode: false,
-            servicetypes: [],
+            services: [],
+            disabilities: [],
 
             currentRecordId: '',
             currentRecord: {},
             currentBeneficiary: '',
+            recordBeneficiaries: [],
 
             serviceForm: new Form({
                 record_id: '',
                 beneficiary_id: '',
-                servicetypes_ids: [],
+                services_ids: [],
             }),
             beneficiaryForm: new Form({
                 id: '',
                 individual_id: '',
                 record_id: '',
                 is_direct: '',
-                disabilities: '',
-                // servicetypes: [],
-                // services: [],
+                disabilities: [],
+                services: [],
                 // followUps: [],
                 // disabilities: [],
             }),
@@ -263,8 +297,8 @@ export default {
         init() { 
             // set latest record id
             // var lastPosition = this.lineData.length -1;
-            // this.currentRecordId = this.referral.records[0].id;
-            // this.currentRecord = this.referral.records[0];
+            this.currentRecordId = this.referral.records[0].id;
+            this.currentRecord = this.referral.records[0];
             this.getRecordBeneficiaries()
         },
 
@@ -284,11 +318,19 @@ export default {
             });
 			this.$Progress.finish();
 		},
-        getServicetypes(){
+        getServices(){
 			this.$Progress.start();
-			axios.get("/api/servicetypes")
+			axios.get("/api/services")
 			.then(({data}) => {
-				this.servicetypes = data.data
+				this.services = data.data
+			});
+			this.$Progress.finish();
+		},
+        getDisabilities(){
+			this.$Progress.start();
+			axios.get("/api/disabilities")
+			.then(({data}) => {
+				this.disabilities = data.data
 			});
 			this.$Progress.finish();
 		},
@@ -353,7 +395,7 @@ export default {
 
 
 
-		deleteService(id){
+		deleteBeneficiary(id){
 			Swal.fire({
 				title: 'Are you sure?',
 				text: "You won't be able to revert this!",
@@ -366,10 +408,10 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.serviceForm.delete('/api/services/'+id)
+					this.beneficiaryForm.delete('/api/beneficiaries/'+id)
 					.then(() => {
 						// success
-						Fire.$emit('servicesChanged');
+						Fire.$emit('beneficiariesChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -390,12 +432,16 @@ export default {
 		// console.log($getPermissions());
 		this.init()
 
-		this.getServicetypes();
+		this.getServices()
+        this.getDisabilities()
 		
 		Fire.$on('servicesChanged', () => {
 			this.getServices();
 		});
-
+		
+        Fire.$on('beneficiariesChanged', () => {
+			this.getRecordBeneficiaries();
+		});
 		
 	}
 }

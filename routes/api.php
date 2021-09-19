@@ -27,10 +27,9 @@ Route::middleware('auth:api')->group( function () {
     Route::apiResources(['relationships'=> 'API\RelationshipController']);
     Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
     Route::apiResources(['referral_reasons'=> 'API\ReasonController']);
-    Route::apiResources(['servicetypes'=> 'API\ServicetypeController']);
-
-    // services
     Route::apiResources(['services'=> 'API\ServiceController']);
+    Route::apiResources(['disabilities'=> 'API\DisabilityController']);
+
 
     
     // Files

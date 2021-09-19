@@ -36,7 +36,7 @@
         </div>
 
         <!-- Records Section -->
-        <Records :referral="referral" />
+        <Records v-if="referral" :referral="referral" />
 
     </div>
 </template>

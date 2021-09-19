@@ -27,58 +27,10 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $recordId = $request->input('record_id');
-        $servicseIds = $request->input('services_ids');
-
-        foreach($servicseIds as $serviceId){
-            Benefit::create([
-                'record_id' => $recordId,
-                'beneficiary_id' => $request->input('beneficiary_id'),
-                'service_id' => $serviceId
-            ]);
-        }
-
-        // foreach( $beneficiariesIds as $beneficiaryId){
-        //     Benefit::create([
-        //         'beneficiary_id' => $beneficiaryId,
-        //         'record_id' => $recordId,
-        //         'service_id' => $serviceId,
-        //     ]);
-        // }
-
-        // make the record inactive if it has no activities
-        $record = Record::find($recordId);
-        $record->status_id = 1;
-        $record->save();
-
-
-
-
-
-
-
         $service = Service::create([
             'name' => $request['name'],
         ]);
         
-        $i = 0;
-        foreach($monthsCodes as $monthCode)
-        {
-            $i++;
-            // insert Records
-            $month = Month::where('code', $monthCode)->firstOrFail();
-            if($i == 1){
-                $is_new = 1;
-            }else{
-                $is_new = 0;
-            }
-            $record = Record::create([
-                'month_id' => $month->id,
-                'referral_id' => $referral->id,
-                'status_id' => '2',
-                'is_new' => $is_new,
-                'is_emergency' => '0',
-            ]);
 
 
         return $service;

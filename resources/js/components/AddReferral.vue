@@ -58,9 +58,9 @@
 							</div>
 
 							<div class="form-group">
-								<label for="referring_person_email" class="form-label">Referring Person Name</label>
-								<input id="referring_person_email" v-model="referralForm.referring_person_email" type="text" name="referring_person_email" class="form-control">
-								<HasError :form="referralForm" field="referring_person_email" />
+								<label for="referring_person_email" class="form-label">Referring Person Email</label>
+								<input id="referring_person_email" v-model="referralForm.referring_person_email" type="email" name="referring_person_email" class="form-control">
+							<HasError :form="referralForm" field="referring_person_email" />
 							</div>
 
 							<div class="form-group">
