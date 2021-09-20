@@ -43,7 +43,7 @@ class ReferralController extends Controller
             'referral_source_id' => 'required',
             'referral_date' => 'required',
             'referring_person_name' => 'required',
-            'referring_person_email' => 'required',
+            'referring_person_email' => 'required|email',
             'referral_narrative_reason' => 'required',
             'current_status_id' => '',
             'current_assigned_psw_id' => '',
@@ -145,4 +145,62 @@ class ReferralController extends Controller
         return ['data' => $referrals];
     }
 
+
+    public function update(Request $request, $id)
+    {
+        $referral = Referral::findOrFail($id);
+
+        // if it exists
+        if($referral){
+            
+            $this->validate($request, [
+                'original_direct_individual_id' => 'required',
+                'referral_source_id' => 'required',
+                'referral_date' => 'required',
+                'referring_person_name' => 'required',
+                'referring_person_email' => 'required|email',
+                'referral_narrative_reason' => 'required',
+                'current_status_id' => '',
+                'current_assigned_psw_id' => '',
+            ]);
+            
+            // update first
+            $referral->update([
+                'original_direct_individual_id' => $request->original_direct_individual_id,
+                'referral_source_id' => $request->referral_source_id,
+                'referral_date' => $request->referral_date,
+                'referring_person_name' => $request->referring_person_name,
+                'referring_person_email' => $request->referring_person_email,
+                'referral_narrative_reason' => $request->referral_narrative_reason,
+                'current_status_id' => $request->current_status_id,
+                'current_assigned_psw_id' => $request->current_assigned_psw_id,
+            ]);
+
+            // then sync
+            $reasonsIds = collect($request->input('reasons'))->pluck('id');
+            $referral->reasons()->sync($reasonsIds);
+            
+            
+            return ['message' => 'Referral updated'];
+        }
+
+    }
+
+
+    public function destroy($id)
+    {
+        $referral = Referral::findOrFail($id);
+
+        // if it exists
+        if($referral){
+            // detach first
+            $referral->permissions()->detach();
+            // then delete
+            $referral->delete();
+        }
+
+        return ['message' => 'Referral deleted'];
+    }
 }
+
+

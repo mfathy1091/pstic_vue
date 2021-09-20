@@ -19,6 +19,7 @@ let routes = [
 
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/individuals/check', component: require('./components/CheckIndividual.vue').default },
+    { path: '/individuals/create_registered', component: require('./components/AddRegisteredIndividual.vue').default },
     { path: '/individuals/:id', component: ShowIndividual },
     { path: '/individuals/:id/referrals/create', component: AddReferral },
     { path: '/referrals/:id', component: ShowReferral },

@@ -15,7 +15,7 @@ class CreateIndividualsTable extends Migration
     {
         Schema::create('individuals', function (Blueprint $table) {
             $table->id();
-            $table->string('passport_number')->nullable();
+            $table->string('passport_number')->nullable()->unique();
             $table->string('name');
             $table->integer('age');
             $table->boolean('is_registered')->nullable();

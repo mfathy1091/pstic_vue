@@ -59,6 +59,15 @@
 					<form @submit.prevent="referralEditMode ? updateReferral() : createReferral()">
 						<div class="modal-body">
 							<div class="form-group">
+								<label for="referral_source_id" class="form-label">Referral Source</label>
+								<select name="referral_source_id" v-model="referralForm.referral_source_id" id="referral_source_id" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('referral_source_id') }">
+									<option value='0' disabled>Choose...</option>
+									<option v-for='referralSource in referralSources' :value='referralSource.id' :key="referralSource.id">{{ referralSource.name }}</option>
+								</select>
+								<HasError :form="referralForm" field="referral_source_id" />
+							</div>
+                            
+                            <div class="form-group">
 								<label for="referral_date" class="form-label">Referral Date</label>
 								<input id="referral_date" v-model="referralForm.referral_date" type="text" name="referral_date" class="form-control">
 								<HasError :form="referralForm" field="referral_date" />
@@ -133,17 +142,21 @@ export default {
         return{
             referral: '',
             reasons: [],
+            referralSources: [],
 
             referralEditMode: false,
             
             recordBeneficiaries: [],
 
             referralForm: new Form({
+                id: '',
+                referral_source_id: '',
                 referral_date: '',
                 referring_person_name: '',
                 referring_person_email: '',
                 referral_narrative_reason: '',
                 reasons: [],
+                original_direct_individual_id: '',
             }),
         }
     },
@@ -154,6 +167,14 @@ export default {
 			.then(({data}) => {
 				this.reasons = data.data
 			});
+			this.$Progress.finish();
+		},
+        getReferralSources(){			
+			this.$Progress.start();
+			axios.get("/api/referral_sources")
+            .then(({data}) => {
+                this.referralSources = data.data
+            });
 			this.$Progress.finish();
 		},
 
@@ -169,7 +190,7 @@ export default {
 
 
         showEditReferralModal(){
-			this.editMode = true;
+			this.referralEditMode = true;
 			this.referralForm.reset()
 			$('#referralModal').modal('show')
 			this.referralForm.fill(this.referral)
@@ -179,7 +200,7 @@ export default {
 			this.referralForm.put('/api/referrals/'+this.referralForm.id)
 			.then(() => {
 				// success
-				// Fire.$emit('referralsChanged');
+				Fire.$emit('referralChanged');
 				$('#referralModal').modal('hide')
 				Swal.fire(
 					'Updated!',
@@ -196,8 +217,13 @@ export default {
     },
 
     created (){
+        this.getReferralSources()
         this.getReferralReasons()
         this.getReferral()
+
+        Fire.$on('referralChanged', () => {
+			this.getReferral();
+		});
     }
 }
 </script>

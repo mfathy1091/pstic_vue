@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
     Route::get('individuals/{individual}/other_file_individuals', 'API\IndividualController@getOtherFileIndividuals');
     Route::get('individuals/{individual}/referrals', 'API\Individual\ReferralController@index');
+    Route::get('passport_individuals/get_individual_by_passport/{passport_number}', 'API\Individual\PassportIndividualController@getIndividualByPassword');
 
     
     // Beneficiaries
