@@ -1,33 +1,40 @@
+<style scoped>
+.clickable {
+    cursor: pointer
+}
+</style>
+
 <template>
     <div>
+		<!-- File Number Field -->
 		<div class="col-4">
-			<form @submit.prevent="getFile">
-				<hr>
-				
-				<div class="form-group">
-					<label for="file_number" class="form-label">Enter File Number</label>
-					<input v-model="fileForm.file_number" type="text" :placeholder="mask" class="form-control">
-				</div>
-				
-				<button  type="submit" class="btn btn-primary">Create File</button>
-			</form>
+			<ValidationObserver v-slot="{ handleSubmit }">
+				<form @submit.prevent="handleSubmit(getFile)">
+					<hr>
+					<ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
+					<div class="form-group">
+						<label for="number" class="form-label">Enter File Number</label>
+						<input v-model="fileForm.number" type="text" :placeholder="mask" class="form-control">
+						<span class="text-danger">{{ errors[0] }}</span>
+					</div>
+					</ValidationProvider>
+					<button  type="submit" class="btn btn-primary">Create File</button>
+				</form>
+			</ValidationObserver>
 		</div>
 
-
+		<!-- File Section -->
 		<div v-if="showRegisterByFileNumberSection">
+			
 			<div class="card mt-3">
 				<div class="card-header">
 					<h5 class="m-0">
-						File Number 
-						<span v-if="this.file">(Already Exists)</span>
+						File Number: {{ this.file.number }}
 					</h5>
 				</div>
 				<div class="card-body">
-					<h6 class="card-title">{{ this.file.number }}</h6>
-				</div>
-			</div>
-
-			<div class="card mt-3">
+					<!-- File Individuals -->
+					<div class="card mt-3">
 				<div class="card-header">
 					<h3 class="card-title">
 						Individuals under {{ this.file.number }}
@@ -68,6 +75,9 @@
 										<td>{{ individual.nationality.name}}</td>
 										<td>{{ individual.current_phone_number }}</td>
 										<td>
+											<a href="#" @click="goToIndividualPage(individual)">
+                                            	<i class="fas fa-eye"></i>
+                                        	</a>
 											<a href="#" @click="showEditIndividualModal(individual)">
 												<i class="fa fa-edit blue"></i>
 											</a>
@@ -83,9 +93,73 @@
 				</div>
 			</div>
 
+
+		</div>
+	</div>
+
+			<div class="card card-solid">
+				<div class="card-header">
+					<h3 class="card-title">
+						Individuals Linked to {{ this.file.number }}
+					</h3>
+
+					<div class="card-tools">
+						<button class="btn btn-primary" @click="showCreateIndividualModal">
+							<i class="fas fa-link"></i> Link Individuals
+						</button>
+					</div>
+					
+				</div>
+				<div class="card-body pb-0">
+					<div class="row">
+						
+						<div v-for="individual in fileIndividuals" :key="individual.id"
+						class="col-12 col-lg-4 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+							<div class="card bg-light d-flex flex-fill">
+								<div class="card-header text-dark border-bottom-0">
+									<h6 class="lead">{{ individual.name }}</h6>
+								</div>
+								<div class="card-body pt-2">
+									<div class="row">
+										<div class="col-12">
+											
+											<span class="text-muted text-sm"><b>Personal Details</b></span>
+											<ul class="mb-0 fa-ul text-muted">
+												<li><span class="fa-li"></span><b>Passport #:</b> {{ individual.passport_number }}</li>
+												<li><span class="fa-li"></span><b>Age:</b> {{ individual.age }}</li>
+												<li><span class="fa-li"></span><b>Gender:</b> {{ individual.gender.name }}</li>
+												<li><span class="fa-li"></span><b>Nationality:</b> {{ individual.nationality.name }}</li>
+												<li><span class="fa-li"></span><b>Phone #:</b> {{ individual.current_phone_number}}</li>
+											</ul>
+											<hr>
+											<span class="text-muted text-sm"><b>File Related Details</b></span>
+											<span class="clickable text-red ml-2" @click="showCreateIndividualModal">
+												<i class="fas fa-unlink"></i> Unlink
+											</span>
+
+											<ul class="mb-0 fa-ul text-muted">
+												<li><span class="fa-li"></span><b>Individual ID:</b> {{ individual.individual_id }}</li>
+												<li><span class="fa-li"></span><b>Relationship:</b> {{ individual.relationship.name}}</li>
+											</ul>
+
+										</div>
+									</div>
+								</div>
+								<div class="card-footer">
+										<button class="btn btn-sm btn-primary" @click="goToIndividualPage(individual)">
+											<i class="fas fa-eye"></i> View Page
+										</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
 			<!-- Choose Direct Section -->
 			<ValidationObserver v-slot="{ handleSubmit }">
-				<form @submit.prevent="handleSubmit(goToCreateReferralPage)">
+				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="fileIndividuals.length">
 					<!-- <ValidationProvider name="directIndividual_id" rules="required|numeric" v-slot="{ errors }">
 						<input v-model="directIndividual_id" type="text">
 						<span>{{ errors[0] }}</span>
@@ -212,9 +286,9 @@
 						<div class="modal-body">
 							
 							<div class="form-group">
-								<label for="file_number" class="form-label">Enter the File Number</label>
-								<input id="file_number" v-model="fileForm.file_number" type="text" name="file_number" class="form-control">
-								<HasError :form="fileForm" field="file_number" />
+								<label for="number" class="form-label">Enter the File Number</label>
+								<input id="number" v-model="fileForm.number" type="text" name="number" class="form-control">
+								<HasError :form="fileForm" field="number" />
 							</div>
 
 						</div>
@@ -234,6 +308,7 @@
 import Form from 'vform'
 import router from '../router'
 import {mapActions, mapGetters} from 'vuex'
+//import { required, email, integer, between, regex } from 'vee-validate/dist/rules';
 
 export default {
     data(){
@@ -244,6 +319,7 @@ export default {
 			individualEditMode: false,
 			fileEditMode: false,
             file: '',
+			isNewFile: '',
             fileIndividuals: [],
 			directIndividual_id: '',
 			relationships: [],
@@ -252,7 +328,7 @@ export default {
             
             fileForm: new Form({
 				id: '',
-				file_number: '',
+				number: '',
 			}),
             format: '',
             regex: '^',
@@ -260,7 +336,7 @@ export default {
 
 			individualForm : new Form({
 				id: '',
-                file_number: '',
+                number: '',
                 passport_number: '',
                 name: '',
                 age: '',
@@ -297,9 +373,9 @@ export default {
     },
 
     watch: {
-        'fileForm.file_number'(next, prev) {
+        'fileForm.number'(next, prev) {
             if (next.length > prev.length) {
-                this.fileForm.file_number = this.fileForm.file_number.replace(/[^0-9]/g, '')
+                this.fileForm.number = this.fileForm.number.replace(/[^0-9]/g, '')
             
             .replace(new RegExp(this.regex, 'g'), this.format)
             .substr(0, this.mask.length);
@@ -415,25 +491,9 @@ export default {
 			})
 		},
 		// File Methods
-		getFile(){
-            // this.$store.dispatch("changeTheCounter", 1);
-			this.$Progress.start();
-			axios.get('/api/files/get/'+this.fileForm.file_number)
-            .then(({data}) => {
-					this.file = data.data
-					Fire.$emit('fileChanged');
-					Fire.$emit('fileIndividualsChanged');
-					
-					this.$Progress.finish();
-				if(this.file){
-					this.showRegisterByFileNumberSection = true	
-				}else{
-					console.log('hi')
-					this.showRegisterByFileNumberSection = false
-					this.showCreateFileModal()
-				}
-            })
-		},
+		
+
+
 		showCreateFileModal(){
 			this.fileEditMode = false;
 			this.fileForm.reset()
@@ -445,25 +505,38 @@ export default {
 			$('#fileModal').modal('show')
 			this.fileForm.fill(file)
 		},
-		createFile() {
+
+		getFile(){
 			this.$Progress.start();
-			this.fileForm.post('/api/files')
-			.then(() => {
-				// success
-				Fire.$emit('fileChanged');
-				$('#fileModal').modal('hide')
-				Toast.fire({
-					icon: 'success',
-					title: 'Added successfully'
-				})
-				
-				this.$Progress.finish();
-			})
+			this.fileForm.get('/api/files/create_or_get/')
+            .then(({data}) => {
+					this.file = data.data
+					Fire.$emit('fileChanged');
+					Fire.$emit('fileIndividualsChanged');
+					this.$Progress.finish();
+					this.isNewFile = data.isNewFile
+					if(this.isNewFile){
+						Toast.fire({
+							icon: 'success',
+							title: 'File created successfully'
+						})
+					}else{
+						Swal.fire(
+							'File Already Exists!',
+							'We fetch it to you',
+							'info'
+						)
+					}
+				if(this.file){
+					this.showRegisterByFileNumberSection = true	
+				}
+            })
 			.catch(() => {
 				// error
 				this.$Progress.fail();
 			})
 		},
+
 		updateFile(){
 			this.$Progress.start();
 			this.fileForm.put('/api/files/'+this.fileForm.id)
@@ -514,8 +587,12 @@ export default {
 				}
 			})
 		},
-		goToIndividualPage(){
-			router.push({ path: '/individuals/'+this.directIndividual_id })
+		// goToIndividualPage(){
+		// 	router.push({ path: '/individuals/'+this.directIndividual_id })
+		// },
+
+		goToIndividualPage(individual){
+			router.push({ path: '/individuals/'+individual.id })
 		},
 
 		goToCreateReferralPage(){

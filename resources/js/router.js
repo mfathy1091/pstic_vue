@@ -5,6 +5,7 @@ Vue.use(Router)
 import ShowIndividual from './components/ShowIndividual'
 import AddReferral from './components/AddReferral'
 import ShowReferral from './components/ShowReferral'
+import ShowFile from './components/ShowFile'
 import Forms from './views/Forms'
 import usecom from './vuex/usecom'
 
@@ -23,6 +24,7 @@ let routes = [
     { path: '/individuals/:id', component: ShowIndividual },
     { path: '/individuals/:id/referrals/create', component: AddReferral },
     { path: '/referrals/:id', component: ShowReferral },
+    { path: '/files/:id', component: ShowFile },
     { path: '/forms', component: Forms },
     { path: '/testvuex', component: usecom },
 ]

@@ -33,8 +33,11 @@ Route::middleware('auth:api')->group( function () {
 
     
     // Files
+    Route::post('files', 'API\FileController@store');
+    Route::get('files/{id}', 'API\FileController@show');
+    Route::put('files/{id}', 'API\FileController@update');
     Route::get('files/exists/{n}', 'API\FileController@exists');
-    Route::get('files/get/{n}', 'API\FileController@get');
+    Route::get('files/create_or_get', 'API\FileController@createOrGetFile');
     Route::get('files/{id}/individuals', 'API\FileController@getIndividuals');
 
 
