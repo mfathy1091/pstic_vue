@@ -28,10 +28,10 @@
                     <div v-for="individual in this.file.individuals" :key="individual.id"
                     class="col-sm-6 col-md-6 col-lg-4 clo-xl-3">
                         <div class="card card-outline bg-light">
-                            <div class="overlay" v-show="individual.is_active == 0">
-                                <div class="p-3 text-center">
-                                    <h3>Inactive</h3>
-                                    <a href="" class="text-primary">Click here re-activate</a>
+                            <div class="overlay bg-white-50" v-show="individual.is_active == 0">
+                                <div class="p-4 text-center">
+                                    <h3 class="bg-white text-secondary">Inactive</h3>
+                                    <a href="" class="text-primary p-2 bg-white">Click here re-activate</a>
                                 </div>
                                 
 
