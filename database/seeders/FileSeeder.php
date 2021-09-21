@@ -69,6 +69,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '3',
                 'relationship_id' => '1',
                 'current_phone_number' => '01006785305',
+                'is_active' => '1'
             ],
             [
                 'passport_number' => '025025765',
@@ -80,6 +81,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '3',
                 'relationship_id' => '5',
                 'current_phone_number' => '01006785305',
+                'is_active' => '1'
             ],
             [
                 'passport_number' => '030029864',
@@ -91,6 +93,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '3',
                 'relationship_id' => '5',
                 'current_phone_number' => '01006785305',
+                'is_active' => '0'
             ],
 
 
@@ -106,6 +109,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '2',
                 'relationship_id' => '1',
                 'current_phone_number' => '01112067527',
+                'is_active' => '1'
             ],
             [
                 'passport_number' => '278945254',
@@ -117,6 +121,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '2',
                 'relationship_id' => '2',
                 'current_phone_number' => '01112067527',
+                'is_active' => '1'
             ],            
             [
                 'passport_number' => '958390473',
@@ -128,6 +133,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '2',
                 'relationship_id' => '5',
                 'current_phone_number' => '01112067527',
+                'is_active' => '1'
             ],
 
 
@@ -142,6 +148,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '7',
                 'relationship_id' => '1',
                 'current_phone_number' => '01154212163',
+                'is_active' => '1'
             ],
 
 
@@ -156,6 +163,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '4',
                 'relationship_id' => '1',
                 'current_phone_number' => '01008817734',
+                'is_active' => '1'
             ],
 
             [
@@ -168,6 +176,7 @@ class FileSeeder extends Seeder
                 'nationality_id' => '4',
                 'relationship_id' => '1',
                 'current_phone_number' => '01027594793',
+                'is_active' => '1'
             ],
 
         ];

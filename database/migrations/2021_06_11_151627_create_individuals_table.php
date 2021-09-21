@@ -25,6 +25,7 @@ class CreateIndividualsTable extends Migration
             $table->unsignedbigInteger('nationality_id');
             $table->unsignedbigInteger('relationship_id')->nullable();
             $table->string('current_phone_number')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
 
             // foreign keys

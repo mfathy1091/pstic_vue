@@ -5,7 +5,7 @@
 </style>
 <template>
     <div>
-        <div class="card card-solid">
+        <div class="card card-row" v-if="this.file">
             <div class="card-header">
                 <h3 class="card-title">
                     Individuals Linked to {{ this.file.number }}
@@ -13,25 +13,40 @@
 
                 <div class="card-tools">
                     <!-- <button class="btn btn-primary" @click="showCreateIndividualModal"> -->
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary btn-sm">
                         <i class="fas fa-link"></i> Link Individuals
                     </button>
                 </div>
                 
             </div>
-            <div class="card-body pb-0">
-                <div class="row" v-if="this.file">
-                    <p v-if="!this.file.individuals.length" class="ml-5 text-primary"><b>This file has no linked individuals!</b></p>
-                    
+            <div class="card-body row">
+                <p v-if="!this.file.individuals.length" class="ml-5 text-primary">
+                    <b>This file has no linked individuals!</b>
+                </p>
+
+                    <!-- individuals -->
                     <div v-for="individual in this.file.individuals" :key="individual.id"
-                    class="col-12 col-lg-4 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-                        <div class="card bg-light d-flex flex-fill">
-                            <div class="card-header text-dark border-bottom-0">
-                                <h6 class="lead">{{ individual.name }}</h6>
+                    class="col-sm-6 col-md-6 col-lg-4 clo-xl-3">
+                        <div class="card card-outline bg-light">
+                            <div class="overlay" v-show="individual.is_active == 0">
+                                <div class="p-3 text-center">
+                                    <h3>Inactive</h3>
+                                    <a href="" class="text-primary">Click here re-activate</a>
+                                </div>
+                                
+
+                                
                             </div>
-                            <div class="card-body pt-2">
-                                <div class="row">
-                                    <div class="col-12">
+                            <div class="card-header border-bottom-0 pt-2 pl-3 pb-0">
+                                <h6 class="card-title">{{ individual.name }}</h6>
+                                <div class="card-tools">
+                                        <span class="clickable text-orange ml-2" @click="unlinkIndividual(individual.id)">
+                                            Deactivate <i class="fas fa-user-slash orange"></i>
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="card-body pt-2" >
+
                                         
                                         <span class="text-muted text-sm"><b>Personal Details</b></span>
                                         <ul class="mb-0 fa-ul text-muted">
@@ -43,31 +58,30 @@
                                         </ul>
                                         <hr>
                                         <span class="text-muted text-sm"><b>File Related Details</b></span>
-                                        <span class="clickable text-red ml-2" @click="unlinkIndividual(individual.id)">
-                                            <i class="fas fa-unlink"></i> Unlink
-                                        </span>
 
                                         <ul class="mb-0 fa-ul text-muted">
                                             <li><span class="fa-li"></span><b>Individual ID:</b> {{ individual.individual_id }}</li>
                                             <li><span class="fa-li"></span><b>Relationship:</b> {{ individual.relationship.name}}</li>
                                         </ul>
 
-                                    </div>
-                                </div>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer p-0">
                                     <!-- <button class="btn btn-sm btn-primary" @click="goToIndividualPage(individual)"> -->
-                                    <button class="btn btn-sm btn-primary">
-                                        <i class="fas fa-eye"></i> View Page
-                                    </button>
+                                    <span class="btn btn-tool clickable">
+                                        Show <i class="fas fa-eye"></i>
+                                    </span>
+                                    <span class="btn btn-tool clickable text-blue">
+                                        Edit <i class="fas fa-pen blue"></i>
+                                    </span>
+                                    <span class="btn btn-tool clickable text-red">
+                                        Delete <i class="fas fa-trash red"></i>
+                                    </span>
                             </div>
                         </div>
                     </div>
 
-                </div>
             </div>
         </div>
-
 
     </div>
 </template>
