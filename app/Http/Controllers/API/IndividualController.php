@@ -75,6 +75,20 @@ class IndividualController extends Controller
 
     }
 
+    public function unlinkFile($individual_id){
+        
+        
+        $individual = Individual::findOrFail($individual_id);
+        if($individual){
+            $individual->file()->dissociate();
+            $individual->save();
+            return response()->json([
+                'data' => $individual,
+                'message' => 'file is unlinked'
+            ]);
+        }
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [

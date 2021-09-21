@@ -180,7 +180,7 @@ export default {
 
         getReferral(){
 			this.$Progress.start();
-			axios.get("/api/referrals/"+this.$route.params.id)
+			axios.get("/api/referrals/"+this.$route.params.referral_id)
             .then(({data}) => {
                 this.referral = data.data
             });

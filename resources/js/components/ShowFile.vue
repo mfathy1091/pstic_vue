@@ -1,5 +1,5 @@
 <style scoped>
-#clickableAwesomeFont {
+.clickable {
     cursor: pointer
 }
 </style>
@@ -73,7 +73,7 @@
 			</div>
 		</div>
         <!-- Linked Individuals Section -->
-        <FileLinkedIndividuals v-if="file" :file="file" />
+        <FileLinkedIndividuals v-if="file" :file_id="file.id" />
 
     </div>
 </template>
@@ -112,7 +112,7 @@ export default {
     methods: {
         getFile(){
 			this.$Progress.start();
-			axios.get("/api/files/"+this.$route.params.id)
+			axios.get("/api/files/"+this.$route.params.file_id)
             .then(({data}) => {
                 this.file = data.data
             });
