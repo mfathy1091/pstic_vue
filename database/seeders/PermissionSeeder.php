@@ -19,20 +19,21 @@ class PermissionSeeder extends Seeder
     {
         
         $permissions = [
-            [
-                'name' => 'user_create',
-            ],
-            [
-                'name' => 'user_update',
-            ],
-            [
-                'name' => 'user_list',
-            ],
+            'user_list',
+            'user_create',
+            'user_edit',
+            'user_delete',
+
+            'role_list',
+            'role_create',
+            'role_edit',
+            'role_delete',
         ];
 
         foreach($permissions as $n){
-            Permission::create($n);
+            Permission::create(['name' => $n]);
         }
+
 
         $adminRole = Role::create(['name' => 'admin']);
         $userRole = Role::create(['name' => 'user']);

@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->group( function () {
+Route::middleware('auth:api', 'auth.gates')->group( function () {
     Route::apiResources(['user'=> 'API\UserController']);
     Route::apiResources(['roles'=> 'API\RoleController']);
     Route::apiResources(['permission'=> 'API\PermissionController']);

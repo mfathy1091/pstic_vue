@@ -78,8 +78,10 @@
 </template>
 <script>
 import Form from 'vform'
+import axiosMixin from '../mixins/axiosMixin'
 
 export default {
+	mixins: [axiosMixin],
 	data() {
 		return {
 			editMode: false,
@@ -91,11 +93,6 @@ export default {
 		}
 	},
 	methods: {
-		getServices(){			
-			this.$Progress.start();
-			axios.get("/api/servicetypes").then(({data}) => (this.services = data.data));
-			this.$Progress.finish();
-		},
 
 		showCreateServiceModal(){
 			this.editMode = false;
@@ -104,7 +101,7 @@ export default {
 		},
 		createService() {
 			this.$Progress.start();
-			this.form.post('/api/servicetypes')
+			this.form.post('/api/services')
 			.then(() => {
 				// success
 				Fire.$emit('servicesChanged');
@@ -131,7 +128,7 @@ export default {
 		},
 		updateService(){
 			this.$Progress.start();
-			this.form.put('/api/servicetypes/'+this.form.id)
+			this.form.put('/api/services/'+this.form.id)
 			.then(() => {
 				// success
 				Fire.$emit('servicesChanged');
@@ -162,7 +159,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.form.delete('/api/servicetypes/'+id)
+					this.form.delete('/api/services/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('servicesChanged');
@@ -188,6 +185,8 @@ export default {
 		Fire.$on('servicesChanged', () => {
 			this.getServices();
 		});
+
+		
 
 		
 	}

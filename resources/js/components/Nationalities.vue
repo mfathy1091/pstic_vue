@@ -1,5 +1,6 @@
 <template>
 	<div class="container-fluid">
+
 		<div class="row mt-5">
 			<div class="col-md-12">
 				<div class="card">
@@ -79,8 +80,10 @@
 </template>
 <script>
 import Form from 'vform'
+import axiosMixin from '../mixins/axiosMixin'
 
 export default {
+	mixins: [axiosMixin],
 	data() {
 		return {
 			editMode: false,
@@ -92,14 +95,7 @@ export default {
 		}
 	},
 	methods: {
-		getNationalities(){
-			this.$Progress.start();
-			axios.get("/api/nationalities")
-			.then(({data}) => {
-				this.nationalities = data.data
-			});
-			this.$Progress.finish();
-		},
+
 
 		showCreateNationalityModal(){
 			this.editMode = false;

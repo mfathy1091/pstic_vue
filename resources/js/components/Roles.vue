@@ -10,10 +10,7 @@
 
 <template>
 	<div class="container-fluid">
-		<button class="btn btn-success" @click="checkPermission">
-			Check Permission
-		</button>
-		{{ nationalities }}
+		<!-- {{ nationalities }} -->
 
 		<div class="row mt-5">
 			<div class="col-md-12">
@@ -22,7 +19,7 @@
 					<h3 class="card-title">Roles</h3>
 
 					<div class="card-tools">
-						<button class="btn btn-success" @click="showCreateRoleModal" v-if="$can('user-list')">
+						<button class="btn btn-success" @click="showCreateRoleModal" v-if="$can('role_create')">
 							Add Role
 						</button>
 					</div>
@@ -49,11 +46,11 @@
 										</span>
 									</td>
 									<td>
-										<a href="#" @click="showEditRoleModal(role)">
+										<a href="#" @click="showEditRoleModal(role)" v-if="$can('role_edit')">
 											<i class="fa fa-edit blue"></i>
 										</a>
 										
-										<a href="#" @click="deleteRole(role.id)">
+										<a href="#" @click="deleteRole(role.id)" v-if="$can('role_delete')">
 											<i class="fa fa-trash red"></i>
 										</a>
 									</td>
@@ -87,18 +84,6 @@
 								<input id="name" v-model="form.name" type="text" name="name" class="form-control">
 								<HasError :form="form" field="name" />
 							</div>
-
-
-							<div class="form-group" v-if="roles">
-								<label for="permissions" class="form-label">Permissions</label>
-								<select class="form-control" id="exampleFormControlSelect1" multiple v-model="form.permissions">
-									<option v-for="permission in permissions" :key="permission.id" :value="permission" >
-										{{ permission.name }}
-									</option>
-								</select>
-								<HasError :form="form" field="permissions" />
-							</div>
-
 							
 							<div class="form-group" v-if="roles">
 								<label class="typo__label">Permissions</label>
@@ -134,14 +119,13 @@
 import Form from 'vform';
 import Multiselect from 'vue-multiselect'
 import {mapActions, mapGetters} from 'vuex'
-// import PermissionsMixin from '../mixins/PermissionsMixin'
+import axiosMixin from '../mixins/axiosMixin'
 
 export default {
-	// mixins: [PermissionsMixin],
+	mixins: [axiosMixin],
 	components: { Multiselect },
 	data() {
 		return {
-			abilities: {},
 			editMode: false,
 			roles: {},
 			permissions: [],
@@ -153,26 +137,9 @@ export default {
 		}
 	},
 	methods: {
-		loadAbilities(){			
-			this.$Progress.start();
-			axios.get("/api/abilities")
-			.then(({data}) => (this.abilities = data.data));
-			this.$Progress.finish();
-		},
 
-		loadRoles(){			
-			this.$Progress.start();
-			axios.get("/api/roles")
-			.then(({data}) => (this.roles = data.data));
-			this.$Progress.finish();
-		},
 
-		loadPermissions(){			
-			this.$Progress.start();
-			axios.get("/api/permission")
-			.then(({data}) => (this.permissions = data.data));
-			this.$Progress.finish();
-		},
+
 
 		showCreateRoleModal(){
 			this.editMode = false;
@@ -261,24 +228,7 @@ export default {
 				}
 			})
 		},
-		checkPermission(permissionName){
-			// return this.$Perms.indexOf(permissionName) !== -1;
-			//console.log('roles: ' + this.$Perms)
-			console.log(this.$can('user_list'))
-			// console.log(this.$nationalities)
-		},
 
-		getAbitities(){
-                axios.get('/api/abilities')
-                .then(({data}) => {
-                    this.abilities = data.data
-                });
-
-        },
-		$can(permissionName) {
-			return this.abilities.indexOf(permissionName) !== -1;
-			
-		},
 	},
 	computed: {
         ...mapGetters({
@@ -292,14 +242,11 @@ export default {
     },
 	
 	created() {
-		// console.log($getPermissions());
-		
-		this.getAbitities();
-		this.loadRoles();
-		this.loadPermissions();
+		this.getRoles();
+		this.getPermissions();
 
 		Fire.$on('rolesChanged', () => {
-			this.loadRoles();
+			this.getRoles();
 		});
 
 		

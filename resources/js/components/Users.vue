@@ -10,17 +10,13 @@
 
 <template>
 	<div class="container-fluid">
-		<button class="btn btn-success" @click="checkPermission">
-			Check Permission
-		</button>
 		<div class="row mt-5">
 			<div class="col-md-12">
 				<div class="card">
 				<div class="card-header">
 					<h3 class="card-title">Users</h3>
 
-					<!-- v-if="$can('user_create')" -->
-					<div class="card-tools" v-if="$can('user_update')">
+					<div class="card-tools" v-if="$can('user_create')">
 						<button class="btn btn-success" @click="showCreateUserModal">Add New</button>
 					</div>
 					
@@ -48,11 +44,11 @@
 										<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
 									</td>
 									<td>
-										<a href="#" @click="showEditUserModal(user)">
+										<a href="#" @click="showEditUserModal(user)" v-if="$can('user_edit')">
 											<i class="fa fa-edit blue"></i>
 										</a>
 										
-										<a href="#" @click="deleteUser(user.id)">
+										<a href="#" @click="deleteUser(user.id)" v-if="$can('user_delete')">
 											<i class="fa fa-trash red"></i>
 										</a>
 									</td>
@@ -150,9 +146,6 @@ export default {
 		}
 	},
 	methods: {
-		checkPermission(){
-			console.log(this.$can('user_list'))
-		},
 		loadRoles(){			
 			this.$Progress.start();
 			axios.get("/api/roles")

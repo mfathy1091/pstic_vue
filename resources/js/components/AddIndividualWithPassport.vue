@@ -232,8 +232,10 @@
 import Form from 'vform'
 import router from '../router'
 import {mapActions, mapGetters} from 'vuex'
+import axiosMixin from '../mixins/axiosMixin'
 
 export default {
+	mixins: [axiosMixin],
     data(){
         return {
 			individualExists: '',

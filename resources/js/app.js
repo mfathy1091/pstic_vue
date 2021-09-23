@@ -6,9 +6,34 @@ import store from './store'
 
 import moment from 'moment';
 
-import { abilitiesPlugin } from '@casl/vue'
-import ability from './services/ability';
-Vue.use(abilitiesPlugin, ability);
+Vue.mixin({
+    data(){
+        return{
+            abilities: [],
+        }
+    },
+    methods: {
+        getAbilities(){
+            axios.get("/api/abilities")
+            .then(({data}) => {
+                this.abilities = data.data
+                console.log(this.abilities)
+                console.log(this.$can('user_list'))
+                }
+            );
+        },
+        $can(permissionName) {
+            return this.abilities.indexOf(permissionName) !== -1;
+        },
+    },
+    mounted() {
+        // this.getAbilities()
+    },
+    created(){
+
+        
+    }
+});
 
 
 import { ValidationObserver } from 'vee-validate';
@@ -85,6 +110,8 @@ Vue.filter('myDate', function(date){
 
 window.Fire = new Vue();
 
+
+
 const app = new Vue({
     el: '#app',
     router,
@@ -114,3 +141,5 @@ Vue.prototype.$Perms = [1, 2, 3]
 //         ]
 //     )
 // })
+
+

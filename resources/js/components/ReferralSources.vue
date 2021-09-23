@@ -78,8 +78,10 @@
 </template>
 <script>
 import Form from 'vform'
+import axiosMixin from '../mixins/axiosMixin'
 
 export default {
+	mixins: [axiosMixin],
 	data() {
 		return {
 			editMode: false,
@@ -91,11 +93,6 @@ export default {
 		}
 	},
 	methods: {
-		getReferralSources(){			
-			this.$Progress.start();
-			axios.get("/api/referral_sources").then(({data}) => (this.referralSources = data.data));
-			this.$Progress.finish();
-		},
 
 		showCreateReferralSourceModal(){
 			this.editMode = false;
