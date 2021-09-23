@@ -36,7 +36,10 @@ class UserSeeder extends Seeder
         }
 
         $ahmedAlrajeh = User::where('name', 'Ahmed Alrajeh')->first();
-        // $ahmedAlrajeh->assignRole('PS Worker');
+
+
+
+
 
 
         

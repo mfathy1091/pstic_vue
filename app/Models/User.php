@@ -64,5 +64,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function hasPermission(string $permissionName)
+{
+    return null !== $this->permissions()->where('name', $permissionName)->first();
+}
 
 }

@@ -36,16 +36,16 @@ class PermissionSeeder extends Seeder
 
 
         $adminRole = Role::create(['name' => 'admin']);
-        $userRole = Role::create(['name' => 'user']);
+        $userRole = Role::create(['name' => 'worker']);
 
 
-        $permissions = Permission::all();
+        $allPermissions = Permission::all();
 
-        $adminRole->permissions()->sync($permissions);
+        $adminRole->permissions()->sync($allPermissions);
         $adminUser = User::find(1);
 
         $adminUser->roles()->sync([$adminRole->id, $userRole->id]);
 
-        
+     
     }
 }
