@@ -75,7 +75,7 @@ class ServiceController extends Controller
             $service->delete();
         }
 
-        return ['message' => 'Nationality deleted'];
+        return ['message' => 'Service deleted'];
     }
 }
 

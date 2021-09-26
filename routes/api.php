@@ -14,18 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    
-    return $request->user();
-});
 
-Route::middleware('auth:api', 'auth.gates')->group( function () {
-    Route::apiResources(['user'=> 'API\UserController']);
+
+    
     Route::apiResources(['roles'=> 'API\RoleController']);
     Route::apiResources(['permission'=> 'API\PermissionController']);
     Route::apiResources(['nationalities'=> 'API\NationalityController']);
     Route::apiResources(['relationships'=> 'API\RelationshipController']);
-    Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
     Route::apiResources(['referral_reasons'=> 'API\ReasonController']);
     Route::apiResources(['services'=> 'API\ServiceController']);
     Route::apiResources(['disabilities'=> 'API\DisabilityController']);
@@ -52,6 +47,7 @@ Route::middleware('auth:api', 'auth.gates')->group( function () {
     
     // Beneficiaries
     Route::apiResources(['beneficiaries'=> 'API\BeneficiaryController']);
+    Route::get('records/{record}/beneficiaries', 'API\Record\BeneficiaryController@index');
 
     // Referrals
     Route::apiResources(['referrals'=> 'API\ReferralController']);
@@ -59,16 +55,26 @@ Route::middleware('auth:api', 'auth.gates')->group( function () {
     // Route::get('individuals/{individual_id}/referrals', 'API\ReferralController@getIndividualReferrals');
 
     // Records
-    Route::get('records/{record}/beneficiaries', 'API\Record\BeneficiaryController@index');
+    Route::get('referrals/{referral_id}/latest-record', 'API\RecordController@latestReferralRecord');
+    
     
     Route::get('abilities', 'AbilityController@index');
     Route::get('ability/{id}', 'AbilityController@show');
     Route::post('ability', 'AbilityController@store');
     Route::put('ability', 'AbilityController@update');
     Route::delete('ability/{id}', 'AbilityController@destroy');
+
+
+    Route::apiResources(['user'=> 'API\UserController']);
+    Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
+
+
+
+// Protected routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
-
-
-
+Route::group(['middleware' => ['auth.gates']], function () {
+    // Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
+});
 

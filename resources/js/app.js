@@ -6,34 +6,8 @@ import store from './store'
 
 import moment from 'moment';
 
-Vue.mixin({
-    data(){
-        return{
-            abilities: [],
-        }
-    },
-    methods: {
-        getAbilities(){
-            axios.get("/api/abilities")
-            .then(({data}) => {
-                this.abilities = data.data
-                console.log(this.abilities)
-                console.log(this.$can('user_list'))
-                }
-            );
-        },
-        $can(permissionName) {
-            return this.abilities.indexOf(permissionName) !== -1;
-        },
-    },
-    mounted() {
-        // this.getAbilities()
-    },
-    created(){
 
-        
-    }
-});
+
 
 
 import { ValidationObserver } from 'vee-validate';
@@ -112,34 +86,46 @@ window.Fire = new Vue();
 
 
 
+
+// Golbal mixin for abilities
+Vue.mixin({
+    data(){
+        return{
+            abilities: ['user-list'],
+        }
+    },
+    methods: {
+        $can(permissionName) {
+            return this.abilities.indexOf(permissionName) !== -1;
+        },
+        getAbilities(){
+            store.dispatch('fetchAbilities')
+            .then((res) => {
+                this.abilities = store.state.abilities
+                // console.log('Checking the state after dispatch:', store.state.abilities);
+            });
+        }
+    },
+    mounted() {
+        
+    },
+    created(){
+        // this.getAbilities();
+    },
+    watch: {
+        //'$route': this.getAbilities()
+    }
+});
+
+
+
+
+
 const app = new Vue({
     el: '#app',
     router,
     store,
 });
 
-
-var permissions = []
-
-
-
-Vue.prototype.$Perms = [1, 2, 3]
-
-
-// console.log('can read Post', ability.can('read', 'Post')) // true
-// console.log('can read User', ability.can('read', 'User')) // true
-// console.log('can update User', ability.can('update', 'User')) // true
-// console.log('can delete User', ability.can('delete', 'User')) // false
-// console.log('cannot delete User', ability.cannot('delete', 'User')) // true
-
-
-// axios.get('/api/abilities').then(response => {
-
-//     ability.update(
-//         [
-//             {subject: 'all', actions: response.data.data}
-//         ]
-//     )
-// })
 
 

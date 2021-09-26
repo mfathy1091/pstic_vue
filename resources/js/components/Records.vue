@@ -1,8 +1,4 @@
-<style scoped>
-#clickableAwesomeFont {
-    cursor: pointer
-}
-</style>
+
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
@@ -13,9 +9,9 @@
                     <li class="pt-2 px-3"><h3 class="card-title">Monthly Records</h3></li>
                     <li class="nav-item" v-for="(record, i) in referral.records" :key="i" @click="changeSelectedRecordTab(record)">
                         <a class="nav-link" v-bind:id="record.id" 
-                        v-bind:class="{ 'bg-white': currentRecordId==record.id, 'border-left': currentRecordId==record.id, 'border-top': currentRecordId==record.id, 'border-right': currentRecordId==record.id,}"
+                        v-bind:class="{ 'bg-blue': currentRecord.id==record.id, 'border-left': currentRecord.id==record.id, 'border-top': currentRecord.id==record.id, 'border-right': currentRecord.id==record.id,}"
                         data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="false">
-                            {{ record.month.name }}<br>
+                            {{ record.month.name }}
                             <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
                             <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
                             <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
@@ -29,20 +25,15 @@
                 <div class="tab-content" id="custom-tabs-two-tabContent" v-for="(record, i) in referral.records" :key="i">
                     <div v-bind:id="record.id" 
                     class="tab-pane fade" 
-                    v-bind:class="{ show: currentRecordId==record.id, active: currentRecordId==record.id}"
+                    v-bind:class="{ show: currentRecord.id==record.id, active: currentRecord.id==record.id}"
                     role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
-                        {{ record.month.name }}
-                        
+                    
+                        <div v-if="recordBeneficiaries">
 
-                        <div>
-
-
-                            <div class="row">
-                                <h5 class="align-middle p-0 m-0">Record Beneficiaries</h5>
-                                <button class="btn btn-success mb-6" @click="showAddBeneficiaryModal">
-                                    Modify Beneficiaries
-                                </button>
-                            </div>
+                            <h5 class="align-middle p-0 m-0">{{ record.month.name }} Beneficiaries</h5>
+                            <a class="clickable mb-6" @click="showSelectBeneficiariesModel">
+                                Choose individuals from File<i class="fa fa-edit blue fa"></i>
+                            </a>
                             
                             <!-- Beneficiaries -->
                             <div class="row">
@@ -50,15 +41,12 @@
                                     <div class="card-header">
                                         <span class="mt-2">{{ beneficiary.individual.name }}</span>
                                         <span v-show="beneficiary.is_direct == 1" class="badge badge-pill badge-primary">Direct</span>
-                                        <span @click="showEditBeneficiaryModal(beneficiary, record)"
-                                        id='clickableAwesomeFont' class="ml-5">
-                                            <i class="fa fa-edit blue fa-lg"></i>
-                                        </span>
-                                        <span @click="deleteBeneficiary(beneficiary.id)"
-                                        id='clickableAwesomeFont'>
-                                            <i class="fa fa-trash red"></i>
-                                        </span>
+                                        
 
+
+                                        <span @click="deleteBeneficiary(beneficiary.id)" class="clickable text-red ml-4">
+                                            Delete <i class="fa fa-trash"></i>
+                                        </span>
                                         
                                     </div>
 
@@ -98,6 +86,9 @@
                                                 
                                             </div>
                                         </div>
+                                        <span @click="showEditBeneficiaryAttachmentsModal(beneficiary, record)" class="clickable text-blue mt-4">
+                                            Edit <i class="fa fa-edit"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -172,20 +163,20 @@
         </div> -->
 
         <!-- Beneficiary Modal -->
-        <div class="modal fade" id="beneficiaryModal" tabindex="-1" aria-labelledby="beneficiaryModalLabel" aria-hidden="true">
+        <div class="modal fade" id="beneficiaryAttachmentsModal" tabindex="-1" aria-labelledby="beneficiaryAttachmentsModalLabel" aria-hidden="true" v-if="this.currentRecord.month">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-show="!beneficiaryEditMode" class="modal-title" id="beneficiaryModalLabel">
+                        <h5 v-show="!beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">
                             Add Beneficiary | 
                             {{ this.currentRecord.month.name }}
                             </h5>
-                        <h5 v-show="beneficiaryEditMode" class="modal-title" id="beneficiaryModalLabel">Edit Beneficiary {{ this.currentRecord.month.name }}</h5>
+                        <h5 v-show="beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">Edit Beneficiary {{ this.currentRecord.month.name }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="beneficiaryEditMode ? updateBeneficiary() : createBeneficiary()">
+                    <form @submit.prevent="beneficiaryAttachmentsEditMode ? updateBeneficiaryAttachments() : createBeneficiaryAttachments()">
                         <div class="modal-body">
 
 
@@ -259,8 +250,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button v-show="!beneficiaryEditMode" type="submit" class="btn btn-success">Create</button>
-                            <button v-show="beneficiaryEditMode" type="submit" class="btn btn-primary">Update</button>
+                            <button v-show="!beneficiaryAttachmentsEditMode" type="submit" class="btn btn-success">Create</button>
+                            <button v-show="beneficiaryAttachmentsEditMode" type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </form>
                 </div>
@@ -282,18 +273,18 @@ export default {
     name: 'Records',
     components: { Multiselect },
     props: {
-        referral:Object,
+        referral_id: Number,
     },
     data() {
         return{
             serviceEditMode: false,
-            beneficiaryEditMode: false,
+            beneficiaryAttachmentsEditMode: false,
             services: [],
             disabilities: [],
             fileIndividuals: [],
+            referral: '',
 
-            currentRecordId: '',
-            currentRecord: {},
+            currentRecord: '',
             currentBeneficiary: '',
             recordBeneficiaries: [],
 
@@ -315,16 +306,53 @@ export default {
         }
     },
     methods: {
-        init() { 
-            // set latest record id
-            // var lastPosition = this.lineData.length -1;
-            this.currentRecordId = this.referral.records[0].id;
-            this.currentRecord = this.referral.records[0];
-            this.getRecordBeneficiaries()
+
+
+        getReferral(){
+			this.$Progress.start();
+			axios.get("/api/referrals/"+this.referral_id)
+            .then(({data}) => {
+                this.referral = data.data
+            });
+			this.$Progress.finish();
+        },
+        // getLatestRecord(){
+		// 	this.$Progress.start();
+		// 	axios.get("/api/referrals/" + this.referral_id +"/latest-record/")
+        //     .then(({data}) => {
+        //         this.latestRecord = data.data
+        //         this.currentRecord = this.latestRecord;
+        //     });
+		// 	this.$Progress.finish();
+        // },
+
+        getLatestRecord(){
+			this.$Progress.start();
+			axios.get("/api/referrals/" + this.referral_id +"/latest-record/")
+            .then(({data}) => {
+                this.latestRecord = data.data
+                // this.currentRecord = this.latestRecord;
+            });
+			this.$Progress.finish();
         },
 
+        init() { 
+            // (1) get Referral
+            this.$Progress.start();
+			axios.get("/api/referrals/"+this.referral_id)
+            .then(({data}) => {
+                this.referral = data.data
+                var latestRecord = this.referral.records[0];
+                
+                // (2) set selected tab to latest record
+                this.currentRecord = latestRecord
+                this.serviceForm.record_id = latestRecord.id
+                this.getRecordBeneficiaries()
+            });
+			this.$Progress.finish();
+
+        },
         changeSelectedRecordTab(record){
-            this.currentRecordId=record.id
             this.currentRecord=record
             this.serviceForm.record_id = record.id
             this.getRecordBeneficiaries()
@@ -346,7 +374,7 @@ export default {
 
         getRecordBeneficiaries(){			
 			this.$Progress.start();
-			axios.get('/api/records/' + this.currentRecordId + '/beneficiaries', { params: { record_id: this.currentRecordId } })
+			axios.get('/api/records/' + this.currentRecord.id + '/beneficiaries', { params: { record_id: this.currentRecord.id } })
             .then(({data}) => {
                 this.recordBeneficiaries = data.data
             });
@@ -369,27 +397,27 @@ export default {
 			this.$Progress.finish();
 		},
 
-        showAddBeneficiaryModal(){
-            this.beneficiaryEditMode = false;
+        showSelectBeneficiariesModel(){
+            // this.beneficiaryAttachmentsEditMode = false;
 			this.beneficiaryForm.reset()
-			$('#beneficiaryModal').modal('show')
+			$('#beneficiaryAttachmentsModal').modal('show')
         },
-        showEditBeneficiaryModal(beneficiary, record){
-			this.beneficiaryEditMode = true;
+        showEditBeneficiaryAttachmentsModal(beneficiary, record){
+			this.beneficiaryAttachmentsEditMode = true;
 			this.beneficiaryForm.reset()
             this.beneficiaryForm.record_id = record.id
             this.beneficiaryForm.beneficiary_id = beneficiary.id
-			$('#beneficiaryModal').modal('show')
+			$('#beneficiaryAttachmentsModal').modal('show')
 			this.beneficiaryForm.fill(beneficiary)
 		},
-        createBeneficiary() {
+        createBeneficiaryAttachments() {
 			this.$Progress.start();
 			this.beneficiaryForm.post('/api/beneficiaries')
 			.then(() => {
 				// success
-				Fire.$emit('beneficiariesChanged');
+				Fire.$emit('beneficiariesAttachmentsChanged');
 
-				$('#beneficiaryModal').modal('hide')
+				$('#beneficiaryAttachmentsModal').modal('hide')
 				Toast.fire({
 					icon: 'success',
 					title: 'Added successfully'
@@ -403,13 +431,13 @@ export default {
 			})
 		},
 
-        updateBeneficiary(){
+        updateBeneficiaryAttachments(){
 			this.$Progress.start();
 			this.beneficiaryForm.put('/api/beneficiaries/'+this.beneficiaryForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('beneficiariesChanged');
-				$('#beneficiaryModal').modal('hide')
+				Fire.$emit('beneficiariesAttachmentsChanged');
+				$('#beneficiaryAttachmentsModal').modal('hide')
 				Swal.fire(
 					'Updated!',
 					'It has been updated.',
@@ -445,7 +473,7 @@ export default {
 					this.beneficiaryForm.delete('/api/beneficiaries/'+id)
 					.then(() => {
 						// success
-						Fire.$emit('beneficiariesChanged');
+						Fire.$emit('beneficiariesAttachmentsChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -463,21 +491,31 @@ export default {
 	},
 
 	created() {
+        this.init()
+        // this.getLatestRecord();
 		// console.log($getPermissions());
-		this.init()
+		
 
+        
 		this.getServices()
         this.getDisabilities()
         this.getFileIndividuals()
+        
 		
 		Fire.$on('servicesChanged', () => {
 			this.getServices();
 		});
 		
-        Fire.$on('beneficiariesChanged', () => {
-			this.getRecordBeneficiaries();
+        Fire.$on('beneficiariesAttachmentsChanged', () => {
+			this.getReferral();
+            this.getRecordBeneficiaries();
 		});
 		
-	}
+	},
+    // watch: {
+    //     'fileIndividuals'(next, prev) {
+    //         this.fileNumber
+    //     },
+    // },
 }
 </script>

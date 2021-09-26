@@ -1,9 +1,3 @@
-<style scoped>
-.clickable {
-    cursor: pointer
-}
-</style>
-
 <template>
     <div>
 		<!-- File Number Field -->
@@ -310,7 +304,15 @@ import router from '../router'
 import {mapActions, mapGetters} from 'vuex'
 //import { required, email, integer, between, regex } from 'vee-validate/dist/rules';
 
+
+import AddReferral from './AddReferral.vue'
+
+
 export default {
+	// name: 'CheckIndividual',
+    components: {
+        AddReferral,
+    },
     data(){
         return {
 			

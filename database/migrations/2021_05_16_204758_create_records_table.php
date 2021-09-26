@@ -19,7 +19,6 @@ class CreateRecordsTable extends Migration
             $table->unsignedBigInteger('month_id');
             $table->unsignedBigInteger('status_id');
             $table->boolean('is_new');
-            $table->boolean('is_emergency');
             $table->timestamps();
 
             // foreign keys

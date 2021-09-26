@@ -1,8 +1,7 @@
 <style scoped>
 .badge{
 	font-size: 0.9rem;
-	margin-left: 2px;
-	
+	margin: 2px;
 }
 </style>
 
@@ -40,7 +39,7 @@
 								<tr v-for="role in roles" :key="role.id">
 									<td>{{ role.id }}</td>
 									<td>{{ role.name }}</td>
-									<td>
+									<td class="row">
 										<span v-for="permission in role.permissions" :key="permission.id" class="badge badge-pill badge-primary">
 											{{permission.name}}
 										</span>
@@ -57,7 +56,6 @@
 								</tr>
 						</tbody>
 					</table>
-
 
 				</div>
 				<!-- /.card-body -->
@@ -137,9 +135,6 @@ export default {
 		}
 	},
 	methods: {
-
-
-
 
 		showCreateRoleModal(){
 			this.editMode = false;

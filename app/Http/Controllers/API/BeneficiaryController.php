@@ -75,6 +75,21 @@ class BeneficiaryController extends Controller
                 $disabilitiesIds = collect($request->input('disabilities'))->pluck('id');
                 $beneficiary->disabilities()->sync($disabilitiesIds);
             }
+
+            $record = Record::findOrFail($request->record_id);
+            $recordBeneficiariesCount = $record->beneficiaries->count();
+
+            $recordBeneficiariesHasServicesCount = Beneficiary::where('record_id', $record->id)->has('services')->count();
+
+            // make record active, if it has at least one beneficiary and if all beneficiaries has services
+            if($recordBeneficiariesCount > 0 && ($recordBeneficiariesHasServicesCount === $recordBeneficiariesCount)){
+                $record->status_id = 1;
+                $record->save();
+            }else{
+                $record->status_id = 2;
+                $record->save();
+            }
+
             
             return ['message' => 'Beneficiary updated'];
         }
@@ -91,6 +106,21 @@ class BeneficiaryController extends Controller
             $beneficiary->disabilities()->detach();
             // then delete
             $beneficiary->delete();
+        }
+
+        //$record = Record::findOrFail($request->record_id);
+        $record = $beneficiary->record;
+        $recordBeneficiariesCount = $record->beneficiaries->count();
+
+        $recordBeneficiariesHasServicesCount = Beneficiary::where('record_id', $record->id)->has('services')->count();
+
+        // make record active, if it has at least one beneficiary and if all beneficiaries has services
+        if($recordBeneficiariesCount > 0 && ($recordBeneficiariesHasServicesCount === $recordBeneficiariesCount)){
+            $record->status_id = 1;
+            $record->save();
+        }else{
+            $record->status_id = 2;
+            $record->save();
         }
 
         return ['message' => 'Beneficiary deleted'];

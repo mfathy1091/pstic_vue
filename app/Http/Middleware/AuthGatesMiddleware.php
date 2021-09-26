@@ -23,8 +23,53 @@ class AuthGatesMiddleware
         //$user = auth()->guard('api')->user();
         // Auth::guard('api')->user
         $user = auth()->user();
+        // dd($user);
+
+        $permissions = [
+            'user_list',
+            'user_create',
+            'user_edit',
+            'user_delete',
+
+            'role_list',
+            'role_create',
+            'role_edit',
+            'role_delete',
+        ];
+
+        $userPermissions = [
+            'user_list',
+            'user_create',
+            'user_edit',
+            'user_delete',
+
+            'role_list',
+            'role_create',
+            'role_edit',
+            'role_delete',
+        ];
+
+        Gate::define('user_list', function($user){
+            return true;
+        });
 
         if($user) {
+        dd($user->name);
+            
+
+
+
+            // $permissionName = 'user_list';
+            // Gate::define($permissionName, function ($user) use ($permissionName, $userPermissions){
+            //     return in_array($permissionName, $userPermissions);
+            // });
+
+
+
+
+
+
+
             // $roles = Role::with('permissions')->get();
             // $permissionsArray = [];
             // $allPermissions = Permission::all();

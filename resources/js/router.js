@@ -25,8 +25,7 @@ let routes = [
     { path: '/individuals/:id/referrals/create', component: AddReferral },
     { path: '/referrals/:referral_id', component: ShowReferral },
     { path: '/files/:file_id', component: ShowFile },
-    { path: '/forms', component: Forms },
-    { path: '/testvuex', component: usecom },
+
 ]
 
 export default new Router({

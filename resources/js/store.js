@@ -52,7 +52,7 @@ export default new Vuex.Store({
         },
         fetchAbilities({commit}){
 			// this.$Progress.start();
-			axios.get('/api/abilities')
+			return axios.get('/api/abilities')
             .then(({data}) => {
                 this.abilities = data.data
                 commit('setAbilities', data.data)

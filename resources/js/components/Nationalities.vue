@@ -180,16 +180,27 @@ export default {
 				}
 			})
 		},
+		async getLocalNationalities(){
+			const res = await this.getAll('get', '/api/nationalities')
+			if(res.status==200){
+				console.log(res)
+				this.nationalities = res.data.data
+			}
+		}
 	},
 
 	created() {
 		// console.log($getPermissions());
 		
 
-		this.getNationalities();
+		this.getLocalNationalities();
+
+		// get nationalities
+
+		
 		
 		Fire.$on('nationalitiesChanged', () => {
-			this.getNationalities();
+			this.getLocalNationalities();
 		});
 
 		

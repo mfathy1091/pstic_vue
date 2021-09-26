@@ -17,6 +17,7 @@ class CreateBeneficiaryServicePivotTable extends Migration
             $table->id();
             $table->unsignedInteger('beneficiary_id');
             $table->unsignedInteger('service_id');
+            // $table->unsignedInteger('record_id');
             $table->timestamps();
 
         });

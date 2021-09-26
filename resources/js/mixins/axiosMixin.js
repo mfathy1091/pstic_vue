@@ -1,5 +1,18 @@
 export default {
 	methods: {
+		async getAll(method, url, dataObj){
+			try {
+                return await axios({
+                    method: method,
+                    url: url,
+                    data:dataObj,
+                });
+            } catch (e) {
+                return e.response
+            }	  
+		},
+
+
 		getNationalities(){
 			this.$Progress.start();
 			axios.get("/api/nationalities")

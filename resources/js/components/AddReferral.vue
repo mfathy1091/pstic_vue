@@ -1,3 +1,5 @@
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <template>
     <div>
 
@@ -17,20 +19,41 @@
 							<br>
 							<br>
 
-							<div class="form-group">
-								<label for="direct_individual_name" class="form-label">Direct Beneficiary</label>
-								<input id="direct_individual_name" v-model="directIndividual.name" type="text" name="direct_individual_name" class="form-control" disabled>
-								<HasError :form="referralForm" field="direct_individual_name" />
-							</div>
-
-							<div class="form-group">
-								<label for="referral_source_id" class="form-label">Select Indirect Beneficiaries</label>
-								<select multiple name="referral_source_id" v-model="referralForm.indirect_beneficiaries_ids" id="referral_source_id" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('individual') }">
-									<option v-for='individual in directIndividual.file.individuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
-								</select>
-								<HasError :form="referralForm" field="referral_source_id" />
+							<div class="form-group" v-if="fileIndividuals">
+								<label class="typo__label">Select Beneficiaries</label>
+								<multiselect 
+								v-model="referralForm.referral_beneficiaries" 
+								:options="fileIndividuals" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 							</div>
 							
+							<div class="form-group" v-if="fileIndividuals">
+								<label class="typo__label">Select Direct</label>
+								<multiselect 
+								v-model="referralForm.direct_beneficiaries" 
+								:options="referralForm.referral_beneficiaries" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name"
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							</div>
 
 							<br><hr>
 							<h5 class="card-title text-primary">Referral Details</h5><br>
@@ -93,12 +116,15 @@
 <script>
 import Form from 'vform'
 import router from '../router'
+import Multiselect from 'vue-multiselect'
 
 export default {
+	components: { Multiselect },
     data(){
         return {
-
+			checks: [1],
 			referralEditMode: false,
+			createdReferral: '',
 
             file: '',
             fileIndividuals: [],
@@ -110,13 +136,13 @@ export default {
 
 			referralForm : new Form({
 				id: '',
+				referral_beneficiaries: [],
+				direct_beneficiaries : [],
 				referral_source_id: '',
 				referral_date: '',
 				referring_person_name: '',
 				referring_person_email: '',
 				referral_narrative_reason: '',
-                original_direct_individual_id: this.$route.params.id,
-				indirect_beneficiaries_ids : [],
 				reasons_ids: [],
             }),
         }
@@ -164,11 +190,11 @@ export default {
 		createReferral() {
 			this.$Progress.start();
 			this.referralForm.post('/api/referrals')
-			.then(() => {
+			.then((res) => {
 				// success
 				// Fire.$emit('fileIndividualsChanged');
 				
-				
+				this.createdReferral = res.data.referral
 				
 				Toast.fire({
 					icon: 'success',
@@ -176,11 +202,12 @@ export default {
 				})
 				
 				this.$Progress.finish();
-				router.push({ path: '/individuals/'+this.directIndividual.id })
+
+				router.push({ path: '/referrals/'+this.createdReferral.id })
 			})
-			.catch(() => {
-				// error
+			.catch((e) => {
 				this.$Progress.fail();
+				console.log(e)
 			})
 			
 		},
@@ -199,7 +226,6 @@ export default {
 				if(this.file){
 					this.showRegisterByFileNumberSection = true	
 				}else{
-					console.log('hi')
 					this.showRegisterByFileNumberSection = false
 					this.showCreateFileModal()
 				}
@@ -212,6 +238,10 @@ export default {
 			console.log(directIndividual.id)
 		},
 		
+		goToReferralPage(){
+			router.push({ path: '/referrals/'+this.directIndividual.id })
+			console.log(directIndividual.id)
+		},
 
     },
 	created(){

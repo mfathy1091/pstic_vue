@@ -28,6 +28,7 @@ class PermissionSeeder extends Seeder
             'role_create',
             'role_edit',
             'role_delete',
+            'pss-menu',
         ];
 
         foreach($permissions as $n){

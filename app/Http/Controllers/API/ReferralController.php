@@ -9,6 +9,7 @@ use App\Models\Month;
 use App\Models\Referral;
 use App\Models\Record;
 use App\Models\Beneficiary;
+use App\Models\Individual;
 use App\Models\Reason;
 
 class ReferralController extends Controller
@@ -39,7 +40,6 @@ class ReferralController extends Controller
 
         /* validate if referradate is in future (reject it - it must be today or older) */
         $this->validate($request, [
-            'original_direct_individual_id' => 'required',
             'referral_source_id' => 'required',
             'referral_date' => 'required',
             'referring_person_name' => 'required',
@@ -51,7 +51,6 @@ class ReferralController extends Controller
 
         // Create Referral
         $referral = Referral::create([
-            'original_direct_individual_id' => $request->original_direct_individual_id,
             'referral_source_id' => $request->referral_source_id,
             'referral_date' => $request->referral_date,
             'referring_person_name' => $request->referring_person_name,
@@ -110,33 +109,63 @@ class ReferralController extends Controller
                 'referral_id' => $referral->id,
                 'status_id' => '2',
                 'is_new' => $is_new,
-                'is_emergency' => '0',
             ]);
             
-            // Insert Direct Individual In Each Record
-            $directIndividualId = $request->original_direct_individual_id;
-            Beneficiary::create([
-                'individual_id' => $directIndividualId,
-                'record_id' => $record->id,
-                'is_direct' => '1',
-            ]);
 
+            // referral_beneficiaries: [],
+            // direct_beneficiaries : [],
 
-            // Insert Indirect Individuals In Each Record
-            $indirectIndividualsIds = $request->indirect_beneficiaries_ids;
-            if(!empty($indirectIndividualsIds)){
-                foreach($indirectIndividualsIds as $indirectIndividualId)
+            $referralIndividuals = $request->referral_beneficiaries;
+            $directIndividuals = collect($request->direct_beneficiaries)->pluck('id')->toArray();
+            //dd($directIndividuals);
+            if(!empty($referralIndividuals)){
+                foreach($referralIndividuals as $individual)
                 {
+                    $is_direct = in_array($individual['id'], $directIndividuals) ? 1 : 0;
                     Beneficiary::create([
-                        'individual_id' => $indirectIndividualId,
+                        'individual_id' => $individual['id'],
                         'record_id' => $record->id,
-                        'is_direct' => '0',
+                        'is_direct' => $is_direct
                     ]);
                 }
             }
+
+
+            // // Insert Direct Individual In Each Record
+            // $directIndividualsIds = $request->direct_beneficiaries_ids;
+            // if(!empty($directIndividualsIds)){
+            //     foreach($directIndividualsIds as $directIndividualId)
+            //     {
+            //         Beneficiary::create([
+            //             'individual_id' => $directIndividualId,
+            //             'record_id' => $record->id,
+            //             'is_direct' => '1',
+            //         ]);
+            //     }
+            // }
+
+
+            // // Insert Indirect Individuals In Each Record
+            // $indirectIndividualsIds = $request->indirect_beneficiaries_ids;
+            // if(!empty($indirectIndividualsIds)){
+            //     foreach($indirectIndividualsIds as $indirectIndividualId)
+            //     {
+            //         Beneficiary::create([
+            //             'individual_id' => $indirectIndividualId,
+            //             'record_id' => $record->id,
+            //             'is_direct' => '0',
+            //         ]);
+            //     }
+            // }
         }
 
-        return $referral;
+        $response = [
+            'referral' => $referral,
+            'message' => 'created successfully'
+        ];
+
+        return response($response, 201);
+
     }
 
     public function getIndividualReferrals(Request $request)
@@ -201,6 +230,7 @@ class ReferralController extends Controller
 
         return ['message' => 'Referral deleted'];
     }
+
 }
 
 
