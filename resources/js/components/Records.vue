@@ -168,7 +168,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 v-show="!beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">
-                            Add Beneficiary | 
+                            Add Beneficiaries | 
                             {{ this.currentRecord.month.name }}
                             </h5>
                         <h5 v-show="beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">Edit Beneficiary {{ this.currentRecord.month.name }}</h5>
@@ -281,12 +281,15 @@ export default {
             beneficiaryAttachmentsEditMode: false,
             services: [],
             disabilities: [],
-            fileIndividuals: [],
+            
             referral: '',
 
             currentRecord: '',
             currentBeneficiary: '',
             recordBeneficiaries: [],
+            fileIndividuals: [],
+            remianingBeneficiaries: [],
+
 
             serviceForm: new Form({
                 record_id: '',
@@ -359,17 +362,12 @@ export default {
         },
         
         getFileIndividuals(){
-			
-			if(this.file){
-				this.$Progress.start();
-				axios.get('/api/files/'+this.file.id+'/individuals')
-				.then(({data}) => {
-					this.fileIndividuals = data.data
-				});
-				this.$Progress.finish();
-			}else{
-				this.fileIndividuals = []
-			}
+            this.$Progress.start();
+            axios.get('/api/files/'+this.file.id+'/individuals')
+            .then(({data}) => {
+                this.fileIndividuals = data.data
+            });
+            this.$Progress.finish();
 		},
 
         getRecordBeneficiaries(){			
@@ -377,6 +375,7 @@ export default {
 			axios.get('/api/records/' + this.currentRecord.id + '/beneficiaries', { params: { record_id: this.currentRecord.id } })
             .then(({data}) => {
                 this.recordBeneficiaries = data.data
+                this.remianingBeneficiaries = this.fileIndividuals.filter(function(obj) { return this.recordBeneficiaries.indexOf(obj) == -1; });
             });
 			this.$Progress.finish();
 		},
@@ -496,10 +495,10 @@ export default {
 		// console.log($getPermissions());
 		
 
-        
+        this.getFileIndividuals()
 		this.getServices()
         this.getDisabilities()
-        this.getFileIndividuals()
+        
         
 		
 		Fire.$on('servicesChanged', () => {

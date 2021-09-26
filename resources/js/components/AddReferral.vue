@@ -11,7 +11,7 @@
             </div>
 
             <div class="card-body">
-                <div class="card-body table-responsive p-0" v-if="directIndividual">
+                <div class="card-body table-responsive p-0">
 					<form @submit.prevent="referralEditMode ? updateReferral() : createReferral()">
 						<div>
 
@@ -27,11 +27,13 @@
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
-								:preserve-search="true" 
-								placeholder="Pick some" 
+								:preserve-search="false" 
+								:hideSelected="true"
+								:taggable="true"
+								placeholder="" 
 								label="name" 
 								track-by="name" 
-								:preselect-first="true">
+								:preselect-first="false">
 									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
 								</multiselect>
 								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
@@ -45,7 +47,9 @@
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
-								:preserve-search="true" 
+								:preserve-search="false" 
+								:hideSelected="true"
+								:min="1"
 								placeholder="Pick some" 
 								label="name" 
 								track-by="name"
@@ -144,16 +148,17 @@ export default {
 				referring_person_email: '',
 				referral_narrative_reason: '',
 				reasons_ids: [],
+				file_id: 1,
             }),
         }
     },
     methods:{
-		getIndividual(){
-            console.log("hi")
+		getFile(){
+			console.log('print'+this.$route.params.fileId);
 			this.$Progress.start();
-			axios.get("/api/individuals/"+this.$route.params.id)
+			axios.get("/api/file/"+this.$route.params.fileId)
             .then(({data}) => {
-                this.directIndividual = data.data
+                this.file = data.data
             });
 			this.$Progress.finish();
             
@@ -203,7 +208,7 @@ export default {
 				
 				this.$Progress.finish();
 
-				router.push({ path: '/referrals/'+this.createdReferral.id })
+				// router.push({ path: '/referrals/'+this.createdReferral.id })
 			})
 			.catch((e) => {
 				this.$Progress.fail();
@@ -214,23 +219,7 @@ export default {
 
 
 		// File Methods
-		getFile(){
-			this.$Progress.start();
-			axios.get('/api/files/get/'+this.fileForm.file_number)
-            .then(({data}) => {
-					this.file = data.data
-					Fire.$emit('fileChanged');
-					Fire.$emit('fileIndividualsChanged');
-					
-					this.$Progress.finish();
-				if(this.file){
-					this.showRegisterByFileNumberSection = true	
-				}else{
-					this.showRegisterByFileNumberSection = false
-					this.showCreateFileModal()
-				}
-            })
-		},
+
 
 
 		goToIndividualPage(){
@@ -246,7 +235,7 @@ export default {
     },
 	created(){
 		
-		this.getIndividual()
+		this.getFile()
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReasons()

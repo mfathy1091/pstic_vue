@@ -28,6 +28,7 @@
                             <li>{{ this.referral.referral_source.name }}</li>
                             <li>{{ this.referral.referring_person_name }}</li>
                             <li>{{ this.referral.referring_person_email }}</li>
+							<li>{{ this.referral.file.number }}</li>
                         </div>
                     </div>
                     <div class="col mb-4" >

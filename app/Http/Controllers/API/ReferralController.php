@@ -20,6 +20,7 @@ class ReferralController extends Controller
         $referral = Referral::with(
         'originalDirectIndividual', 
         'referralSource', 
+        'file',
         'reasons', 
         'records', 
         'records.month', 
@@ -58,6 +59,7 @@ class ReferralController extends Controller
             'referral_narrative_reason' => $request->referral_narrative_reason,
             'current_status_id' => $request->current_status_id,
             'current_assigned_psw_id' => $request->current_assigned_psw_id,
+            'file_id' => $request->file_id,
         ]);
 
         
@@ -203,6 +205,7 @@ class ReferralController extends Controller
                 'referral_narrative_reason' => $request->referral_narrative_reason,
                 'current_status_id' => $request->current_status_id,
                 'current_assigned_psw_id' => $request->current_assigned_psw_id,
+                'file_id' => $request->file_id,
             ]);
 
             // then sync

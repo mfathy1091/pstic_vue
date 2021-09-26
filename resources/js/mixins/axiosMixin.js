@@ -59,7 +59,23 @@ export default {
 			axios.get("/api/services").then(({data}) => (this.services = data.data));
 			this.$Progress.finish();
 		},
+
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+	
 };
 
 

@@ -22,7 +22,9 @@ let routes = [
     { path: '/individuals/check', component: require('./components/CheckIndividual.vue').default },
     { path: '/individuals/create_registered', component: require('./components/AddRegisteredIndividual.vue').default },
     { path: '/individuals/:id', component: ShowIndividual },
-    { path: '/individuals/:id/referrals/create', component: AddReferral },
+    
+    
+    { path: '/referrals/create/:file_id', component: AddReferral, name: 'referral-create'},
     { path: '/referrals/:referral_id', component: ShowReferral },
     { path: '/files/:file_id', component: ShowFile },
 

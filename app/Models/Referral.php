@@ -16,6 +16,7 @@ class Referral extends Model
         'referral_narrative_reason',
         'current_status_id',
         'current_assigned_psw_id',
+        'file_id'
     ];
 
     // Parent Tables

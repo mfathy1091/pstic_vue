@@ -151,14 +151,11 @@
 				</div>
 			</div>
 
+			<button type="submit" class="btn btn-primary" @click="goToCreateReferralPage">Next</button>
+
 			<!-- Choose Direct Section -->
-			<ValidationObserver v-slot="{ handleSubmit }">
-				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="fileIndividuals.length">
-					<!-- <ValidationProvider name="directIndividual_id" rules="required|numeric" v-slot="{ errors }">
-						<input v-model="directIndividual_id" type="text">
-						<span>{{ errors[0] }}</span>
-					</ValidationProvider> -->
-					
+			<!-- <ValidationObserver v-slot="{ handleSubmit }">
+				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="fileIndividuals.length">		
 					<ValidationProvider name="directIndividual_id" rules="required" v-slot="{ errors }">
 					<div class="form-group">
 						<label for="directIndividual_id" class="form-label">Choose Direct</label>
@@ -172,7 +169,7 @@
 					<br>
 					<button type="submit" class="btn btn-primary">Next</button>
 				</form>
-			</ValidationObserver>
+			</ValidationObserver> -->
 			<br>
 			<br>
 		</div>
@@ -598,9 +595,8 @@ export default {
 		},
 
 		goToCreateReferralPage(){
-			router.push({ path: '/individuals/'+this.directIndividual_id + '/referrals/create' })
+			router.push({ path: '/referrals/create/' + this.file.id })
 		},
-
     },
 	created(){
 		Fire.$on('fileChanged', () => {
