@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+// Protected routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
     
     Route::apiResources(['roles'=> 'API\RoleController']);
@@ -58,11 +59,11 @@ use Illuminate\Support\Facades\Route;
     Route::get('referrals/{referral_id}/latest-record', 'API\RecordController@latestReferralRecord');
     
     
-    Route::get('abilities', 'AbilityController@index');
-    Route::get('ability/{id}', 'AbilityController@show');
-    Route::post('ability', 'AbilityController@store');
-    Route::put('ability', 'AbilityController@update');
-    Route::delete('ability/{id}', 'AbilityController@destroy');
+    Route::get('abilities', 'API\AbilityController@index');
+    Route::get('ability/{id}', 'API\AbilityController@show');
+    Route::post('ability', 'API\AbilityController@store');
+    Route::put('ability', 'API\AbilityController@update');
+    Route::delete('ability/{id}', 'API\AbilityController@destroy');
 
 
     Route::apiResources(['user'=> 'API\UserController']);
@@ -70,8 +71,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// Protected routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
+
 });
 
 Route::group(['middleware' => ['auth.gates']], function () {

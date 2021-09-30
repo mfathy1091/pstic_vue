@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Resources\AbilityResource;
 use Illuminate\Http\Request;
@@ -15,15 +17,11 @@ class AbilityController extends Controller
      */
     public function index()
     {
-        $permissions = auth()->user()->roles()->with('permissions')->get()
+        $permissions = auth('sanctum')->user()->roles()->with('permissions')->get()
             ->pluck('permissions')
             ->flatten()
             ->pluck('name')
             ->toArray();
-
-        // $permissions = (auth()->user())->roles;
-
-        
 
         return new AbilityResource($permissions);
     }
