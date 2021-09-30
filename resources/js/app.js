@@ -110,7 +110,7 @@ Vue.mixin({
         
     },
     created(){
-        // this.getAbilities();
+        this.getAbilities();
     },
     watch: {
         //'$route': this.getAbilities()

@@ -20,6 +20,8 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
+
+
     /**
      * Register any authentication / authorization services.
      *
@@ -28,10 +30,24 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        $permissions = Permission::all();
+        // Gate::after(function ($user, $ability, $result, $arguments) {
+        //     if ($user->isAdministrator()) {
+        //         return true;
+        //     }
+        // });
+
+        // Gate::after(function ($user, $ability, $result, $arguments) {
+        //     if ($user->isAdministrator()) {
+        //         return true;
+        //     }
+        // });
+
+
+
+        $permissions = Permission::PERMISSIONS;
         
         foreach($permissions as $permission){
-            Gate::define($permission->name , function (User $user) use ($permission){
+            Gate::define($permission , function (User $user) use ($permission){
                 // return $user->id === $post->user_id;
                 
                 // TRY TO SOLVE - there is a problem here
@@ -42,7 +58,7 @@ class AuthServiceProvider extends ServiceProvider
                 ->pluck('name')
                 ->toArray();
     
-                return in_array($permission->name, $userPermissionsNames);
+                return in_array($permission, $userPermissionsNames);
             });
         }
 

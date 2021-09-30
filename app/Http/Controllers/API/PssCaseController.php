@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 use App\Models\Beneficiary;
 use App\Models\Individual;
@@ -10,7 +13,6 @@ use DateTime;
 use Carbon\Carbon;
 
 use App\Models\Nationality;
-use Illuminate\Http\Request;
 use App\Models\PsCase;
 use App\Models\PssCase;
 use App\Models\ReferralSource;
