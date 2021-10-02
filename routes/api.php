@@ -14,9 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Public routes
+Route::post('/register', 'API\AuthController@register');
+Route::post('/login', 'API\AuthController@login');
+
+
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
+    Route::post('/logout', 'API\AuthController@logout');
+    Route::prefix('/user')->group(function () {
+        Route::get('/current', 'API\UserController@currentUser');
+    }) ;
     
     Route::apiResources(['roles'=> 'API\RoleController']);
     Route::apiResources(['permission'=> 'API\PermissionController']);

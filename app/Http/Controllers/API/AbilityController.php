@@ -17,12 +17,13 @@ class AbilityController extends Controller
      */
     public function index()
     {
-        $permissions = auth('sanctum')->user()->roles()->with('permissions')->get()
+        //$permissions = auth('sanctum')->user()->roles()->with('permissions')->get()
+        $permissions = Auth::user()->roles()->with('permissions')->get()
             ->pluck('permissions')
             ->flatten()
             ->pluck('name')
             ->toArray();
-
+        
         return new AbilityResource($permissions);
     }
 

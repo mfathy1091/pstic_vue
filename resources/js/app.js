@@ -89,37 +89,19 @@ window.Fire = new Vue();
 
 // Golbal mixin for abilities
 Vue.mixin({
-    data(){
-        return{
-            abilities: ['user-list'],
-        }
-    },
     methods: {
         $can(permissionName) {
-            return this.abilities.indexOf(permissionName) !== -1;
+            //return this.abilities.indexOf(permissionName) !== -1;
+            var abilities = this.$store.state.currentUser.abilities;
+            // console.log('abilities -> ' + abilities)
+            return abilities.indexOf(permissionName) !== -1;
         },
-        getAbilities(){
-            store.dispatch('fetchAbilities')
-            .then((res) => {
-                this.abilities = store.state.abilities
-                // console.log('Checking the state after dispatch:', store.state.abilities);
-            });
-        }
     },
-    mounted() {
-        
-    },
-    created(){
-        this.getAbilities();
-    },
-    watch: {
-        //'$route': this.getAbilities()
-    }
 });
 
 
-
-
+Vue.component('login-form', require("./components/LoginForm.vue").default);
+Vue.component('app-container', require("./components/AppContainer.vue").default);
 
 const app = new Vue({
     el: '#app',

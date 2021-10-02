@@ -8,6 +8,7 @@ import ShowReferral from './components/ShowReferral'
 import ShowFile from './components/ShowFile'
 import Forms from './views/Forms'
 import usecom from './vuex/usecom'
+//import LoginForm from './components/LoginForm'
 
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
@@ -27,8 +28,10 @@ let routes = [
     { path: '/referrals/create/:file_id', component: AddReferral, name: 'referral-create'},
     { path: '/referrals/:referral_id', component: ShowReferral },
     { path: '/files/:file_id', component: ShowFile },
-
+    //{ path: '/login', component: LoginForm },
 ]
+
+
 
 export default new Router({
     mode: 'history',

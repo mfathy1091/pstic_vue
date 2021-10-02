@@ -1,4 +1,9 @@
 export default {
+	// data(){
+    //     return{
+    //         abilities: ['user_create'],
+    //     }
+    // },
 	methods: {
 		async getAll(method, url, dataObj){
 			try {
@@ -60,20 +65,12 @@ export default {
 			this.$Progress.finish();
 		},
 
-
-
-
-
-
-
+		// $can(permissionName) {
+        //     return this.abilities.indexOf(permissionName) !== -1;
+        // },
 
 
 	}
-
-
-
-
-
 
 	
 };
