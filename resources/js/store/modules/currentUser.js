@@ -32,15 +32,20 @@ const actions = {
             if(response.data.access_token) {
                 
                 // save token
-                localStorage.setItem(
-                    "blog_token",
-                    response.data.access_token
-                )
+                localStorage.setItem("blog_token", response.data.access_token)
                 
                 // redirect tpo SPA
-                window.location.replace("/home")
+                window.location.replace("/app")
             }
         })
+    },
+    logoutUser(){
+        // remove token from browser local storage
+        localStorage.removeItem("blog_token");
+        //console.log("removed")
+
+        // change route to login
+        window.location.replace("/login")
     }
 };
 const mutations = {

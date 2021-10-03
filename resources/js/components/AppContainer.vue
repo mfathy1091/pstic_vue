@@ -195,10 +195,7 @@
 export default {
     methods: {
         logout(){
-            axios.post('/api/logout')
-            .then(response => {
-                window.location.href = "login"
-            })
+			this.$store.dispatch('currentUser/logoutUser');
         }
     },
     computed:{
@@ -209,9 +206,14 @@ export default {
         }
     },
     async created(){
-        axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("blog_token");
-        this.$store.dispatch('currentUser/getUser');
-		await this.$store.dispatch('currentUser/getAbilities')
+		if(localStorage.hasOwnProperty("blog_token")){
+			axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("blog_token");
+			this.$store.dispatch('currentUser/getUser');
+			await this.$store.dispatch('currentUser/getAbilities')
+		}else{
+			window.location.replace("/login");
+		}
+
 		// console.log('abilities ')
 		// console.log(await this.$store.state.currentUser.abilities)
 		// console.log('user ')
