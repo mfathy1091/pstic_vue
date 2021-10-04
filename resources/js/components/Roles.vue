@@ -9,8 +9,6 @@
 
 <template>
 	<div class="container-fluid">
-		<!-- {{ nationalities }} -->
-
 		<div class="row mt-5">
 			<div class="col-md-12">
 				<div class="card">
@@ -225,16 +223,6 @@ export default {
 		},
 
 	},
-	computed: {
-        ...mapGetters({
-            'counter': 'getCounter',
-            'nationalities': 'getNationalitiesgetter',
-        })
-    },
-	mounted() {
-
-        this.$store.dispatch('getNationalities')
-    },
 	
 	created() {
 		this.getRoles();

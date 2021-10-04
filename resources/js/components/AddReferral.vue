@@ -124,6 +124,7 @@ import Multiselect from 'vue-multiselect'
 
 export default {
 	components: { Multiselect },
+	name: 'AddReferral',
     data(){
         return {
 			checks: [1],

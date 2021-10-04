@@ -47,18 +47,18 @@ class AuthServiceProvider extends ServiceProvider
         $allPermissions = Permission::PERMISSIONS;
         
         foreach($allPermissions as $permission){
-            Gate::define($permission , function (User $user) use ($permission){
+            Gate::define($permission["slug"] , function (User $user) use ($permission){
                 // return $user->id === $post->user_id;
                 
                 // TRY TO SOLVE - there is a problem here
                 // when ever a gate is defined, it will make a new query
-                $userPermissionsNames = $user->roles()->with('permissions')->get()
+                $userPermissions = $user->roles()->with('permissions')->get()
                 ->pluck('permissions')
                 ->flatten()
-                ->pluck('name')
+                ->pluck('slug')
                 ->toArray();
     
-                return in_array($permission, $userPermissionsNames);
+                return in_array($permission["slug"], $userPermissions);
             });
         }
 

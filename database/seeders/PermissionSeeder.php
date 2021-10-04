@@ -21,7 +21,7 @@ class PermissionSeeder extends Seeder
         $permissions = Permission::PERMISSIONS;
 
         foreach($permissions as $n){
-            Permission::create(['name' => $n]);
+            Permission::create($n);
         }
 
         $adminRole = Role::create(['name' => 'admin']);

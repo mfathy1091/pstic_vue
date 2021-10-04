@@ -595,7 +595,7 @@ export default {
 		},
 
 		goToCreateReferralPage(){
-			router.push({ path: '/referrals/create/' + this.file.id })
+			router.push({ path: `/files/${this.file.id}/referrals/create/` })
 		},
     },
 	created(){
