@@ -208,16 +208,17 @@ export default {
     async created(){
 		if(localStorage.hasOwnProperty("blog_token")){
 			axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("blog_token");
-			this.$store.dispatch('currentUser/getUser');
 			await this.$store.dispatch('currentUser/getAbilities')
+			await this.$store.dispatch('currentUser/getUser');
+
+			// console.log('abilities ')
+			// console.log(this.$store.state.currentUser.abilities)
+			// console.log('user ')
+			// console.log(this.$store.state.currentUser.user)
+
 		}else{
 			window.location.replace("/login");
 		}
-
-		// console.log('abilities ')
-		// console.log(await this.$store.state.currentUser.abilities)
-		// console.log('user ')
-		// console.log(await this.$store.state.currentUser.user)
 
     },
 

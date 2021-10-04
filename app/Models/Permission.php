@@ -10,20 +10,48 @@ class Permission extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'slug', 'name',
     ];
 
     public const PERMISSIONS = [
-        'user_list',
-        'user_create',
-        'user_edit',
-        'user_delete',
+        [
+            'slug' => 'user_list',
+            'name' => 'Show Users',
+        ],
+        [
+            'slug' => 'user_create',
+            'name' => 'Create Users',
+        ],
+        [
+            'slug' => 'user_edit',
+            'name' => 'Edit Users',
+        ],
+        [
+            'slug' => 'user_delete',
+            'name' => 'Delete Users',
+        ],
 
-        'role_list',
-        'role_create',
-        'role_edit',
-        'role_delete',
-        'pss-menu',
+        [
+            'slug' => 'role_list',
+            'name' => 'Show Roles',
+        ],
+        [
+            'slug' => 'role_create',
+            'name' => 'Create Roles',
+        ],
+        [
+            'slug' => 'role_edit',
+            'name' => 'Edit Roles',
+        ],
+        [
+            'slug' => 'role_delete',
+            'name' => 'Delete Roles',
+        ],
+
+        [
+            'slug' => 'pss-menu',
+            'name' => 'Show PSS Menu',
+        ],
     ];
 
     public function roles()

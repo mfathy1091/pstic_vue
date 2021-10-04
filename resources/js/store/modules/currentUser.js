@@ -7,20 +7,24 @@ const state = {
 
 const getters = {};
 const actions = {
-    getUser({commit}){
-        axios
-        .get("/api/user/current")
-        .then(response => {
+    async getUser({commit}){
+        try{
+            const response = await axios.get("/api/user/current");
             commit('setUser', response.data);
-        });
+        }catch (error){
+            console.error(error);
+        }
     },
-    getAbilities({commit}){
-        axios
-        .get("/api/abilities")
-        .then(response => {
+    async getAbilities({commit}){
+        try{
+            const response = await axios.get("/api/abilities");
             commit('setAbilities', response.data.data)
-        });
+        }catch(error){
+            console.error(error);
+        }
     },
+
+
     loginUser({}, user) {
         axios
         .post("/api/login",

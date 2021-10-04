@@ -65,12 +65,8 @@ export default {
 			this.$Progress.finish();
 		},
 
-		// $can(permissionName) {
-        //     return this.abilities.indexOf(permissionName) !== -1;
-        // },
+	},
 
-
-	}
 
 	
 };

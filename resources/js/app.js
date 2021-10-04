@@ -90,11 +90,12 @@ window.Fire = new Vue();
 // Golbal mixin for abilities
 Vue.mixin({
     methods: {
+        
         $can(permissionName) {
-            //return this.abilities.indexOf(permissionName) !== -1;
             var abilities = this.$store.state.currentUser.abilities;
-            // console.log('abilities -> ' + abilities)
-            return abilities.indexOf(permissionName) !== -1;
+            if(abilities.length > 0){
+                return abilities.indexOf(permissionName) !== -1;
+            }
         },
     },
 });

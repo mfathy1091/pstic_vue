@@ -44,9 +44,9 @@ class AuthServiceProvider extends ServiceProvider
 
 
 
-        $permissions = Permission::PERMISSIONS;
+        $allPermissions = Permission::PERMISSIONS;
         
-        foreach($permissions as $permission){
+        foreach($allPermissions as $permission){
             Gate::define($permission , function (User $user) use ($permission){
                 // return $user->id === $post->user_id;
                 

@@ -24,10 +24,8 @@ class PermissionSeeder extends Seeder
             Permission::create(['name' => $n]);
         }
 
-
         $adminRole = Role::create(['name' => 'admin']);
         $userRole = Role::create(['name' => 'worker']);
-
 
         $allPermissions = Permission::all();
 
@@ -36,6 +34,6 @@ class PermissionSeeder extends Seeder
 
         $adminUser->roles()->sync([$adminRole->id, $userRole->id]);
 
-     
+    
     }
 }

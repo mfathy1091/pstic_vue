@@ -44,11 +44,11 @@
 										<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
 									</td>
 									<td>
-										<a href="#" @click="showEditUserModal(user)" v-if="$can('user_edit')">
+										<a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')">
 											<i class="fa fa-edit blue"></i>
 										</a>
 										
-										<a href="#" @click="deleteUser(user.id)" v-if="$can('user_delete')">
+										<a class="clickable" @click="deleteUser(user.id)" v-if="$can('user_delete')">
 											<i class="fa fa-trash red"></i>
 										</a>
 									</td>
