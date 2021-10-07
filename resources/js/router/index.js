@@ -43,8 +43,7 @@ const routes = [
         ]
     },
 
-    
-    
+    { path: '/files/:file:id/referrals/create', component: require('../components/AddReferral.vue').default },
     { path: '/roles', component: require('../components/Roles.vue').default },
     { path: '/nationalities', component: require('../components/Nationalities.vue').default },
     { path: '/referral_sources', component: require('../components/ReferralSources.vue').default },
