@@ -22,7 +22,7 @@
 			<div class="content">
 				<div class="container-fluid" >
 					
-					<router-view></router-view>
+					<router-view :key="$route.path"></router-view>
 					
 					<!-- set progressbar -->
 					<vue-progress-bar></vue-progress-bar>

@@ -1,5 +1,6 @@
 <template>
     <div>
+		<h1>1- Adding File and its Beneficiaries</h1>
 		<!-- File Number Field -->
 		<div class="col-4">
 			<ValidationObserver v-slot="{ handleSubmit }">
@@ -7,7 +8,7 @@
 					<hr>
 					<ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
 					<div class="form-group">
-						<label for="number" class="form-label">Enter File Number</label>
+						<label for="number" class="form-label">File Number</label>
 						<input v-model="fileForm.number" type="text" :placeholder="mask" class="form-control">
 						<span class="text-danger">{{ errors[0] }}</span>
 					</div>

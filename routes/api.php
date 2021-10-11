@@ -38,18 +38,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     // Files
     Route::get('files/create_or_get', 'API\FileController@createOrGetFile');
+    
     Route::post('files', 'API\FileController@store');
     Route::get('files/{id}', 'API\FileController@show');
     Route::put('files/{id}', 'API\FileController@update');
     Route::get('files/exists/{n}', 'API\FileController@exists');
     Route::get('files/{id}/individuals', 'API\FileController@getIndividuals');
+    
+    // Referrals
+    Route::get('files/{file}/referrals', 'API\ReferralController@getFileReferrals');
+    Route::get('individuals/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
+
 
 
     // Individuals
     Route::apiResources(['individuals'=> 'API\IndividualController']);
     Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
     Route::get('individuals/{individual}/other_file_individuals', 'API\IndividualController@getOtherFileIndividuals');
-    Route::get('individuals/{individual}/referrals', 'API\Individual\ReferralController@index');
     Route::get('passport_individuals/get_individual_by_passport/{passport_number}', 'API\Individual\PassportIndividualController@getIndividualByPassword');
     Route::put('individuals/{individual}/unlink', 'API\IndividualController@unlinkFile');
 

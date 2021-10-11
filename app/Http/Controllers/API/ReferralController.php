@@ -15,6 +15,29 @@ use App\Models\Reason;
 class ReferralController extends Controller
 {
 
+    public function getFileReferrals(Request $request)
+    {
+        $referrals =  Referral::with('referralSource', 'records')->where('file_id', $request->file_id)->get();
+
+        $data = [
+            'referrals' => $referrals,
+        ];
+
+        return response($data, 200);
+
+    }
+
+    public function getIndividualReferrals(Request $request)
+    {
+        $referrals =  Referral::with('referralSource')->where('individual_id', $request->individual_id)->get();
+        
+        $data = [
+            'referrals' => $referrals,
+        ];
+
+        return response($data, 200);
+    }
+
     public function show($id)
     {
         $referral = Referral::with(
@@ -168,12 +191,6 @@ class ReferralController extends Controller
 
         return response($response, 201);
 
-    }
-
-    public function getIndividualReferrals(Request $request)
-    {
-        $referrals =  Referral::where('individual_id', $request->individual_id)->get();
-        return ['data' => $referrals];
     }
 
 

@@ -12,7 +12,7 @@ class FileController extends Controller
 
     public function show($id)
     {
-        $file = File::with('individuals', 'individuals.nationality', 'individuals.gender','individuals.relationship')->findOrFail($id);
+        $file = File::with('individuals', 'referrals', 'individuals.nationality', 'individuals.gender','individuals.relationship')->findOrFail($id);
 
         if($file){
             return ['data' => $file];
