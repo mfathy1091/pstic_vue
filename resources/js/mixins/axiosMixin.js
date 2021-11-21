@@ -47,6 +47,7 @@ export default {
 			this.$Progress.finish();
 		},
 
+
 		getPermissions(){			
 			this.$Progress.start();
 			axios.get("/api/permission")
@@ -62,6 +63,31 @@ export default {
 		getServices(){			
 			this.$Progress.start();
 			axios.get("/api/services").then(({data}) => (this.services = data.data));
+			this.$Progress.finish();
+		},
+
+		getCasee(caseeId){
+			this.$Progress.start();
+			axios.get("/api/casees/"+caseeId)
+            .then(({data}) => {
+                this.casee = data.data
+            });
+			this.$Progress.finish();
+        },
+
+		getReasons(){
+			this.$Progress.start();
+			axios.get("/api/referral_reasons")
+			.then(({data}) => {this.reasons = data.data});
+			this.$Progress.finish();
+		},
+
+		getCaseeIndividuals(caseeId){
+			this.$Progress.start();
+			axios.get('/api/individuals/' + caseeId + '/other_casee_individuals/')
+			.then(({data}) => {
+				this.caseeIndividuals = data.data
+			});
 			this.$Progress.finish();
 		},
 

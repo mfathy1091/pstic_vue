@@ -15,7 +15,7 @@ class StatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('statuses')->delete();
+        // DB::table('statuses')->delete();
         $statuses = [
             [
                 'name' => 'Active',

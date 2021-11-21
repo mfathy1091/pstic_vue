@@ -39,9 +39,23 @@
                             with font-awesome or any other icon font library -->
 
                         <li class="nav-item">
-                            <router-link to="dashboard" class="nav-link">
+                            <router-link to="/dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-header">Cases</li>
+                        <li class="nav-item">
+                            <router-link to="/search" class="nav-link">
+                                <i class="nav-icon fas fa-search"></i>
+                                <p>Search / Add Cases</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="/search" class="nav-link">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>Add New Case</p>
                             </router-link>
                         </li>
 

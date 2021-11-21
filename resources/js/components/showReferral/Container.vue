@@ -28,7 +28,7 @@
                             <li>{{ this.referral.referral_source.name }}</li>
                             <li>{{ this.referral.referring_person_name }}</li>
                             <li>{{ this.referral.referring_person_email }}</li>
-							<li>{{ this.referral.file.number }}</li>
+							<li>{{ this.referral.casee.number }}</li>
                         </div>
                     </div>
                     <div class="col mb-4" >
@@ -121,14 +121,14 @@
 			</div>
 		</div>
         <!-- Records Section -->
-        <Records v-if="referral" :referral_id="referral.id" />
+        <Records v-if="referral" :referral_id="referral.id" :case="referral.casee" />
 
     </div>
 </template>
 
 <script>
 import Form from 'vform'
-import Records from '../Records.vue'
+import Records from './Records.vue'
 import Multiselect from 'vue-multiselect'
 
 export default {
@@ -181,14 +181,12 @@ export default {
 
         getReferral(){
 			this.$Progress.start();
-			axios.get("/api/referrals/"+this.$route.params.referral_id)
+			axios.get("/api/referrals/"+this.$route.params.referralId)
             .then(({data}) => {
                 this.referral = data.data
             });
 			this.$Progress.finish();
         },
-
-
 
         showEditReferralModal(){
 			this.referralEditMode = true;
@@ -196,6 +194,7 @@ export default {
 			$('#referralModal').modal('show')
 			this.referralForm.fill(this.referral)
 		},
+
 		updateReferral(){
 			this.$Progress.start();
 			this.referralForm.put('/api/referrals/'+this.referralForm.id)

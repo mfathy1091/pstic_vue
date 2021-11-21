@@ -16,7 +16,7 @@ class MonthSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('months')->delete();
+        // DB::table('months')->delete();
         $data = [
             [
                 'code' => '2021-01',

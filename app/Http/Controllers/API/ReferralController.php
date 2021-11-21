@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 use App\Models\Month;
 use App\Models\Referral;
 use App\Models\Record;
-use App\Models\Beneficiary;
+use App\Models\RecordBeneficiary;
 use App\Models\Individual;
 use App\Models\Reason;
 
 class ReferralController extends Controller
 {
 
-    public function getFileReferrals(Request $request)
+    public function getCaseeReferrals(Request $request)
     {
-        $referrals =  Referral::with('referralSource', 'records')->where('file_id', $request->file_id)->get();
+        $referrals =  Referral::with('referralSource', 'records', 'records.month', 'records.status')->where('casee_id', $request->casee_id)->get();
 
         $data = [
             'referrals' => $referrals,
@@ -43,14 +43,16 @@ class ReferralController extends Controller
         $referral = Referral::with(
         'originalDirectIndividual', 
         'referralSource', 
-        'file',
+        'casee',
+        'casee.individuals',
         'reasons', 
         'records', 
         'records.month', 
         'records.status', 
-        'records.beneficiaries',
-        'records.beneficiaries.individual',
-        'records.beneficiaries.services' )->findOrFail($id);
+        'records.recordBeneficiaries',
+        'records.recordBeneficiaries.individual',
+        //'records.recordBeneficiaries.services' 
+        )->findOrFail($id);
 
         if($referral){
             return ['data' => $referral];
@@ -82,7 +84,7 @@ class ReferralController extends Controller
             'referral_narrative_reason' => $request->referral_narrative_reason,
             'current_status_id' => $request->current_status_id,
             'current_assigned_psw_id' => $request->current_assigned_psw_id,
-            'file_id' => $request->file_id,
+            'casee_id' => $request->casee_id,
         ]);
 
         
@@ -137,9 +139,6 @@ class ReferralController extends Controller
             ]);
             
 
-            // referral_beneficiaries: [],
-            // direct_beneficiaries : [],
-
             $referralIndividuals = $request->referral_beneficiaries;
             $directIndividuals = collect($request->direct_beneficiaries)->pluck('id')->toArray();
             //dd($directIndividuals);
@@ -147,7 +146,7 @@ class ReferralController extends Controller
                 foreach($referralIndividuals as $individual)
                 {
                     $is_direct = in_array($individual['id'], $directIndividuals) ? 1 : 0;
-                    Beneficiary::create([
+                    RecordBeneficiary::create([
                         'individual_id' => $individual['id'],
                         'record_id' => $record->id,
                         'is_direct' => $is_direct
@@ -161,7 +160,7 @@ class ReferralController extends Controller
             // if(!empty($directIndividualsIds)){
             //     foreach($directIndividualsIds as $directIndividualId)
             //     {
-            //         Beneficiary::create([
+            //         RecordBeneficiary::create([
             //             'individual_id' => $directIndividualId,
             //             'record_id' => $record->id,
             //             'is_direct' => '1',
@@ -175,7 +174,7 @@ class ReferralController extends Controller
             // if(!empty($indirectIndividualsIds)){
             //     foreach($indirectIndividualsIds as $indirectIndividualId)
             //     {
-            //         Beneficiary::create([
+            //         RecordBeneficiary::create([
             //             'individual_id' => $indirectIndividualId,
             //             'record_id' => $record->id,
             //             'is_direct' => '0',
@@ -222,7 +221,7 @@ class ReferralController extends Controller
                 'referral_narrative_reason' => $request->referral_narrative_reason,
                 'current_status_id' => $request->current_status_id,
                 'current_assigned_psw_id' => $request->current_assigned_psw_id,
-                'file_id' => $request->file_id,
+                'casee_id' => $request->casee_id,
             ]);
 
             // then sync

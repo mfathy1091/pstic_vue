@@ -13,9 +13,9 @@ class PssCase extends Model
 
     // parent tables
 
-    public function file()
+    public function casee()
     {
-        return $this->belongsTo(File::class, 'file_id');
+        return $this->belongsTo(Casee::class, 'casee_id');
     }
 
     public function referral()

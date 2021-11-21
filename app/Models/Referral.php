@@ -16,13 +16,13 @@ class Referral extends Model
         'referral_narrative_reason',
         'current_status_id',
         'current_assigned_psw_id',
-        'file_id'
+        'casee_id'
     ];
 
     // Parent Tables
-    public function file()
+    public function casee()
     {
-        return $this->belongsTo(File::class, 'file_id');
+        return $this->belongsTo(Casee::class, 'casee_id');
     }
 
     public function directIndividual()

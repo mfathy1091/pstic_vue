@@ -62,7 +62,10 @@
 <script>
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
+import axiosMixin from '../../mixins/axiosMixin'	
+
 export default {
+	mixins: [axiosMixin],
 	components: { Multiselect },
     props:{
         editMode: Boolean,
@@ -91,14 +94,6 @@ export default {
     },
 
 	methods: {
-		loadRoles(){			
-			this.$Progress.start();
-			axios.get("/api/roles")
-			.then(({data}) => {
-				this.roles = data.data
-			});
-			this.$Progress.finish();
-		},
 
 		createUser() {
 			this.$Progress.start();
@@ -145,7 +140,7 @@ export default {
 	},
 
 	created() {
-		this.loadRoles();
+		this.getRoles();
 	}
 }
 </script>

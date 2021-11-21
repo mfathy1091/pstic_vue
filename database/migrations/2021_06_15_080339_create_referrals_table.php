@@ -20,13 +20,13 @@ class CreateReferralsTable extends Migration
             $table->string('referring_person_name');
             $table->string('referring_person_email');
             $table->text('referral_narrative_reason');
-            $table->unsignedBigInteger('file_id')->nullable();
+            $table->unsignedBigInteger('casee_id')->nullable();
 
             $table->unsignedBigInteger('current_status_id')->nullable();
             $table->unsignedBigInteger('current_assigned_psw_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
+            $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');
             $table->foreign('referral_source_id')->references('id')->on('referral_sources')->onDelete('cascade');
             $table->foreign('current_status_id')->references('id')->on('statuses')->onDelete('cascade');
             $table->foreign('current_assigned_psw_id')->references('id')->on('users')->onDelete('cascade');

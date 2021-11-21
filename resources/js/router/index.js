@@ -13,6 +13,7 @@ import usecom from '../vuex/usecom'
 //import LoginForm from './components/LoginForm'
 
 import Dashboard from "../components/dashboard/Container"
+import Search from "../components/search/Container"
 
 import ShowReferral from '../components/showReferral/Container'
 import NotFound from '../components/NotFound'
@@ -22,13 +23,16 @@ const routes = [
         path: "/dashboard", name: "dashboard", component: Dashboard,
         children: []
     },
-
+    {
+        path: "/search", name: "search", component: Search,
+        children: []
+    },
 
 
     {
-        path: '/files/:fileId',
-        name:'show-file',
-        component: () => import(/* webpackChunkName: "show-file" */ '../components/showFile/Container.vue'),
+        path: '/casees/:caseeId',
+        name:'show-casee',
+        component: () => import(/* webpackChunkName: "show-casee" */ '../components/showCasee/Container.vue'),
         props: true
     },
     { 
@@ -44,7 +48,12 @@ const routes = [
         props: true
     },
 
-
+    { 
+        path: '/referrals/:referralId', 
+        name: 'show-referral',
+        component: () => import(/* webpackChunkName: "show-referral" */ '../components/showReferral/Container'),
+        props: true
+    },
 
     { path: '/referrals/create', component: require('../components/AddReferral.vue').default },
 

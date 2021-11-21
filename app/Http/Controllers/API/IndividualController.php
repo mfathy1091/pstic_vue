@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\File;
+use App\Models\Casee;
 use App\Models\Individual;
 
 class IndividualController extends Controller
@@ -18,7 +18,7 @@ class IndividualController extends Controller
 
         $individuals = Individual::query();
 
-        $data = $individuals->with('file')->whereHas('file', function($q) use ($file_number){
+        $data = $individuals->with('casee')->whereHas('casee', function($q) use ($file_number){
             return $q->where('number', 'like', "%$file_number%");
         })->get();
 
@@ -29,7 +29,7 @@ class IndividualController extends Controller
 
     public function show($id)
     {
-        $individual = Individual::with('file', 'file.individuals', 'relationship', 'gender', 'nationality')->findOrFail($id);
+        $individual = Individual::with('casee', 'casee.individuals', 'relationship', 'gender', 'nationality')->findOrFail($id);
 
         if($individual){
             return ['data' => $individual];
@@ -45,7 +45,7 @@ class IndividualController extends Controller
         if($individual){
 
             $this->validate($request, [
-                'file_id' => 'required|string|max:255',
+                'casee_id' => 'required|string|max:255',
                 'passport_number' => 'required|string|max:255',
                 'name' => 'required',
                 'age' => 'required|string|max:255', 
@@ -58,7 +58,7 @@ class IndividualController extends Controller
             ]);
 
             $individual->update([
-                'file_id' => $request->file_id,
+                'casee_id' => $request->casee_id,
                 'passport_number' => $request->passport_number,
                 'name' => $request->name,
                 'age' => $request->age,
@@ -75,16 +75,16 @@ class IndividualController extends Controller
 
     }
 
-    public function unlinkFile($individual_id){
+    public function unlinkCasee($individual_id){
         
         
         $individual = Individual::findOrFail($individual_id);
         if($individual){
-            $individual->file()->dissociate();
+            $individual->casee()->dissociate();
             $individual->save();
             return response()->json([
                 'data' => $individual,
-                'message' => 'file is unlinked'
+                'message' => 'case is unlinked'
             ]);
         }
     }
@@ -92,7 +92,7 @@ class IndividualController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'file_id' => 'required|string|max:255',
+            'casee_id' => 'required|string|max:255',
             'passport_number' => 'required|string|max:255',
             'name' => 'required',
             'age' => 'required|string|max:255', 
@@ -105,7 +105,7 @@ class IndividualController extends Controller
         ]);
 
         $individual = Individual::create([
-            'file_id' => $request->file_id,
+            'casee_id' => $request->casee_id,
             'passport_number' => $request->passport_number,
             'name' => $request->name,
             'age' => $request->age,
@@ -136,17 +136,17 @@ class IndividualController extends Controller
         return ['message' => 'Individual deleted'];
     }
 
-    public function getOtherFileIndividuals($individual_id)
+    public function getOtherCaseeIndividuals($individual_id)
     {
         $individual = Individual::findOrFail($individual_id);
-        $file = $individual->file;
+        $casee = $individual->casee;
 
         // if it exists
         if($individual){
-            // return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()];
+            // return ['data' => $casee->individuals()->with('relationship', 'gender', 'nationality')->get()];
 
             // $users = User::all()->except($currentUser->id);
-            return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()->except($individual_id)];
+            return ['data' => $casee->individuals()->with('relationship', 'gender', 'nationality')->get()->except($individual_id)];
         }
 
         return ['data' => ''];
@@ -158,7 +158,7 @@ class IndividualController extends Controller
 
         // $individuals = Individual::query();
 
-        // $data = $individuals->with('file')->whereHas('file', function($q) use ($file_number){
+        // $data = $individuals->with('casee')->whereHas('casee', function($q) use ($file_number){
         //     return $q->where('number', '=', "%$file_number%");
         // })->get();
 

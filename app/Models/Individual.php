@@ -15,7 +15,10 @@ class Individual extends Model
         return $this->belongsTo('App\Models\Nationality', 'nationality_id');
     }
 
-
+    public function records()
+    {
+        return $this->belongsToMany(Record::class, 'record_beneficiary', 'individual_id', 'record_id');
+    }
 
     
     public function gender()
@@ -36,9 +39,9 @@ class Individual extends Model
         return $query->whereBetween(['age', [$from, $to]]);
     }
 
-    public function scopeRelatedFileIndividuals($query, $fileId)
+    public function scopeRelatedCaseIndividuals($query, $caseeId)
     {
-        return $query->where('file_id', $fileId);
+        return $query->where('casee_id', $caseeId);
     }
 
     public function relationship()
@@ -46,9 +49,9 @@ class Individual extends Model
         return $this->belongsTo(Relationship::class, 'relationship_id');
     }
 
-    public function file()
+    public function casee()
     {
-        return $this->belongsTo(File::class, 'file_id');
+        return $this->belongsTo(Casee::class, 'casee_id');
     }
 
     public function beneficiaries()
@@ -58,7 +61,7 @@ class Individual extends Model
 
 /*     public function pssCases()
     {
-        return $this->belongsToMany(PssCase::class, 'individuals_cases', 'individual_id', 'pss_case_id');
+        return $this->belongsToMany(PssCase::class, 'individuals_cases', 'individual_id', 'pss_casee_id');
     } */
 
     public function pssCases()

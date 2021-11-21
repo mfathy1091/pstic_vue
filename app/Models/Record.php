@@ -44,19 +44,24 @@ class Record extends Model
         return $this->hasMany(Service::class);
     }
 
-    public function beneficiaries()
+    public function individuals()
     {
-        return $this->hasMany(Beneficiary::class);
+        return $this->belongsToMany(Individual::class, 'record_beneficiary', 'record_id', 'individual_id');
     }
 
-    public function directBeneficiary()
+    public function recordBeneficiaries()
     {
-        return $this->hasOne(Beneficiary::class)->where('is_direct', '1');
+        return $this->hasMany(RecordBeneficiary::class);
+    }
+
+    public function directRecordBeneficiaries()
+    {
+        return $this->hasOne(RecordBeneficiary::class)->where('is_direct', '1');
     }
 
 /*     public function Beneficiaries()
     {
-        return $this->belongsToMany(Beneficiary::class, 'records_beneficiaries', 'record_id', 'beneficiary_id');
+        return $this->belongsToMany(RecordBeneficiary::class, 'records_beneficiaries', 'record_id', 'beneficiary_id');
     } */
 
 

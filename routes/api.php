@@ -36,41 +36,44 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     
-    // Files
-    Route::get('files/create_or_get', 'API\FileController@createOrGetFile');
+    // Casees
+    Route::get('casees/create_or_get', 'API\CaseeController@createOrGetCasee');
     
-    Route::post('files', 'API\FileController@store');
-    Route::get('files/{id}', 'API\FileController@show');
-    Route::put('files/{id}', 'API\FileController@update');
-    Route::get('files/exists/{n}', 'API\FileController@exists');
-    Route::get('files/{id}/individuals', 'API\FileController@getIndividuals');
+    Route::get('casees/search', 'API\CaseeController@search');
+    Route::get('casees', 'API\CaseeController@index');
+    Route::post('casees', 'API\CaseeController@store');
+    Route::get('casees/{id}', 'API\CaseeController@show');
+    Route::put('casees/{id}', 'API\CaseeController@update');
+    Route::get('casees/exists/{n}', 'API\CaseeController@exists');
+    Route::get('casees/{id}/individuals', 'API\CaseeController@getIndividuals');
     
-    // Referrals
-    Route::get('files/{file}/referrals', 'API\ReferralController@getFileReferrals');
-    Route::get('individuals/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
-
-
-
-    // Individuals
-    Route::apiResources(['individuals'=> 'API\IndividualController']);
-    Route::get('individuals/get/{fileId}', 'API\IndividualController@getIndividuals');
-    Route::get('individuals/{individual}/other_file_individuals', 'API\IndividualController@getOtherFileIndividuals');
-    Route::get('passport_individuals/get_individual_by_passport/{passport_number}', 'API\Individual\PassportIndividualController@getIndividualByPassword');
-    Route::put('individuals/{individual}/unlink', 'API\IndividualController@unlinkFile');
-
-    
-    // Beneficiaries
-    Route::apiResources(['beneficiaries'=> 'API\BeneficiaryController']);
-    Route::get('records/{record}/beneficiaries', 'API\Record\BeneficiaryController@index');
-
     // Referrals
     Route::apiResources(['referrals'=> 'API\ReferralController']);
+
+    Route::get('casees/{casee}/referrals', 'API\ReferralController@getCaseeReferrals');
+    Route::get('individuals/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
     // Route::get('individuals/{individual_id}/referrals', 'API\ReferralController@getIndividualReferrals');
 
     // Records
     Route::get('referrals/{referral_id}/latest-record', 'API\RecordController@latestReferralRecord');
+    Route::put('records/{record}', 'API\RecordController@update');
+
+
+    // Individuals
+    Route::apiResources(['individuals'=> 'API\IndividualController']);
+    Route::get('individuals/get/{caseeId}', 'API\IndividualController@getIndividuals');
+    Route::get('individuals/{individual}/other_casee_individuals', 'API\IndividualController@getOtherCaseeIndividuals');
+    Route::get('passport_individuals/get_individual_by_passport/{passport_number}', 'API\Individual\PassportIndividualController@getIndividualByPassword');
+    Route::put('individuals/{individual}/unlink', 'API\IndividualController@unlinkCasee');
+
     
+    // Record Beneficiaries
+    Route::apiResources(['record-beneficiaries'=> 'API\RecordBeneficiaryController']);
+    Route::get('records/{record}/record-beneficiaries', 'API\Record\RecordBeneficiaryController@index');
+
+
+
     
     Route::get('abilities', 'API\AbilityController@index');
     Route::get('ability/{id}', 'API\AbilityController@show');

@@ -26,7 +26,7 @@ class GroupUserSeeder extends Seeder
         });*/
 
 
-        DB::table('group_user')->delete();
+        // DB::table('group_user')->delete();
 
         //User::factory()->times(10)->create();
 

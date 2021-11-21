@@ -19,7 +19,7 @@ class CreateIndividualsTable extends Migration
             $table->string('name');
             $table->integer('age');
             $table->boolean('is_registered')->nullable();
-            $table->unsignedbigInteger('file_id')->nullable();
+            $table->unsignedbigInteger('casee_id')->nullable();
             $table->string('individual_id')->nullable();
             $table->unsignedbigInteger('gender_id');
             $table->unsignedbigInteger('nationality_id');
@@ -29,7 +29,7 @@ class CreateIndividualsTable extends Migration
             $table->timestamps();
 
             // foreign keys
-            $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
+            $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');
             $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade');
             $table->foreign('nationality_id')->references('id')->on('nationalities')->onDelete('cascade');
             $table->foreign('relationship_id')->references('id')->on('relationships')->onDelete('cascade');

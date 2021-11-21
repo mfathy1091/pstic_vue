@@ -4,12 +4,12 @@
 		<!-- File Number Field -->
 		<div class="col-4">
 			<ValidationObserver v-slot="{ handleSubmit }">
-				<form @submit.prevent="handleSubmit(getFile)">
+				<form @submit.prevent="handleSubmit(getCasee)">
 					<hr>
 					<ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
 					<div class="form-group">
 						<label for="number" class="form-label">File Number</label>
-						<input v-model="fileForm.number" type="text" :placeholder="mask" class="form-control">
+						<input v-model="caseeForm.file_number" type="text" :placeholder="mask" class="form-control">
 						<span class="text-danger">{{ errors[0] }}</span>
 					</div>
 					</ValidationProvider>
@@ -18,21 +18,21 @@
 			</ValidationObserver>
 		</div>
 
-		<!-- File Section -->
+		<!-- Case Section -->
 		<div v-if="showRegisterByFileNumberSection">
 			
 			<div class="card mt-3">
 				<div class="card-header">
 					<h5 class="m-0">
-						File Number: {{ this.file.number }}
+						File Number: {{ this.casee.file_number }}
 					</h5>
 				</div>
 				<div class="card-body">
-					<!-- File Individuals -->
+					<!-- Case Individuals -->
 					<div class="card mt-3">
 				<div class="card-header">
 					<h3 class="card-title">
-						Individuals under {{ this.file.number }}
+						Individuals under {{ this.casee.file_number }}
 					</h3>
 
 					<div class="card-tools">
@@ -60,7 +60,7 @@
 								</tr>
 							</thead>
 							<tbody>
-									<tr v-for="individual in fileIndividuals" :key="individual.id">
+									<tr v-for="individual in caseeIndividuals" :key="individual.id">
 										<td>{{ individual.name }}</td>
 										<td>{{ individual.individual_id }}</td>
 										<td>{{ individual.passport_number }}</td>
@@ -95,7 +95,7 @@
 			<div class="card card-solid">
 				<div class="card-header">
 					<h3 class="card-title">
-						Individuals Linked to {{ this.file.number }}
+						Individuals Linked to {{ this.casee.file_number }}
 					</h3>
 
 					<div class="card-tools">
@@ -108,7 +108,7 @@
 				<div class="card-body pb-0">
 					<div class="row">
 						
-						<div v-for="individual in fileIndividuals" :key="individual.id"
+						<div v-for="individual in caseeIndividuals" :key="individual.id"
 						class="col-12 col-lg-4 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
 							<div class="card bg-light d-flex flex-fill">
 								<div class="card-header text-dark border-bottom-0">
@@ -156,12 +156,12 @@
 
 			<!-- Choose Direct Section -->
 			<!-- <ValidationObserver v-slot="{ handleSubmit }">
-				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="fileIndividuals.length">		
+				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="caseeIndividuals.length">		
 					<ValidationProvider name="directIndividual_id" rules="required" v-slot="{ errors }">
 					<div class="form-group">
 						<label for="directIndividual_id" class="form-label">Choose Direct</label>
 						<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
-							<option v-for='individual in fileIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
+							<option v-for='individual in caseeIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
 						</select>
 						<span class="text-danger">{{ errors[0] }}</span>
 					</div>
@@ -263,31 +263,31 @@
 			</div>
 		</div>
 
-		<!-- File Modal -->
-		<div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+		<!-- Case Modal -->
+		<div class="modal fade" id="caseeModal" tabindex="-1" aria-labelledby="caseeModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 v-show="!fileEditMode" class="modal-title" id="fileModalLabel">Create New File</h5>
-						<h5 v-show="fileEditMode" class="modal-title" id="fileModalLabel">Edit File</h5>
+						<h5 v-show="!caseeEditMode" class="modal-title" id="caseeModalLabel">Create New File</h5>
+						<h5 v-show="caseeEditMode" class="modal-title" id="caseeModalLabel">Edit File</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<form @submit.prevent="fileEditMode ? updateFile() : createFile()">
+					<form @submit.prevent="caseeEditMode ? updateCasee() : createCasee()">
 						<div class="modal-body">
 							
 							<div class="form-group">
 								<label for="number" class="form-label">Enter the File Number</label>
-								<input id="number" v-model="fileForm.number" type="text" name="number" class="form-control">
-								<HasError :form="fileForm" field="number" />
+								<input id="number" v-model="caseeForm.file_number" type="text" name="number" class="form-control">
+								<HasError :form="caseeForm" field="number" />
 							</div>
 
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-							<button v-show="!fileEditMode" type="submit" class="btn btn-success">Create</button>
-							<button v-show="fileEditMode" type="submit" class="btn btn-primary">Update</button>
+							<button v-show="!caseeEditMode" type="submit" class="btn btn-success">Create</button>
+							<button v-show="caseeEditMode" type="submit" class="btn btn-primary">Update</button>
 						</div>
 
 					</form>
@@ -317,18 +317,18 @@ export default {
 			showRegisterByFileNumberSection: false,
 			showAddFileNumberSection: false,
 			individualEditMode: false,
-			fileEditMode: false,
-            file: '',
-			isNewFile: '',
-            fileIndividuals: [],
+			caseeEditMode: false,
+            casee: '',
+			isNewCasee: '',
+            caseeIndividuals: [],
 			directIndividual_id: '',
 			relationships: [],
             // nationalities: {},
 			
             
-            fileForm: new Form({
+            caseeForm: new Form({
 				id: '',
-				number: '',
+				file_number: '',
 			}),
             format: '',
             regex: '^',
@@ -341,7 +341,7 @@ export default {
                 name: '',
                 age: '',
                 is_registered: '',
-                file_id: '1',
+                casee_id: '1',
                 individual_id: '',
                 gender_id: '0',
                 nationality_id: '0',
@@ -373,9 +373,9 @@ export default {
     },
 
     watch: {
-        'fileForm.number'(next, prev) {
+        'caseeForm.file_number'(next, prev) {
             if (next.length > prev.length) {
-                this.fileForm.number = this.fileForm.number.replace(/[^0-9]/g, '')
+                this.caseeForm.file_number = this.caseeForm.file_number.replace(/[^0-9]/g, '')
             
             .replace(new RegExp(this.regex, 'g'), this.format)
             .substr(0, this.mask.length);
@@ -389,17 +389,17 @@ export default {
 			axios.get('/api/nationalities').then(({data}) => (this.nationalities = data.data));
 			this.$Progress.finish();
 		},
-        getFileIndividuals(){
+        geCaseeIndividuals(){
 			
-			if(this.file){
+			if(this.casee){
 				this.$Progress.start();
-				axios.get('/api/files/'+this.file.id+'/individuals')
+				axios.get('/api/casees/'+this.casee.id+'/individuals')
 				.then(({data}) => {
-					this.fileIndividuals = data.data
+					this.caseeIndividuals = data.data
 				});
 				this.$Progress.finish();
 			}else{
-				this.fileIndividuals = []
+				this.caseeIndividuals = []
 			}
 		},
 		getRelationships(){
@@ -426,7 +426,7 @@ export default {
 			this.individualForm.post('/api/individuals')
 			.then(() => {
 				// success
-				Fire.$emit('fileIndividualsChanged');
+				Fire.$emit('caseeIndividualsChanged');
 				$('#individualModal').modal('hide')
 				Toast.fire({
 					icon: 'success',
@@ -445,7 +445,7 @@ export default {
 			this.individualForm.put('/api/individuals/'+this.individualForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('fileIndividualsChanged');
+				Fire.$emit('caseeIndividualsChanged');
 				$('#individualModal').modal('hide')
 				Swal.fire(
 					'Updated!',
@@ -475,7 +475,7 @@ export default {
 					this.individualForm.delete('/api/individuals/'+id)
 					.then(() => {
 						// success
-						Fire.$emit('fileIndividualsChanged');
+						Fire.$emit('caseeIndividualsChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -494,28 +494,28 @@ export default {
 		
 
 
-		showCreateFileModal(){
-			this.fileEditMode = false;
-			this.fileForm.reset()
-			$('#fileModal').modal('show')
+		showCreateCaseeModal(){
+			this.caseeEditMode = false;
+			this.caseeForm.reset()
+			$('#caseeModal').modal('show')
 		},
-		showEditFileModal(file){
-			this.fileEditMode = true;
-			this.fileForm.reset()
-			$('#fileModal').modal('show')
-			this.fileForm.fill(file)
+		showEditCaseeModal(casee){
+			this.caseeEditMode = true;
+			this.caseeForm.reset()
+			$('#caseeModal').modal('show')
+			this.caseeForm.fill(casee)
 		},
 
-		getFile(){
+		getCasee(){
 			this.$Progress.start();
-			this.fileForm.get('/api/files/create_or_get/')
+			this.caseeForm.get('/api/casees/create_or_get/')
             .then(({data}) => {
-					this.file = data.data
-					Fire.$emit('fileChanged');
-					Fire.$emit('fileIndividualsChanged');
+					this.casee = data.data
+					Fire.$emit('caseeChanged');
+					Fire.$emit('caseeIndividualsChanged');
 					this.$Progress.finish();
-					this.isNewFile = data.isNewFile
-					if(this.isNewFile){
+					this.isNewCasee = data.isNewCasee
+					if(this.isNewCasee){
 						Toast.fire({
 							icon: 'success',
 							title: 'File created successfully'
@@ -527,7 +527,7 @@ export default {
 							'info'
 						)
 					}
-				if(this.file){
+				if(this.casee){
 					this.showRegisterByFileNumberSection = true	
 				}
             })
@@ -537,13 +537,13 @@ export default {
 			})
 		},
 
-		updateFile(){
+		updateCasee(){
 			this.$Progress.start();
-			this.fileForm.put('/api/files/'+this.fileForm.id)
+			this.caseeForm.put('/api/casees/'+this.caseeForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('fileChanged');
-				$('#fileModal').modal('hide')
+				Fire.$emit('caseeChanged');
+				$('#caseeModal').modal('hide')
 				Swal.fire(
 					'Updated!',
 					'It has been updated.',
@@ -556,7 +556,7 @@ export default {
 				this.$Progress.fail();
 			})
 		},
-		deleteFile(id){
+		deleteCasee(id){
 			Swal.fire({
 				title: 'Are you sure?',
 				text: "You won't be able to revert this!",
@@ -569,10 +569,10 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.fileForm.delete('/api/files/'+id)
+					this.caseeForm.delete('/api/casees/'+id)
 					.then(() => {
 						// success
-						Fire.$emit('fileChanged');
+						Fire.$emit('caseeChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -596,15 +596,15 @@ export default {
 		},
 
 		goToCreateReferralPage(){
-			router.push({ path: `/files/${this.file.id}/referrals/create/` })
+			router.push({ path: `/casees/${this.casee.id}/referrals/create/` })
 		},
     },
 	created(){
-		Fire.$on('fileChanged', () => {
-			this.getFileIndividuals();
+		Fire.$on('caseeChanged', () => {
+			this.geCaseeIndividuals();
 		});
-		Fire.$on('fileIndividualsChanged', () => {
-			this.getFileIndividuals();
+		Fire.$on('caseeIndividualsChanged', () => {
+			this.geCaseeIndividuals();
 		});
 		this.getRelationships();
 		// this.getNationalities();

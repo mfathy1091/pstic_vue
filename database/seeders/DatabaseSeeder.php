@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(AdminUserSeeder::class);
         // $this->call(UserSeeder::class);
 
-        $this->call(FileSeeder::class);
+        $this->call(CaseeSeeder::class);
         $this->call(ReferralSourceSeeder::class);
         // $this->call(VulnerabilitySeeder::class);
         // $this->call(EmergencyTypeSeeder::class);
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(MonthSeeder::class);
         //$this->call(RecordSeeder::class);
-        //$this->call(BeneficiarySeeder::class);
+        //$this->call(RecordBeneficiarySeeder::class);
 
         // $this->call(CaseTypeSeeder::class);
         // $this->call(VulnerabilitySeeder::class);

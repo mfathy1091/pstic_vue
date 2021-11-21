@@ -68029,3 +68029,11 @@ readers do not read off random characters that represent icons */
   background-color: #3d5b95 !important;
   color: #fff !important;
 }
+
+.individual-card {
+  margin-left: 3px;
+}
+
+.edit-button :hover {
+  color: green;
+}

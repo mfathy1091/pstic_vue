@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Beneficiary;
+use App\Models\RecordBeneficiary;
 use App\Models\Individual;
 use App\Repositories\PsCaseRepositoryInterface;
 use Illuminate\Support\Facades\Auth;use App\Models\Gender;
@@ -20,7 +20,7 @@ use App\Models\Referral;
 use App\Models\Record;
 use App\Models\Status;
 use App\Models\CaseType;
-use App\Models\File;
+use App\Models\Casee;
 use App\Models\User;
 use App\Models\Service;
 use App\Models\Reason;
@@ -77,7 +77,7 @@ class PssCaseController extends Controller
         $genders = Gender::all();
         $nationalities = Nationality::all();
         $caseTypes = CaseType::all();
-        $files = File::all();
+        $files = Casee::all();
         
         $reasons = Reason::all();
 
@@ -165,7 +165,7 @@ class PssCaseController extends Controller
             
             // Insert Direct Individual In Each Record
             $directIndividualId = $request->direct_individual_id;
-            Beneficiary::create([
+            RecordBeneficiary::create([
                 'individual_id' => $directIndividualId,
                 'record_id' => $record->id,
                 'is_direct' => '1',
@@ -177,7 +177,7 @@ class PssCaseController extends Controller
             if(!empty($indirectIndividualsIds)){
                 foreach($indirectIndividualsIds as $indirectIndividualId)
                 {
-                    Beneficiary::create([
+                    RecordBeneficiary::create([
                         'individual_id' => $indirectIndividualId,
                         'record_id' => $record->id,
                         'is_direct' => '0',
