@@ -466,7 +466,7 @@ export default {
                     this.recordForm.recordBeneficiaries.push(recordBeneficiary);
                 //}
 
-            }
+            } 
             console.log(found);
             
 
