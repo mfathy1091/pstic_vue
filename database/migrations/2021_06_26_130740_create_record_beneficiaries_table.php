@@ -17,7 +17,7 @@ class CreateRecordBeneficiariesTable extends Migration
             $table->id();
             $table->unsignedInteger('individual_id');
             $table->unsignedInteger('record_id');
-            $table->boolean('is_direct');
+            $table->boolean('is_direct')->default(-1);
             $table->timestamps();
 
             // foreign keys
