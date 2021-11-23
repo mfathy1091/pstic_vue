@@ -66,13 +66,11 @@
                                                         <span v-show="recordBeneficiary.status == 2" class="badge badge-pill badge-secondary">Indirect</span>
                                                         <span v-show="recordBeneficiary.status == 0" class="badge badge-pill badge-danger">Not included</span>
                                                         <span>{{ recordBeneficiary.individual.name }} </span>
-                                                        <a class="clickable edit-button mb-6" :id="recordBeneficiary.id" v-show="!recordBeneficiariesEditMode" @click="editRecordBeneficiaries(currentRecord.record_beneficiaries)">
+                                                        <a class="clickable edit-button mb-6" :id="recordBeneficiary.id" v-show="!recordBeneficiariesEditMode" @click="showEditRecordBeneficiaryModal(recordBeneficiary)">
                                                             <i class="fas fa-pencil-alt"></i>
                                                         </a>
                                                         <button class="btn btn-primary btn-sm" v-show="recordBeneficiariesEditMode" @click="updateRecordBeneficiaries(record)">Save</button>
                                                     </div>
-
-
 
 
                                                     <!-- <div class="col-10">
@@ -348,6 +346,13 @@
             </div>
         </div>
 
+		<!-- Modal -->
+		<RecordBeneficiaryModal 
+		:v-if="selectedRecordBeneficiary.id"
+		:selectedRecordBeneficiary='selectedRecordBeneficiary' 
+		v-on:recordBeneficiariesChanged="getReferral()">
+		</RecordBeneficiaryModal>
+
     </div>
     
 
@@ -358,16 +363,23 @@
 <script>
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
+import RecordBeneficiaryModal from './RecordBeneficiaryModal'
 
 export default {
     name: 'Records',
-    components: { Multiselect },
+    components: {
+        Multiselect,
+        RecordBeneficiaryModal,
+    },
+
     props: {
         referral_id: Number,
         casee: Object,
     },
     data() {
         return{
+            selectedRecordBeneficiary: {},
+
             recordBeneficiariesEditMode: false,
             serviceEditMode: false,
             beneficiaryAttachmentsEditMode: false,
@@ -420,7 +432,10 @@ export default {
             let menu = document.getElementById(id).style.display = "none";
         },
 
-
+    	showEditRecordBeneficiaryModal(recordBeneficiary){
+			this.selectedRecordBeneficiary = recordBeneficiary;
+			$('#recordBeneficiaryModal').modal('show')
+		},
 
         editRecordBeneficiaries(recordBeneficiaries){
             this.recordBeneficiariesEditMode = true;
@@ -699,6 +714,10 @@ export default {
         Fire.$on('beneficiariesAttachmentsChanged', () => {
 			this.getReferral();
             this.getRecordBeneficiaries();
+		});
+
+        Fire.$on('recordBeneficiariesChanged', () => {
+			this.getReferral();
 		});
 		
 	},
