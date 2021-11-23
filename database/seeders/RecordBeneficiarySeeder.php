@@ -20,19 +20,19 @@ class RecordBeneficiarySeeder extends Seeder
             [
                 'record_id' => '1',
                 'individual_id' => '1',
-                'is_direct' => '1',
+                'status' => '1',
                 
             ],
             [
                 'record_id' => '1',
                 'individual_id' => '2',
-                'is_direct' => '0',
+                'status' => '0',
             ],
 
             [
                 'record_id' => '2',
                 'individual_id' => '1',
-                'is_direct' => '1',
+                'status' => '1',
             ],
             
         ];

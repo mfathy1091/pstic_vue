@@ -97,7 +97,7 @@ class PssCase extends Model
 
     public function beneficiaries()
     {
-        return $this->hasMany(Beneficiary::class)->orderBy('is_direct', 'DESC');
+        return $this->hasMany(Beneficiary::class)->orderBy('status', 'DESC');
     }
 
     public function currentRecord()

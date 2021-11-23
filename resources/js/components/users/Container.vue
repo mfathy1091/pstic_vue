@@ -67,7 +67,7 @@
 		:v-if="selectedUser.id"
 		:editMode='editMode' 
 		:selectedUser='selectedUser' 
-		v-on:usersChanged="loadUsers()">
+		v-on:usersChanged="getUsers()">
 		</UserModal>
 
 	</div>
@@ -93,7 +93,7 @@ export default {
 	},
 	methods: {
 
-		loadUsers(){			
+		getUsers(){			
 			this.$Progress.start();
 			axios.get("/api/user").then(({data}) => (this.users = data.data));
 			this.$Progress.finish();
@@ -150,10 +150,10 @@ export default {
 		// console.log($getPermissions());
 		
 
-		this.loadUsers()
+		this.getUsers()
 		
 		Fire.$on('usersChanged', () => {
-			this.loadUsers();
+			this.getUsers();
 		});
 
 		

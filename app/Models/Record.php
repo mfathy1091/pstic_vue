@@ -56,7 +56,7 @@ class Record extends Model
 
     public function directRecordBeneficiaries()
     {
-        return $this->hasOne(RecordBeneficiary::class)->where('is_direct', '1');
+        return $this->hasOne(RecordBeneficiary::class)->where('status', '1');
     }
 
 /*     public function Beneficiaries()

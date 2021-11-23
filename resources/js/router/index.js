@@ -57,7 +57,7 @@ const routes = [
 
     { path: '/referrals/create', component: require('../components/AddReferral.vue').default },
 
-    { path: '/nationalities', component: require('../components/Nationalities.vue').default },
+    { path: '/nationalities', component: require('../components/Nationalities/Container.vue').default },
     { path: '/referral_sources', component: require('../components/ReferralSources.vue').default },
     { path: '/referral_reasons', component: require('../components/ReferralReasons.vue').default },
     { path: '/servicetypes', component: require('../components/Servicetypes.vue').default },

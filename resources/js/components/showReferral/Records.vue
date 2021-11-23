@@ -42,29 +42,42 @@
                                     </div>
                                     <div class="col-6">
                                         <ul>
-                                            <div class="form-check" v-for="(individual, i) in referral.casee.individuals" :key="i">
+                                            <div class="form-check" v-for="(recordBeneficiary, i) in currentRecord.record_beneficiaries" :key="i">
                                                 <div class="row">
                                                     <!-- <div class="col-2">
-                                                        <input class="form-check-input" name="beneficiariesStatuses[]" v-model="recordForm.beneficiariesStatuses" type="checkbox"  :value="individual" :id="'direct'+i" :disabled="recordBeneficiariesEditMode ? false : true">
+                                                        <input class="form-check-input" name="beneficiariesStatuses[]" v-model="recordForm.beneficiariesStatuses" type="checkbox"  :value="recordBeneficiary" :id="'direct'+i" :disabled="recordBeneficiariesEditMode ? false : true">
                                                         <label class="form-check-label" :for="'direct'+i">Direct</label>
                                                     </div> -->
-
-
-                                                    <div class="form-group col-4">
-                                                        <select name="beneficiariesStatuses[]" :id="'status'+individual.id" class="form-control" @change="addToRecordBeneficiariesArray(individual)">
-                                                            <option :value="1">Direct</option>
-                                                            <option :value='0'>Indirect</option>
-                                                            <option :value='-1'>Exclude</option>
-                                                        </select>
+                                                    
+                                                    <div v-show="recordBeneficiariesEditMode" class="form-group">
+                                                        <div class="row">
+                                                            <span>{{ recordBeneficiary.individual.name }}</span>
+                                                            <select name="recordBeneficiaryStatuses[]" :id="'status'+recordBeneficiary.id" class="form-control" @change="addToRecordBeneficiariesArray(recordBeneficiary)">
+                                                                <option :value='0'>Exclude</option>
+                                                                <option :value="1">Direct</option>
+                                                                <option :value='2'>Indirect</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-8">
-                                                            <label class="form-check-label" :for="i">{{ individual.name }}</label>
 
+                                                    <div v-show="!recordBeneficiariesEditMode" class="col">
+                                                        
+                                                        <span v-show="recordBeneficiary.status == 1" class="badge badge-pill badge-primary">Direct</span>
+                                                        <span v-show="recordBeneficiary.status == 2" class="badge badge-pill badge-secondary">Indirect</span>
+                                                        <span v-show="recordBeneficiary.status == 0" class="badge badge-pill badge-danger">Not included</span>
+                                                        <span>{{ recordBeneficiary.individual.name }} </span>
+                                                        <a class="clickable edit-button mb-6" :id="recordBeneficiary.id" v-show="!recordBeneficiariesEditMode" @click="editRecordBeneficiaries(currentRecord.record_beneficiaries)">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <button class="btn btn-primary btn-sm" v-show="recordBeneficiariesEditMode" @click="updateRecordBeneficiaries(record)">Save</button>
                                                     </div>
+
+
+
 
                                                     <!-- <div class="col-10">
-                                                        <input class="form-check-input" name="recordBeneficiaries[]" v-model="recordForm.selectedBeneficiariesIds" type="checkbox"  :value="individual.id" :id="i" :disabled="recordBeneficiariesEditMode ? false : true">
-                                                        <label class="form-check-label" :for="i">{{ individual.name }}</label>
+                                                        <input class="form-check-input" name="recordBeneficiaries[]" v-model="recordForm.selectedBeneficiariesIds" type="checkbox"  :value="recordBeneficiary.id" :id="i" :disabled="recordBeneficiariesEditMode ? false : true">
+                                                        <label class="form-check-label" :for="i">{{ recordBeneficiary.name }}</label>
                                                     </div> -->
 
                                                 </div>
@@ -74,7 +87,7 @@
                                         </ul>
                                     </div>
                                     <div class="col">
-                                        <a class="clickable edit-button mb-6" v-show="!recordBeneficiariesEditMode" @click="editSelectedBeneficiaries">
+                                        <a class="clickable edit-button mb-6" v-show="!recordBeneficiariesEditMode" @click="editRecordBeneficiaries(currentRecord.record_beneficiaries)">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <button class="btn btn-primary btn-sm" v-show="recordBeneficiariesEditMode" @click="updateRecordBeneficiaries(record)">Save</button>
@@ -111,7 +124,7 @@
                                     <div class="card-body">
                                         <h5>
                                             <span class="mt-2">{{ beneficiary.individual.name }}</span>
-                                            <span v-show="beneficiary.is_direct == 1" class="badge badge-pill badge-primary">Direct</span>
+                                            <span v-show="beneficiary.status == 1" class="badge badge-pill badge-primary">Direct</span>
                                             <br><br>
 
                                             
@@ -380,7 +393,7 @@ export default {
                 id: '',
                 individual_id: '',
                 record_id: '',
-                is_direct: '',
+                status: '',
                 disabilities: [],
                 services: [],
                 // followUps: [],
@@ -388,7 +401,7 @@ export default {
             }),
             recordBeneficiaryForm: new Form({
                 individual_id: '',
-                is_direct: '',
+                status: '',
             }),
             recordForm: new Form({
                 id: '',
@@ -403,20 +416,32 @@ export default {
         }
     },
     methods: {
-        editSelectedBeneficiaries(){
+        showMenu(id){
+            let menu = document.getElementById(id).style.display = "none";
+        },
+
+
+
+        editRecordBeneficiaries(recordBeneficiaries){
             this.recordBeneficiariesEditMode = true;
+            
+            recordBeneficiaries.forEach(recordBeneficiary => {
+                this.recordBeneficiaries.push(recordBeneficiary);
+            });
+
+            console.log(this.recordBeneficiaries);
 
         },
         updateRecordBeneficiaries(record){
             this.recordBeneficiariesEditMode = false;
             
-            this.recordForm.id = record.id
-            this.recordForm.month_id = record.month_id
-            this.recordForm.referral_id = record.referral_id
-            this.recordForm.status_id = record.status_id
-            this.recordForm.is_new = record.is_new
+            // this.recordForm.id = record.id
+            // this.recordForm.month_id = record.month_id
+            // this.recordForm.referral_id = record.referral_id
+            // this.recordForm.status_id = record.status_id
+            // this.recordForm.is_new = record.is_new
 
-            this.updateRecord();
+            // this.updateRecord();
         },
 
         updateRecord(){
@@ -442,7 +467,13 @@ export default {
 				this.$Progress.fail();
 			})
 		},
-        addToRecordBeneficiariesArray(individual){
+        addToRecordBeneficiariesArray(individual)
+        {
+            recordBeneficiaries
+
+
+
+
             let status = document.getElementById('status'+individual.id).value;
 
             // check if the beneficiary already in the array
@@ -454,14 +485,14 @@ export default {
                 if($status == -1){
                     this.recordForm.recordBeneficiaries.remove(found);
                 }
-                found.is_direct = status;
+                found.status = status;
             }
             // if not found; added it to the array
             else{
                 //if($status == 1 || $status == 0){
                     let recordBeneficiary = {
                         "individual_id": individual.id,
-                        "is_direct": status,
+                        "status": status,
                     };
                     this.recordForm.recordBeneficiaries.push(recordBeneficiary);
                 //}
@@ -470,8 +501,6 @@ export default {
             console.log(found);
             
 
-            
-            
         },
 
 
@@ -616,11 +645,6 @@ export default {
 				this.$Progress.fail();
 			})
 		},
-
-
-
-
-
 
 
 		deleteBeneficiary(id){

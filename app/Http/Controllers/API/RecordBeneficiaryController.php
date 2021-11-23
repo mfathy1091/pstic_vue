@@ -27,13 +27,13 @@ class RecordBeneficiaryController extends Controller
         $this->validate($request, [
             'individual_id' => 'required',
             'record_id' => 'required',
-            'is_direct' => 'required',
+            'status' => 'required',
         ]);
 
         $beneficiary = RecordBeneficiary::create([
             'individual_id' => $request['individual_id'],
             'record_id' => $request['record_id'],
-            'is_direct' => $request['is_direct'],
+            'status' => $request['status'],
         ]);
 
         $servicesIds = collect($request->input('services'))->pluck('id');
@@ -56,7 +56,7 @@ class RecordBeneficiaryController extends Controller
             $this->validate($request, [
                 'individual_id' => 'required',
                 'record_id' => 'required',
-                'is_direct' => 'required',
+                'status' => 'required',
             ]);
 
             // if it exists
@@ -65,7 +65,7 @@ class RecordBeneficiaryController extends Controller
                 $beneficiary->update([
                     'individual_id' => $request['individual_id'],
                     'record_id' => $request['record_id'],
-                    'is_direct' => $request['is_direct'],
+                    'status' => $request['status'],
                 ]);
 
                 // then sync

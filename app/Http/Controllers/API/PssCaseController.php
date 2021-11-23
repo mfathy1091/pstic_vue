@@ -168,7 +168,7 @@ class PssCaseController extends Controller
             RecordBeneficiary::create([
                 'individual_id' => $directIndividualId,
                 'record_id' => $record->id,
-                'is_direct' => '1',
+                'status' => '1',
             ]);
 
 
@@ -180,7 +180,7 @@ class PssCaseController extends Controller
                     RecordBeneficiary::create([
                         'individual_id' => $indirectIndividualId,
                         'record_id' => $record->id,
-                        'is_direct' => '0',
+                        'status' => '0',
                     ]);
                 }
             }

@@ -11,6 +11,7 @@ use App\Models\Record;
 use App\Models\RecordBeneficiary;
 use App\Models\Individual;
 use App\Models\Reason;
+use App\Models\Casee;
 
 class ReferralController extends Controller
 {
@@ -120,6 +121,11 @@ class ReferralController extends Controller
 
         /////* Insert Records *///////
         //$this->insertDefaultRecords($pssCase->id, $referralMonth);
+
+
+        $casee = Casee::find($request->casee_id);
+        $individualsIds = $casee->individuals->pluck('id')->toArray();
+
         $i = 0;
         foreach($monthsCodes as $monthCode)
         {
@@ -138,21 +144,22 @@ class ReferralController extends Controller
                 'is_new' => $is_new,
             ]);
             
+            $record->individuals()->sync($individualsIds);
 
-            $referralIndividuals = $request->referral_beneficiaries;
-            $directIndividuals = collect($request->direct_beneficiaries)->pluck('id')->toArray();
-            //dd($directIndividuals);
-            if(!empty($referralIndividuals)){
-                foreach($referralIndividuals as $individual)
-                {
-                    $is_direct = in_array($individual['id'], $directIndividuals) ? 1 : 0;
-                    RecordBeneficiary::create([
-                        'individual_id' => $individual['id'],
-                        'record_id' => $record->id,
-                        'is_direct' => $is_direct
-                    ]);
-                }
-            }
+
+            //$referralIndividuals = $request->referral_beneficiaries;
+            // $directIndividuals = collect($request->direct_beneficiaries)->pluck('id')->toArray();
+            // if(!empty($referralIndividuals)){
+            //     foreach($referralIndividuals as $individual)
+            //     {
+            //         $status = in_array($individual['id'], $directIndividuals) ? 1 : 0;
+            //         RecordBeneficiary::create([
+            //             'individual_id' => $individual['id'],
+            //             'record_id' => $record->id,
+            //             'status' => $status
+            //         ]);
+            //     }
+            // }
 
 
             // // Insert Direct Individual In Each Record
@@ -163,7 +170,7 @@ class ReferralController extends Controller
             //         RecordBeneficiary::create([
             //             'individual_id' => $directIndividualId,
             //             'record_id' => $record->id,
-            //             'is_direct' => '1',
+            //             'status' => '1',
             //         ]);
             //     }
             // }
@@ -177,18 +184,18 @@ class ReferralController extends Controller
             //         RecordBeneficiary::create([
             //             'individual_id' => $indirectIndividualId,
             //             'record_id' => $record->id,
-            //             'is_direct' => '0',
+            //             'status' => '0',
             //         ]);
             //     }
             // }
         }
 
-        $response = [
+        $data = [
             'referral' => $referral,
             'message' => 'created successfully'
         ];
 
-        return response($response, 201);
+        return response($data, 201);
 
     }
 

@@ -11,54 +11,6 @@
                 </div>
                 <form @submit.prevent="referralEditMode ? updateReferral() : createReferral()">
                     <div class="modal-body">
-						<h5 class="card-title text-primary">Beneficiaries</h5>
-						<br>
-						<br>
-
-						<div class="form-group" v-if="caseeIndividuals">
-							<label class="typo__label">Select Beneficiaries</label>
-							<multiselect 
-							v-model="referralForm.referral_beneficiaries" 
-							:options="caseeIndividuals" 
-							:multiple="true" 
-							:close-on-select="false" 
-							:clear-on-select="false" 
-							:preserve-search="false" 
-							:hideSelected="true"
-							:taggable="true"
-							placeholder="" 
-							label="name" 
-							track-by="name" 
-							:preselect-first="false">
-								<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
-							</multiselect>
-							<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-						</div>
-						
-						<div class="form-group" v-if="caseeIndividuals">
-							<label class="typo__label">Select Direct</label>
-							<multiselect 
-							v-model="referralForm.direct_beneficiaries" 
-							:options="referralForm.referral_beneficiaries" 
-							:multiple="true" 
-							:close-on-select="false" 
-							:clear-on-select="false" 
-							:preserve-search="false" 
-							:hideSelected="true"
-							:min="1"
-							placeholder="Pick some" 
-							label="name" 
-							track-by="name"
-							:preselect-first="true">
-								<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
-							</multiselect>
-							<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-						</div>
-
-						<br><hr>
-						<h5 class="card-title text-primary">Referral Details</h5><br>
-						<br>
-						
 						<div class="form-group">
 							<label for="referral_source_id" class="form-label">Referral Source</label>
 							<select name="referral_source_id" v-model="referralForm.referral_source_id" id="referral_source_id" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('referral_source_id') }">
@@ -146,8 +98,8 @@ export default {
 			roles: [],
 			referralForm : new Form({
 				id: '',
-				referral_beneficiaries: [],
-				direct_beneficiaries : [],
+				// referral_beneficiaries: [],
+				// direct_beneficiaries : [],
 				referral_source_id: '',
 				referral_date: '',
 				referring_person_name: '',

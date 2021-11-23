@@ -47,13 +47,13 @@ class RecordController extends Controller
                 foreach($recordBeneficiaries as $i => $object) {
                     $key = $object['individual_id'];
                     
-                    $result[$key] = ['is_direct' => $object['is_direct']];
+                    $result[$key] = ['status' => $object['status']];
                 }
                 $record->individuals()->sync($result);
                 
                 // $record->individuals()->sync([
-                //     1 => ['is_direct' => '1'],
-                //     2 => ['is_direct' => '0']
+                //     1 => ['status' => '1'],
+                //     2 => ['status' => '0']
                 // ]);
             }
 
@@ -63,8 +63,8 @@ class RecordController extends Controller
                 'recordBeneficiaries' => $request->recordBeneficiaries,
                 'result' => $result,
                 'result2' => [
-                    1 => ['is_direct' => '1'],
-                    2 => ['is_direct' => '0']
+                    1 => ['status' => '1'],
+                    2 => ['status' => '0']
                 ],
             ];
     
