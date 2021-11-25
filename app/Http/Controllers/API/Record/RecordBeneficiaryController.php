@@ -15,7 +15,7 @@ class RecordBeneficiaryController extends Controller
 
     public function index(Request $request)
     {
-        $beneficiaries =  RecordBeneficiary::with('individual.casee', 'services', 'disabilities')->where('record_id', $request->record_id)->get();
+        $beneficiaries =  RecordBeneficiary::with('individual.casee')->where('record_id', $request->record_id)->get();
         
         return response()->json([
             'data' => $beneficiaries,

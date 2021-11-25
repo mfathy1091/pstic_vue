@@ -69,26 +69,26 @@ class RecordBeneficiaryController extends Controller
                 ]);
 
                 // then sync
-                $servicesIds = collect($request->input('services'))->pluck('id');
-                $beneficiary->services()->sync($servicesIds);
+                // $servicesIds = collect($request->input('services'))->pluck('id');
+                // $beneficiary->services()->sync($servicesIds);
 
-                $disabilitiesIds = collect($request->input('disabilities'))->pluck('id');
-                $beneficiary->disabilities()->sync($disabilitiesIds);
+                // $disabilitiesIds = collect($request->input('disabilities'))->pluck('id');
+                // $beneficiary->disabilities()->sync($disabilitiesIds);
             }
 
-            $record = Record::findOrFail($request->record_id);
-            $recordBeneficiariesCount = $record->beneficiaries->count();
+            // $record = Record::findOrFail($request->record_id);
+            // $recordBeneficiariesCount = $record->beneficiaries->count();
 
-            $recordBeneficiariesHasServicesCount = RecordBeneficiary::where('record_id', $record->id)->has('services')->count();
+            // $recordBeneficiariesHasServicesCount = RecordBeneficiary::where('record_id', $record->id)->has('services')->count();
 
-            // make record active, if it has at least one beneficiary and if all beneficiaries has services
-            if($recordBeneficiariesCount > 0 && ($recordBeneficiariesHasServicesCount === $recordBeneficiariesCount)){
-                $record->status_id = 1;
-                $record->save();
-            }else{
-                $record->status_id = 2;
-                $record->save();
-            }
+            // // make record active, if it has at least one beneficiary and if all beneficiaries has services
+            // if($recordBeneficiariesCount > 0 && ($recordBeneficiariesHasServicesCount === $recordBeneficiariesCount)){
+            //     $record->status_id = 1;
+            //     $record->save();
+            // }else{
+            //     $record->status_id = 2;
+            //     $record->save();
+            // }
 
             
             return ['message' => 'Beneficiary updated'];

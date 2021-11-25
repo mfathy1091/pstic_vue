@@ -121,7 +121,7 @@
 			</div>
 		</div>
         <!-- Records Section -->
-        <Records v-if="referral" :referral_id="referral.id" :case="referral.casee" />
+        <Records v-if="referral" :referral_id="referral.id" :casee="referral.casee" />
 
     </div>
 </template>

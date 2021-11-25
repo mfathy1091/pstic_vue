@@ -11,7 +11,7 @@
                     
                     <li class="nav-item" v-for="(record, i) in referral.records" :key="i" @click="changeSelectedRecordTab(record)">
                         <a class="nav-link" v-bind:id="record.id" 
-                        v-bind:class="{ 'bg-blue': currentRecord.id==record.id, 'border-left': currentRecord.id==record.id, 'border-top': currentRecord.id==record.id, 'border-right': currentRecord.id==record.id,}"
+                        v-bind:class="{ 'bg-blue': record.id==record.id, 'border-left': record.id==record.id, 'border-top': record.id==record.id, 'border-right': record.id==record.id,}"
                         data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="false">
                             {{ record.month.name }}
                             <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
@@ -28,7 +28,7 @@
                 class="tab-content" id="custom-tabs-two-tabContent">
                     <div v-bind:id="record.id" 
                     class="tab-pane fade" 
-                    v-bind:class="{ show: currentRecord.id==record.id, active: currentRecord.id==record.id}"
+                    v-bind:class="{ show: record.id==record.id, active: record.id==record.id}"
                     role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                     
                         <div v-if="recordBeneficiaries">
@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="col-6">
                                         <ul>
-                                            <div class="form-check" v-for="(recordBeneficiary, i) in currentRecord.record_beneficiaries" :key="i">
+                                            <div class="form-check" v-for="(recordBeneficiary, i) in record.record_beneficiaries" :key="i">
                                                 <div class="row">
                                                     <!-- <div class="col-2">
                                                         <input class="form-check-input" name="beneficiariesStatuses[]" v-model="recordForm.beneficiariesStatuses" type="checkbox"  :value="recordBeneficiary" :id="'direct'+i" :disabled="recordBeneficiariesEditMode ? false : true">
@@ -85,7 +85,7 @@
                                         </ul>
                                     </div>
                                     <div class="col">
-                                        <a class="clickable edit-button mb-6" v-show="!recordBeneficiariesEditMode" @click="editRecordBeneficiaries(currentRecord.record_beneficiaries)">
+                                        <a class="clickable edit-button mb-6" v-show="!recordBeneficiariesEditMode" @click="editRecordBeneficiaries(record.record_beneficiaries)">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <button class="btn btn-primary btn-sm" v-show="recordBeneficiariesEditMode" @click="updateRecordBeneficiaries(record)">Save</button>
@@ -207,7 +207,7 @@
                             <div class="form-group">
                                 <label for="beneficiary_id" class="form-label">Beneficiary</label>
                                 <select name="beneficiary_id" v-model="serviceForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': serviceForm.errors.has('beneficiary_id') }">
-                                    <option v-for='beneficiary in this.currentRecord.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
+                                    <option v-for='beneficiary in this.record.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
                                 </select>
                                 <HasError :form="serviceForm" field="beneficiary_id" />
                             </div>
@@ -251,15 +251,15 @@
         </div> -->
 
         <!-- Beneficiary Modal -->
-        <div class="modal fade" id="beneficiaryAttachmentsModal" tabindex="-1" aria-labelledby="beneficiaryAttachmentsModalLabel" aria-hidden="true" v-if="this.currentRecord.month">
+        <div class="modal fade" id="beneficiaryAttachmentsModal" tabindex="-1" aria-labelledby="beneficiaryAttachmentsModalLabel" aria-hidden="true" v-if="this.record.month">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 v-show="!beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">
                             Add Beneficiaries | 
-                            {{ this.currentRecord.month.name }}
+                            {{ this.record.month.name }}
                             </h5>
-                        <h5 v-show="beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">Edit Beneficiary {{ this.currentRecord.month.name }}</h5>
+                        <h5 v-show="beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">Edit Beneficiary {{ this.record.month.name }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -268,11 +268,11 @@
                         <div class="modal-body">
 
 
-                            <div class="form-group" v-if="fileIndividuals">
+                            <div class="form-group" v-if="caseeIndividuals">
 								<label class="typo__label">File Individuals</label>
 								<multiselect 
 								v-model="beneficiaryForm.individual_id" 
-								:options="fileIndividuals" 
+								:options="caseeIndividuals" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -287,7 +287,7 @@
                             <div class="form-group">
                                 <label for="beneficiary_id" class="form-label">Beneficiary</label>
                                 <select name="beneficiary_id" v-model="beneficiaryForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': beneficiaryForm.errors.has('beneficiary_id') }">
-                                    <option v-for='beneficiary in this.currentRecord.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
+                                    <option v-for='beneficiary in this.record.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
                                 </select>
                                 <HasError :form="beneficiaryForm" field="beneficiary_id" />
                             </div>
@@ -388,11 +388,11 @@ export default {
             
             referral: '',
 
-            currentRecord: '',
+            record: '',
             currentBeneficiary: '',
             recordBeneficiaries: [],
             
-            fileIndividuals: [],
+            caseeIndividuals: [],
             remianingBeneficiaries: [],
 
 
@@ -523,6 +523,7 @@ export default {
 
 
         getReferral(){
+            console.log("fired")
 			this.$Progress.start();
 			axios.get("/api/referrals/"+this.referral_id)
             .then(({data}) => {
@@ -535,7 +536,7 @@ export default {
 		// 	axios.get("/api/referrals/" + this.referral_id +"/latest-record/")
         //     .then(({data}) => {
         //         this.latestRecord = data.data
-        //         this.currentRecord = this.latestRecord;
+        //         this.record = this.latestRecord;
         //     });
 		// 	this.$Progress.finish();
         // },
@@ -545,7 +546,7 @@ export default {
 			axios.get("/api/referrals/" + this.referral_id +"/latest-record/")
             .then(({data}) => {
                 this.latestRecord = data.data
-                // this.currentRecord = this.latestRecord;
+                // this.record = this.latestRecord;
             });
 			this.$Progress.finish();
         },
@@ -559,7 +560,7 @@ export default {
                 var latestRecord = this.referral.records[0];
                 
                 // (2) set selected tab to latest record
-                this.currentRecord = latestRecord
+                this.record = latestRecord
                 this.serviceForm.record_id = latestRecord.id
                 this.getRecordBeneficiaries()
             });
@@ -567,26 +568,26 @@ export default {
 
         },
         changeSelectedRecordTab(record){
-            this.currentRecord=record
+            this.record=record
             this.serviceForm.record_id = record.id
             this.getRecordBeneficiaries()
         },
         
-        getFileIndividuals(){
+        getCaseeIndividuals(){
             this.$Progress.start();
-            axios.get('/api/files/'+this.file.id+'/individuals')
+            axios.get('/api/casees/'+this.casee.id+'/individuals')
             .then(({data}) => {
-                this.fileIndividuals = data.data
+                this.caseeIndividuals = data.data
             });
             this.$Progress.finish();
 		},
 
         getRecordBeneficiaries(){			
 			this.$Progress.start();
-			axios.get('/api/records/' + this.currentRecord.id + '/record-beneficiaries', { params: { record_id: this.currentRecord.id } })
+			axios.get('/api/records/' + this.record.id + '/record-beneficiaries', { params: { record_id: this.record.id } })
             .then(({data}) => {
                 this.recordBeneficiaries = data.data
-                this.remianingBeneficiaries = this.fileIndividuals.filter(function(obj) { return this.recordBeneficiaries.indexOf(obj) == -1; });
+                this.remianingBeneficiaries = this.caseeIndividuals.filter(function(obj) { return this.recordBeneficiaries.indexOf(obj) == -1; });
             });
 			this.$Progress.finish();
 		},
@@ -701,7 +702,7 @@ export default {
 		// console.log($getPermissions());
 		
 
-        this.getFileIndividuals()
+        this.getCaseeIndividuals()
 		this.getServices()
         this.getDisabilities()
         
@@ -722,7 +723,7 @@ export default {
 		
 	},
     // watch: {
-    //     'fileIndividuals'(next, prev) {
+    //     'caseeIndividuals'(next, prev) {
     //         this.fileNumber
     //     },
     // },

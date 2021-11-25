@@ -69,7 +69,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     
     // Record Beneficiaries
-    Route::apiResources(['record-beneficiaries'=> 'API\RecordBeneficiaryController']);
+    // Route::apiResources(['record-beneficiaries'=> 'API\RecordBeneficiaryController']);
+    Route::put('record-beneficiaries/{id}', 'API\RecordBeneficiaryController@update');
     Route::get('records/{record}/record-beneficiaries', 'API\Record\RecordBeneficiaryController@index');
 
 
