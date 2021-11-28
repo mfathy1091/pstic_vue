@@ -11,7 +11,7 @@
                     
                     <li class="nav-item" v-for="(record, i) in referral.records" :key="i" @click="changeSelectedRecordTab(record)">
                         <a class="nav-link" v-bind:id="record.id" 
-                        v-bind:class="{ 'bg-blue': record.id==record.id, 'border-left': record.id==record.id, 'border-top': record.id==record.id, 'border-right': record.id==record.id,}"
+                        v-bind:class="{ 'bg-blue': record.id==currentRecord.id, 'border-left': record.id==currentRecord.id, 'border-top': record.id==currentRecord.id, 'border-right': record.id==currentRecord.id,}"
                         data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="false">
                             {{ record.month.name }}
                             <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
@@ -28,7 +28,7 @@
                 class="tab-content" id="custom-tabs-two-tabContent">
                     <div v-bind:id="record.id" 
                     class="tab-pane fade" 
-                    v-bind:class="{ show: record.id==record.id, active: record.id==record.id}"
+                    v-bind:class="{ show: record.id==currentRecord.id, active: record.id==currentRecord.id}"
                     role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                     
                         <div v-if="recordBeneficiaries">
@@ -109,7 +109,10 @@
                             
                             
                             <hr>
-                            
+
+
+
+                                                
                             <a class="clickable mb-6" @click="showSelectBeneficiariesModel">
                                 Choose individuals from File<i class="fa fa-edit red fa"></i>
                             </a>
@@ -190,162 +193,6 @@
             </div>
         </div>
 
-        <!-- Service Modal -->
-        <!-- <div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 v-show="!serviceEditMode" class="modal-title" id="serviceModalLabel">Add Service</h5>
-                        <h5 v-show="serviceEditMode" class="modal-title" id="serviceModalLabel">Modify Services Provided</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form @submit.prevent="serviceEditMode ? updateService() : createService()">
-                        <div class="modal-body">
-                            
-                            <div class="form-group">
-                                <label for="beneficiary_id" class="form-label">Beneficiary</label>
-                                <select name="beneficiary_id" v-model="serviceForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': serviceForm.errors.has('beneficiary_id') }">
-                                    <option v-for='beneficiary in this.record.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
-                                </select>
-                                <HasError :form="serviceForm" field="beneficiary_id" />
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="name" class="form-label">Record ID</label>
-                                <input id="name" v-model="serviceForm.record_id" type="text" name="name" class="form-control" disabled>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="name" class="form-label">Beneficiary ID</label>
-                                <input id="name" v-model="serviceForm.beneficiary_id" type="text" name="name" class="form-control" disabled>
-                            </div>
-
-                            <div class="form-group" v-if="services">
-								<label class="typo__label">Services Provided</label>
-								<multiselect 
-								v-model="beneficiaryForm.services" 
-								:options="services" 
-								:multiple="true" 
-								:close-on-select="false" 
-								:clear-on-select="false" 
-								:preserve-search="true" 
-								placeholder="Pick some" 
-								label="name" 
-								track-by="name" 
-								:preselect-first="true">
-								</multiselect>
-							</div>
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button v-show="!serviceEditMode" type="submit" class="btn btn-success">Create</button>
-                            <button v-show="serviceEditMode" type="submit" class="btn btn-primary">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- Beneficiary Modal -->
-        <div class="modal fade" id="beneficiaryAttachmentsModal" tabindex="-1" aria-labelledby="beneficiaryAttachmentsModalLabel" aria-hidden="true" v-if="this.record.month">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 v-show="!beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">
-                            Add Beneficiaries | 
-                            {{ this.record.month.name }}
-                            </h5>
-                        <h5 v-show="beneficiaryAttachmentsEditMode" class="modal-title" id="beneficiaryAttachmentsModalLabel">Edit Beneficiary {{ this.record.month.name }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form @submit.prevent="beneficiaryAttachmentsEditMode ? updateBeneficiaryAttachments() : createBeneficiaryAttachments()">
-                        <div class="modal-body">
-
-
-                            <div class="form-group" v-if="caseeIndividuals">
-								<label class="typo__label">File Individuals</label>
-								<multiselect 
-								v-model="beneficiaryForm.individual_id" 
-								:options="caseeIndividuals" 
-								:multiple="true" 
-								:close-on-select="false" 
-								:clear-on-select="false" 
-								:preserve-search="true" 
-								placeholder="Pick some" 
-								label="name" 
-								track-by="name" 
-								:preselect-first="true">
-								</multiselect>
-							</div>
-
-                            <div class="form-group">
-                                <label for="beneficiary_id" class="form-label">Beneficiary</label>
-                                <select name="beneficiary_id" v-model="beneficiaryForm.beneficiary_id" id="beneficiary_id" class="form-control" :class="{ 'is-invalid': beneficiaryForm.errors.has('beneficiary_id') }">
-                                    <option v-for='beneficiary in this.record.beneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.individual.name }}</option>
-                                </select>
-                                <HasError :form="beneficiaryForm" field="beneficiary_id" />
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="name" class="form-label">Record ID</label>
-                                <input id="name" v-model="beneficiaryForm.record_id" type="text" name="name" class="form-control" disabled>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="name" class="form-label">Beneficiary ID</label>
-                                <input id="name" v-model="beneficiaryForm.id" type="text" name="name" class="form-control" disabled>
-                            </div>
-
-                            <div class="form-group" v-if="services">
-								<label class="typo__label">Services Provided</label>
-								<multiselect 
-								v-model="beneficiaryForm.services" 
-								:options="services" 
-								:multiple="true" 
-								:close-on-select="false" 
-								:clear-on-select="false" 
-								:preserve-search="true" 
-								placeholder="Pick some" 
-								label="name" 
-								track-by="name" 
-								:preselect-first="true">
-								</multiselect>
-							</div>
-
-                            <div class="form-group" v-if="disabilities">
-								<label class="typo__label">Disabilities</label>
-								<multiselect 
-								v-model="beneficiaryForm.disabilities" 
-								:options="disabilities" 
-								:multiple="true" 
-								:close-on-select="false" 
-								:clear-on-select="false" 
-								:preserve-search="true" 
-								placeholder="Pick some" 
-								label="name" 
-								track-by="name" 
-								:preselect-first="true">
-								</multiselect>
-							</div>
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button v-show="!beneficiaryAttachmentsEditMode" type="submit" class="btn btn-success">Create</button>
-                            <button v-show="beneficiaryAttachmentsEditMode" type="submit" class="btn btn-primary">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
 		<!-- Modal -->
 		<RecordBeneficiaryModal 
 		:v-if="selectedRecordBeneficiary.id"
@@ -353,21 +200,29 @@
 		v-on:recordBeneficiariesChanged="getReferral()">
 		</RecordBeneficiaryModal>
 
+                                    <!-- Activities Section -->
+                            <Activities 
+                            :v-if="currentRecord.id"
+                            :selectedRecord='currentRecord' 
+                            v-on:recordsChanged="getReferral()">
+                            </Activities>
+
     </div>
     
-
 
 
 </template>
 
 <script>
 import Form from 'vform'
+import Activities from './Activities.vue'
 import Multiselect from 'vue-multiselect'
 import RecordBeneficiaryModal from './RecordBeneficiaryModal'
 
 export default {
     name: 'Records',
     components: {
+        Activities,
         Multiselect,
         RecordBeneficiaryModal,
     },
@@ -388,7 +243,7 @@ export default {
             
             referral: '',
 
-            record: '',
+            currentRecord: '',
             currentBeneficiary: '',
             recordBeneficiaries: [],
             
@@ -568,7 +423,7 @@ export default {
 
         },
         changeSelectedRecordTab(record){
-            this.record=record
+            this.currentRecord=record
             this.serviceForm.record_id = record.id
             this.getRecordBeneficiaries()
         },

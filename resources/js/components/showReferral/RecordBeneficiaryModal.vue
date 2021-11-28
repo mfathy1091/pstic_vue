@@ -17,7 +17,7 @@
 								<HasError :form="recordBeneficiaryForm" field="name" />
 							</div> -->
 
-							<span>{{ this.selectedRecordBeneficiary.individual.name }}</span>
+							<span v-if="selectedRecordBeneficiary.individual">{{ this.selectedRecordBeneficiary.individual.name }}</span>
 							<select name="recordBeneficiaryStatuses"  v-model="recordBeneficiaryForm.status" class="form-control">
 								<option :value='0'>Exclude</option>
 								<option :value="1">Direct</option>

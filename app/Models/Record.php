@@ -41,7 +41,7 @@ class Record extends Model
 
     public function services()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Servicetype::class);
     }
 
     public function individuals()

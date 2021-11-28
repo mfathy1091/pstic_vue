@@ -64,7 +64,7 @@ import NationalityModal from './NationalityModal'
 
 export default {
 	mixins: [axiosMixin],
-		components: { 
+	components: { 
 			NationalityModal,
 	},
 

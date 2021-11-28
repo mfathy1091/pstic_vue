@@ -24,17 +24,23 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|string|max:255',
+            'activity_id' => 'required',
         ]);
 
         $service = Service::create([
-            'name' => $request['name'],
+            'activity_id' => $request['activity_id'],
         ]);
         
 
+        $data = [
+            'data' => $service,
+        ];
 
-        return $service;
+        return response($data, 201);
+
     }
+
+    
 
     public function show($id)
     {
@@ -45,16 +51,16 @@ class ServiceController extends Controller
 
     public function update(Request $request, $id)
     {
-        $service = Service::findOrFail($id);
+        $servicetype = Servicetype::findOrFail($id);
 
-        if($service){
+        if($servicetype){
             
             $this->validate($request, [
                 'name' => 'required|string|max:255',
             ]);
 
-            if($service){
-                $service->update([
+            if($servicetype){
+                $servicetype->update([
                     'name' => $request['name'],
                 ]);
             }
@@ -67,12 +73,12 @@ class ServiceController extends Controller
 
     public function destroy($id)
     {
-        $service = Service::findOrFail($id);
+        $servicetype = Servicetype::findOrFail($id);
 
         // if it exists
-        if($service){
+        if($servicetype){
             // then delete
-            $service->delete();
+            $servicetype->delete();
         }
 
         return ['message' => 'Service deleted'];

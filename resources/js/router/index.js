@@ -28,6 +28,12 @@ const routes = [
         children: []
     },
 
+    {
+        path: '/record/:recordId/create-activity',
+        name:'create-activity',
+        component: () => import(/* webpackChunkName: "create-activity" */ '../components/CreateActivity/Container.vue'),
+        props: true
+    },
 
     {
         path: '/casees/:caseeId',

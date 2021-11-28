@@ -16,9 +16,9 @@ class BeneficiaryService extends Model
         return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
     }
 
-    public function service()
+    public function servicetype()
     {
-        return $this->belongsTo(Service::class, 'service_id');
+        return $this->belongsTo(Servicetype::class, 'service_id');
     }
 
     public function record()

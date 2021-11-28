@@ -35,9 +35,9 @@ class RecordBeneficiary extends Model
         return $this->belongsToMany(Disability::class);
     }
     
-    public function services()
+    public function servicetyps()
     {
-        return $this->belongsToMany(Service::class);
+        return $this->belongsToMany(Servicetype::class);
     }
 
     // public function pssCase()
@@ -52,9 +52,9 @@ class RecordBeneficiary extends Model
     //     return $this->belongsTo(Month::class, 'month_id');
     // }
 
-    // public function services()
+    // public function Servicetypes()
     // {
-    //     return $this->belongsToMany(Service::class, 'services_beneficiaries', 'beneficiary_id', 'service_id');
+    //     return $this->belongsToMany(Servicetype::class, 'services_beneficiaries', 'beneficiary_id', 'service_id');
 
     // }
 

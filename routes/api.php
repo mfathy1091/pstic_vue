@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['nationalities'=> 'API\NationalityController']);
     Route::apiResources(['relationships'=> 'API\RelationshipController']);
     Route::apiResources(['referral_reasons'=> 'API\ReasonController']);
-    Route::apiResources(['services'=> 'API\ServiceController']);
+    Route::apiResources(['servicetypes'=> 'API\ServicetypeController']);
     Route::apiResources(['disabilities'=> 'API\DisabilityController']);
 
 
@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Records
     Route::get('referrals/{referral_id}/latest-record', 'API\RecordController@latestReferralRecord');
     Route::put('records/{record}', 'API\RecordController@update');
+    Route::get('records/{record}', 'API\RecordController@getRecord');
 
 
     // Individuals
@@ -86,6 +87,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['user'=> 'API\UserController']);
     Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
 
+    Route::get('activities', 'API\ActivityController@index');
 
 
 

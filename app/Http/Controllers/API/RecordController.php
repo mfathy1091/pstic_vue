@@ -20,6 +20,25 @@ class RecordController extends Controller
         
     }
 
+    public function getRecord($id)
+    {
+        $record = Record::with(
+            'month',
+            'status',
+            'recordBeneficiaries',
+            'recordBeneficiaries.individual',
+            //'records.recordBeneficiaries.services'
+            )->findOrFail($id);
+
+
+
+        if($record){
+            return response(['data' => $record], 200);
+        }
+        
+
+        
+    }
 
     public function update(Request $request, $id)
     {

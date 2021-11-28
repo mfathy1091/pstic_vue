@@ -22,7 +22,7 @@ use App\Models\Status;
 use App\Models\CaseType;
 use App\Models\Casee;
 use App\Models\User;
-use App\Models\Service;
+use App\Models\Servicetype;
 use App\Models\Reason;
 use App\Models\Month;
 use App\Models\Budget;
@@ -268,7 +268,7 @@ class PssCaseController extends Controller
         // $direct = $record->directBeneficiary;
         // dd($direct);
         
-        $pssServices = Service::where('type', 'Psychosocial')->get();
+        $pssServices = Servicetype::where('type', 'Psychosocial')->get();
         $emergencyTypes = EmergencyType::all();
 
         $pssCase = PssCase::find($id);
@@ -283,11 +283,11 @@ class PssCaseController extends Controller
         //dd($julyRecord);
         //$beneficiaries = $julyRecord->beneficiaries;
 
-        //dd($beneficiary->benefits->first()->service->name);
+        //dd($beneficiary->benefits->first()->Servicetype->name);
         //dd($beneficiary->benefits);
         
         //foreach($beneficiary->benefits as $benefit){
-            //dd($benefit->service->name);
+            //dd($benefit->Servicetype->name);
         //}
 
         return view('pss_cases.show', compact('pssCase', 'referral', 'records', 'pssServices', 'emergencyTypes'));

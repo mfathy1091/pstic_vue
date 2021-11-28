@@ -120,6 +120,10 @@
 				</div>
 			</div>
 		</div>
+
+
+
+
         <!-- Records Section -->
         <Records v-if="referral" :referral_id="referral.id" :casee="referral.casee" />
 
@@ -134,7 +138,7 @@ import Multiselect from 'vue-multiselect'
 export default {
     name: 'ShowReferral',
     components: {
-        Records,
+		Records,
         Multiselect,
     },
 
