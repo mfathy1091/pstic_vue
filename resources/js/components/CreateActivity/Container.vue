@@ -55,7 +55,23 @@
                         <div class="col-6">
                             <ul>
                                 <li v-for="recordBeneficiary in record.record_beneficiaries" :key="recordBeneficiary.id">
-                                    {{ recordBeneficiary.individual.name}}
+                                    <span>{{ recordBeneficiary.individual.name}}</span>
+                                    <div class="form-group" v-if="servicetypes" >
+                                        <multiselect :id="recordBeneficiary.id"
+                                        v-model="recordBeneficiaryForm.servicetypes"
+                                        :options="servicetypes"
+                                        :multiple="true"
+                                        :close-on-select="false"
+                                        :clear-on-select="false" 
+                                        :preserve-search="true"
+                                        placeholder="Pick some"
+                                        label="name" 
+                                        track-by="name" 
+                                        :preselect-first="true">
+                                            <!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+                                        </multiselect>
+                                        <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -64,17 +80,6 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
-                        <div class="col">
-                            Emergencies
-                        </div>
-                        <div class="col-6">
-                            2 of 3 (wider)
-                        </div>
-                        <div class="col">
-                            3 of 3
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -103,6 +108,12 @@ export default {
     data() {
         return{
             record: {},
+            servicetypes: [],
+            recordBeneficiaryForm: new Form({
+				id: '',
+				servicetypes: [],
+			})
+
         }
     },
     methods: {
@@ -120,11 +131,26 @@ export default {
                 console.log(e);
 			})
 		},
+        getServicetypes() {
+			this.$Progress.start();
+			axios.get('/api/servicetypes/')
+			.then((data) => {
+				// success
+                this.servicetypes = data.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                console.log(e);
+			})
+		},
 
     },
 
     created (){
         this.getRecord();
+        this.getServicetypes();
     },
 
 }

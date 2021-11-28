@@ -29,7 +29,7 @@ const routes = [
     },
 
     {
-        path: '/record/:recordId/create-activity',
+        path: '/records/:recordId/activities/create',
         name:'create-activity',
         component: () => import(/* webpackChunkName: "create-activity" */ '../components/CreateActivity/Container.vue'),
         props: true
