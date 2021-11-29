@@ -58,7 +58,12 @@
                                 <p>Add New Case</p>
                             </router-link>
                         </li>
-
+                        <li class="nav-item">
+                            <router-link to="/statistics" class="nav-link">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>Statistics</p>
+                            </router-link>
+                        </li>
 
                     <li class="nav-header">Settings</li>
                     <li class="nav-item">

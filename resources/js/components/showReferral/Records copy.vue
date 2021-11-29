@@ -495,9 +495,6 @@ export default {
         {
             recordBeneficiaries
 
-
-
-
             let status = document.getElementById('status'+individual.id).value;
 
             // check if the beneficiary already in the array

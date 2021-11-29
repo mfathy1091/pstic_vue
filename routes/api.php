@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('activities', 'API\ActivityController@index');
 
-
+    Route::get('statistics', 'API\StatisticsController@getEmergencies');
 
 });
 

@@ -27,7 +27,13 @@ const routes = [
         path: "/search", name: "search", component: Search,
         children: []
     },
-
+    {
+        path: '/statistics',
+        name:'statistics',
+        component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics/Container.vue'),
+        props: true
+    },
+    
     {
         path: '/records/:recordId/activities/create',
         name:'create-activity',
