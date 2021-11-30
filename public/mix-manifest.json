@@ -1,9 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/statistics.js": "/js/statistics.js",
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/show-casee.js": "/js/show-casee.js",
     "/js/users.js": "/js/users.js",
     "/js/roles.js": "/js/roles.js",
     "/css/app.css": "/css/app.css",
-    "/js/statistics.js": "/js/statistics.js"
+    "/js/create-emergency.js": "/js/create-emergency.js"
 }

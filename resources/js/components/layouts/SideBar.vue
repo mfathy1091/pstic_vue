@@ -59,7 +59,7 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/statistics" class="nav-link">
+                            <router-link to="/statistics/emergencies" class="nav-link">
                                 <i class="nav-icon far fa-circle"></i>
                                 <p>Statistics</p>
                             </router-link>

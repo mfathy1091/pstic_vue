@@ -28,7 +28,7 @@ const routes = [
         children: []
     },
     {
-        path: '/statistics',
+        path: '/statistics/emergencies',
         name:'statistics',
         component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics/Container.vue'),
         props: true
@@ -40,6 +40,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "create-activity" */ '../components/CreateActivity/Container.vue'),
         props: true
     },
+
+    {
+        path: '/records/:recordId/emergencies/create',
+        name:'create-emergency',
+        component: () => import(/* webpackChunkName: "create-emergency" */ '../components/CreateEmergency/Container.vue'),
+        props: true
+    },
+    
 
     {
         path: '/casees/:caseeId',

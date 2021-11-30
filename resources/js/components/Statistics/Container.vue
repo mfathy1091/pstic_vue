@@ -28,6 +28,7 @@
 								<th>File #</th>
                                 <th>Main Beneficiary</th>
                                 <th>Emergency Date</th>
+								<th>Emergency Type</th>
                                 <th>Modify</th>
 							</tr>
 						</thead>
@@ -41,6 +42,7 @@
 										{{ individual.name }}
                                         </li> -->
                                     </td>
+									<td>{{ emergency.emergency_type.name }}</td>
 								</tr>
 						</tbody>
 					</table>
@@ -73,7 +75,7 @@ export default {
         async getEmergencies(){
             this.$Progress.start();
             try{
-                const response = await axios.get("/api/emergencies");
+                const response = await axios.get("/api/statistics/emergencies");
                 this.emergencies = response.data.data;
                 this.$Progress.finish();
             }catch (error){
@@ -86,7 +88,7 @@ export default {
 
 
 	created() {
-        // this.getEmergencies();
+        this.getEmergencies();
 		
 	}
 }
