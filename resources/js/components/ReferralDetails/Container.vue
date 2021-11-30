@@ -6,7 +6,7 @@
     <section>
         <h2>Records in {{ referral.referral_date }}</h2>
         <div>
-            <div v-for="record in records" :key="record.id" class="card-body">
+            <div v-for="record in referral.records" :key="record.id" class="card-body">
                 {{ record.month.name }}
             </div>
         </div>

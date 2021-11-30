@@ -20,7 +20,8 @@ class RecordController extends Controller
         
     }
 
-    public function getRecord($id)
+  
+    public function show($id)
     {
         $record = Record::with(
             'month',
