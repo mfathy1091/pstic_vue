@@ -17,8 +17,27 @@ import Search from "../components/search/Container"
 
 import ShowReferral from '../components/showReferral/Container'
 import NotFound from '../components/NotFound'
+import Home from '../components/Home'
 
 const routes = [
+    {
+        path: "/",
+        name: "home",
+        component: Home,
+        props: true,
+    },
+    { 
+        path: '/details/:referralId', 
+        name: 'referralDetails',
+        component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/Container.vue'),
+        props: true,
+
+        
+
+    },
+
+
+ 
     {
         path: "/dashboard", name: "dashboard", component: Dashboard,
         children: []
@@ -70,10 +89,13 @@ const routes = [
 
     { 
         path: '/referrals/:referralId', 
-        name: 'show-referral',
-        component: () => import(/* webpackChunkName: "show-referral" */ '../components/showReferral/Container'),
-        props: true
+        name: 'showReferral',
+        component: () => import(/* webpackChunkName: "showReferral" */ '../components/showReferral/Container'),
+        props: true,
+
     },
+
+
 
     { path: '/referrals/create', component: require('../components/AddReferral.vue').default },
 

@@ -15,6 +15,16 @@ use App\Models\Casee;
 
 class ReferralController extends Controller
 {
+    public function index()
+    {
+        $referrals =  Referral::with('referralSource', 'records', 'records.month', 'records.status')->get();
+
+        $data = [
+            'data' => $referrals,
+        ];
+
+        return response($data, 200);
+    }
 
     public function getCaseeReferrals(Request $request)
     {
@@ -25,6 +35,8 @@ class ReferralController extends Controller
         ];
 
         return response($data, 200);
+
+        
 
     }
 

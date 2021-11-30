@@ -121,11 +121,28 @@
 			</div>
 		</div>
 
-
-
-
         <!-- Records Section -->
         <Records v-if="referral" :referral_id="referral.id" :casee="referral.casee" />
+
+		<!-- Records Section -->
+		<section>
+			<h2>Records</h2>
+			<div
+			v-for="record in referral.records" :key="record.id"
+			class="card-body"
+			>
+				<router-link 
+				:to={
+					name: "RecordDetails",
+					params: {RecordID: record.id
+					}>
+				<span>{{ record.month.name }}</span>
+			</router-link>
+				<span>{{ record.month.name }}</span>
+
+			</div>
+			<router-view :key="$route"></router-view>
+		</section>
 
     </div>
 </template>
