@@ -89,7 +89,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('activities', 'API\ActivityController@index');
 
-    Route::get('statistics/emergencies', 'API\StatisticsController@getEmergencies');
+    Route::get('emergencies', 'API\EmergencyController@index');
+    Route::post('emergencies', 'API\EmergencyController@store');
 
     Route::get('emergency-types', 'API\EmergencyTypeController@index');
 

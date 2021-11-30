@@ -28,8 +28,8 @@ const routes = [
         children: []
     },
     {
-        path: '/statistics/emergencies',
-        name:'statistics',
+        path: '/emergencies',
+        name:'emergencies',
         component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics/Container.vue'),
         props: true
     },

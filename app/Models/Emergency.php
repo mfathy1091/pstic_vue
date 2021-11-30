@@ -21,6 +21,11 @@ class Emergency extends Model
         return $this->belongsTo(Record::class, 'record_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function emergencyType()
     {
         return $this->belongsTo(EmergencyType::class, 'emergency_type_id');

@@ -16,11 +16,13 @@ class CreateEmergenciesTable extends Migration
         Schema::create('emergencies', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('record_id');
+            $table->unsignedInteger('user_id');
             $table->date('emergency_date');
             $table->text('comment');
             $table->unsignedInteger('emergency_type_id');
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('record_id')->references('id')->on('records')->onDelete('cascade');
             $table->foreign('emergency_type_id')->references('id')->on('emergency_types')->onDelete('cascade');
         });

@@ -25,11 +25,11 @@
 					<table class="table table-hover text-nowrap align-middle">
 						<thead>
 							<tr>
-								<th>File #</th>
+								<th>Case / File #</th>
                                 <th>Main Beneficiary</th>
                                 <th>Emergency Date</th>
 								<th>Emergency Type</th>
-                                <th>Modify</th>
+								<th>Worker</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -43,6 +43,7 @@
                                         </li> -->
                                     </td>
 									<td>{{ emergency.emergency_type.name }}</td>
+									<td>{{ emergency.user.name }}</td>
 								</tr>
 						</tbody>
 					</table>
@@ -75,7 +76,7 @@ export default {
         async getEmergencies(){
             this.$Progress.start();
             try{
-                const response = await axios.get("/api/statistics/emergencies");
+                const response = await axios.get("/api/emergencies");
                 this.emergencies = response.data.data;
                 this.$Progress.finish();
             }catch (error){

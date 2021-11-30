@@ -14,82 +14,66 @@
                     Create New Emergency
                 </h5>
             </div>
+            <form @submit.prevent="emergencyEditMode ? updateEmergency() : createEmergency()">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                Date / Time
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="worker_name" class="form-label">Worker Name</label>
+                                    <input id="worker_name" type="text" name="worker_name" class="form-control" autocomplete="off" :value="currentUser.name" disabled>
+                                    <!-- <HasError :form="emergencyForm" field="worker_name" /> -->
+                                </div>
 
-            <div class="card-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            Date / Time
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="activity_date" class="form-label">Date</label>
-                                <input id="activity_date" type="text" name="activity_date" class="form-control" autocomplete="off" placeholder="YYYY-MM-DD">
-                                <!-- <HasError :form="referralForm" field="activity_date" /> -->
+                                <div class="form-group">
+                                    <label for="emergency_date" class="form-label">Emergency Date</label>
+                                    <input v-model="emergencyForm.emergency_date" id="emergency_date" type="text" name="emergency_date" class="form-control" autocomplete="off" placeholder="YYYY-MM-DD">
+                                    <!-- <HasError :form="emergencyForm" field="emergency_date" /> -->
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="location" class="form-label">Emergency Type</label>
+                                    <select v-model="emergencyForm.emergency_type_id" name="location" id="location" class="form-control">
+                                        <option value='0' disabled selected>Choose</option>
+                                        <option :value="emergencyType.id" v-for="emergencyType in emergencyTypes" :key="emergencyType.id">{{ emergencyType.name }}</option>
+                                    </select>
+                                    <!-- <HasError :form="emergencyForm" field="location" /> -->
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="comment" class="form-label">Comment</label>
+                                    <textarea class="form-control" rows="3" v-model="emergencyForm.comment" name="comment"></textarea>
+                                    <!-- <HasError :form="emergencyForm" field="comment" /> -->
+                                </div>
+
                             </div>
-                            <div class="form-group">
-                                <label for="activity_time" class="form-label">Time</label>
-                                <input id="activity_time" type="text" name="activity_time" class="form-control" autocomplete="off" placeholder="22:00">
-                                <!-- <HasError :form="referralForm" field="activity_time" /> -->
-                            </div>
-                            <div class="form-group">
-                                <label for="location" class="form-label">Location</label>
-                                <select name="location" id="location" class="form-control">
-                                    <option value='0' disabled>Choose</option>
-                                    <option value='0'>client home</option>
-                                    <option value='0'>Your office</option>
-                                    <option value='0'>Community center</option>
-                                </select>
-                                <!-- <HasError :form="referralForm" field="location" /> -->
-                            </div>
-                            <div class="form-group">
-                                <label for="location" class="form-label">Emergency Type</label>
-                                <select name="location" id="location" class="form-control">
-                                    <option value='0' disabled>Choose</option>
-                                    <option v-for="emergencyType in emergencyTypes" :key="emergencyType.id">{{ emergencyType.name }}</option>
-                                </select>
-                                <!-- <HasError :form="referralForm" field="location" /> -->
+                            <div class="col">
+                                3 of 3
                             </div>
                         </div>
-                        <div class="col">
-                            3 of 3
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                Services
+                            </div>
+                            
+                            <div class="col">
+                                3 of 3
+                            </div>
                         </div>
+                        <hr>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            Services
-                        </div>
-                        <div class="col-6">
-                            <ul>
-                                <li v-for="recordBeneficiary in record.record_beneficiaries" :key="recordBeneficiary.id">
-                                    <span>{{ recordBeneficiary.individual.name}}</span>
-                                    <div class="form-group" v-if="servicetypes" >
-                                        <multiselect :id="recordBeneficiary.id"
-                                        v-model="recordBeneficiaryForm.servicetypes"
-                                        :options="servicetypes"
-                                        :multiple="true"
-                                        :close-on-select="false"
-                                        :clear-on-select="false" 
-                                        :preserve-search="true"
-                                        placeholder="Pick some"
-                                        label="name" 
-                                        track-by="name" 
-                                        :preselect-first="true">
-                                            <!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
-                                        </multiselect>
-                                        <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col">
-                            3 of 3
-                        </div>
-                    </div>
-                    <hr>
                 </div>
-            </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+                    <button v-show="!emergencyEditMode" type="submit" class="btn btn-success">Create</button>
+                    <button v-show="emergencyEditMode" type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
         </div>
 
 
@@ -115,13 +99,20 @@ export default {
     },
     data() {
         return{
+            emergencyEditMode: false,
             record: {},
             emergencyTypes: [],
             recordBeneficiaryForm: new Form({
 				id: '',
 				emergencyTypes: [],
+			}),
+			emergencyForm: new Form({
+				id: '',
+				record_id: '',
+                emergency_date: '',
+                comment: '',
+                emergency_type_id: '',
 			})
-
         }
     },
     methods: {
@@ -131,6 +122,7 @@ export default {
 			.then((data) => {
 				// success
                 this.record = data.data.data;
+                this.emergencyForm.record_id = this.record.id
 				this.$Progress.finish();
 			})
 			.catch((e) => {
@@ -143,9 +135,9 @@ export default {
         getEmergencyTypes() {
 			this.$Progress.start();
 			axios.get('/api/emergency-types/')
-			.then((data) => {
+			.then((response) => {
 				// success
-                this.emergencyTypes = data.data.data;
+                this.emergencyTypes = response.data.data;
 				this.$Progress.finish();
 			})
 			.catch((e) => {
@@ -155,11 +147,66 @@ export default {
 			})
 		},
 
+        createEmergency() {
+			this.$Progress.start();
+			this.emergencyForm.post('/api/emergencies')
+			.then((response) => {
+				// success
+				// $('#referralModal').modal('hide')
+				// Fire.$emit('caseeReferralsChanged');
+				
+				// this.createdReferral = res.data.data
+				
+				Toast.fire({
+					icon: 'success',
+					title: 'Added successfully'
+				})
+				
+				this.$Progress.finish();
+
+				// router.push({ path: '/referrals/'+this.createdReferral.id })
+			})
+			.catch((e) => {
+				this.$Progress.fail();
+                Toast.fire({
+                    icon: 'error',
+                    title: e
+                })
+			})
+			
+		},
+
+		updateEmergency(){
+			// this.$Progress.start();
+			// this.emergencyForm.put('/api/user/'+this.emergencyForm.id)
+			// .then(() => {
+			// 	// success
+			// 	Fire.$emit('usersChanged');
+			// 	$('#referralModal').modal('hide')
+			// 	Swal.fire(
+			// 		'Updated!',
+			// 		'It has been updated.',
+			// 		'success'
+			// 	)
+			// 	this.$Progress.finish();
+			// })
+			// .catch(() => {
+			// 	this.$Progress.fail();
+			// })
+		},
+
     },
 
     created (){
         this.getRecord();
         this.getEmergencyTypes();
+    },
+    computed:{
+        currentUser: {
+            get(){
+                return this.$store.state.currentUser.user;
+            }
+        }
     },
 
 }
