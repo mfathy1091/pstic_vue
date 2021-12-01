@@ -29,9 +29,18 @@ const routes = [
     { 
         path: '/details/:referralId', 
         name: 'referralDetails',
-        component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/Container.vue'),
         props: true,
-
+        component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/Container.vue'),
+        
+        children: [
+            {
+                path: "records/:recordId",
+                name: "RecordDetails",
+                props: true,
+                component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue'),
+                
+            }
+        ]
         
 
     },

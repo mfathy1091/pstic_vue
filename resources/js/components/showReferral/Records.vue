@@ -215,7 +215,7 @@
 
 <script>
 import Form from 'vform'
-import Activities from './Activities.vue'
+import Activities from '../ReferralDetails/Activities.vue'
 import Multiselect from 'vue-multiselect'
 import RecordBeneficiaryModal from './RecordBeneficiaryModal'
 

@@ -7,9 +7,16 @@
         <h2>Records in {{ referral.referral_date }}</h2>
         <div>
             <div v-for="record in referral.records" :key="record.id" class="card-body">
-                {{ record.month.name }}
+                <router-link
+                :to="{
+                    name: 'RecordDetails',
+                    params: {recordId: record.id}
+                    }">
+                <span>{{ record.month.name }}</span>
+                </router-link>
             </div>
         </div>
+        <router-view :key="$route.path"></router-view>
     </section>
 </div>
 </template>
