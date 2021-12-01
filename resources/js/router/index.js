@@ -27,10 +27,10 @@ const routes = [
         props: true,
     },
     { 
-        path: '/details/:referralId', 
+        path: '/referrals/:referralId', 
         name: 'referralDetails',
         props: true,
-        component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/Container.vue'),
+        component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/ReferralDetails.vue'),
         
         children: [
             {
@@ -96,13 +96,13 @@ const routes = [
         props: true
     },
 
-    { 
-        path: '/referrals/:referralId', 
-        name: 'showReferral',
-        component: () => import(/* webpackChunkName: "showReferral" */ '../components/showReferral/Container'),
-        props: true,
+    // { 
+    //     path: '/referrals/:referralId', 
+    //     name: 'showReferral',
+    //     component: () => import(/* webpackChunkName: "showReferral" */ '../components/showReferral/Container'),
+    //     props: true,
 
-    },
+    // },
 
 
 

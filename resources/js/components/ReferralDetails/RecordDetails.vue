@@ -4,18 +4,18 @@
 
         <h3>Records</h3>
         <div class="card">
-            <div class="card-body">
-                <span><b>{{ record.month.name }}</b></span>
+            <div class="card-body" v-if="record">
             </div>
+                <!-- Activities Section -->
+                <Activities 
+                :v-if="record"
+                :record='record' 
+                v-on:recordsChanged="getReferral()">
+                </Activities>
         </div>
     </section>
 
-    <!-- Activities Section -->
-    <Activities 
-    :v-if="currentRecord.id"
-    :selectedRecord='currentRecord' 
-    v-on:recordsChanged="getReferral()">
-    </Activities>
+
 </div>
 
 </template>
