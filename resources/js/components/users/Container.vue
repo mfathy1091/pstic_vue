@@ -35,25 +35,25 @@
 							</tr>
 						</thead>
 						<tbody>
-								<tr v-for="user in users" :key="user.id">
-									<td>{{ user.id }}</td>
-									<td>{{ user.name }}</td>
-									<td>{{ user.email }}</td>
-									<td>{{ user.created_at | myDate }}</td>
-									<td>
-										<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
-									</td>
-									<td>
-										<!-- <a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')"> -->
-										<a class="clickable" @click="showEditUserModal(user)">
-											<i class="fa fa-edit blue"></i>
-										</a>
-										
-										<a class="clickable" @click="deleteUser(user.id)" v-if="$can('user_delete')">
-											<i class="fa fa-trash red"></i>
-										</a>
-									</td>
-								</tr>
+							<tr v-for="user in users" :key="user.id">
+								<td>{{ user.id }}</td>
+								<td>{{ user.name }}</td>
+								<td>{{ user.email }}</td>
+								<td>{{ user.created_at | myDate }}</td>
+								<td>
+									<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
+								</td>
+								<td>
+									<!-- <a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')"> -->
+									<a class="clickable" @click="showEditUserModal(user)">
+										<i class="fa fa-edit blue"></i>
+									</a>
+									
+									<a class="clickable" @click="deleteUser(user.id)" v-if="$can('user_delete')">
+										<i class="fa fa-trash red"></i>
+									</a>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

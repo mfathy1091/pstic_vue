@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Casee;
+use App\Models\Individual;
+
 
 class CaseeController extends Controller
 {
@@ -19,6 +21,18 @@ class CaseeController extends Controller
         $response = [
             'number' => $request,
             'data' => $casees,
+        ];
+
+        return response($response, 200);
+    }
+
+    public function caseeIndividuals(Request $request, $id)
+    {
+        $caseIndividuals = Individual::with('casee', 'casee.individuals', 'relationship', 'gender', 'nationality')->where('case_id', $id)->get();
+        
+        // return the created user and token
+        $response = [
+            'data' => $caseIndividuals,
         ];
 
         return response($response, 200);

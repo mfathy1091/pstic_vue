@@ -48,5 +48,40 @@ class EmergencyController extends Controller
 
     }
 
+    public function update(Request $request, $id)
+    {
+        $emergency = Emergency::findOrFail($id);
+
+        if($emergency){
+            
+            $this->validate($request, [
+                'record_id' => 'required',
+                'emergency_date' => 'required',
+                'comment' => 'required',
+                'emergency_type_id' => 'required',
+            ]);
+
+            $emergency->update([
+                'record_id' => $request['record_id'],
+                'emergency_date' => $request['emergency_date'],
+                'comment' => $request['comment'],
+                'emergency_type_id' => $request['emergency_type_id'],
+                'user_id' => Auth::id(),
+            ]);
+            
+            $data = [
+                'data' => $emergency,
+            ];
+            
+            return response($data, 201);
+        }else{
+            return response('', 201);
+        }
+
+
+        
+
+    }
+
     
 }

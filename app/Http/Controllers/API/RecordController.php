@@ -26,18 +26,16 @@ class RecordController extends Controller
         $record = Record::with(
             'month',
             'status',
+            'emergencies.user',
+            'emergencies.emergencyType',
             'recordBeneficiaries',
             'recordBeneficiaries.individual',
             //'records.recordBeneficiaries.services'
             )->findOrFail($id);
 
-
-
         if($record){
             return response(['data' => $record], 200);
         }
-        
-
         
     }
 

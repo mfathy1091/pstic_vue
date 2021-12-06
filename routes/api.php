@@ -38,14 +38,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     // Casees
     Route::get('casees/create_or_get', 'API\CaseeController@createOrGetCasee');
-    
+    Route::get('casees/{id}/individuals', 'API\CaseeController@caseeIndividuals');
     Route::get('casees/search', 'API\CaseeController@search');
     Route::get('casees', 'API\CaseeController@index');
     Route::post('casees', 'API\CaseeController@store');
     Route::get('casees/{id}', 'API\CaseeController@show');
     Route::put('casees/{id}', 'API\CaseeController@update');
     Route::get('casees/exists/{n}', 'API\CaseeController@exists');
-    Route::get('casees/{id}/individuals', 'API\CaseeController@getIndividuals');
+    
     
     // Referrals
     Route::apiResources(['referrals'=> 'API\ReferralController']);
@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('emergencies', 'API\EmergencyController@index');
     Route::post('emergencies', 'API\EmergencyController@store');
+    Route::put('emergencies/{id}', 'API\EmergencyController@update');
 
     Route::get('emergency-types', 'API\EmergencyTypeController@index');
 
