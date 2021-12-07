@@ -38,7 +38,7 @@
                                     <td class="align-middle"></td>
                                     <td>
                                         {{ emergency.emergency_date }}
-                                        <!-- <li v-for="individual in casee.individuals" :key="individual.id">
+                                        <!-- <li v-for="individual in casee.beneficiaries" :key="individual.id">
 										{{ individual.name }}
                                         </li> -->
                                     </td>

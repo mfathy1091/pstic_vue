@@ -9,7 +9,7 @@ use App\Models\Month;
 use App\Models\Referral;
 use App\Models\Record;
 use App\Models\RecordBeneficiary;
-use App\Models\Individual;
+use App\Models\Beneficiary;
 use App\Models\Reason;
 use App\Models\Casee;
 
@@ -42,7 +42,7 @@ class ReferralController extends Controller
 
     public function getIndividualReferrals(Request $request)
     {
-        $referrals =  Referral::with('referralSource')->where('individual_id', $request->individual_id)->get();
+        $referrals =  Referral::with('referralSource')->where('beneficiary_id', $request->beneficiary_id)->get();
         
         $data = [
             'referrals' => $referrals,
@@ -57,7 +57,7 @@ class ReferralController extends Controller
         'originalDirectIndividual', 
         'referralSource', 
         'casee',
-        'casee.individuals',
+        'casee.beneficiaries',
         'reasons', 
         'records', 
         'records.month', 
@@ -71,7 +71,7 @@ class ReferralController extends Controller
             return ['data' => $referral];
         }
 
-        return ['message' => 'Individual does not exist'];
+        return ['message' => 'beneficiary does not exist'];
     }
 
     public function store(Request $request)
@@ -136,7 +136,7 @@ class ReferralController extends Controller
 
 
         $casee = Casee::find($request->casee_id);
-        $individualsIds = $casee->individuals->pluck('id')->toArray();
+        $beneficiariesIds = $casee->beneficiaries->pluck('id')->toArray();
 
         $i = 0;
         foreach($monthsCodes as $monthCode)
@@ -156,17 +156,17 @@ class ReferralController extends Controller
                 'is_new' => $is_new,
             ]);
             
-            $record->individuals()->sync($individualsIds);
+            $record->beneficiaries()->sync($beneficiariesIds);
 
 
-            //$referralIndividuals = $request->referral_beneficiaries;
-            // $directIndividuals = collect($request->direct_beneficiaries)->pluck('id')->toArray();
-            // if(!empty($referralIndividuals)){
-            //     foreach($referralIndividuals as $individual)
+            //$referralbeneficiaries = $request->referral_beneficiaries;
+            // $directbeneficiaries = collect($request->direct_beneficiaries)->pluck('id')->toArray();
+            // if(!empty($referralbeneficiaries)){
+            //     foreach($referralbeneficiaries as $beneficiary)
             //     {
-            //         $status = in_array($individual['id'], $directIndividuals) ? 1 : 0;
+            //         $status = in_array($beneficiary['id'], $directbeneficiaries) ? 1 : 0;
             //         RecordBeneficiary::create([
-            //             'individual_id' => $individual['id'],
+            //             'beneficiary_id' => $beneficiary['id'],
             //             'record_id' => $record->id,
             //             'status' => $status
             //         ]);
@@ -174,13 +174,13 @@ class ReferralController extends Controller
             // }
 
 
-            // // Insert Direct Individual In Each Record
-            // $directIndividualsIds = $request->direct_beneficiaries_ids;
-            // if(!empty($directIndividualsIds)){
-            //     foreach($directIndividualsIds as $directIndividualId)
+            // // Insert Direct Beneficiary In Each Record
+            // $directbeneficiariesIds = $request->direct_beneficiaries_ids;
+            // if(!empty($directbeneficiariesIds)){
+            //     foreach($directbeneficiariesIds as $directBeneficiaryId)
             //     {
             //         RecordBeneficiary::create([
-            //             'individual_id' => $directIndividualId,
+            //             'beneficiary_id' => $directBeneficiaryId,
             //             'record_id' => $record->id,
             //             'status' => '1',
             //         ]);
@@ -188,13 +188,13 @@ class ReferralController extends Controller
             // }
 
 
-            // // Insert Indirect Individuals In Each Record
-            // $indirectIndividualsIds = $request->indirect_beneficiaries_ids;
-            // if(!empty($indirectIndividualsIds)){
-            //     foreach($indirectIndividualsIds as $indirectIndividualId)
+            // // Insert Indirect beneficiaries In Each Record
+            // $indirectbeneficiariesIds = $request->indirect_beneficiaries_ids;
+            // if(!empty($indirectbeneficiariesIds)){
+            //     foreach($indirectbeneficiariesIds as $indirectIndividualId)
             //     {
             //         RecordBeneficiary::create([
-            //             'individual_id' => $indirectIndividualId,
+            //             'beneficiary_id' => $indirectIndividualId,
             //             'record_id' => $record->id,
             //             'status' => '0',
             //         ]);
@@ -220,7 +220,7 @@ class ReferralController extends Controller
         if($referral){
             
             $this->validate($request, [
-                'original_direct_individual_id' => 'required',
+                'original_direct_beneficiary_id' => 'required',
                 'referral_source_id' => 'required',
                 'referral_date' => 'required',
                 'referring_person_name' => 'required',
@@ -232,7 +232,7 @@ class ReferralController extends Controller
             
             // update first
             $referral->update([
-                'original_direct_individual_id' => $request->original_direct_individual_id,
+                'original_direct_beneficiary_id' => $request->original_direct_beneficiary_id,
                 'referral_source_id' => $request->referral_source_id,
                 'referral_date' => $request->referral_date,
                 'referring_person_name' => $request->referring_person_name,

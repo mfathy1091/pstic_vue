@@ -178,7 +178,7 @@ export default {
                 referring_person_email: '',
                 referral_narrative_reason: '',
                 reasons: [],
-                original_direct_individual_id: '',
+                original_direct_beneficiary_id: '',
             }),
         }
     },

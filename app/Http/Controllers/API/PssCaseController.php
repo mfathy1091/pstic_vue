@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\RecordBeneficiary;
-use App\Models\Individual;
+use App\Models\Beneficiary;
 use App\Repositories\PsCaseRepositoryInterface;
 use Illuminate\Support\Facades\Auth;use App\Models\Gender;
 use DateTime;
@@ -66,10 +66,10 @@ class PssCaseController extends Controller
 
     public function create($id)
     {
-        $directIndividual = Individual::find($id);
-    $fileId = $directIndividual->file->id;
-        $indirectIndividuals = Individual::where('file_id', $fileId)->where('id', '!=', $id)->get();
-        //dd($indirectIndividuals);
+        $directBeneficiary = Beneficiary::find($id);
+        $fileId = $directBeneficiary->file->id;
+        $indirectbeneficiaries = Beneficiary::where('file_id', $fileId)->where('id', '!=', $id)->get();
+        //dd($indirectbeneficiaries);
 
         $months = Month::all();
         $referralSources = ReferralSource::all();
@@ -81,7 +81,7 @@ class PssCaseController extends Controller
         
         $reasons = Reason::all();
 
-		return view('pss_cases.create', compact('directIndividual', 'indirectIndividuals', 'referralSources','psWorkers', 'genders', 'nationalities', 'caseTypes', 'files', 'reasons'));
+		return view('pss_cases.create', compact('directIndividual', 'indirectbeneficiaries', 'referralSources','psWorkers', 'genders', 'nationalities', 'caseTypes', 'files', 'reasons'));
     }
 
 
@@ -112,7 +112,7 @@ class PssCaseController extends Controller
 
         // insert Pss Case
         $pssCase = new PssCase();
-        $pssCase->direct_individual_id = $request->direct_individual_id;
+        $pssCase->direct_beneficiary_id = $request->direct_beneficiary_id;
         $pssCase->current_status_id = '1';
         $pssCase->assigned_psw_id = Auth::id();
         $pssCase->save();
@@ -163,22 +163,22 @@ class PssCaseController extends Controller
                 ]);
             }
             
-            // Insert Direct Individual In Each Record
-            $directIndividualId = $request->direct_individual_id;
+            // Insert Direct Beneficiary In Each Record
+            $directBeneficiaryId = $request->direct_beneficiary_id;
             RecordBeneficiary::create([
-                'individual_id' => $directIndividualId,
+                'beneficiary_id' => $directBeneficiaryId,
                 'record_id' => $record->id,
                 'status' => '1',
             ]);
 
 
-            // Insert Indirect Individuals In Each Record
-            $indirectIndividualsIds = $request->indirect_individuals_ids;
-            if(!empty($indirectIndividualsIds)){
-                foreach($indirectIndividualsIds as $indirectIndividualId)
+            // Insert Indirect beneficiaries In Each Record
+            $indirectbeneficiariesIds = $request->indirect_beneficiaries_ids;
+            if(!empty($indirectbeneficiariesIds)){
+                foreach($indirectbeneficiariesIds as $indirectIndividualId)
                 {
                     RecordBeneficiary::create([
-                        'individual_id' => $indirectIndividualId,
+                        'beneficiary_id' => $indirectIndividualId,
                         'record_id' => $record->id,
                         'status' => '0',
                     ]);
@@ -187,7 +187,7 @@ class PssCaseController extends Controller
         }
 
         // return redirect()->route('psscases.show', [$pssCase->id]);
-        return redirect()->route('individuals.show', [$directIndividualId]);
+        return redirect()->route('beneficiaries.show', [$directBeneficiaryId]);
     }
 
 

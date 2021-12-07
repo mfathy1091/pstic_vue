@@ -44,9 +44,9 @@ class Record extends Model
         return $this->hasMany(Servicetype::class);
     }
 
-    public function individuals()
+    public function beneficiaries()
     {
-        return $this->belongsToMany(Individual::class, 'record_beneficiary', 'record_id', 'individual_id');
+        return $this->belongsToMany(Beneficiary::class, 'record_beneficiary', 'record_id', 'beneficiary_id');
     }
 
     public function recordBeneficiaries()

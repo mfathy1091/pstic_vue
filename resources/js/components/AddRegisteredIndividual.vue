@@ -28,11 +28,11 @@
 					</h5>
 				</div>
 				<div class="card-body">
-					<!-- Case Individuals -->
+					<!-- Case beneficiaries -->
 					<div class="card mt-3">
 				<div class="card-header">
 					<h3 class="card-title">
-						Individuals under {{ this.casee.file_number }}
+						beneficiaries under {{ this.casee.file_number }}
 					</h3>
 
 					<div class="card-tools">
@@ -60,9 +60,9 @@
 								</tr>
 							</thead>
 							<tbody>
-									<tr v-for="individual in caseeIndividuals" :key="individual.id">
+									<tr v-for="individual in caseebeneficiaries" :key="individual.id">
 										<td>{{ individual.name }}</td>
-										<td>{{ individual.individual_id }}</td>
+										<td>{{ individual.beneficiary_id }}</td>
 										<td>{{ individual.passport_number }}</td>
 										<td>{{ individual.relationship.name}}</td>
 										<td>{{ individual.age }}</td>
@@ -95,12 +95,12 @@
 			<div class="card card-solid">
 				<div class="card-header">
 					<h3 class="card-title">
-						Individuals Linked to {{ this.casee.file_number }}
+						beneficiaries Linked to {{ this.casee.file_number }}
 					</h3>
 
 					<div class="card-tools">
 						<button class="btn btn-primary" @click="showCreateIndividualModal">
-							<i class="fas fa-link"></i> Link Individuals
+							<i class="fas fa-link"></i> Link beneficiaries
 						</button>
 					</div>
 					
@@ -108,7 +108,7 @@
 				<div class="card-body pb-0">
 					<div class="row">
 						
-						<div v-for="individual in caseeIndividuals" :key="individual.id"
+						<div v-for="individual in caseebeneficiaries" :key="individual.id"
 						class="col-12 col-lg-4 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
 							<div class="card bg-light d-flex flex-fill">
 								<div class="card-header text-dark border-bottom-0">
@@ -133,7 +133,7 @@
 											</span>
 
 											<ul class="mb-0 fa-ul text-muted">
-												<li><span class="fa-li"></span><b>Individual ID:</b> {{ individual.individual_id }}</li>
+												<li><span class="fa-li"></span><b>Individual ID:</b> {{ individual.beneficiary_id }}</li>
 												<li><span class="fa-li"></span><b>Relationship:</b> {{ individual.relationship.name}}</li>
 											</ul>
 
@@ -156,12 +156,12 @@
 
 			<!-- Choose Direct Section -->
 			<!-- <ValidationObserver v-slot="{ handleSubmit }">
-				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="caseeIndividuals.length">		
-					<ValidationProvider name="directIndividual_id" rules="required" v-slot="{ errors }">
+				<form @submit.prevent="handleSubmit(goToCreateReferralPage)" v-if="caseebeneficiaries.length">		
+					<ValidationProvider name="directbeneficiary_id" rules="required" v-slot="{ errors }">
 					<div class="form-group">
-						<label for="directIndividual_id" class="form-label">Choose Direct</label>
-						<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
-							<option v-for='individual in caseeIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
+						<label for="directbeneficiary_id" class="form-label">Choose Direct</label>
+						<select name="directbeneficiary_id" v-model="directbeneficiary_id" id="directbeneficiary_id" class="form-control" aria-placeholder="fdgfdg">
+							<option v-for='beneficiary in caseebeneficiaries' :value='beneficiary.id' :key="individual.id">{{ individual.name }}</option>
 						</select>
 						<span class="text-danger">{{ errors[0] }}</span>
 					</div>
@@ -176,7 +176,7 @@
 		</div>
 
 		
-		<!-- Registered Individual Modal -->
+		<!-- Registered Beneficiary Modal -->
 		<div class="modal fade" id="individualModal" tabindex="-1" aria-labelledby="individualModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -200,9 +200,9 @@
 							</div>
 							
 							<div class="form-group">
-								<label for="individual_id" class="form-label">File Individual ID</label>
-								<input id="individual_id" v-model="individualForm.individual_id" type="text" name="individual_id" class="form-control">
-								<HasError :form="individualForm" field="individual_id" />
+								<label for="beneficiary_id" class="form-label">File Beneficiary ID</label>
+								<input id="beneficiary_id" v-model="individualForm.beneficiary_id" type="text" name="beneficiary_id" class="form-control">
+								<HasError :form="individualForm" field="beneficiary_id" />
 							</div>
 
 							<hr class="col-8 mt-5 mb-5">
@@ -320,8 +320,8 @@ export default {
 			caseeEditMode: false,
             casee: '',
 			isNewCasee: '',
-            caseeIndividuals: [],
-			directIndividual_id: '',
+            caseebeneficiaries: [],
+			directbeneficiary_id: '',
 			relationships: [],
             // nationalities: {},
 			
@@ -342,7 +342,7 @@ export default {
                 age: '',
                 is_registered: '',
                 casee_id: '1',
-                individual_id: '',
+                beneficiary_id: '',
                 gender_id: '0',
                 nationality_id: '0',
                 relationship_id: '0',
@@ -389,17 +389,17 @@ export default {
 			axios.get('/api/nationalities').then(({data}) => (this.nationalities = data.data));
 			this.$Progress.finish();
 		},
-        geCaseeIndividuals(){
+        geCaseebeneficiaries(){
 			
 			if(this.casee){
 				this.$Progress.start();
-				axios.get('/api/casees/'+this.casee.id+'/individuals')
+				axios.get('/api/casees/'+this.casee.id+'/beneficiaries')
 				.then(({data}) => {
-					this.caseeIndividuals = data.data
+					this.caseebeneficiaries = data.data
 				});
 				this.$Progress.finish();
 			}else{
-				this.caseeIndividuals = []
+				this.caseebeneficiaries = []
 			}
 		},
 		getRelationships(){
@@ -423,10 +423,10 @@ export default {
 		},
 		createIndividual() {
 			this.$Progress.start();
-			this.individualForm.post('/api/individuals')
+			this.individualForm.post('/api/beneficiaries')
 			.then(() => {
 				// success
-				Fire.$emit('caseeIndividualsChanged');
+				Fire.$emit('caseebeneficiariesChanged');
 				$('#individualModal').modal('hide')
 				Toast.fire({
 					icon: 'success',
@@ -442,10 +442,10 @@ export default {
 		},
 		updateIndividual(){
 			this.$Progress.start();
-			this.individualForm.put('/api/individuals/'+this.individualForm.id)
+			this.individualForm.put('/api/beneficiaries/'+this.individualForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('caseeIndividualsChanged');
+				Fire.$emit('caseebeneficiariesChanged');
 				$('#individualModal').modal('hide')
 				Swal.fire(
 					'Updated!',
@@ -472,10 +472,10 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.individualForm.delete('/api/individuals/'+id)
+					this.individualForm.delete('/api/beneficiaries/'+id)
 					.then(() => {
 						// success
-						Fire.$emit('caseeIndividualsChanged');
+						Fire.$emit('caseebeneficiariesChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -512,7 +512,7 @@ export default {
             .then(({data}) => {
 					this.casee = data.data
 					Fire.$emit('caseeChanged');
-					Fire.$emit('caseeIndividualsChanged');
+					Fire.$emit('caseebeneficiariesChanged');
 					this.$Progress.finish();
 					this.isNewCasee = data.isNewCasee
 					if(this.isNewCasee){
@@ -588,11 +588,11 @@ export default {
 			})
 		},
 		// goToIndividualPage(){
-		// 	router.push({ path: '/individuals/'+this.directIndividual_id })
+		// 	router.push({ path: '/beneficiaries/'+this.directbeneficiary_id })
 		// },
 
 		goToIndividualPage(individual){
-			router.push({ path: '/individuals/'+individual.id })
+			router.push({ path: '/beneficiaries/'+individual.id })
 		},
 
 		goToCreateReferralPage(){
@@ -601,10 +601,10 @@ export default {
     },
 	created(){
 		Fire.$on('caseeChanged', () => {
-			this.geCaseeIndividuals();
+			this.geCaseebeneficiaries();
 		});
-		Fire.$on('caseeIndividualsChanged', () => {
-			this.geCaseeIndividuals();
+		Fire.$on('caseebeneficiariesChanged', () => {
+			this.geCaseebeneficiaries();
 		});
 		this.getRelationships();
 		// this.getNationalities();

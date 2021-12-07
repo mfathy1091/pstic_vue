@@ -19,11 +19,11 @@
 							<br>
 							<br>
 
-							<div class="form-group" v-if="caseeIndividuals">
+							<div class="form-group" v-if="caseebeneficiaries">
 								<label class="typo__label">Select Beneficiaries</label>
 								<multiselect 
 								v-model="referralForm.referral_beneficiaries" 
-								:options="caseeIndividuals" 
+								:options="caseebeneficiaries" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -39,7 +39,7 @@
 								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 							</div>
 							
-							<div class="form-group" v-if="caseeIndividuals">
+							<div class="form-group" v-if="caseebeneficiaries">
 								<label class="typo__label">Select Direct</label>
 								<multiselect 
 								v-model="referralForm.direct_beneficiaries" 
@@ -135,7 +135,7 @@ export default {
 			createdReferral: '',
 
             casee: '',
-            caseeIndividuals: [],
+            caseebeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
@@ -185,11 +185,11 @@ export default {
 			this.$Progress.finish();
 		},
 
-        getCaseeIndividuals(){
+        getCaseebeneficiaries(){
 			this.$Progress.start();
-			axios.get('/api/individuals/' + this.$route.params.id + '/other_casee_individuals/')
+			axios.get('/api/beneficiaries/' + this.$route.params.id + '/other_casee_beneficiaries/')
 			.then(({data}) => {
-				this.caseeIndividuals = data.data
+				this.caseebeneficiaries = data.data
 			});
 			this.$Progress.finish();
 		},
@@ -199,7 +199,7 @@ export default {
 			this.referralForm.post('/api/referrals')
 			.then((res) => {
 				// success
-				// Fire.$emit('caseeIndividualsChanged');
+				// Fire.$emit('caseebeneficiariesChanged');
 				
 				this.createdReferral = res.data.referral
 				
@@ -221,7 +221,7 @@ export default {
 
 
 		goToIndividualPage(){
-			router.push({ path: '/individuals/'+this.directIndividual.id })
+			router.push({ path: '/beneficiaries/'+this.directIndividual.id })
 			console.log(directIndividual.id)
 		},
 		
@@ -237,7 +237,7 @@ export default {
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReasons()
-		this.getCaseeIndividuals()
+		this.getCaseebeneficiaries()
 	}
 }
 </script>

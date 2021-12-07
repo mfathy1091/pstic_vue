@@ -15,7 +15,7 @@ class RecordBeneficiaryController extends Controller
 
     public function index(Request $request)
     {
-        $beneficiaries =  RecordBeneficiary::with('individual')->where('record_id', $request->record_id)->get();
+        $beneficiaries =  RecordBeneficiary::with('beneficiary')->where('record_id', $request->record_id)->get();
         
         return response()->json([
             'data' => $beneficiaries,
@@ -25,13 +25,13 @@ class RecordBeneficiaryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'individual_id' => 'required',
+            'beneficiary_id' => 'required',
             'record_id' => 'required',
             'status' => 'required',
         ]);
 
         $beneficiary = RecordBeneficiary::create([
-            'individual_id' => $request['individual_id'],
+            'beneficiary_id' => $request['beneficiary_id'],
             'record_id' => $request['record_id'],
             'status' => $request['status'],
         ]);
@@ -54,7 +54,7 @@ class RecordBeneficiaryController extends Controller
         if($beneficiary){
             
             $this->validate($request, [
-                'individual_id' => 'required',
+                'beneficiary_id' => 'required',
                 'record_id' => 'required',
                 'status' => 'required',
             ]);
@@ -63,7 +63,7 @@ class RecordBeneficiaryController extends Controller
             if($beneficiary){
                 // update first
                 $beneficiary->update([
-                    'individual_id' => $request['individual_id'],
+                    'beneficiary_id' => $request['beneficiary_id'],
                     'record_id' => $request['record_id'],
                     'status' => $request['status'],
                 ]);

@@ -15,12 +15,12 @@ class CreatePssCasesTable extends Migration
     {
         Schema::create('pss_cases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('direct_individual_id');
+            $table->unsignedBigInteger('direct_beneficiary_id');
             $table->unsignedBigInteger('current_status_id')->nullable();
             $table->unsignedBigInteger('assigned_psw_id');
             $table->timestamps();
 
-            $table->foreign('direct_individual_id')->references('id')->on('individuals')->onDelete('cascade');
+            $table->foreign('direct_beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
             $table->foreign('current_status_id')->references('id')->on('statuses')->onDelete('cascade');
             $table->foreign('assigned_psw_id')->references('id')->on('users')->onDelete('cascade');
 

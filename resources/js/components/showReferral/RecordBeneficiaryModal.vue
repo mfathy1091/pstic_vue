@@ -48,7 +48,7 @@ export default {
 		return {
 			recordBeneficiaryForm: new Form({
 				id: '',
-				individual_id: '',
+				beneficiary_id: '',
 				record_id: '',
 				status: '',
 			})

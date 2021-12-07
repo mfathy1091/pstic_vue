@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Casee;
-use App\Models\Individual;
+use App\Models\Beneficiary;
 
 
 class CaseeController extends Controller
@@ -15,7 +15,7 @@ class CaseeController extends Controller
     public function search(Request $request){
         // if($request->filled('search_text'))
         // dd($request);
-        $casees = Casee::with('individuals', 'referrals', 'individuals.nationality', 'individuals.gender','individuals.relationship')
+        $casees = Casee::with('beneficiaries', 'referrals', 'beneficiaries.nationality', 'beneficiaries.gender','beneficiaries.relationship')
                 ->where('file_number', $request->fileNumber)->get();
 
         $response = [
@@ -26,20 +26,20 @@ class CaseeController extends Controller
         return response($response, 200);
     }
 
-    public function caseeIndividuals(Request $request, $id)
+    public function caseebeneficiaries(Request $request, $id)
     {
-        $caseIndividuals = Individual::with('casee', 'casee.individuals', 'relationship', 'gender', 'nationality')->where('case_id', $id)->get();
+        $casebeneficiaries = Beneficiary::with('casee', 'casee.beneficiaries', 'relationship', 'gender', 'nationality')->where('case_id', $id)->get();
         
         // return the created user and token
         $response = [
-            'data' => $caseIndividuals,
+            'data' => $casebeneficiaries,
         ];
 
         return response($response, 200);
     }
 
     public function index(){
-        $casees = Casee::with('individuals', 'referrals', 'individuals.nationality', 'individuals.gender','individuals.relationship')->get();
+        $casees = Casee::with('beneficiaries', 'referrals', 'beneficiaries.nationality', 'beneficiaries.gender','beneficiaries.relationship')->get();
         
         // return the created user and token
         $response = [
@@ -52,7 +52,7 @@ class CaseeController extends Controller
 
     public function show($id)
     {
-        $casee = Casee::with('individuals', 'referrals', 'individuals.nationality', 'individuals.gender','individuals.relationship')->findOrFail($id);
+        $casee = Casee::with('beneficiaries', 'referrals', 'beneficiaries.nationality', 'beneficiaries.gender','beneficiaries.relationship')->findOrFail($id);
 
         if($casee){
             return ['data' => $casee];
@@ -78,8 +78,8 @@ class CaseeController extends Controller
             ]);
 
             // then sync
-            // $linkedIndividualsIds = collect($request->input('linked_individuals'))->pluck('id');
-            // $casee->linkedIndividuals()->sync($linkedIndividualsIds);
+            // $linkedbeneficiariesIds = collect($request->input('linked_beneficiaries'))->pluck('id');
+            // $casee->linkedbeneficiaries()->sync($linkedbeneficiariesIds);
             
             return ['message' => 'Case updated'];
         }
@@ -98,22 +98,22 @@ class CaseeController extends Controller
         return ['data' => false];
     }
 
-    public function getIndividuals($id)
+    public function getbeneficiaries($id)
     {
         $casee = Casee::findOrFail($id);
 
         // if it exists
         if($casee){
-            return ['data' => $casee->individuals()->with('relationship', 'gender', 'nationality')->get()];
+            return ['data' => $casee->beneficiaries()->with('relationship', 'gender', 'nationality')->get()];
         }
 
         return ['data' => ''];
 
         // $number = $request->keyword;
 
-        // $individuals = Individual::query();
+        // $beneficiaries = Beneficiary::query();
 
-        // $data = $individuals->with('casee')->whereHas('casee', function($q) use ($number){
+        // $data = $beneficiaries->with('casee')->whereHas('casee', function($q) use ($number){
         //     return $q->where('file_number', '=', "%$number%");
         // })->get();
 

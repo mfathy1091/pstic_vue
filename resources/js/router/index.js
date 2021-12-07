@@ -114,9 +114,9 @@ const routes = [
     { path: '/servicetypes', component: require('../components/Servicetypes.vue').default },
 
     { path: '/profile', component: require('../components/Profile.vue').default },
-    { path: '/individuals/check', component: require('../components/AddReferral/CheckIndividual.vue').default },
-    { path: '/individuals/create_registered', component: require('../components/AddRegisteredIndividual.vue').default },
-    { path: '/individuals/:id', component: ShowIndividual },
+    { path: '/beneficiaries/check', component: require('../components/AddReferral/CheckIndividual.vue').default },
+    { path: '/beneficiaries/create_registered', component: require('../components/AddRegisteredIndividual.vue').default },
+    { path: '/beneficiaries/:id', component: ShowIndividual },
     { path: '/404', component: NotFound },
     // { path: '*', redirect: '/404' },
     { path: '*', component: NotFound },

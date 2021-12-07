@@ -19,19 +19,19 @@ class RecordBeneficiarySeeder extends Seeder
         $data = [
             [
                 'record_id' => '1',
-                'individual_id' => '1',
+                'beneficiary_id' => '1',
                 'status' => '1',
                 
             ],
             [
                 'record_id' => '1',
-                'individual_id' => '2',
+                'beneficiary_id' => '2',
                 'status' => '0',
             ],
 
             [
                 'record_id' => '2',
-                'individual_id' => '1',
+                'beneficiary_id' => '1',
                 'status' => '1',
             ],
             

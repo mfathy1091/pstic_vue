@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndividualsCasesTable extends Migration
+class CreatebeneficiariesCasesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateIndividualsCasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('individuals_cases', function (Blueprint $table) {
+        Schema::create('beneficiaries_cases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('individual_id');
+            $table->unsignedInteger('beneficiary_id');
             $table->unsignedInteger('pss_case_id');
             $table->timestamps();
 
 
 
-            $table->foreign('individual_id')->references('id')->on('individuals')->onDelete('cascade');
+            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
             $table->foreign('pss_case_id')->references('id')->on('pss_cases')->onDelete('cascade');
         });
     }
@@ -33,6 +33,6 @@ class CreateIndividualsCasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('individuals_cases');
+        Schema::dropIfExists('beneficiaries_cases');
     }
 }

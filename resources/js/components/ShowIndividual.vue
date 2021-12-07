@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <!-- Individual Section -->
+        <!-- Beneficiary Section -->
         <div class="card mt-3" v-if="this.individual">
             <div class="card-header">
                 <h5 class="m-0">
@@ -29,7 +29,7 @@
                         <tbody>
                                 <tr>
                                     <td>{{ this.individual.name }}</td>
-                                    <td>{{ this.individual.individual_id }}</td>
+                                    <td>{{ this.individual.beneficiary_id }}</td>
                                     <td>{{ this.individual.file.number }}</td>
                                     <td>{{ this.individual.passport_number }}</td>
                                     <td>{{ this.individual.relationship.name}}</td>
@@ -118,7 +118,7 @@ export default {
     methods: {
         getIndividual(){
 			this.$Progress.start();
-			axios.get("/api/individuals/"+this.$route.params.id)
+			axios.get("/api/beneficiaries/"+this.$route.params.id)
             .then(({data}) => {
                 this.individual = data.data
             });
@@ -128,7 +128,7 @@ export default {
         
         getIndividualReferrals(){
             this.$Progress.start();
-            axios.get('/api/individuals/'+this.$route.params.id+'/referrals', { params: { individual_id: this.$route.params.id } })
+            axios.get('/api/beneficiaries/'+this.$route.params.id+'/referrals', { params: { beneficiary_id: this.$route.params.id } })
             .then(({data}) => {
                 this.individualReferrals = data.data
             });
@@ -136,7 +136,7 @@ export default {
 		},
 		
         gotToCreatePage(){
-			router.push({ path: '/individuals/'+this.$route.params.id+'/referrals/create' })
+			router.push({ path: '/beneficiaries/'+this.$route.params.id+'/referrals/create' })
 		},
 
         goToShowReferralPage(referral){

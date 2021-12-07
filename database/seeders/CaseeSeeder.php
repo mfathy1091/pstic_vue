@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Casee;
 use App\Models\Relationship;
-use App\Models\Individual;
+use App\Models\Beneficiary;
 
 class CaseeSeeder extends Seeder
 {
@@ -58,11 +58,11 @@ class CaseeSeeder extends Seeder
 
 
 
-        $individuals = [
+        $beneficiaries = [
             [
                 'passport_number' => '010018765',
                 'casee_id' => '1',
-                'individual_id' => '555-00112677',
+                'beneficiary_id' => '555-00112677',
                 'name' => 'Mariam KONE',
                 'age' => '42',
                 'gender_id' => '2',
@@ -74,7 +74,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '025025765',
                 'casee_id' => '1',
-                'individual_id' => '555-00112682',
+                'beneficiary_id' => '555-00112682',
                 'name' => 'Zaharaa DIABY',
                 'age' => '20',
                 'gender_id' => '2',
@@ -86,7 +86,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '030029864',
                 'casee_id' => '1',
-                'individual_id' => '555-00112683',
+                'beneficiary_id' => '555-00112683',
                 'name' => 'Kadidja DIABY',
                 'age' => '19',
                 'gender_id' => '2',
@@ -102,7 +102,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '548635369',
                 'casee_id' => '2',
-                'individual_id' => '914-00127057',
+                'beneficiary_id' => '914-00127057',
                 'name' => 'Hussein Asaad YASIN',
                 'age' => '26',
                 'gender_id' => '1',
@@ -114,7 +114,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '278945254',
                 'casee_id' => '2',
-                'individual_id' => '914-00127062',
+                'beneficiary_id' => '914-00127062',
                 'name' => 'Reem Mahmoud DAMAMA ALLOULOU',
                 'age' => '23',
                 'gender_id' => '2',
@@ -126,7 +126,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '958390473',
                 'casee_id' => '2',
-                'individual_id' => '555-00118684',
+                'beneficiary_id' => '555-00118684',
                 'name' => 'Mariam Hussien YASIN',
                 'age' => '4',
                 'gender_id' => '2',
@@ -141,7 +141,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '290347636',
                 'casee_id' => '3',
-                'individual_id' => '555-00270922',
+                'beneficiary_id' => '555-00270922',
                 'name' => 'Anas Musa ABDI',
                 'age' => '15',
                 'gender_id' => '1',
@@ -156,7 +156,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '850303586',
                 'casee_id' => '4',
-                'individual_id' => '555-00244422',
+                'beneficiary_id' => '555-00244422',
                 'name' => 'Suleiman Mussa Yusuf Mohamed',
                 'age' => '30',
                 'gender_id' => '1',
@@ -169,7 +169,7 @@ class CaseeSeeder extends Seeder
             [
                 'passport_number' => '568455878',
                 'casee_id' => '5',
-                'individual_id' => '555-00219736',
+                'beneficiary_id' => '555-00219736',
                 'name' => 'Asmaa Ahmed ALI',
                 'age' => '62',
                 'gender_id' => '2',
@@ -181,8 +181,8 @@ class CaseeSeeder extends Seeder
 
         ];
 
-        foreach ($individuals as $n) {
-            Individual::create($n);
+        foreach ($beneficiaries as $n) {
+            Beneficiary::create($n);
         } 
     }
 }

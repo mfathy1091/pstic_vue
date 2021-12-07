@@ -109,12 +109,12 @@ export default {
             });
 			this.$Progress.finish();
         },
-        unlinkIndividual(individual_id){
+        unlinkIndividual(beneficiary_id){
             this.$Progress.start();
-			axios.put('/api/individuals/' + individual_id + '/unlink' )
+			axios.put('/api/beneficiaries/' + beneficiary_id + '/unlink' )
 			.then(() => {
 				// success
-				Fire.$emit('caseeIndividualsChanged');
+				Fire.$emit('caseebeneficiariesChanged');
 				// $('#individualModal').modal('hide')
 				Swal.fire(
 					'Unlinked!',
@@ -162,7 +162,7 @@ export default {
         this.getCasee();
         this.getCaseeReferrals();
 
-        Fire.$on('caseeIndividualsChanged', () => {
+        Fire.$on('caseebeneficiariesChanged', () => {
             this.getCasee();
         });
 

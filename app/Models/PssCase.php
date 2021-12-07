@@ -40,7 +40,7 @@ class PssCase extends Model
 
     public function directIndividual()
     {
-        return $this->belongsTo(Individual::class, 'direct_individual_id');
+        return $this->belongsTo(Beneficiary::class, 'direct_beneficiary_id');
     }
 
 

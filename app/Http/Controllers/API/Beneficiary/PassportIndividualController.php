@@ -1,45 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\API\Individual;
+namespace App\Http\Controllers\API\Beneficiary;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\File;
-use App\Models\Individual;
+use App\Models\Beneficiary;
 
-class PassportIndividualController extends Controller
+class PassportBeneficiaryController extends Controller
 {
 
     
-    public function getIndividualByPassword($passport_number)
+    public function getBeneficiaryByPassword($passport_number)
     {
-        $individual = Individual::with('file', 'file.individuals', 'relationship', 'gender', 'nationality')
+        $beneficiary = Beneficiary::with('file', 'file.beneficiaries', 'relationship', 'gender', 'nationality')
         ->where('passport_number', $passport_number)->firstOrFail();
 
-        if($individual){
-            return ['data' => $individual];
+        if($beneficiary){
+            return ['data' => $beneficiary];
         }
 
-        return ['message' => 'Individual does not exist'];
+        return ['message' => 'beneficiary does not exist'];
     }
 
     public function show($id)
     {
-        $individual = Individual::with('file', 'file.individuals', 'relationship', 'gender', 'nationality')->findOrFail($id);
+        $beneficiary = Beneficiary::with('file', 'file.beneficiaries', 'relationship', 'gender', 'nationality')->findOrFail($id);
 
-        if($individual){
-            return ['data' => $individual];
+        if($beneficiary){
+            return ['data' => $beneficiary];
         }
 
-        return ['message' => 'Individual does not exist'];
+        return ['message' => 'beneficiary does not exist'];
     }
 
     public function update(Request $request, $id)
     {
-        $individual = Individual::findOrFail($id);
+        $beneficiary = Beneficiary::findOrFail($id);
 
-        if($individual){
+        if($beneficiary){
 
             $this->validate($request, [
                 'file_id' => 'required|string|max:255',
@@ -47,20 +47,20 @@ class PassportIndividualController extends Controller
                 'name' => 'required',
                 'age' => 'required|string|max:255', 
                 'is_registered' => '', 
-                'individual_id' => 'required|string|max:255|unique:individuals,individual_id,'.$individual->id,
+                'beneficiary_id' => 'required|string|max:255|unique:beneficiaries,beneficiary_id,'.$beneficiary->id,
                 'gender_id' => 'required', 
                 'nationality_id' => 'required', 
                 'relationship_id' => 'required', 
                 'current_phone_number' => 'required', 
             ]);
 
-            $individual->update([
+            $beneficiary->update([
                 'file_id' => $request->file_id,
                 'passport_number' => $request->passport_number,
                 'name' => $request->name,
                 'age' => $request->age,
                 'is_registered' => $request->is_registered,
-                'individual_id' => $request->individual_id,
+                'beneficiary_id' => $request->beneficiary_id,
                 'gender_id' => $request->gender_id,
                 'nationality_id' => $request->nationality_id,
                 'relationship_id' => $request->relationship_id,
@@ -80,20 +80,20 @@ class PassportIndividualController extends Controller
             'name' => 'required',
             'age' => 'required|string|max:255', 
             'is_registered' => '', 
-            'individual_id' => 'required|string|max:255|unique:individuals',
+            'beneficiary_id' => 'required|string|max:255|unique:beneficiaries',
             'gender_id' => 'required', 
             'nationality_id' => 'required', 
             'relationship_id' => 'required', 
             'current_phone_number' => 'required', 
         ]);
 
-        $individual = Individual::create([
+        $beneficiary = Beneficiary::create([
             'file_id' => $request->file_id,
             'passport_number' => $request->passport_number,
             'name' => $request->name,
             'age' => $request->age,
             'is_registered' => $request->is_registered,
-            'individual_id' => $request->individual_id,
+            'beneficiary_id' => $request->beneficiary_id,
             'gender_id' => $request->gender_id,
             'nationality_id' => $request->nationality_id,
             'relationship_id' => $request->relationship_id,
@@ -102,34 +102,34 @@ class PassportIndividualController extends Controller
 
         return response()->json([
             'message'=>'Added Successfully!!',
-            'individual'=>$individual
+            'beneficiary'=>$beneficiary
         ]);
     }
 
     public function destroy($id)
     {
-        $individual = Individual::findOrFail($id);
+        $beneficiary = Beneficiary::findOrFail($id);
 
         // if it exists
-        if($individual){
+        if($beneficiary){
             // then delete
-            $individual->delete();
+            $beneficiary->delete();
         }
 
-        return ['message' => 'Individual deleted'];
+        return ['message' => 'beneficiary deleted'];
     }
 
-    public function getOtherFileIndividuals($individual_id)
+    public function getOtherFilebeneficiaries($beneficiary_id)
     {
-        $individual = Individual::findOrFail($individual_id);
-        $file = $individual->file;
+        $beneficiary = Beneficiary::findOrFail($beneficiary_id);
+        $file = $beneficiary->file;
 
         // if it exists
-        if($individual){
-            // return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()];
+        if($beneficiary){
+            // return ['data' => $file->beneficiaries()->with('relationship', 'gender', 'nationality')->get()];
 
             // $users = User::all()->except($currentUser->id);
-            return ['data' => $file->individuals()->with('relationship', 'gender', 'nationality')->get()->except($individual_id)];
+            return ['data' => $file->beneficiaries()->with('relationship', 'gender', 'nationality')->get()->except($beneficiary_id)];
         }
 
         return ['data' => ''];
@@ -139,9 +139,9 @@ class PassportIndividualController extends Controller
 
         // $file_number = $request->keyword;
 
-        // $individuals = Individual::query();
+        // $beneficiarys = Beneficiary::query();
 
-        // $data = $individuals->with('file')->whereHas('file', function($q) use ($file_number){
+        // $data = $beneficiarys->with('file')->whereHas('file', function($q) use ($file_number){
         //     return $q->where('number', '=', "%$file_number%");
         // })->get();
 

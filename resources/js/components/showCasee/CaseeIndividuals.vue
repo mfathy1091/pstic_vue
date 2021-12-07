@@ -8,24 +8,24 @@
         <div class="card card-row" v-if="this.casee">
             <div class="card-header">
                 <h3 class="card-title">
-                    Individuals Linked to {{ this.casee.number }}
+                    beneficiaries Linked to {{ this.casee.number }}
                 </h3>
 
                 <div class="card-tools">
                     <!-- <button class="btn btn-primary" @click="showCreateIndividualModal"> -->
                     <button class="btn btn-primary btn-sm">
-                        <i class="fas fa-link"></i> Link Individuals
+                        <i class="fas fa-link"></i> Link beneficiaries
                     </button>
                 </div>
                 
             </div>
             <div class="card-body row">
-                <p v-if="!this.casee.individuals.length" class="ml-5 text-primary">
-                    <b>This case has no linked individuals!</b>
+                <p v-if="!this.casee.beneficiaries.length" class="ml-5 text-primary">
+                    <b>This case has no linked beneficiaries!</b>
                 </p>
 
-                    <!-- individuals -->
-                    <div v-for="individual in this.casee.individuals" :key="individual.id">
+                    <!-- beneficiaries -->
+                    <div v-for="individual in this.casee.beneficiaries" :key="individual.id">
 
                         <div class="card individual-card" style="width: 18rem;">
                             <div class="card-body">
@@ -61,7 +61,7 @@
                                 <span class="text-sm"><b>File Details</b></span>
 
                                 <ul class="mb-0 fa-ul">
-                                    <li><span class="fa-li"></span><b>Individual ID:</b> {{ individual.individual_id }}</li>
+                                    <li><span class="fa-li"></span><b>Individual ID:</b> {{ individual.beneficiary_id }}</li>
                                     <li><span class="fa-li"></span><b>Relationship:</b> {{ individual.relationship.name}}</li>
                                 </ul>
                             </div>
@@ -80,7 +80,7 @@ import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 
 export default {
-    name: 'CaseeIndividuals',
+    name: 'Caseebeneficiaries',
     components: {
         Multiselect,
     },
@@ -102,12 +102,12 @@ export default {
             });
 			this.$Progress.finish();
         },
-        unlinkIndividual(individual_id){
+        unlinkIndividual(beneficiary_id){
             this.$Progress.start();
-			axios.put('/api/individuals/' + individual_id + '/unlink' )
+			axios.put('/api/beneficiaries/' + beneficiary_id + '/unlink' )
 			.then(() => {
 				// success
-				Fire.$emit('caseeIndividualsChanged');
+				Fire.$emit('caseebeneficiariesChanged');
 				// $('#individualModal').modal('hide')
 				Swal.fire(
 					'Unlinked!',
@@ -125,7 +125,7 @@ export default {
     created() {
         this.getCasee();
 
-        Fire.$on('caseeIndividualsChanged', () => {
+        Fire.$on('caseebeneficiariesChanged', () => {
             this.getCasee();
         });
     }

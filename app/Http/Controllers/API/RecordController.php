@@ -63,13 +63,13 @@ class RecordController extends Controller
 
 
                 foreach($recordBeneficiaries as $i => $object) {
-                    $key = $object['individual_id'];
+                    $key = $object['beneficiary_id'];
                     
                     $result[$key] = ['status' => $object['status']];
                 }
-                $record->individuals()->sync($result);
+                $record->beneficiaries()->sync($result);
                 
-                // $record->individuals()->sync([
+                // $record->beneficiaries()->sync([
                 //     1 => ['status' => '1'],
                 //     2 => ['status' => '0']
                 // ]);

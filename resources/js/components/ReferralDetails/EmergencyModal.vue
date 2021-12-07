@@ -114,9 +114,9 @@ export default {
     },
 
 	methods: {
-		getCaseeIndividuals(){
+		getCaseebeneficiaries(){
 			this.$Progress.start();
-			axios.get('/api/casee/'+ this.$route.params.referralId +'/individuals')
+			axios.get('/api/casee/'+ this.$route.params.referralId +'/beneficiaries')
 			.then((response) => {
 				// success
                 this.caseeBeneficiaries = response.data.data;
@@ -192,7 +192,7 @@ export default {
 	},
 
     created (){
-        this.getCaseeIndividuals();
+        this.getCaseebeneficiaries();
         this.getEmergencyTypes();
 		console.log(this.$route.params.referralId);
     },

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Referral extends Model
 {
     protected $fillable = [
-        'original_direct_individual_id',
+        'original_direct_beneficiary_id',
         'referral_source_id',
         'referral_date',
         'referring_person_name',
@@ -27,12 +27,12 @@ class Referral extends Model
 
     public function directIndividual()
     {
-        return $this->belongsTo(Individual::class, 'individual_id');
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
     }
     
     public function originalDirectIndividual()
     {
-        return $this->belongsTo(Individual::class, 'original_direct_individual_id');
+        return $this->belongsTo(Beneficiary::class, 'original_direct_beneficiary_id');
     }
     
     public function referralSource()

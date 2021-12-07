@@ -29,7 +29,7 @@
 				<div class="card mt-3">
 					<div class="card-header">
 						<h3 class="card-title">
-							Individuals under {{ this.file.number }}
+							beneficiaries under {{ this.file.number }}
 						</h3>
 
 						<div class="card-tools">
@@ -57,9 +57,9 @@
 									</tr>
 								</thead>
 								<tbody>
-										<tr v-for="individual in fileIndividuals" :key="individual.id">
+										<tr v-for="individual in filebeneficiaries" :key="individual.id">
 											<td>{{ individual.name }}</td>
-											<td>{{ individual.individual_id }}</td>
+											<td>{{ individual.beneficiary_id }}</td>
 											<td>{{ individual.passport_number }}</td>
 											<td>{{ individual.relationship.name}}</td>
 											<td>{{ individual.age }}</td>
@@ -85,16 +85,16 @@
 				<!-- Choose Direct Section -->
 				<ValidationObserver v-slot="{ handleSubmit }">
 					<form @submit.prevent="handleSubmit(goToCreateReferralPage)">
-						<!-- <ValidationProvider name="directIndividual_id" rules="required|numeric" v-slot="{ errors }">
-							<input v-model="directIndividual_id" type="text">
+						<!-- <ValidationProvider name="directbeneficiary_id" rules="required|numeric" v-slot="{ errors }">
+							<input v-model="directbeneficiary_id" type="text">
 							<span>{{ errors[0] }}</span>
 						</ValidationProvider> -->
 						
-						<ValidationProvider name="directIndividual_id" rules="required" v-slot="{ errors }">
+						<ValidationProvider name="directbeneficiary_id" rules="required" v-slot="{ errors }">
 						<div class="form-group">
-							<label for="directIndividual_id" class="form-label">Choose Direct</label>
-							<select name="directIndividual_id" v-model="directIndividual_id" id="directIndividual_id" class="form-control" aria-placeholder="fdgfdg">
-								<option v-for='individual in fileIndividuals' :value='individual.id' :key="individual.id">{{ individual.name }}</option>
+							<label for="directbeneficiary_id" class="form-label">Choose Direct</label>
+							<select name="directbeneficiary_id" v-model="directbeneficiary_id" id="directbeneficiary_id" class="form-control" aria-placeholder="fdgfdg">
+								<option v-for='beneficiary in filebeneficiaries' :value='beneficiary.id' :key="individual.id">{{ individual.name }}</option>
 							</select>
 							<span class="text-danger">{{ errors[0] }}</span>
 						</div>
@@ -108,7 +108,7 @@
 				<br>
 			</div>
 		
-		<!-- Registered Individual Modal -->
+		<!-- Registered Beneficiary Modal -->
 		<div class="modal fade" id="individualModal" tabindex="-1" aria-labelledby="individualModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -132,9 +132,9 @@
 							</div>
 							
 							<div class="form-group">
-								<label for="individual_id" class="form-label">File Individual ID</label>
-								<input id="individual_id" v-model="individualForm.individual_id" type="text" name="individual_id" class="form-control">
-								<HasError :form="individualForm" field="individual_id" />
+								<label for="beneficiary_id" class="form-label">File Beneficiary ID</label>
+								<input id="beneficiary_id" v-model="individualForm.beneficiary_id" type="text" name="beneficiary_id" class="form-control">
+								<HasError :form="individualForm" field="beneficiary_id" />
 							</div>
 
 							<hr class="col-8 mt-5 mb-5">
@@ -245,8 +245,8 @@ export default {
 			individualEditMode: false,
 			fileEditMode: false,
             file: '',
-            fileIndividuals: [],
-			directIndividual_id: '',
+            filebeneficiaries: [],
+			directbeneficiary_id: '',
 			relationships: [],
             // nationalities: {},
 			
@@ -267,7 +267,7 @@ export default {
                 age: '',
                 is_registered: '',
                 file_id: '1',
-                individual_id: '',
+                beneficiary_id: '',
                 gender_id: '0',
                 nationality_id: '0',
                 relationship_id: '0',
@@ -292,10 +292,10 @@ export default {
     methods:{
 		getIndividualByPassport(){
 			this.$Progress.start();
-			axios.get("/api/passport_individuals/get_individual_by_passport/"+this.individualForm.passport_number)
+			axios.get("/api/passport_beneficiaries/get_individual_by_passport/"+this.individualForm.passport_number)
             .then(({data}) => {
                 this.directIndividual = data.data
-				Fire.$emit('individualChanged');
+				Fire.$emit('beneficiaryChanged');
 			
 				if(this.directIndividual){
 					this.individualExists = true	
@@ -318,17 +318,17 @@ export default {
 			axios.get('/api/nationalities').then(({data}) => (this.nationalities = data.data));
 			this.$Progress.finish();
 		},
-        passportExistsIndividuals(){
+        passportExistsbeneficiaries(){
 			
 			if(this.file){
 				this.$Progress.start();
-				axios.get('/api/files/'+this.file.id+'/individuals')
+				axios.get('/api/files/'+this.file.id+'/beneficiaries')
 				.then(({data}) => {
-					this.fileIndividuals = data.data
+					this.filebeneficiaries = data.data
 				});
 				this.$Progress.finish();
 			}else{
-				this.fileIndividuals = []
+				this.filebeneficiaries = []
 			}
 		},
 		getRelationships(){
@@ -352,10 +352,10 @@ export default {
 		},
 		createIndividual() {
 			this.$Progress.start();
-			this.individualForm.post('/api/individuals')
+			this.individualForm.post('/api/beneficiaries')
 			.then(() => {
 				// success
-				Fire.$emit('fileIndividualsChanged');
+				Fire.$emit('filebeneficiariesChanged');
 				$('#individualModal').modal('hide')
 				Toast.fire({
 					icon: 'success',
@@ -371,10 +371,10 @@ export default {
 		},
 		updateIndividual(){
 			this.$Progress.start();
-			this.individualForm.put('/api/individuals/'+this.individualForm.id)
+			this.individualForm.put('/api/beneficiaries/'+this.individualForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('fileIndividualsChanged');
+				Fire.$emit('filebeneficiariesChanged');
 				$('#individualModal').modal('hide')
 				Swal.fire(
 					'Updated!',
@@ -401,10 +401,10 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					this.individualForm.delete('/api/individuals/'+id)
+					this.individualForm.delete('/api/beneficiaries/'+id)
 					.then(() => {
 						// success
-						Fire.$emit('fileIndividualsChanged');
+						Fire.$emit('filebeneficiariesChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -427,7 +427,7 @@ export default {
             .then(({data}) => {
 					this.file = data.data
 					Fire.$emit('fileChanged');
-					Fire.$emit('fileIndividualsChanged');
+					Fire.$emit('filebeneficiariesChanged');
 					
 					this.$Progress.finish();
 				if(this.file){
@@ -520,20 +520,20 @@ export default {
 			})
 		},
 		goToIndividualPage(){
-			router.push({ path: '/individuals/'+this.directIndividual_id })
+			router.push({ path: '/beneficiaries/'+this.directbeneficiary_id })
 		},
 
 		goToCreateReferralPage(){
-			router.push({ path: '/individuals/'+this.directIndividual_id + '/referrals/create' })
+			router.push({ path: '/beneficiaries/'+this.directbeneficiary_id + '/referrals/create' })
 		},
 
     },
 	created(){
 		Fire.$on('fileChanged', () => {
-			this.passportExistsIndividuals();
+			this.passportExistsbeneficiaries();
 		});
-		Fire.$on('fileIndividualsChanged', () => {
-			this.passportExistsIndividuals();
+		Fire.$on('filebeneficiariesChanged', () => {
+			this.passportExistsbeneficiaries();
 		});
 		this.getRelationships();
 		// this.getNationalities();

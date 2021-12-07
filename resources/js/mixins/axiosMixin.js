@@ -82,11 +82,11 @@ export default {
 			this.$Progress.finish();
 		},
 
-		getCaseeIndividuals(caseeId){
+		getCaseebeneficiaries(caseeId){
 			this.$Progress.start();
-			axios.get('/api/individuals/' + caseeId + '/other_casee_individuals/')
+			axios.get('/api/beneficiaries/' + caseeId + '/other_casee_beneficiaries/')
 			.then(({data}) => {
-				this.caseeIndividuals = data.data
+				this.caseebeneficiaries = data.data
 			});
 			this.$Progress.finish();
 		},

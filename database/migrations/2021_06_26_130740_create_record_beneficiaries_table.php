@@ -15,13 +15,13 @@ class CreateRecordBeneficiariesTable extends Migration
     {
         Schema::create('record_beneficiary', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('individual_id');
+            $table->unsignedInteger('beneficiary_id');
             $table->unsignedInteger('record_id');
             $table->boolean('status')->default(0);
             $table->timestamps();
 
             // foreign keys
-            $table->foreign('individual_id')->references('id')->on('individuals')->onDelete('cascade');
+            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
             $table->foreign('record_id')->references('id')->on('records')->onDelete('cascade');
         });
     }

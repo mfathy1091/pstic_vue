@@ -14,7 +14,7 @@ class RecordBeneficiary extends Model
 
     public function individual()
     {
-        return $this->belongsTo(Individual::class, 'individual_id');
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
     }
 
     public function record()

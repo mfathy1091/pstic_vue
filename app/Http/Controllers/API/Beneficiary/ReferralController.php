@@ -15,7 +15,7 @@ class ReferralController extends Controller
 
     public function index(Request $request)
     {
-        $referrals =  Referral::with('referralSource')->where('original_direct_individual_id', $request->individual_id)->get();
+        $referrals =  Referral::with('referralSource')->where('original_direct_beneficiary_id', $request->beneficiary_id)->get();
         // $referrals =  Referral::all();
         
         return response()->json([

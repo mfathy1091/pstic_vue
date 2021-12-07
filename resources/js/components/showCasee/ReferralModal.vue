@@ -86,7 +86,7 @@ export default {
 			// editMode: false,
             //  selected: this.selectedUser;,
 			casee: '',
-            caseeIndividuals: [],
+            caseebeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
@@ -167,7 +167,7 @@ export default {
 
 	created() {
 		this.getCasee(this.caseeId)
-		this.getCaseeIndividuals(this.caseeId)
+		this.getCaseebeneficiaries(this.caseeId)
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReasons()

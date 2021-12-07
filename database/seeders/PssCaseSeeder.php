@@ -20,19 +20,19 @@ class PssCaseSeeder extends Seeder
         // PSS Cases
         $pssCases = [
             [   
-                'direct_individual_id' => '1',
+                'direct_beneficiary_id' => '1',
                 'assigned_psw_id' => '4',
                 'current_status_id' => '2',
             ],
             [   
-                'direct_individual_id' => '2',
+                'direct_beneficiary_id' => '2',
                 'assigned_psw_id' => '4',
                 'current_status_id' => '1',
             ],
 
         
             [   
-                'direct_individual_id' => '2',
+                'direct_beneficiary_id' => '2',
                 'assigned_psw_id' => '3',
                 'current_status_id' => '1',
             ],

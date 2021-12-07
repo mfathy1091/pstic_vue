@@ -6,19 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Casee;
-use App\Models\Individual;
+use App\Models\Beneficiary;
 
-class IndividualController extends Controller
+class BeneficiaryController extends Controller
 {
     public function liveSearch(Request $request)
     {
-        $data = Individual::where('name', 'LIKE','%'.$request->keyword.'%')->get();
+        $data = Beneficiary::where('name', 'LIKE','%'.$request->keyword.'%')->get();
 
         $file_number = $request->keyword;
 
-        $individuals = Individual::query();
+        $beneficiaries = Beneficiary::query();
 
-        $data = $individuals->with('casee')->whereHas('casee', function($q) use ($file_number){
+        $data = $beneficiaries->with('casee')->whereHas('casee', function($q) use ($file_number){
             return $q->where('number', 'like', "%$file_number%");
         })->get();
 
@@ -29,20 +29,20 @@ class IndividualController extends Controller
 
     public function show($id)
     {
-        $individual = Individual::with('casee', 'casee.individuals', 'relationship', 'gender', 'nationality')->findOrFail($id);
+        $beneficiary = Beneficiary::with('casee', 'casee.beneficiaries', 'relationship', 'gender', 'nationality')->findOrFail($id);
 
-        if($individual){
-            return ['data' => $individual];
+        if($beneficiary){
+            return ['data' => $beneficiary];
         }
 
-        return ['message' => 'Individual does not exist'];
+        return ['message' => 'Does not exist'];
     }
 
     public function update(Request $request, $id)
     {
-        $individual = Individual::findOrFail($id);
+        $beneficiary = Beneficiary::findOrFail($id);
 
-        if($individual){
+        if($beneficiary){
 
             $this->validate($request, [
                 'casee_id' => 'required|string|max:255',
@@ -50,20 +50,20 @@ class IndividualController extends Controller
                 'name' => 'required',
                 'age' => 'required|string|max:255', 
                 'is_registered' => '', 
-                'individual_id' => 'required|string|max:255|unique:individuals,individual_id,'.$individual->id,
+                'beneficiary_id' => 'required|string|max:255|unique:beneficiaries,beneficiary_id,'.$beneficiary->id,
                 'gender_id' => 'required', 
                 'nationality_id' => 'required', 
                 'relationship_id' => 'required', 
                 'current_phone_number' => 'required', 
             ]);
 
-            $individual->update([
+            $beneficiary->update([
                 'casee_id' => $request->casee_id,
                 'passport_number' => $request->passport_number,
                 'name' => $request->name,
                 'age' => $request->age,
                 'is_registered' => $request->is_registered,
-                'individual_id' => $request->individual_id,
+                'beneficiary_id' => $request->beneficiary_id,
                 'gender_id' => $request->gender_id,
                 'nationality_id' => $request->nationality_id,
                 'relationship_id' => $request->relationship_id,
@@ -75,15 +75,15 @@ class IndividualController extends Controller
 
     }
 
-    public function unlinkCasee($individual_id){
+    public function unlinkCasee($beneficiary_id){
         
         
-        $individual = Individual::findOrFail($individual_id);
-        if($individual){
-            $individual->casee()->dissociate();
-            $individual->save();
+        $beneficiary = Beneficiary::findOrFail($beneficiary_id);
+        if($beneficiary){
+            $beneficiary->casee()->dissociate();
+            $beneficiary->save();
             return response()->json([
-                'data' => $individual,
+                'data' => $beneficiary,
                 'message' => 'case is unlinked'
             ]);
         }
@@ -97,20 +97,20 @@ class IndividualController extends Controller
             'name' => 'required',
             'age' => 'required|string|max:255', 
             'is_registered' => '', 
-            'individual_id' => 'required|string|max:255|unique:individuals',
+            'beneficiary_id' => 'required|string|max:255|unique:beneficiaries',
             'gender_id' => 'required', 
             'nationality_id' => 'required', 
             'relationship_id' => 'required', 
             'current_phone_number' => 'required', 
         ]);
 
-        $individual = Individual::create([
+        $beneficiary = Beneficiary::create([
             'casee_id' => $request->casee_id,
             'passport_number' => $request->passport_number,
             'name' => $request->name,
             'age' => $request->age,
             'is_registered' => $request->is_registered,
-            'individual_id' => $request->individual_id,
+            'beneficiary_id' => $request->beneficiary_id,
             'gender_id' => $request->gender_id,
             'nationality_id' => $request->nationality_id,
             'relationship_id' => $request->relationship_id,
@@ -119,34 +119,34 @@ class IndividualController extends Controller
 
         return response()->json([
             'message'=>'Added Successfully!!',
-            'individual'=>$individual
+            'beneficiary'=>$beneficiary
         ]);
     }
 
     public function destroy($id)
     {
-        $individual = Individual::findOrFail($id);
+        $beneficiary = Beneficiary::findOrFail($id);
 
         // if it exists
-        if($individual){
+        if($beneficiary){
             // then delete
-            $individual->delete();
+            $beneficiary->delete();
         }
 
-        return ['message' => 'Individual deleted'];
+        return ['message' => 'beneficiary deleted'];
     }
 
-    public function getOtherCaseeIndividuals($individual_id)
+    public function getOtherCaseebeneficiaries($beneficiary_id)
     {
-        $individual = Individual::findOrFail($individual_id);
-        $casee = $individual->casee;
+        $beneficiary = Beneficiary::findOrFail($beneficiary_id);
+        $casee = $beneficiary->casee;
 
         // if it exists
-        if($individual){
-            // return ['data' => $casee->individuals()->with('relationship', 'gender', 'nationality')->get()];
+        if($beneficiary){
+            // return ['data' => $casee->beneficiaries()->with('relationship', 'gender', 'nationality')->get()];
 
             // $users = User::all()->except($currentUser->id);
-            return ['data' => $casee->individuals()->with('relationship', 'gender', 'nationality')->get()->except($individual_id)];
+            return ['data' => $casee->beneficiaries()->with('relationship', 'gender', 'nationality')->get()->except($beneficiary_id)];
         }
 
         return ['data' => ''];
@@ -156,9 +156,9 @@ class IndividualController extends Controller
 
         // $file_number = $request->keyword;
 
-        // $individuals = Individual::query();
+        // $beneficiaries = Beneficiary::query();
 
-        // $data = $individuals->with('casee')->whereHas('casee', function($q) use ($file_number){
+        // $data = $beneficiaries->with('casee')->whereHas('casee', function($q) use ($file_number){
         //     return $q->where('number', '=', "%$file_number%");
         // })->get();
 

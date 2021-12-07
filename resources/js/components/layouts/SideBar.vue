@@ -136,7 +136,7 @@
                         
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <router-link to="/individuals/check" class="nav-link">
+                                <router-link to="/beneficiaries/check" class="nav-link">
                                     <i class="fas fa-minus nav-icon"></i>
                                     <p>Add Referral</p>
                                 </router-link>

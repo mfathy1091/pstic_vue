@@ -14,9 +14,9 @@ class Casee extends Model
         return $this->belongsTo(User::class, 'created_user_id');
     }
 
-    public function individuals()
+    public function beneficiaries()
     {
-        return $this->hasMany(Individual::class);
+        return $this->hasMany(Beneficiary::class);
     }
 
     public function referrals()

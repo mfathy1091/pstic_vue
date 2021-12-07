@@ -114,7 +114,7 @@
 
                                                 
                             <a class="clickable mb-6" @click="showSelectBeneficiariesModel">
-                                Choose individuals from File<i class="fa fa-edit red fa"></i>
+                                Choose beneficiaries from File<i class="fa fa-edit red fa"></i>
                             </a>
                             
                             <!-- Beneficiaries -->
@@ -247,7 +247,7 @@ export default {
             currentBeneficiary: '',
             recordBeneficiaries: [],
             
-            caseeIndividuals: [],
+            caseebeneficiaries: [],
             remianingBeneficiaries: [],
 
 
@@ -258,7 +258,7 @@ export default {
             }),
             beneficiaryForm: new Form({
                 id: '',
-                individual_id: '',
+                beneficiary_id: '',
                 record_id: '',
                 status: '',
                 disabilities: [],
@@ -267,7 +267,7 @@ export default {
                 // disabilities: [],
             }),
             recordBeneficiaryForm: new Form({
-                individual_id: '',
+                beneficiary_id: '',
                 status: '',
             }),
             recordForm: new Form({
@@ -347,7 +347,7 @@ export default {
             let status = document.getElementById('status'+individual.id).value;
 
             // check if the beneficiary already in the array
-            let found = this.recordForm.recordBeneficiaries.find(o => o.individual_id === individual.id);
+            let found = this.recordForm.recordBeneficiaries.find(o => o.beneficiary_id === individual.id);
             
             // if aleady in the array; just update the status
             if(found){
@@ -361,7 +361,7 @@ export default {
             else{
                 //if($status == 1 || $status == 0){
                     let recordBeneficiary = {
-                        "individual_id": individual.id,
+                        "beneficiary_id": individual.id,
                         "status": status,
                     };
                     this.recordForm.recordBeneficiaries.push(recordBeneficiary);
@@ -428,11 +428,11 @@ export default {
             this.getRecordBeneficiaries()
         },
         
-        getCaseeIndividuals(){
+        getCaseebeneficiaries(){
             this.$Progress.start();
-            axios.get('/api/casees/'+this.casee.id+'/individuals')
+            axios.get('/api/casees/'+this.casee.id+'/beneficiaries')
             .then(({data}) => {
-                this.caseeIndividuals = data.data
+                this.caseebeneficiaries = data.data
             });
             this.$Progress.finish();
 		},
@@ -442,7 +442,7 @@ export default {
 			axios.get('/api/records/' + this.record.id + '/record-beneficiaries', { params: { record_id: this.record.id } })
             .then(({data}) => {
                 this.recordBeneficiaries = data.data
-                this.remianingBeneficiaries = this.caseeIndividuals.filter(function(obj) { return this.recordBeneficiaries.indexOf(obj) == -1; });
+                this.remianingBeneficiaries = this.caseebeneficiaries.filter(function(obj) { return this.recordBeneficiaries.indexOf(obj) == -1; });
             });
 			this.$Progress.finish();
 		},
@@ -557,7 +557,7 @@ export default {
 		// console.log($getPermissions());
 		
 
-        this.getCaseeIndividuals()
+        this.getCaseebeneficiaries()
 		this.getServices()
         this.getDisabilities()
         
@@ -578,7 +578,7 @@ export default {
 		
 	},
     // watch: {
-    //     'caseeIndividuals'(next, prev) {
+    //     'caseebeneficiaries'(next, prev) {
     //         this.fileNumber
     //     },
     // },

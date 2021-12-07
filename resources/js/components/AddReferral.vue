@@ -19,11 +19,11 @@
 							<br>
 							<br>
 
-							<div class="form-group" v-if="fileIndividuals">
+							<div class="form-group" v-if="filebeneficiaries">
 								<label class="typo__label">Select Beneficiaries</label>
 								<multiselect 
 								v-model="referralForm.referral_beneficiaries" 
-								:options="fileIndividuals" 
+								:options="filebeneficiaries" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -39,7 +39,7 @@
 								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 							</div>
 							
-							<div class="form-group" v-if="fileIndividuals">
+							<div class="form-group" v-if="filebeneficiaries">
 								<label class="typo__label">Select Direct</label>
 								<multiselect 
 								v-model="referralForm.direct_beneficiaries" 
@@ -132,7 +132,7 @@ export default {
 			createdReferral: '',
 
             file: '',
-            fileIndividuals: [],
+            filebeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
@@ -183,11 +183,11 @@ export default {
 		},
 
 
-        getFileIndividuals(){
+        getFilebeneficiaries(){
 			this.$Progress.start();
-			axios.get('/api/individuals/' + this.$route.params.id + '/other_file_individuals/')
+			axios.get('/api/beneficiaries/' + this.$route.params.id + '/other_file_beneficiaries/')
 			.then(({data}) => {
-				this.fileIndividuals = data.data
+				this.filebeneficiaries = data.data
 			});
 			this.$Progress.finish();
 
@@ -198,7 +198,7 @@ export default {
 			this.referralForm.post('/api/referrals')
 			.then((res) => {
 				// success
-				// Fire.$emit('fileIndividualsChanged');
+				// Fire.$emit('filebeneficiariesChanged');
 				
 				this.createdReferral = res.data.referral
 				
@@ -224,7 +224,7 @@ export default {
 
 
 		goToIndividualPage(){
-			router.push({ path: '/individuals/'+this.directIndividual.id })
+			router.push({ path: '/beneficiaries/'+this.directIndividual.id })
 			console.log(directIndividual.id)
 		},
 		
@@ -240,7 +240,7 @@ export default {
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReasons()
-		this.getFileIndividuals()
+		this.getFilebeneficiaries()
 	}
 }
 </script>

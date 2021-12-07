@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Individual extends Model
+class Beneficiary extends Model
 {
     protected $guarded=[];
 
@@ -17,7 +17,7 @@ class Individual extends Model
 
     public function records()
     {
-        return $this->belongsToMany(Record::class, 'record_beneficiary', 'individual_id', 'record_id');
+        return $this->belongsToMany(Record::class, 'record_beneficiary', 'beneficiary_id', 'record_id');
     }
 
     
@@ -39,7 +39,7 @@ class Individual extends Model
         return $query->whereBetween(['age', [$from, $to]]);
     }
 
-    public function scopeRelatedCaseIndividuals($query, $caseeId)
+    public function scopeRelatedCasebeneficiaries($query, $caseeId)
     {
         return $query->where('casee_id', $caseeId);
     }
@@ -61,11 +61,11 @@ class Individual extends Model
 
 /*     public function pssCases()
     {
-        return $this->belongsToMany(PssCase::class, 'individuals_cases', 'individual_id', 'pss_casee_id');
+        return $this->belongsToMany(PssCase::class, 'beneficiaries_cases', 'beneficiary_id', 'pss_casee_id');
     } */
 
     public function pssCases()
     {
-        return $this->hasMany(PssCase::class, 'direct_individual_id');
+        return $this->hasMany(PssCase::class, 'direct_beneficiary_id');
     }
 }

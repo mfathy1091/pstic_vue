@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="col mb-4" >
-                        <h6 class="card-subtitle mb-2 text-muted">Linked Individuals</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">Linked beneficiaries</h6>
                         <!-- <div class="ml-4" v-for="reason in this.referral.reasons" :key="reason.id">
                             <li>{{ reason.name  }}</li>
                         </div> -->
@@ -73,8 +73,8 @@
                 </div>  
 			</div>
 		</div>
-        <!-- Linked Individuals Section -->
-        <CaseeIndividuals v-if="casee" :casee_id="casee.id" />
+        <!-- Linked beneficiaries Section -->
+        <Caseebeneficiaries v-if="casee" :casee_id="casee.id" />
 
         <CaseeReferrals v-if="casee" :caseeId="casee.id" />
 
@@ -92,7 +92,7 @@
 
 <script>
 import Form from 'vform'
-import CaseeIndividuals from './CaseeIndividuals.vue'
+import Caseebeneficiaries from './Caseebeneficiaries.vue'
 import CaseeReferrals from './CaseeReferrals.vue'
 import Multiselect from 'vue-multiselect'
 import ReferralModal from './ReferralModal'
@@ -102,7 +102,7 @@ export default {
 	mixins: [axiosMixin],
     name: 'ShowCasee',
     components: {
-        CaseeIndividuals,
+        Caseebeneficiaries,
         CaseeReferrals,
         Multiselect,
         ReferralModal,
@@ -127,12 +127,12 @@ export default {
 
             caseeEditMode: false,
             
-            linkedIndividuals: [],
+            linkedbeneficiaries: [],
 
             caseeForm: new Form({
                 id: '',
                 fileNumber: '',
-                linked_individuals: [],
+                linked_beneficiaries: [],
             }),
             format: '',
             regex: '^',
