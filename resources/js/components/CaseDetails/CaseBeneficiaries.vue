@@ -16,8 +16,6 @@
 				</button>
 			</div>
 
-            
-
 
             <div class="row m-0" v-if="casee">
                 <p v-if="!casee.beneficiaries.length" class="ml-5 text-primary">

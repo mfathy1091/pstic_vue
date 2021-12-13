@@ -90,7 +90,12 @@ export default {
 			});
 			this.$Progress.finish();
 		},
-
+		getReferral(referralId){			
+			this.$Progress.start();
+			axios.get("/api/referrals/"+referralId)
+            .then(({data}) => (this.referral = data.data));
+			this.$Progress.finish();
+		},
 	},
 
 

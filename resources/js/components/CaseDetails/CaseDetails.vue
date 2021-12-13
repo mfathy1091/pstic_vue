@@ -10,12 +10,10 @@
     }
 
     .router-link-active.tab-header{
-        border-top: 1px solid rgb(0, 0, 0);
-        border-left: 1px solid rgb(0, 0, 0);
-        border-right: 1px solid rgb(0, 0, 0);
+        border-top: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
     }
-
-
 
     .back-btn{
         background-color: #f4f6f9 !important;

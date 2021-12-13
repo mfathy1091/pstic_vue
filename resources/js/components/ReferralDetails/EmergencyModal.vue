@@ -24,7 +24,15 @@
 								<input v-model="emergencyForm.emergency_date" id="emergency_date" type="text" name="emergency_date" class="form-control" autocomplete="off" placeholder="YYYY-MM-DD">
 								<!-- <HasError :form="emergencyForm" field="emergency_date" /> -->
 							</div>
-
+							
+							<div class="form-group">
+								<label for="location" class="form-label">Emergency Month</label>
+								<select v-model="emergencyForm.emergency_type_id" name="location" id="location" class="form-control">
+									<option value='0' disabled selected>Choose</option>
+									<option :value="record.id" v-for="record in referral.records" :key="record.id">{{ record.month.name }}</option>
+								</select>
+								<!-- <HasError :form="emergencyForm" field="location" /> -->
+							</div>
 
 							<div class="form-group">
 								<label for="location" class="form-label">Emergency Type</label>
@@ -80,21 +88,22 @@ export default {
 	mixins: [axiosMixin],
 	components: { Multiselect },
     props:{
-		recordId: {
-            type: Number,
-            required: true
-        },
+		// recordId: {
+        //     type: Number,
+        //     required: true
+        // },
         emergencyEditMode: {
             type: Boolean,
             required: true
         },
 		selectedEmergency: {
-            type: Object,
+            // type: Object,
             required: true
         },
     },
 	data() {
 		return {
+			referral: "",
 			caseeBeneficiaries: [],
 			emergencyTypes: [],
 			emergencyForm: new Form({
@@ -168,7 +177,6 @@ export default {
 			})
 		},
 
-
 		updateEmergency(){
 			this.$Progress.start();
 			this.emergencyForm.put('/api/emergencies/'+this.emergencyForm.id)
@@ -192,6 +200,7 @@ export default {
 	},
 
     created (){
+		this.getReferral(this.$route.params.referralId)
         this.getCaseebeneficiaries();
         this.getEmergencyTypes();
 		console.log(this.$route.params.referralId);

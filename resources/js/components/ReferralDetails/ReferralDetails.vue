@@ -59,6 +59,68 @@
                     </div>
                 </div>
             </div>
+
+            <hr>
+            <h5>Records</h5>
+            <div class="row m-3">
+				<button class="btn btn-success btn-sm mr-2">
+					<i class="fas fa-plus-circle"></i><span><b> Activity</b></span>
+				</button>
+                <button class="btn btn-success btn-sm mr-2" @click="showCreateEmergencyModal">
+					<i class="fas fa-plus-circle"></i><span><b> Emergency</b></span>
+				</button>
+				<button class="btn btn-secondary btn-sm">
+					<i class="fas fa-sync-alt"></i>
+				</button>
+			</div>
+            
+            <table class="table table-hover table-striped table-sm border">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Activities</th>
+                        <th>Emergencies</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="record in referral.records" :key="record.id">
+                        <td>
+                            <span>{{ record.month.name }}</span>
+                            <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
+                            <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
+                            <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
+                            <span v-show="record.is_new == 1" class="badge badge-pill badge-info">New</span>
+                        </td>
+                        <td></td>
+                        <td>
+                            <div class="list-unstyled">
+                                <li v-for="emergency in record.emergencies" :key="emergency.id">
+                                    <span>{{ emergency.emergency_date | myDate }}</span>
+                                </li>
+                            </div>
+                        </td>
+                        <td>
+                            <a class="clickable">
+                                <i class="fa fa-edit blue"></i>
+                            </a>
+                            
+                            <a class="clickable">
+                                <i class="fa fa-trash red"></i>
+                            </a>
+                            <router-link
+                            :to="{name: 'RecordDetails', params: { recordId: record.id }}"
+                            class="fa fa-eye blue align-middle"
+                            >
+                            
+                            </router-link>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+<br><br>
+
+
+
             
             <section>
                 <ul class="nav">
@@ -80,40 +142,59 @@
                 <router-view :key="$route.path"></router-view>
             </section>
         </div>
+            <EmergencyModal 
+            :v-if="selectedEmergency.id"
+            :emergencyEditMode='emergencyEditMode' 
+            :selectedEmergency='selectedEmergency'
+            v-on:recordsChanged="getReferral()">
+            </EmergencyModal>
     </div>
 </template>
 <script>
 import router from '../../router'
+import EmergencyModal from './EmergencyModal'
+import Multiselect from 'vue-multiselect'
+import axiosMixin from '../../mixins/axiosMixin'
 
 export default {
+    mixins: [axiosMixin],
     props: {
         referralId: {
             // type: String,
             required: true
         }
     },
+    components: {
+        EmergencyModal,
+        Multiselect,
+    },
     data(){
         return {
             referral: "",
+            selectedEmergency: "",
+            emergencyEditMode: false,
         }
     },
     methods: {
-        getReferral(){			
-			this.$Progress.start();
-			axios.get("/api/referrals/"+this.referralId)
-            .then(({data}) => (this.referral = data.data));
-			this.$Progress.finish();
-		},
+
 
         showEditReferralModal(){
 
         },
-        goBack(){
-            router.go(-1);
-        }
+        showCreateEmergencyModal(){
+			this.emergencyEditMode = false;
+			this.selectedEmergency = {};
+			$('#emergencyModal').modal('show')
+		},
+
+        showEditEmergencyModal(emergency){
+			this.emergencyEditMode = true;
+			this.selectedEmergency = emergency;
+			$('#emergencyModal').modal('show')
+		},
     },
     created(){
-        this.getReferral();
+        this.getReferral(this.referralId);
     }
 }
 </script>
