@@ -1,66 +1,56 @@
 <style scoped>
 .badge{
-	font-size: 0.9rem;
-	margin: 2px;
+	font-size: 0.7rem;
+	margin-left: 2px;
+	
 }
 </style>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
-	<div class="container-fluid">
-		<div class="row mt-5">
-			<div class="col-md-12">
-				<div class="card">
-				<div class="card-header">
-					<h3 class="card-title">Roles</h3>
-
-					<div class="card-tools">
-						<button class="btn btn-success" @click="showCreateRoleModal" v-if="$can('role_create')">
-							Add Role
-						</button>
-					</div>
-					
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0">
-					<table class="table table-hover text-nowrap">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Permissions</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody v-if="roles">
-								<tr v-for="role in roles" :key="role.id">
-									<td>{{ role.id }}</td>
-									<td>{{ role.name }}</td>
-									<td class="row">
-										<span v-for="permission in role.permissions" :key="permission.id" class="badge badge-pill badge-primary">
-											{{permission.name}}
-										</span>
-									</td>
-									<td>
-										<a href="#" @click="showEditRoleModal(role)" v-if="$can('role_edit')">
-											<i class="fa fa-edit blue"></i>
-										</a>
-										
-										<a href="#" @click="deleteRole(role.id)" v-if="$can('role_delete')">
-											<i class="fa fa-trash red"></i>
-										</a>
-									</td>
-								</tr>
-						</tbody>
-					</table>
-
-				</div>
-				<!-- /.card-body -->
-				</div>
-				<!-- /.card -->
+	<div class="container-fluid mt-3">
+		<h3>Roles</h3>
+		<div class="card-body bg-white pt-2 p-0 mt-3">
+			<div class="row m-3">
+				<button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal">
+				<!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
+					<i class="fas fa-plus-circle"></i><span><b> Role</b></span>
+				</button>
+				<button class="btn btn-secondary btn-sm" @click="getRoles">
+					<i class="fas fa-sync-alt"></i>
+				</button>
 			</div>
+			<table class="table table-hover table-sm table-striped  border text-nowrap">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Permissions</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody v-if="roles">
+						<tr v-for="role in roles" :key="role.id">
+							<td>{{ role.name }}</td>
+							<td class="row">
+								<span v-for="permission in role.permissions" :key="permission.id" class="badge badge-pill badge-primary">
+									{{permission.name}}
+								</span>
+							</td>
+							<td>
+								<a href="#" @click="showEditRoleModal(role)" v-if="$can('role_edit')">
+									<i class="fa fa-edit blue"></i>
+								</a>
+								
+								<a href="#" @click="deleteRole(role.id)" v-if="$can('role_delete')">
+									<i class="fa fa-trash red"></i>
+								</a>
+							</td>
+						</tr>
+				</tbody>
+			</table>
 		</div>
+
 
 		<!-- Modal -->
 		<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">

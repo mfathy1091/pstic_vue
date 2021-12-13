@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['referrals'=> 'API\ReferralController']);
 
     Route::get('casees/{casee}/referrals', 'API\ReferralController@getCaseeReferrals');
+    Route::get('casees/{casee}/beneficiaries', 'API\BeneficiaryController@getCaseeBeneficiaries');
+
     Route::get('beneficiaries/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
     // Route::get('beneficiaries/{beneficiary_id}/referrals', 'API\ReferralController@getIndividualReferrals');

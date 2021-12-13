@@ -35,9 +35,6 @@ class ReferralController extends Controller
         ];
 
         return response($data, 200);
-
-        
-
     }
 
     public function getIndividualReferrals(Request $request)

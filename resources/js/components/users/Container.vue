@@ -9,58 +9,51 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
-	<div class="container-fluid">
-		<div class="row mt-5">
-			<div class="col-md-12">
-				<div class="card">
-				<div class="card-header">
-					<h3 class="card-title">Users</h3>
-
-					<div class="card-tools" v-if="$can('user_create')">
-						<button class="btn btn-success" @click="showCreateUserModal">Add New</button>
-					</div>
-					
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0">
-					<table class="table table-hover text-nowrap">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Registered At</th>
-								<th>Roles</th>
-								<th>Modify</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="user in users" :key="user.id">
-								<td>{{ user.id }}</td>
-								<td>{{ user.name }}</td>
-								<td>{{ user.email }}</td>
-								<td>{{ user.created_at | myDate }}</td>
-								<td>
-									<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
-								</td>
-								<td>
-									<!-- <a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')"> -->
-									<a class="clickable" @click="showEditUserModal(user)">
-										<i class="fa fa-edit blue"></i>
-									</a>
-									
-									<a class="clickable" @click="deleteUser(user.id)" v-if="$can('user_delete')">
-										<i class="fa fa-trash red"></i>
-									</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-				</div>
-				<!-- /.card -->
+	<div class="container-fluid mt-3">
+		<h3>Users</h3>
+		<div class="card-body bg-white pt-2 p-0 mt-3">
+			<div class="row m-3">
+				<button class="btn btn-success btn-sm mr-2" @click="showCreateUserModal">
+					<i class="fas fa-plus-circle"></i><span><b> User</b></span>
+				</button>
+				<button class="btn btn-secondary btn-sm" @click="getUsers">
+					<i class="fas fa-sync-alt"></i>
+				</button>
 			</div>
+
+
+			<table class="table table-hover table-striped table-sm border m-0">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Registered At</th>
+						<th>Roles</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="user in users" :key="user.id">
+						<td>{{ user.name }}</td>
+						<td>{{ user.email }}</td>
+						<td>{{ user.created_at | myDate }}</td>
+						<td>
+							<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
+						</td>
+						<td>
+							<!-- <a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')"> -->
+							<a class="clickable" @click="showEditUserModal(user)">
+								<i class="fa fa-edit blue"></i>
+							</a>
+							
+							<a class="clickable" @click="deleteUser(user.id)" v-if="$can('user_delete')">
+								<i class="fa fa-trash red"></i>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
 		</div>
 
 		<!-- Modal -->

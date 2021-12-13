@@ -84,6 +84,11 @@ class Referral extends Model
         return $this->hasMany(Record::class)->orderBy('month_id', 'DESC');
     }
 
+    public function currentRecord()
+    {
+        return $this->hasMany(Record::class)->orderBy('month_id', 'DESC');
+    }
+
     
 }
 

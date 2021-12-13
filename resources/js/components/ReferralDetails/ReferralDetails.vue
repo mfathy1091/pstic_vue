@@ -1,20 +1,41 @@
+<style scoped>
+.router-link-active{
+    background-color: #ffffff !important;
+    color: #459adf !important;
+}
+
+.tab-header{
+    color: #343a40 !important;
+}
+
+.back-btn{
+    background-color: #ffffff !important;
+    color: #459adf !important;
+}
+
+</style>
+
 <template>
-<div>
+    <div>
+        <div class="card-body bg-white pt-2" v-if="this.referral">
 
-    
-    <section class="card mt-3" v-if="this.referral">
-        <div class="card-header">
-            <h5 class="m-0">
-                Referral Details
-            <span @click="showEditReferralModal"
-            id='clickableAwesomeFont' class="ml-5">
-                <i class="fa fa-edit blue"></i>
-            </span>
-            </h5>
-        </div>
+            <div class="row mt-3">
+                <router-link
+                :to="{ name: 'caseReferrals' }"
+                class="back-btn pl-3 pr-3">
+                    <i class="fas fa-arrow-left"></i>
+                </router-link>
 
-        <div class="card-body">
-            <div class="row">
+                <h5>        
+                    {{ this.referral.referral_source.name }} / {{ this.referral.referral_date | myDate  }}
+                </h5>
+                <span @click="showEditReferralModal"
+                    id='clickableAwesomeFont' class="ml-5">
+                        <i class="fa fa-edit blue"></i>
+                </span>
+            </div>
+
+            <div class="row m-3">
                 <div class="col mb-4">
                     <h6 class="card-subtitle mb-2 text-muted">Referral Source</h6>
                     <div class="ml-4">
@@ -38,37 +59,42 @@
                     </div>
                 </div>
             </div>
+            
+            <section>
+                <ul class="nav">
+                    <li v-for="record in referral.records" :key="record.id" class="nav-item">
+                        <router-link
+                        :to="{
+                            name: 'RecordDetails',
+                            params: {recordId: record.id}
+                            }"
+                        class="nav-link tab-header">
+                            <span>{{ record.month.name }}</span>
+                            <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
+                            <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
+                            <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
+                            <span v-show="record.is_new == 1" class="badge badge-pill badge-info">New</span>
+                        </router-link>
+                    </li>
+                </ul>
+                <router-view :key="$route.path"></router-view>
+            </section>
         </div>
-    </section>
-    
-    <section>
-        <ul class="nav nav-pills nav-fill">
-            <li v-for="record in referral.records" :key="record.id" class="nav-item">
-                <router-link
-                :to="{
-                    name: 'RecordDetails',
-                    params: {recordId: record.id}
-                    }"
-                class="nav-link active">
-                <span>{{ record.month.name }}</span>
-                </router-link>
-            </li>
-        </ul>
-        <router-view :key="$route.path"></router-view>
-    </section>
-</div>
+    </div>
 </template>
 <script>
+import router from '../../router'
+
 export default {
     props: {
         referralId: {
-            type: String,
+            // type: String,
             required: true
         }
     },
     data(){
         return {
-            referral: {},
+            referral: "",
         }
     },
     methods: {
@@ -81,6 +107,9 @@ export default {
 
         showEditReferralModal(){
 
+        },
+        goBack(){
+            router.go(-1);
         }
     },
     created(){

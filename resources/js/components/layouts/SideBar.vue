@@ -47,9 +47,10 @@
 
                         <li class="nav-header">Cases</li>
                         <li class="nav-item">
-                            <router-link to="/search" class="nav-link">
-                                <i class="nav-icon fas fa-search"></i>
-                                <p>Search / Add Cases</p>
+                            <router-link
+                            to='/cases' class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Cases</p>
                             </router-link>
                         </li>
                         <li class="nav-item">

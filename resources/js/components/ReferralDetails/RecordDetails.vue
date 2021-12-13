@@ -1,69 +1,55 @@
 <template>
-<div>
-    <div class="card">
-        <div class="card-body" v-if="record">
-        
-            <!-- Activities Section -->
-            <Activities 
-            :v-if="record"
-            :record='record' 
-            v-on:recordsChanged="getReferral()">
-            </Activities>
-            <section>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Emergencies</h3>
+    <div>
+        <div class="card-body bg-white pt-2 pl-2 p-0" v-if="record">
+            <div class="row m-3">
+				<button class="btn btn-success btn-sm mr-2" @click="showCreateEmergencyModal">
+					<i class="fas fa-plus-circle"></i><span><b> Emergency</b></span>
+				</button>
+				<button class="btn btn-secondary btn-sm" @click="getEmergencies">
+					<i class="fas fa-sync-alt"></i>
+				</button>
+			</div>
+            
+            <p v-show="!record.emergencies.length" class="ml-3 text-secondary font-italic">
+                There are no emergencies!
+            </p>
 
-                        <div class="card-tools">
-                            <button class="btn btn-success" @click="showCreateEmergencyModal">Add New</button>
-                        </div>
-                        
-                    </div>
-                    <div class="card-body table-responsive p-0">
-                        <table class="table table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Type</th>
-                                    <th>Worker</th>
-                                    <th>Modify</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="emergency in record.emergencies" :key="emergency.id">
-                                    <td>{{ emergency.emergency_date | myDate }}</td>
-                                    <td>{{ emergency.emergency_type.name }}</td>
-                                    <td>{{ emergency.user.name }}</td>
-                                    <td>
-                                        <a class="clickable" @click="showEditEmergencyModal(emergency)">
-                                            <i class="fa fa-edit blue"></i>
-                                        </a>
-                                
-                                        <a class="clickable" @click="deleteEmergency(emergency.id)">
-                                            <i class="fa fa-trash red"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-				
+            <table v-show="record.emergencies.length" class="table table-hover table-striped table-sm border">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Worker</th>
+                        <th>Modify</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="emergency in record.emergencies" :key="emergency.id">
+                        <td>{{ emergency.emergency_date | myDate }}</td>
+                        <td>{{ emergency.emergency_type.name }}</td>
+                        <td>{{ emergency.user.name }}</td>
+                        <td>
+                            <a class="clickable" @click="showEditEmergencyModal(emergency)">
+                                <i class="fa fa-edit blue"></i>
+                            </a>
+                    
+                            <a class="clickable" @click="deleteEmergency(emergency.id)">
+                                <i class="fa fa-trash red"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                <!-- Modal -->
-                <EmergencyModal 
-                :v-if="selectedEmergency.id"
-                :emergencyEditMode='emergencyEditMode' 
-                :selectedEmergency='selectedEmergency'
-                :recordId='record.id' 
-                v-on:recordsChanged="getEmergencies()">
-                </EmergencyModal>
-            </section>
+            <EmergencyModal 
+            :v-if="selectedEmergency.id"
+            :emergencyEditMode='emergencyEditMode' 
+            :selectedEmergency='selectedEmergency'
+            :recordId='record.id' 
+            v-on:recordsChanged="getEmergencies()">
+            </EmergencyModal>
         </div>
     </div>
-
-
-</div>
 
 </template>
 <script>
@@ -89,9 +75,9 @@ export default {
     },
     data(){
         return {
-            record: {},
+            record: "",
             emergencies: [],
-            selectedEmergency: {},
+            selectedEmergency: "",
             emergencyEditMode: false,
         }
     },
