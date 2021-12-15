@@ -26,17 +26,6 @@ class CaseeController extends Controller
         return response($response, 200);
     }
 
-    public function caseebeneficiaries(Request $request, $id)
-    {
-        $casebeneficiaries = Beneficiary::with('casee', 'casee.beneficiaries', 'relationship', 'gender', 'nationality')->where('case_id', $id)->get();
-        
-        // return the created user and token
-        $response = [
-            'data' => $casebeneficiaries,
-        ];
-
-        return response($response, 200);
-    }
 
     public function index(){
         $casees = Casee::with('beneficiaries', 'referrals', 'beneficiaries.nationality', 'beneficiaries.gender','beneficiaries.relationship')->get();

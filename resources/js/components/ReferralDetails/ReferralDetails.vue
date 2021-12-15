@@ -74,7 +74,7 @@
 				</button>
 			</div>
             
-            <table class="table table-hover table-striped table-sm border">
+            <table class="table table-hover table-striped border">
                 <thead>
                     <tr>
                         <th>Month</th>
@@ -96,13 +96,14 @@
                             <div class="list-unstyled">
                                 <li v-for="emergency in record.emergencies" :key="emergency.id">
                                     <span>{{ emergency.emergency_date | myDate }}</span>
+                                    <span>{{ emergency.user.name }}</span>
+                                    <a class="clickable" @click="showEditEmergencyModal(emergency)">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
                                 </li>
                             </div>
                         </td>
                         <td>
-                            <a class="clickable">
-                                <i class="fa fa-edit blue"></i>
-                            </a>
                             
                             <a class="clickable">
                                 <i class="fa fa-trash red"></i>
@@ -120,27 +121,6 @@
 <br><br>
 
 
-
-            
-            <section>
-                <ul class="nav">
-                    <li v-for="record in referral.records" :key="record.id" class="nav-item">
-                        <router-link
-                        :to="{
-                            name: 'RecordDetails',
-                            params: {recordId: record.id}
-                            }"
-                        class="nav-link tab-header">
-                            <span>{{ record.month.name }}</span>
-                            <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
-                            <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
-                            <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
-                            <span v-show="record.is_new == 1" class="badge badge-pill badge-info">New</span>
-                        </router-link>
-                    </li>
-                </ul>
-                <router-view :key="$route.path"></router-view>
-            </section>
         </div>
             <EmergencyModal 
             :v-if="selectedEmergency.id"
@@ -195,6 +175,9 @@ export default {
     },
     created(){
         this.getReferral(this.referralId);
+        Fire.$on('referralChanged', () => {
+			this.getReferral(this.referralId);
+		});
     }
 }
 </script>

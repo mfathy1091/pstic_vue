@@ -23,19 +23,22 @@ class BeneficiaryController extends Controller
         })->get();
 
 
-        return response()->json($data); 
+        return response()->json([
+            'data' => $data,
+        ]);
     }
 
-    public function getCaseeReferrals(Request $request)
+    public function getCaseeBeneficiaries(Request $request, $caseeId)
     {
-        $beneficiaries =  Beneficiary::with('casee', 'casee.beneficiaries', 'relationship', 'gender', 'nationality')->where('casee_id', $request->casee_id)->get();
+        $beneficiaries =  Beneficiary::with('casee', 'casee.beneficiaries', 'relationship', 'gender', 'nationality')->where('casee_id', $caseeId)->get();
 
         $data = [
-            'beneficiaries' => $beneficiaries,
+            'data' => $beneficiaries,
         ];
 
         return response($data, 200);
     }
+    
 
     public function show($id)
     {

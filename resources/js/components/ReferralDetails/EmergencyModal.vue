@@ -27,7 +27,7 @@
 							
 							<div class="form-group">
 								<label for="location" class="form-label">Emergency Month</label>
-								<select v-model="emergencyForm.emergency_type_id" name="location" id="location" class="form-control">
+								<select v-model="emergencyForm.record_id" name="location" id="location" class="form-control">
 									<option value='0' disabled selected>Choose</option>
 									<option :value="record.id" v-for="record in referral.records" :key="record.id">{{ record.month.name }}</option>
 								</select>
@@ -49,7 +49,7 @@
 								<!-- <HasError :form="emergencyForm" field="comment" /> -->
 							</div>
 
-							<div class="form-group" v-if="caseeBeneficiaries">
+							<div class="form-group">
 								<label class="typo__label">Affected Beneficiaries</label>
 								<multiselect 
 								v-model="emergencyForm.emergencyBeneficiaries" 
@@ -125,7 +125,7 @@ export default {
 	methods: {
 		getCaseebeneficiaries(){
 			this.$Progress.start();
-			axios.get('/api/casee/'+ this.$route.params.referralId +'/beneficiaries')
+			axios.get('/api/casees/'+ this.$route.params.caseeId +'/beneficiaries')
 			.then((response) => {
 				// success
                 this.caseeBeneficiaries = response.data.data;
@@ -155,12 +155,12 @@ export default {
 
         createEmergency() {
 			this.$Progress.start();
-			this.emergencyForm.record_id = this.recordId
+			// this.emergencyForm.record_id = this.recordId
 			this.emergencyForm.post('/api/emergencies')
 			.then((response) => {
 				// success
 				$('#emergencyModal').modal('hide')
-				Fire.$emit('recordsChanged');
+				Fire.$emit('referralChanged');
 								
 				Toast.fire({
 					icon: 'success',
@@ -182,7 +182,7 @@ export default {
 			this.emergencyForm.put('/api/emergencies/'+this.emergencyForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('recordsChanged');
+				Fire.$emit('referralChanged');
 				$('#emergencyModal').modal('hide')
 				Swal.fire(
 					'Updated!',

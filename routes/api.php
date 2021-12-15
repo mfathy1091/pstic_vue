@@ -38,7 +38,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     // Casees
     Route::get('casees/create_or_get', 'API\CaseeController@createOrGetCasee');
-    Route::get('casees/{id}/beneficiaries', 'API\CaseeController@caseebeneficiaries');
     Route::get('casees/search', 'API\CaseeController@search');
     Route::get('casees', 'API\CaseeController@index');
     Route::post('casees', 'API\CaseeController@store');
@@ -51,7 +50,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['referrals'=> 'API\ReferralController']);
 
     Route::get('casees/{casee}/referrals', 'API\ReferralController@getCaseeReferrals');
-    Route::get('casees/{casee}/beneficiaries', 'API\BeneficiaryController@getCaseeBeneficiaries');
 
     Route::get('beneficiaries/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
@@ -69,6 +67,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('beneficiaries/{individual}/other_casee_beneficiaries', 'API\IndividualController@getOtherCaseebeneficiaries');
     Route::get('passport_beneficiaries/get_individual_by_passport/{passport_number}', 'API\Individual\PassportIndividualController@getIndividualByPassword');
     Route::put('beneficiaries/{individual}/unlink', 'API\IndividualController@unlinkCasee');
+    Route::get('casees/{casee}/beneficiaries', 'API\BeneficiaryController@getCaseeBeneficiaries');
 
     
     // Record Beneficiaries

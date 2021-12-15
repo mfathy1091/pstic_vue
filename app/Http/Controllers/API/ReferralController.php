@@ -55,6 +55,7 @@ class ReferralController extends Controller
         'referralSource', 
         'casee',
         'casee.beneficiaries',
+        'records.emergencies.user',
         'reasons', 
         'records', 
         'records.month', 
