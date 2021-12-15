@@ -27,6 +27,7 @@
                         <th>Source</th>
                         <th>Referral Date</th>
                         <th>Current Month Status</th>
+                        <th>Assigned Worker</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -49,6 +50,7 @@
                             </div>
 
                         </td>
+                        <td>{{ referral.current_assigned_psw.name }}</td>
 
                         <td>
                             <a class="clickable">
@@ -126,7 +128,7 @@ export default {
             this.$Progress.start();
             axios.get('/api/casees/'+this.caseeId+'/referrals', { params: { casee_id: this.caseeId } })
             .then(({data}) => {
-                this.caseeReferrals = data.referrals
+                this.caseeReferrals = data.data
             });
             this.$Progress.finish();
 		},

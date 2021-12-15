@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Month;
 use App\Models\Referral;
@@ -28,10 +29,35 @@ class ReferralController extends Controller
 
     public function getCaseeReferrals(Request $request)
     {
-        $referrals =  Referral::with('referralSource', 'records', 'records.month', 'records.status')->where('casee_id', $request->casee_id)->get();
+        $referrals =  Referral::with(
+            'referralSource',
+            'current_assigned_psw',
+            'records', 
+            'records.month', 
+            'records.status')
+            ->where('casee_id', $request->casee_id)->get();
 
         $data = [
-            'referrals' => $referrals,
+            'data' => $referrals,
+        ];
+
+        return response($data, 200);
+    }
+
+    public function getCurrentPswReferrals(Request $request)
+    {
+        $referrals =  Referral::with(
+            'referralSource',
+            'current_assigned_psw',
+            'records', 
+            'records.month', 
+            'records.status')
+            ->where('casee_id', $request->casee_id)
+            ->where('current_assigned_psw', Auth::id())
+            ->get();
+
+        $data = [
+            'data' => $referrals,
         ];
 
         return response($data, 200);
@@ -94,7 +120,7 @@ class ReferralController extends Controller
             'referring_person_email' => $request->referring_person_email,
             'referral_narrative_reason' => $request->referral_narrative_reason,
             'current_status_id' => $request->current_status_id,
-            'current_assigned_psw_id' => $request->current_assigned_psw_id,
+            'current_assigned_psw_id' => Auth::id(),
             'casee_id' => $request->casee_id,
         ]);
 

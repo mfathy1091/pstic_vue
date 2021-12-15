@@ -18,12 +18,19 @@ import Cases from "../components/Cases/Container"
 import ShowReferral from '../components/showReferral/Container'
 import NotFound from '../components/NotFound'
 import Home from '../components/Home'
+import MyReferrals from '../components/MyReferrals/MyReferrals'
 
 const routes = [
     {
         path: "/",
         name: "home",
         component: Home,
+        props: true,
+    },
+    {
+        path: "/myreferrals",
+        name: "myReferrals",
+        component: MyReferrals,
         props: true,
     },
 

@@ -19,7 +19,13 @@ class Referral extends Model
         'casee_id'
     ];
 
+    
     // Parent Tables
+    public function current_assigned_psw()
+    {
+        return $this->belongsTo(User::class, 'current_assigned_psw_id');
+    }
+
     public function casee()
     {
         return $this->belongsTo(Casee::class, 'casee_id');
