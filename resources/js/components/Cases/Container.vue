@@ -10,14 +10,19 @@
 
 <template>
 	<div class="container-fluid">
-		<div class="row mt-5">
+                <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mt-2">
+                <li class="breadcrumb-item active" aria-current="page">Cases</li>
+            </ol>
+        </nav>
+		<div class="row">
 			<div class="col-md-12">
                 <div class="col-4">
                     <ValidationObserver v-slot="{ handleSubmit }">
                         <form @submit.prevent="handleSubmit(search)">
                             <ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
                             <div class="form-group">
-                                <label for="file-number" class="form-label">File Number</label>
+                                <label for="file-number" class="form-label">Search By File Number</label>
                                 <input v-model="searchForm.fileNumber" type="text" :placeholder="mask" class="form-control">
                                 <span class="text-danger">{{ errors[0] }}</span>
                             </div>
@@ -29,43 +34,23 @@
 
                 <br>
 
-				<div class="card">
-				<div class="card-header">
-
-                    <h3 class="card-title">Search</h3>
-
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                        <input v-model="searchText" type="text" name="table_search" class="form-control float-right" placeholder="Search" autocomplete="off">
-
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                        </div>
-                    </div>
-            
-
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0">
-					<table class="table table-hover text-nowrap align-middle">
-						<thead>
-							<tr>
-								<th>File #</th>
+				<div class="card">	
+                    <table class="table table-hover text-nowrap align-middle">
+                        <thead>
+                            <tr>
+                                <th>File #</th>
                                 <th>File Owner</th>
                                 <th>Other File members</th>
                                 <th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-								<tr v-for="casee in casees" :key="casee.id">
-									<td class="align-middle">{{ casee.file_number }}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr v-for="casee in casees" :key="casee.id">
+                                    <td class="align-middle">{{ casee.file_number }}</td>
                                     <td class="align-middle"></td>
                                     <td>
                                         <li v-for="individual in casee.beneficiaries" :key="individual.id">
-										{{ individual.name }}
+                                        {{ individual.name }}
                                         </li>
                                     </td>
                                     <td class="align-middle">
@@ -75,13 +60,10 @@
                                         >
                                         </router-link>
                                     </td>
-								</tr>
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-				</div>
-				<!-- /.card -->
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
 			</div>
 		</div>
 

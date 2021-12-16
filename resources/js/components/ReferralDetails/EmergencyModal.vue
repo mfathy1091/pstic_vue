@@ -123,20 +123,7 @@ export default {
     },
 
 	methods: {
-		getCaseebeneficiaries(){
-			this.$Progress.start();
-			axios.get('/api/casees/'+ this.$route.params.caseeId +'/beneficiaries')
-			.then((response) => {
-				// success
-                this.caseeBeneficiaries = response.data.data;
-				this.$Progress.finish();
-			})
-			.catch((e) => {
-				// error
-				this.$Progress.fail();
-                console.log(e);
-			})
-		},
+
 
         getEmergencyTypes() {
 			this.$Progress.start();
@@ -201,7 +188,7 @@ export default {
 
     created (){
 		this.getReferral(this.$route.params.referralId)
-        this.getCaseebeneficiaries();
+        this.getCaseebeneficiaries(this.$route.params.caseeId);
         this.getEmergencyTypes();
 		console.log(this.$route.params.referralId);
     },

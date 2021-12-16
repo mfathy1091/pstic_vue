@@ -30,7 +30,7 @@
                         <td>{{ emergency.user.name }}</td>
                         <td>
                             <a class="clickable" @click="showEditEmergencyModal(emergency)">
-                                <i class="fa fa-edit blue"></i>
+                                <i class="fas fa-pencil-alt"></i>
                             </a>
                     
                             <a class="clickable" @click="deleteEmergency(emergency.id)">

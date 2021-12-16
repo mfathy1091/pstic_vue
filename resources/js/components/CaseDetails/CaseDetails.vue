@@ -52,7 +52,7 @@
             </h5>
             <span @click="showEditCaseeModal"
                 id='clickableAwesomeFont' class="ml-5">
-                    <i class="fa fa-edit blue"></i>
+                    <i class="fas fa-pencil-alt blue"></i>
             </span>
         </div>
 
@@ -104,7 +104,14 @@
                 <router-link
                     :to="{ name: 'caseReferrals' }"
                     class="nav-link tab-header">
-                    Referrals
+                    PSS Referrals
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link
+                    :to="{ name: 'caseReferrals' }"
+                    class="nav-link tab-header">
+                    Housing Referrals
                 </router-link>
             </li>
 

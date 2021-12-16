@@ -147,13 +147,17 @@ class ReferralController extends Controller
 
     
 
-        // insert referral reasons
-        $reasonsIds = $request->reasons_ids;
-        foreach($reasonsIds as $reasonId)
-        {
-            $reason = Reason::find($reasonId);
-            $referral->reasons()->attach($reason);
-        }
+        // // insert referral reasons
+        // $reasonsIds = $request->reasons_ids;
+        // foreach($reasonsIds as $reasonId)
+        // {
+        //     $reason = Reason::find($reasonId);
+        //     $referral->reasons()->attach($reason);
+        // }
+
+        // then sync
+        $reasonsIds = collect($request->input('referral_reasons'))->pluck('id');
+        $referral->reasons()->sync($reasonsIds);
 
         /////* Insert Records *///////
         //$this->insertDefaultRecords($pssCase->id, $referralMonth);
@@ -242,9 +246,8 @@ class ReferralController extends Controller
 
         // if it exists
         if($referral){
-            
+
             $this->validate($request, [
-                'original_direct_beneficiary_id' => 'required',
                 'referral_source_id' => 'required',
                 'referral_date' => 'required',
                 'referring_person_name' => 'required',
@@ -256,19 +259,18 @@ class ReferralController extends Controller
             
             // update first
             $referral->update([
-                'original_direct_beneficiary_id' => $request->original_direct_beneficiary_id,
                 'referral_source_id' => $request->referral_source_id,
                 'referral_date' => $request->referral_date,
                 'referring_person_name' => $request->referring_person_name,
                 'referring_person_email' => $request->referring_person_email,
                 'referral_narrative_reason' => $request->referral_narrative_reason,
                 'current_status_id' => $request->current_status_id,
-                'current_assigned_psw_id' => $request->current_assigned_psw_id,
+                'current_assigned_psw_id' => Auth::id(),
                 'casee_id' => $request->casee_id,
             ]);
 
             // then sync
-            $reasonsIds = collect($request->input('reasons'))->pluck('id');
+            $reasonsIds = collect($request->input('referral_reasons'))->pluck('id');
             $referral->reasons()->sync($reasonsIds);
             
             

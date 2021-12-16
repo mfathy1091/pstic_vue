@@ -12,6 +12,7 @@
                 <form @submit.prevent="referralEditMode ? updateReferral() : createReferral()">
                     <div class="modal-body">
 						<div class="form-group">
+
 							<label for="referral_source_id" class="form-label">Referral Source</label>
 							<select name="referral_source_id" v-model="referralForm.referral_source_id" id="referral_source_id" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('referral_source_id') }">
 								<option value='0' disabled>Choose...</option>
@@ -39,11 +40,21 @@
 						</div>
 
 						<div class="form-group">
-							<label for="reasons_ids" class="form-label">Referral Reason</label>
-							<select multiple name="reasons_ids" v-model="referralForm.reasons_ids" id="reasons_ids" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('reasons_ids') }">
-								<option v-for='reason in reasons' :value='reason.id' :key="reason.id">{{ reason.name }}</option>
-							</select>
-							<HasError :form="referralForm" field="reasons_ids" />
+							<label class="typo__label">Referral Reasons</label>
+							<multiselect 
+							v-model="referralForm.referral_reasons" 
+							:options="referral_reasons" 
+							:multiple="true" 
+							:close-on-select="false" 
+							:clear-on-select="false" 
+							:preserve-search="true" 
+							placeholder="Pick some" 
+							label="name" 
+							track-by="name" 
+							:preselect-first="true">
+								<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+							</multiselect>
+							<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 						</div>
 
 						<div class="form-group">
@@ -74,7 +85,7 @@ export default {
 	components: { Multiselect },
     props:{
         referralEditMode: Boolean,
-        selectedUser: Object,
+        selectedReferral: Object,
 		caseeId: {
             type: Number, 
             required: true
@@ -84,14 +95,14 @@ export default {
 	data() {
 		return {
 			// editMode: false,
-            //  selected: this.selectedUser;,
+            //  selected: this.selectedReferral;,
 			casee: '',
             caseebeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
             nationalities: [],
-			reasons: [],
+			referral_reasons: [],
 
 
 			users: {},
@@ -105,14 +116,15 @@ export default {
 				referring_person_name: '',
 				referring_person_email: '',
 				referral_narrative_reason: '',
-				reasons_ids: [],
-				casee_id: 1,
+				referral_reasons: [],
+				casee_id: "",
             }),
 		}
 	},
     watch: {
-        selectedUser (next, prev){
-            this.referralForm.fill(this.selectedUser)
+        selectedReferral (next, prev){
+            this.referralForm.fill(this.selectedReferral);
+			this.referralForm.casee_id = this.$route.params.caseeId;
         }
     },
 
@@ -146,10 +158,9 @@ export default {
 
 		updateReferral(){
 			this.$Progress.start();
-			this.referralForm.put('/api/user/'+this.referralForm.id)
+			this.referralForm.put('/api/referrals/'+this.referralForm.id)
 			.then(() => {
-				// success
-				Fire.$emit('usersChanged');
+				Fire.$emit('caseeReferralsChanged');
 				$('#referralModal').modal('hide')
 				Swal.fire(
 					'Updated!',
@@ -169,7 +180,7 @@ export default {
 		this.getCasee(this.caseeId)
 		this.getReferralSources()
 		this.getNationalities()
-		this.getReasons()
+		this.getReferralReasons()
 	}
 }
 </script>

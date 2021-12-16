@@ -36,7 +36,7 @@ export default {
 			this.$Progress.start();
 			axios.get("/api/referral_reasons")
 			.then(({data}) => {
-				this.referralReasons = data.data
+				this.referral_reasons = data.data
 			});
 			this.$Progress.finish();
 		},
@@ -75,21 +75,21 @@ export default {
 			this.$Progress.finish();
         },
 
-		getReasons(){
-			this.$Progress.start();
-			axios.get("/api/referral_reasons")
-			.then(({data}) => {this.reasons = data.data});
-			this.$Progress.finish();
-		},
-
 		getCaseebeneficiaries(caseeId){
 			this.$Progress.start();
-			axios.get('/api/beneficiaries/' + caseeId + '/other_casee_beneficiaries/')
-			.then(({data}) => {
-				this.caseebeneficiaries = data.data
-			});
-			this.$Progress.finish();
+			axios.get('/api/casees/'+ caseeId +'/beneficiaries')
+			.then((response) => {
+				// success
+                this.caseeBeneficiaries = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                console.log(e);
+			})
 		},
+
 		getReferral(referralId){			
 			this.$Progress.start();
 			axios.get("/api/referrals/"+referralId)

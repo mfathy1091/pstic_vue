@@ -6,7 +6,7 @@
 <template>
 
     <div>
-        <div class="card-body bg-white pt-2 p-0" v-if="casee">
+        <div class="card" v-if="casee">
             <div class="row m-3">
 				<button class="btn btn-success btn-sm mr-2" @click="showCreateReferralModal">
 				<!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
@@ -17,11 +17,9 @@
 				</button>
 			</div>
 
-            <p v-if="!casee.referrals.length" class="ml-5 text-primary">
-                <b>This case has no linked referrals!</b>
-            </p>
+            <p v-show="!caseeReferrals.length" class="font-italic ml-3">This case has no referrals!</p>
 
-            <table class="table table-hover table-striped table-sm border">
+            <table v-show="caseeReferrals.length" class="table table-hover table-sm">
                 <thead>
                     <tr>
                         <th>Source</th>
@@ -53,19 +51,18 @@
                         <td>{{ referral.current_assigned_psw.name }}</td>
 
                         <td>
-                            <a class="clickable">
-                                <i class="fa fa-edit blue"></i>
+                            <router-link
+                            :to="{name: 'referralDetails', params: { caseeId: caseeId, referralId: referral.id }}"
+                            class="fa fa-eye blue align-middle mr-2">
+                            </router-link>
+                            <a class="clickable" @click="showEditReferralModal(referral)">
+                                <i class="fas fa-pencil-alt blue mr-2"></i>
                             </a>
                             
                             <a class="clickable">
                                 <i class="fa fa-trash red"></i>
                             </a>
-                            <router-link
-                            :to="{name: 'referralDetails', params: { caseeId: caseeId, referralId: referral.id }}"
-                            class="fa fa-eye blue align-middle"
-                            >
-                            
-                            </router-link>
+
                         </td>
                     </tr>
                 </tbody>
@@ -140,7 +137,6 @@ export default {
 		},
 
         showEditReferralModal(referral){
-            console.log('hi')
 			this.referralEditMode = true;
 			this.selectedReferral = referral;
 			$('#referralModal').modal('show')

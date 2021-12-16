@@ -61,6 +61,14 @@
             </div>
 
             <hr>
+            <h5>Beneficiary Statuses</h5>
+            <ul v-if="caseeBeneficiaries">
+                <li v-for="caseBeneficiary in caseeBeneficiaries" :key="caseBeneficiary.id">
+                    {{ caseBeneficiary.name }}
+                </li>
+            </ul>
+
+            <hr>
             <h5>Records</h5>
             <div class="row m-3">
 				<button class="btn btn-success btn-sm mr-2">
@@ -151,6 +159,7 @@ export default {
     data(){
         return {
             referral: "",
+            caseeBeneficiaries: [],
             selectedEmergency: "",
             emergencyEditMode: false,
         }
@@ -175,6 +184,7 @@ export default {
     },
     created(){
         this.getReferral(this.referralId);
+        this.getCaseebeneficiaries(this.$route.params.caseeId);
         Fire.$on('referralChanged', () => {
 			this.getReferral(this.referralId);
 		});

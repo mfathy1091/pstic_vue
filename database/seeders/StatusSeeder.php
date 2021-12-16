@@ -30,6 +30,18 @@ class StatusSeeder extends Seeder
                 'type' => 'Psychosocial',
             ],
 
+            [
+                'name' => 'accepted',
+                'type' => 'Housing Grant',
+            ],
+            [
+                'name' => 'Rejected',
+                'type' => 'Housing Grant',
+            ],
+            [
+                'name' => 'Pending',
+                'type' => 'Housing Grant',
+            ],
         ];
 
         foreach ($statuses as $n) {
