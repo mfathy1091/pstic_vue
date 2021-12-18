@@ -3,6 +3,7 @@
     "/js/caseDetails.js": "/js/caseDetails.js",
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
     "/js/caseReferrals.js": "/js/caseReferrals.js",
+    "/js/caseHousingReferrals.js": "/js/caseHousingReferrals.js",
     "/js/referralDetails.js": "/js/referralDetails.js",
     "/js/RecordDetails.js": "/js/RecordDetails.js",
     "/js/statistics.js": "/js/statistics.js",

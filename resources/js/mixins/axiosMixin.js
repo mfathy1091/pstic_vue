@@ -75,12 +75,14 @@ export default {
 			this.$Progress.finish();
         },
 
-		getCaseebeneficiaries(caseeId){
+
+
+		getCaseeHousingReferrals(caseeId){
 			this.$Progress.start();
-			axios.get('/api/casees/'+ caseeId +'/beneficiaries')
+			axios.get('/api/casees/'+ caseeId +'/housing-referrals', { params: { casee_id: caseeId } } )
 			.then((response) => {
 				// success
-                this.caseeBeneficiaries = response.data.data;
+                this.caseeHousingReferrals = response.data.data;
 				this.$Progress.finish();
 			})
 			.catch((e) => {
@@ -90,13 +92,91 @@ export default {
 			})
 		},
 
+		getCaseeReferrals(caseeId){
+			this.$Progress.start();
+			axios.get('/api/casees/'+ caseeId +'/referrals', { params: { casee_id: caseeId } } )
+			.then((response) => {
+				// success
+                this.caseeReferrals = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                console.log(e);
+			})
+		},
+
+
 		getReferral(referralId){			
 			this.$Progress.start();
 			axios.get("/api/referrals/"+referralId)
             .then(({data}) => (this.referral = data.data));
 			this.$Progress.finish();
 		},
+
+		getHousingGrantStatuses(){
+			this.$Progress.start();
+			axios.get('/api/housing-grant-statuses/')
+			.then((response) => {
+				// success
+				this.housingGrantStatuses = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
+		getBeneficiaryStatuses(){
+			this.$Progress.start();
+			axios.get('/api/beneficiary-statuses/')
+			.then((response) => {
+				// success
+				this.beneficiaryStatuses = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
+		getRelationships(){
+			this.$Progress.start();
+			axios.get('/api/relationships/')
+			.then((response) => {
+				// success
+				this.relationships = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
+		getCaseeBeneficiaries(caseeId){
+			this.$Progress.start();
+			axios.get('/api/casees/'+ caseeId +'/beneficiaries', { params: { casee_id: caseeId } })
+			.then((response) => {
+				// success
+				this.caseeBeneficiaries = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
 	},
+
+
 
 
 	

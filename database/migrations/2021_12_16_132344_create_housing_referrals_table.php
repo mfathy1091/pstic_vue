@@ -18,17 +18,18 @@ class CreateHousingReferralsTable extends Migration
             $table->unsignedBigInteger('casee_id')->nullable();
             $table->unsignedInteger('referral_source_id');
             $table->date('referral_date')->nullable();
-            $table->unsignedInteger('grant_status_id');
             $table->string('referring_person_name');
             $table->string('referring_person_email');
             $table->text('referral_narrative_reason');
-            $table->unsignedBigInteger('assigned_housing_advocate')->nullable();
+            $table->unsignedInteger('grant_status_id');
+            $table->unsignedInteger('grant_amount');
+            $table->unsignedBigInteger('assigned_housing_advocate_id')->nullable();
             $table->timestamps();
 
             $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');
             $table->foreign('referral_source_id')->references('id')->on('referral_sources')->onDelete('cascade');
             $table->foreign('grant_status_id')->references('id')->on('statuses')->onDelete('cascade');
-            $table->foreign('assigned_housing_advocate')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('assigned_housing_advocate_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -35,6 +35,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['disabilities'=> 'API\DisabilityController']);
 
 
+    // statuses
+    Route::get('housing-grant-statuses', 'API\StatusController@getHousingGrantStatuses');
+    Route::get('beneficiary-statuses', 'API\StatusController@getBeneficiaryStatuses');
+
+    
     
     // Casees
     Route::get('casees/create_or_get', 'API\CaseeController@createOrGetCasee');
@@ -46,15 +51,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('casees/exists/{n}', 'API\CaseeController@exists');
     
     
-    // Referrals
+    // PSS Referrals
     Route::apiResources(['referrals'=> 'API\ReferralController']);
     Route::get('current-psw/referrals', 'API\ReferralController@getCurrentPswReferrals');
-
     Route::get('casees/{casee}/referrals', 'API\ReferralController@getCaseeReferrals');
-
     Route::get('beneficiaries/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
-    // Route::get('beneficiaries/{beneficiary_id}/referrals', 'API\ReferralController@getIndividualReferrals');
+
+
+    // Housing Referrals
+    Route::get('casees/{casee}/housing-referrals', 'API\HousingReferralController@getCaseeHousingReferrals');
+    Route::get('current-housing-advocate/housing-referrals', 'API\HousingReferralController@getCurrentHousingAdvocateHousingReferrals');
+    Route::post('housing-referrals/', 'API\HousingReferralController@store');
+    Route::put('housing-referrals/{id}', 'API\HousingReferralController@update');
+    Route::get('casees/{casee}/housing-referrals', 'API\HousingReferralController@getCaseeHousingReferrals');
 
     // Records
     Route::get('referrals/{referral_id}/latest-record', 'API\RecordController@latestReferralRecord');
@@ -63,11 +73,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     // beneficiaries
-    Route::apiResources(['beneficiaries'=> 'API\IndividualController']);
-    Route::get('beneficiaries/get/{caseeId}', 'API\IndividualController@getbeneficiaries');
-    Route::get('beneficiaries/{individual}/other_casee_beneficiaries', 'API\IndividualController@getOtherCaseebeneficiaries');
-    Route::get('passport_beneficiaries/get_individual_by_passport/{passport_number}', 'API\Individual\PassportIndividualController@getIndividualByPassword');
-    Route::put('beneficiaries/{individual}/unlink', 'API\IndividualController@unlinkCasee');
+    Route::apiResources(['beneficiaries'=> 'API\BeneficiaryController']);
+    Route::get('beneficiaries/get/{caseeId}', 'API\BeneficiaryController@getbeneficiaries');
+    Route::get('beneficiaries/{individual}/other_casee_beneficiaries', 'API\BeneficiaryController@getOtherCaseebeneficiaries');
+    Route::get('passport_beneficiaries/get_individual_by_passport/{passport_number}', 'API\Individual\PassportBeneficiaryController@getIndividualByPassword');
+    Route::put('beneficiaries/{individual}/unlink', 'API\BeneficiaryController@unlinkCasee');
     Route::get('casees/{casee}/beneficiaries', 'API\BeneficiaryController@getCaseeBeneficiaries');
 
     
@@ -75,8 +85,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::apiResources(['record-beneficiaries'=> 'API\RecordBeneficiaryController']);
     Route::put('record-beneficiaries/{id}', 'API\RecordBeneficiaryController@update');
     Route::get('records/{record}/record-beneficiaries', 'API\Record\RecordBeneficiaryController@index');
-
-
 
     
     Route::get('abilities', 'API\AbilityController@index');

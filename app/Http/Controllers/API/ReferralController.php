@@ -13,21 +13,12 @@ use App\Models\RecordBeneficiary;
 use App\Models\Beneficiary;
 use App\Models\Reason;
 use App\Models\Casee;
+Use Exception;
 
 class ReferralController extends Controller
 {
-    public function index()
-    {
-        $referrals =  Referral::with('referralSource', 'records', 'records.month', 'records.status')->get();
 
-        $data = [
-            'data' => $referrals,
-        ];
-
-        return response($data, 200);
-    }
-
-    public function getCaseeReferrals(Request $request)
+    public function getCaseeReferrals(Request $request, $caseeId)
     {
         $referrals =  Referral::with(
             'referralSource',
@@ -35,7 +26,8 @@ class ReferralController extends Controller
             'records', 
             'records.month', 
             'records.status')
-            ->where('casee_id', $request->casee_id)->get();
+            ->where('casee_id', $caseeId)
+            ->get();
 
         $data = [
             'data' => $referrals,

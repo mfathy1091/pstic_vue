@@ -92,7 +92,7 @@
 
 <script>
 import Form from 'vform'
-import Caseebeneficiaries from './CaseBeneficiaries.vue'
+import Caseebeneficiaries from './CaseBeneficiaries/CaseBeneficiaries.vue'
 import CaseeReferrals from './CaseReferrals.vue'
 import Multiselect from 'vue-multiselect'
 import ReferralModal from './ReferralModal'

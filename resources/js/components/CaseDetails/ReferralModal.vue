@@ -87,7 +87,7 @@ export default {
         referralEditMode: Boolean,
         selectedReferral: Object,
 		caseeId: {
-            type: Number, 
+            // type: Number, 
             required: true
         }
     },

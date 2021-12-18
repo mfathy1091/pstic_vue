@@ -60,123 +60,151 @@ class CaseeSeeder extends Seeder
 
         $beneficiaries = [
             [
-                'passport_number' => '010018765',
                 'casee_id' => '1',
-                'beneficiary_id' => '555-00112677',
                 'name' => 'Mariam KONE',
+                'passport_number' => '010018765',
                 'age' => '42',
                 'gender_id' => '2',
                 'nationality_id' => '3',
+                'phone_number' => '01006785305',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '555-00112677',
                 'relationship_id' => '1',
-                'current_phone_number' => '01006785305',
-                'is_active' => '1'
             ],
+
             [
-                'passport_number' => '025025765',
                 'casee_id' => '1',
-                'beneficiary_id' => '555-00112682',
+                'passport_number' => '025025765',
                 'name' => 'Zaharaa DIABY',
                 'age' => '20',
                 'gender_id' => '2',
                 'nationality_id' => '3',
+                'phone_number' => '01006785305',
+                'beneficiary_status_id' => '7',
+                'is_registered' => '1',
+
+                'file_individual_number' => '555-00112682',
                 'relationship_id' => '5',
-                'current_phone_number' => '01006785305',
-                'is_active' => '1'
+
+
             ],
             [
-                'passport_number' => '030029864',
                 'casee_id' => '1',
-                'beneficiary_id' => '555-00112683',
                 'name' => 'Kadidja DIABY',
+                'passport_number' => '030029864',
                 'age' => '19',
                 'gender_id' => '2',
                 'nationality_id' => '3',
+                'phone_number' => '01006785305',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '555-00112683',
                 'relationship_id' => '5',
-                'current_phone_number' => '01006785305',
-                'is_active' => '0'
+
             ],
 
 
 
 
             [
-                'passport_number' => '548635369',
                 'casee_id' => '2',
-                'beneficiary_id' => '914-00127057',
                 'name' => 'Hussein Asaad YASIN',
+                'passport_number' => '548635369',
                 'age' => '26',
                 'gender_id' => '1',
                 'nationality_id' => '2',
+                'phone_number' => '01112067527',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '914-00127057',
                 'relationship_id' => '1',
-                'current_phone_number' => '01112067527',
-                'is_active' => '1'
+
             ],
             [
-                'passport_number' => '278945254',
                 'casee_id' => '2',
-                'beneficiary_id' => '914-00127062',
                 'name' => 'Reem Mahmoud DAMAMA ALLOULOU',
+                'passport_number' => '278945254',
                 'age' => '23',
                 'gender_id' => '2',
                 'nationality_id' => '2',
+                'phone_number' => '01112067527',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '914-00127062',
                 'relationship_id' => '2',
-                'current_phone_number' => '01112067527',
-                'is_active' => '1'
+
             ],            
             [
-                'passport_number' => '958390473',
                 'casee_id' => '2',
-                'beneficiary_id' => '555-00118684',
                 'name' => 'Mariam Hussien YASIN',
+                'passport_number' => '958390473',
                 'age' => '4',
                 'gender_id' => '2',
                 'nationality_id' => '2',
+                'phone_number' => '01112067527',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '555-00118684',
                 'relationship_id' => '5',
-                'current_phone_number' => '01112067527',
-                'is_active' => '1'
+
             ],
 
 
 
             [
-                'passport_number' => '290347636',
                 'casee_id' => '3',
-                'beneficiary_id' => '555-00270922',
                 'name' => 'Anas Musa ABDI',
+                'passport_number' => '290347636',
                 'age' => '15',
                 'gender_id' => '1',
                 'nationality_id' => '7',
+                'phone_number' => '01154212163',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '555-00270922',
                 'relationship_id' => '1',
-                'current_phone_number' => '01154212163',
-                'is_active' => '1'
+
             ],
 
 
 
             [
-                'passport_number' => '850303586',
                 'casee_id' => '4',
-                'beneficiary_id' => '555-00244422',
                 'name' => 'Suleiman Mussa Yusuf Mohamed',
+                'passport_number' => '850303586',
                 'age' => '30',
                 'gender_id' => '1',
                 'nationality_id' => '4',
+                'phone_number' => '01008817734',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '555-00244422',
                 'relationship_id' => '1',
-                'current_phone_number' => '01008817734',
-                'is_active' => '1'
+
             ],
 
             [
-                'passport_number' => '568455878',
                 'casee_id' => '5',
-                'beneficiary_id' => '555-00219736',
                 'name' => 'Asmaa Ahmed ALI',
+                'passport_number' => '568455878',
                 'age' => '62',
                 'gender_id' => '2',
                 'nationality_id' => '4',
+                'phone_number' => '01027594793',
+                'beneficiary_status_id' => '7',
+
+                'is_registered' => '1',
+                'file_individual_number' => '555-00219736',
                 'relationship_id' => '1',
-                'current_phone_number' => '01027594793',
-                'is_active' => '1'
+
             ],
 
         ];

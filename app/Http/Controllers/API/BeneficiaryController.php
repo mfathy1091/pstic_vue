@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Casee;
 use App\Models\Beneficiary;
+Use Exception;
 
 class BeneficiaryController extends Controller
 {
@@ -51,39 +52,95 @@ class BeneficiaryController extends Controller
         return ['message' => 'Does not exist'];
     }
 
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'casee_id' => 'required|string|max:255',
+            'name' => 'required',
+            'passport_number' => 'required|string|max:255',
+            'age' => 'required|string|max:255',
+            'gender_id' => 'required', 
+            'nationality_id' => 'required',
+            'phone_number' => 'required', 
+            'beneficiary_status_id' => 'required', 
+
+            'is_registered' => '', 
+            // 'file_individual_number' => 'required|string|max:255|unique:beneficiaries',
+            'file_individual_number' => '', 
+            'relationship_id' => '', 
+        ]);
+
+        $beneficiary = Beneficiary::create([
+            'casee_id' => $request->casee_id,
+            'name' => $request->name,
+            'passport_number' => $request->passport_number,
+            'age' => $request->age,
+            'gender_id' => $request->gender_id,
+            'nationality_id' => $request->nationality_id,
+            'phone_number' => $request->phone_number,
+            'beneficiary_status_id' => $request->beneficiary_status_id,
+
+            'is_registered' => $request->is_registered,
+            'file_individual_number' => $request->file_individual_number,
+            'relationship_id' => $request->relationship_id,
+        ]);
+
+        $data = [
+            'beneficiary' => $beneficiary,
+            'message' => 'created successfully'
+        ];
+
+        return response($data, 201);
+    }
+
+
     public function update(Request $request, $id)
     {
-        $beneficiary = Beneficiary::findOrFail($id);
-
-        if($beneficiary){
+        try 
+        {
+            $beneficiary = Beneficiary::findOrFail($id);
 
             $this->validate($request, [
                 'casee_id' => 'required|string|max:255',
-                'passport_number' => 'required|string|max:255',
                 'name' => 'required',
-                'age' => 'required|string|max:255', 
-                'is_registered' => '', 
-                'beneficiary_id' => 'required|string|max:255|unique:beneficiaries,beneficiary_id,'.$beneficiary->id,
+                'passport_number' => 'required|string|max:255',
+                'age' => 'required|string|max:255',
                 'gender_id' => 'required', 
-                'nationality_id' => 'required', 
-                'relationship_id' => 'required', 
-                'current_phone_number' => 'required', 
+                'nationality_id' => 'required',
+                'phone_number' => 'required', 
+                'beneficiary_status_id' => 'required', 
+    
+                'is_registered' => '', 
+                'file_individual_number' => 'string|max:255|unique:beneficiaries,file_individual_number,'.$beneficiary->id,
+                'relationship_id' => '', 
             ]);
 
             $beneficiary->update([
                 'casee_id' => $request->casee_id,
-                'passport_number' => $request->passport_number,
                 'name' => $request->name,
+                'passport_number' => $request->passport_number,
                 'age' => $request->age,
-                'is_registered' => $request->is_registered,
-                'beneficiary_id' => $request->beneficiary_id,
                 'gender_id' => $request->gender_id,
                 'nationality_id' => $request->nationality_id,
+                'phone_number' => $request->phone_number,
+                'beneficiary_status_id' => $request->beneficiary_status_id,
+    
+                'is_registered' => $request->is_registered,
+                'file_individual_number' => $request->file_individual_number,
                 'relationship_id' => $request->relationship_id,
-                'current_phone_number' => $request->current_phone_number,
             ]);
             
-            return ['message' => 'User updated'];
+            $data = [
+                'beneficiary' => $beneficiary,
+                'message' => 'Updated successfully'
+            ];
+    
+            return response($data, 201);  
+        } 
+        catch(Exception $e)
+        {
+            dd($e->getMessage());
         }
 
     }
@@ -102,39 +159,7 @@ class BeneficiaryController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'casee_id' => 'required|string|max:255',
-            'passport_number' => 'required|string|max:255',
-            'name' => 'required',
-            'age' => 'required|string|max:255', 
-            'is_registered' => '', 
-            'beneficiary_id' => 'required|string|max:255|unique:beneficiaries',
-            'gender_id' => 'required', 
-            'nationality_id' => 'required', 
-            'relationship_id' => 'required', 
-            'current_phone_number' => 'required', 
-        ]);
 
-        $beneficiary = Beneficiary::create([
-            'casee_id' => $request->casee_id,
-            'passport_number' => $request->passport_number,
-            'name' => $request->name,
-            'age' => $request->age,
-            'is_registered' => $request->is_registered,
-            'beneficiary_id' => $request->beneficiary_id,
-            'gender_id' => $request->gender_id,
-            'nationality_id' => $request->nationality_id,
-            'relationship_id' => $request->relationship_id,
-            'current_phone_number' => $request->current_phone_number,
-        ]);
-
-        return response()->json([
-            'message'=>'Added Successfully!!',
-            'beneficiary'=>$beneficiary
-        ]);
-    }
 
     public function destroy($id)
     {

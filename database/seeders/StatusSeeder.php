@@ -31,7 +31,7 @@ class StatusSeeder extends Seeder
             ],
 
             [
-                'name' => 'accepted',
+                'name' => 'Accepted',
                 'type' => 'Housing Grant',
             ],
             [
@@ -41,6 +41,14 @@ class StatusSeeder extends Seeder
             [
                 'name' => 'Pending',
                 'type' => 'Housing Grant',
+            ],
+            [
+                'name' => 'Active',
+                'type' => 'Beneficiary',
+            ],
+            [
+                'name' => 'Inactive',
+                'type' => 'Beneficiary',
             ],
         ];
 

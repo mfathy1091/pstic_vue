@@ -10,9 +10,9 @@
     }
 
     .router-link-active.tab-header{
-        border-top: 1px solid;
+        /* border-top: 1px solid;
         border-left: 1px solid;
-        border-right: 1px solid;
+        border-right: 1px solid; */
     }
 
     .back-btn{
@@ -109,7 +109,7 @@
             </li>
             <li class="nav-item">
                 <router-link
-                    :to="{ name: 'caseReferrals' }"
+                    :to="{ name: 'caseHousingReferrals' }"
                     class="nav-link tab-header">
                     Housing Referrals
                 </router-link>
@@ -124,7 +124,7 @@
 
 <script>
 import Form from 'vform'
-import Caseebeneficiaries from './CaseBeneficiaries.vue'
+import Caseebeneficiaries from './CaseBeneficiaries/CaseBeneficiaries.vue'
 import CaseeReferrals from './CaseReferrals.vue'
 import Multiselect from 'vue-multiselect'
 import ReferralModal from './ReferralModal'

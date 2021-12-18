@@ -15,17 +15,18 @@ class CreatebeneficiariesTable extends Migration
     {
         Schema::create('beneficiaries', function (Blueprint $table) {
             $table->id();
-            $table->string('passport_number')->nullable()->unique();
+            $table->unsignedbigInteger('casee_id');
             $table->string('name');
+            $table->string('passport_number')->nullable()->unique();
             $table->integer('age');
-            $table->boolean('is_registered')->nullable();
-            $table->unsignedbigInteger('casee_id')->nullable();
-            $table->string('beneficiary_id')->nullable();
             $table->unsignedbigInteger('gender_id');
             $table->unsignedbigInteger('nationality_id');
+            $table->string('phone_number')->nullable();
+            $table->unsignedbigInteger('beneficiary_status_id')->default(7);
+
+            $table->boolean('is_registered')->nullable();
+            $table->unsignedbigInteger('file_individual_number')->nullable();
             $table->unsignedbigInteger('relationship_id')->nullable();
-            $table->string('current_phone_number')->nullable();
-            $table->boolean('is_active')->default(1);
             $table->timestamps();
 
             // foreign keys
@@ -33,6 +34,8 @@ class CreatebeneficiariesTable extends Migration
             $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade');
             $table->foreign('nationality_id')->references('id')->on('nationalities')->onDelete('cascade');
             $table->foreign('relationship_id')->references('id')->on('relationships')->onDelete('cascade');
+            $table->foreign('beneficiary_status_id')->references('id')->on('statuses')->onDelete('cascade');
+
         });
     }
 

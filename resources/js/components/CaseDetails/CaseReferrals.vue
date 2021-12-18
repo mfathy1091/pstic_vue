@@ -6,13 +6,13 @@
 <template>
 
     <div>
-        <div class="card" v-if="casee">
+        <div class="card">
             <div class="row m-3">
 				<button class="btn btn-success btn-sm mr-2" @click="showCreateReferralModal">
 				<!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
 					<i class="fas fa-plus-circle"></i><span><b> Referral</b></span>
 				</button>
-				<button class="btn btn-secondary btn-sm" @click="getCaseeReferrals">
+				<button class="btn btn-secondary btn-sm" @click="getCaseeReferrals(caseeId)">
 					<i class="fas fa-sync-alt"></i>
 				</button>
 			</div>
@@ -29,7 +29,7 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="this.caseeReferrals">
                     <tr v-for="referral in this.caseeReferrals" :key="referral.id">
                         <td>{{ referral.referral_source.name  }}</td>
                         <td>{{ referral.referral_date | myDate }}</td>
@@ -72,7 +72,6 @@
 
         </div>
 
-        <!-- Referral Modal -->
 		<ReferralModal v-if="casee" :caseeId="casee.id"
 		:v-if="selectedReferral.id"
 		:referralEditMode='referralEditMode' 
@@ -88,6 +87,7 @@ import Form from 'vform'
 import ReferralModal from './ReferralModal'
 import Multiselect from 'vue-multiselect'
 import router from '../../router'
+import axiosMixin from '../../mixins/axiosMixin'
 
 export default {
     name: 'caseeReferrals',
@@ -96,7 +96,7 @@ export default {
         ReferralModal,
         
     },
-
+    mixins: [axiosMixin],
     props: {
         caseeId: {
             // type: Number, 
@@ -112,24 +112,7 @@ export default {
         }
     },
     methods: {
-        getCasee(){
-			this.$Progress.start();
-			axios.get("/api/casees/"+this.caseeId)
-            .then(({data}) => {
-                this.casee = data.data
-            });
-			this.$Progress.finish();
-        },
 
-        getCaseeReferrals(){
-            this.$Progress.start();
-            axios.get('/api/casees/'+this.caseeId+'/referrals', { params: { casee_id: this.caseeId } })
-            .then(({data}) => {
-                this.caseeReferrals = data.data
-            });
-            this.$Progress.finish();
-		},
-        
         showCreateReferralModal(){
 			this.referralEditMode = false;
 			this.selectedReferral = {};
@@ -142,25 +125,17 @@ export default {
 			$('#referralModal').modal('show')
 		},
 
-        goToReferral(referral){
-
-        },
-        goToReferralPage(referral){
-			router.push({ path: '/referrals/'+referral.id })
-		},
-
     },
     created() {
-        this.getCasee();
-        this.getCaseeReferrals();
+        this.getCasee(this.caseeId);
+        this.getCaseeReferrals(this.caseeId);
 
         Fire.$on('caseebeneficiariesChanged', () => {
-            this.getCasee();
+            this.getCasee(this.caseeId);
         });
 
         Fire.$on('caseeReferralsChanged', () => {
-			console.log('new');
-            this.getCaseeReferrals();
+            this.getCaseeReferrals(this.caseeId);
 		});
     }
 }

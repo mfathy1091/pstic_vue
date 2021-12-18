@@ -40,10 +40,9 @@ const routes = [
     },
     
     { path: '/cases/:caseeId', name: "caseDetails", props: true, component: () => import(/* webpackChunkName: "caseDetails" */ '../components/CaseDetails/CaseDetails.vue'), children: [
-        { path: "beneficiaries", name: "caseBeneficiaries", props: true, component: () => import(/* webpackChunkName: "caseBeneficiaries" */ '../components/CaseDetails/CaseBeneficiaries.vue') },
-        { path: "referrals", name: "caseReferrals", props: true, component: () => import(/* webpackChunkName: "caseReferrals" */ '../components/CaseDetails/CaseReferrals.vue') , children: [
-
-        ] },
+        { path: "beneficiaries", name: "caseBeneficiaries", props: true, component: () => import(/* webpackChunkName: "caseBeneficiaries" */ '../components/CaseDetails/CaseBeneficiaries/CaseBeneficiaries.vue') },
+        { path: "referrals", name: "caseReferrals", props: true, component: () => import(/* webpackChunkName: "caseReferrals" */ '../components/CaseDetails/CaseReferrals.vue') , children: [] },
+        { path: "housing-referrals", name: "caseHousingReferrals", props: true, component: () => import(/* webpackChunkName: "caseHousingReferrals" */ '../components/CaseDetails/CaseHousingReferrals/CaseHousingReferrals.vue') },
         { path: 'referrals/:referralId', name: 'referralDetails', props: true, component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/ReferralDetails.vue'), children: [
             {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
         ] },
@@ -51,7 +50,7 @@ const routes = [
 
 
 
-
+    
 
     {
         path: "/dashboard", name: "dashboard", component: Dashboard,

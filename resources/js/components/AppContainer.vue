@@ -46,7 +46,19 @@ export default {
 
     async created(){
 		if(localStorage.hasOwnProperty("blog_token")){
+			// attach token to all axios calls by default
 			axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("blog_token");
+			
+			// redirect to login if token doesn't match
+			// axios.interceptors.response.use(response => {
+			// 	return response;
+			// }, error => {
+			// 	if (error.response.status === 401) {
+			// 		window.location.replace("/login");
+			// 	}
+			// 	return error;
+			// });
+
 			await this.$store.dispatch('currentUser/getAbilities')
 			await this.$store.dispatch('currentUser/getUser');
 
