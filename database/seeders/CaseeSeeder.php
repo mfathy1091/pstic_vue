@@ -67,7 +67,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '2',
                 'nationality_id' => '3',
                 'phone_number' => '01006785305',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '555-00112677',
@@ -82,7 +82,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '2',
                 'nationality_id' => '3',
                 'phone_number' => '01006785305',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
                 'is_registered' => '1',
 
                 'file_individual_number' => '555-00112682',
@@ -98,7 +98,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '2',
                 'nationality_id' => '3',
                 'phone_number' => '01006785305',
-                'beneficiary_status_id' => '7',
+                'is_active' => '0',
 
                 'is_registered' => '1',
                 'file_individual_number' => '555-00112683',
@@ -117,7 +117,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '1',
                 'nationality_id' => '2',
                 'phone_number' => '01112067527',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '914-00127057',
@@ -132,7 +132,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '2',
                 'nationality_id' => '2',
                 'phone_number' => '01112067527',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '914-00127062',
@@ -147,7 +147,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '2',
                 'nationality_id' => '2',
                 'phone_number' => '01112067527',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '555-00118684',
@@ -165,7 +165,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '1',
                 'nationality_id' => '7',
                 'phone_number' => '01154212163',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '555-00270922',
@@ -183,7 +183,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '1',
                 'nationality_id' => '4',
                 'phone_number' => '01008817734',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '555-00244422',
@@ -199,7 +199,7 @@ class CaseeSeeder extends Seeder
                 'gender_id' => '2',
                 'nationality_id' => '4',
                 'phone_number' => '01027594793',
-                'beneficiary_status_id' => '7',
+                'is_active' => '1',
 
                 'is_registered' => '1',
                 'file_individual_number' => '555-00219736',

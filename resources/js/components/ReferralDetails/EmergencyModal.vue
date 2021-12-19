@@ -188,7 +188,7 @@ export default {
 
     created (){
 		this.getReferral(this.$route.params.referralId)
-        this.getCaseebeneficiaries(this.$route.params.caseeId);
+        this.getCaseeBeneficiaries(this.$route.params.caseeId);
         this.getEmergencyTypes();
 		console.log(this.$route.params.referralId);
     },

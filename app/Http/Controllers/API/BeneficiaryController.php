@@ -63,7 +63,7 @@ class BeneficiaryController extends Controller
             'gender_id' => 'required', 
             'nationality_id' => 'required',
             'phone_number' => 'required', 
-            'beneficiary_status_id' => 'required', 
+            'is_active' => 'required', 
 
             'is_registered' => '', 
             // 'file_individual_number' => 'required|string|max:255|unique:beneficiaries',
@@ -79,7 +79,7 @@ class BeneficiaryController extends Controller
             'gender_id' => $request->gender_id,
             'nationality_id' => $request->nationality_id,
             'phone_number' => $request->phone_number,
-            'beneficiary_status_id' => $request->beneficiary_status_id,
+            'is_active' => $request->is_active,
 
             'is_registered' => $request->is_registered,
             'file_individual_number' => $request->file_individual_number,
@@ -94,6 +94,55 @@ class BeneficiaryController extends Controller
         return response($data, 201);
     }
 
+    public function deactivateBeneficiary(Request $request, $id)
+    {
+        try 
+        {
+            $beneficiary = Beneficiary::findOrFail($id);
+
+
+            $beneficiary->update([
+                'is_active' => '0',
+            ]);
+            
+            $data = [
+                'beneficiary' => $beneficiary,
+                'message' => 'Updated successfully'
+            ];
+    
+            return response($data, 201);  
+        } 
+        catch(Exception $e)
+        {
+            dd($e->getMessage());
+        }
+
+    }
+
+    public function activateBeneficiary(Request $request, $id)
+    {
+        try 
+        {
+            $beneficiary = Beneficiary::findOrFail($id);
+
+
+            $beneficiary->update([
+                'is_active' => '1',
+            ]);
+            
+            $data = [
+                'beneficiary' => $beneficiary,
+                'message' => 'Updated successfully'
+            ];
+    
+            return response($data, 201);  
+        } 
+        catch(Exception $e)
+        {
+            dd($e->getMessage());
+        }
+
+    }
 
     public function update(Request $request, $id)
     {
@@ -109,7 +158,7 @@ class BeneficiaryController extends Controller
                 'gender_id' => 'required', 
                 'nationality_id' => 'required',
                 'phone_number' => 'required', 
-                'beneficiary_status_id' => 'required', 
+                // 'is_active' => 'required', 
     
                 'is_registered' => '', 
                 'file_individual_number' => 'string|max:255|unique:beneficiaries,file_individual_number,'.$beneficiary->id,
@@ -124,7 +173,7 @@ class BeneficiaryController extends Controller
                 'gender_id' => $request->gender_id,
                 'nationality_id' => $request->nationality_id,
                 'phone_number' => $request->phone_number,
-                'beneficiary_status_id' => $request->beneficiary_status_id,
+                // 'is_active' => $request->is_active,
     
                 'is_registered' => $request->is_registered,
                 'file_individual_number' => $request->file_individual_number,

@@ -73,6 +73,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     // beneficiaries
+    
+    Route::put('beneficiaries/{individual}/deactivate', 'API\BeneficiaryController@deactivateBeneficiary');
+    Route::put('beneficiaries/{individual}/activate', 'API\BeneficiaryController@activateBeneficiary');
     Route::apiResources(['beneficiaries'=> 'API\BeneficiaryController']);
     Route::get('beneficiaries/get/{caseeId}', 'API\BeneficiaryController@getbeneficiaries');
     Route::get('beneficiaries/{individual}/other_casee_beneficiaries', 'API\BeneficiaryController@getOtherCaseebeneficiaries');

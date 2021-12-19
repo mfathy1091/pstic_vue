@@ -112,7 +112,6 @@ export default {
                 gender_id: '',
                 nationality_id: '',
                 phone_number: '',
-                beneficiary_status_id: '',
 
 				is_registered: '',
                 file_individual_number: '',
@@ -125,7 +124,6 @@ export default {
         selectedBeneficiary (next, prev){
             this.BeneficiaryForm.fill(this.selectedBeneficiary)
 			this.BeneficiaryForm.casee_id = this.$route.params.caseeId;
-			this.BeneficiaryForm.beneficiary_status_id = '7';
         }
     },
 
@@ -137,7 +135,7 @@ export default {
 			.then((res) => {
 				// success
 				$('#beneficiaryModal').modal('hide')
-				Fire.$emit('caseebeneficiariesChanged');
+				Fire.$emit('caseeBeneficiariesChanged');
 								
 				Toast.fire({
 					icon: 'success',
@@ -171,7 +169,7 @@ export default {
 			this.BeneficiaryForm.put('/api/beneficiaries/'+this.BeneficiaryForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('caseebeneficiariesChanged');
+				Fire.$emit('caseeBeneficiariesChanged');
 				$('#beneficiaryModal').modal('hide')
 				Swal.fire(
 					'Updated!',

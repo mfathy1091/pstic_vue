@@ -27,7 +27,7 @@
                 </router-link>
 
                 <h5>        
-                    {{ this.referral.referral_source.name }} / {{ this.referral.referral_date | myDate  }}
+                    {{ this.referral.referral_source.name }}  {{ this.referral.referral_date | myDate  }}
                 </h5>
                 <span @click="showEditReferralModal"
                     id='clickableAwesomeFont' class="ml-5">
@@ -61,7 +61,15 @@
             </div>
 
             <hr>
-            <h5>Beneficiary Statuses</h5>
+            <h5>Included Beneficiary
+                <span class="clickable ml-3 secondary tt" data-bs-placement="bottom" id="tooltip1" data-toggle="tooltip" title="You don't have to choose all the beneficiaries">
+                    <i class="fas fa-info-circle"></i>
+                </span>
+            </h5>
+
+
+
+            
             <ul v-if="caseeBeneficiaries">
                 <li v-for="caseBeneficiary in caseeBeneficiaries" :key="caseBeneficiary.id">
                     {{ caseBeneficiary.name }}
@@ -166,7 +174,6 @@ export default {
     },
     methods: {
 
-
         showEditReferralModal(){
 
         },
@@ -183,8 +190,13 @@ export default {
 		},
     },
     created(){
+        const tooltips = document.querySelectorAll('.tt')
+        tooltips.forEach(t => {
+            new bootstrap.Tooltip(t)
+        })
+        console.log(tooltips)
         this.getReferral(this.referralId);
-        this.getCaseebeneficiaries(this.$route.params.caseeId);
+        this.getCaseeBeneficiaries(this.$route.params.caseeId);
         Fire.$on('referralChanged', () => {
 			this.getReferral(this.referralId);
 		});

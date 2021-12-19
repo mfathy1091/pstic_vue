@@ -86,17 +86,12 @@ export default {
     props:{
         referralEditMode: Boolean,
         selectedReferral: Object,
-		caseeId: {
-            // type: Number, 
-            required: true
-        }
     },
 
 	data() {
 		return {
 			// editMode: false,
             //  selected: this.selectedReferral;,
-			casee: '',
             caseebeneficiaries: [],
 			directIndividual: '',
 
@@ -177,7 +172,6 @@ export default {
 	},
 
 	created() {
-		this.getCasee(this.caseeId)
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReferralReasons()

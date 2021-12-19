@@ -22,7 +22,7 @@ class CreatebeneficiariesTable extends Migration
             $table->unsignedbigInteger('gender_id');
             $table->unsignedbigInteger('nationality_id');
             $table->string('phone_number')->nullable();
-            $table->unsignedbigInteger('beneficiary_status_id')->default(7);
+            $table->unsignedInteger('is_active')->default(1);
 
             $table->boolean('is_registered')->nullable();
             $table->unsignedbigInteger('file_individual_number')->nullable();
@@ -34,7 +34,6 @@ class CreatebeneficiariesTable extends Migration
             $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade');
             $table->foreign('nationality_id')->references('id')->on('nationalities')->onDelete('cascade');
             $table->foreign('relationship_id')->references('id')->on('relationships')->onDelete('cascade');
-            $table->foreign('beneficiary_status_id')->references('id')->on('statuses')->onDelete('cascade');
 
         });
     }

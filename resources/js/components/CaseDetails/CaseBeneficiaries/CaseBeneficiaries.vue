@@ -5,7 +5,7 @@
 </style>
 <template>
     <div>
-        <div class="card-body bg-white pt-2 pl-2 p-0" v-if="casee">
+        <div class="card-body bg-white pt-2 pl-2 p-0">
             <div class="row m-3">
 				<button class="btn btn-success btn-sm mr-2" @click="showCreateBeneficiaryModal">
 					<i class="fas fa-plus-circle"></i><span><b> Beneficiary</b></span>
@@ -26,35 +26,26 @@
                 <div v-for="beneficiary in caseeBeneficiaries" :key="beneficiary.id">
 
                     <div class="card individual-card" style="width: 18rem;">
+                        <div class="overlay bg-white-50" v-show="beneficiary.is_active == 0">
+                            <div class="p-4 text-center">
+                                <h3 class="bg-white text-secondary">Inactive</h3>
+                                <a class="clickable text-primary p-2 bg-white" @click="activateBeneficiary(beneficiary)">Click here re-activate</a>
+                            </div>
+                        </div>
                         <div class="card-body">
+
                             <h4 class="card-title">{{ beneficiary.name }}</h4>
+                                
                             <div class="float-right">
                                 <a class="clickable" @click="showEditBeneficiaryModal(beneficiary)">
                                     <i class="fas fa-pencil-alt blue mr-2"></i>
                                 </a>
                                 
                                 <a class="clickable">
-                                    <i class="fa fa-trash red"></i>
+                                    <i class="fa fa-trash red" @click="deleteBeneficiary(beneficiary)"></i>
                                 </a>
 
-                                <div class="dropdown">
-                                    <button class="btn btn-tool" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                        <button class="dropdown-item" type="button">Edit</button>
-                                        <button class="dropdown-item" type="button">
-                                            <span class="text-red">Delete</span>
-                                        </button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item" type="button">
-                                            <span class="text-orange">Deativate</span>
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
-
                             
 
 
@@ -74,7 +65,10 @@
                                 <li><span class="fa-li"></span><b>File Individual number:</b> {{ beneficiary.file_individual_number }}</li>
                                 <li><span class="fa-li"></span><b>Relationship:</b> {{ beneficiary.relationship.name}}</li>
                             </ul>
+                            <a class="clickable orange" @click="deactivateBeneficiary(beneficiary)">Deactivate</a>
+
                         </div>
+                        
                     </div>
                     
                 </div>
@@ -82,11 +76,11 @@
             </div>
         </div>
 
-		<BeneficiaryModal v-if="casee" :caseeId="casee.id"
+		<BeneficiaryModal
 		:v-if="selectedBeneficiary.id"
 		:beneficiaryEditMode='beneficiaryEditMode' 
 		:selectedBeneficiary='selectedBeneficiary' 
-		v-on:caseebeneficiariesChanged="getCaseeBeneficiaries(caseeId)">
+		v-on:caseeBeneficiariesChanged="getCaseeBeneficiaries(caseeId)">
 		</BeneficiaryModal>
 
     </div>
@@ -116,7 +110,6 @@ export default {
 
     data(){
         return {
-            casee: '',
             caseeBeneficiaries: [],
             beneficiaryEditMode: false,
 			selectedBeneficiary: {},
@@ -129,7 +122,7 @@ export default {
 			axios.put('/api/beneficiaries/' + beneficiary_id + '/unlink' )
 			.then(() => {
 				// success
-				Fire.$emit('caseebeneficiariesChanged');
+				Fire.$emit('caseeBeneficiariesChanged');
 				// $('#individualModal').modal('hide')
 				Swal.fire(
 					'Unlinked!',
@@ -155,12 +148,109 @@ export default {
 			this.selectedBeneficiary = beneficiary;
 			$('#beneficiaryModal').modal('show')
 		},
+
+        activateBeneficiary(beneficiary)
+            {
+                Swal.fire({
+				title: 'Are you sure?',
+				// text: "You won't be able to include this beneficiary in new referrals!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, re-activate it!'
+			})
+			.then((result) => {
+				if (result.isConfirmed) {
+					this.$Progress.start();
+					axios.put('/api/beneficiaries/'+beneficiary.id + '/activate')
+					.then(() => {
+						// success
+						Fire.$emit('caseeBeneficiariesChanged');
+						Swal.fire(
+							'Activated!',
+							'It has been activated.',
+							'success'
+						)
+						this.$Progress.finish();
+					})
+					.catch(() => {
+						// error
+						Swal("Failed!", "There was something wrong.", "warning");
+					});
+				}
+			})
+		},
+
+        deactivateBeneficiary(beneficiary)
+            {
+                Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to include this beneficiary in new referrals!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, deactivate it!'
+			})
+			.then((result) => {
+				if (result.isConfirmed) {
+					this.$Progress.start();
+					axios.put('/api/beneficiaries/'+beneficiary.id + '/deactivate')
+					.then(() => {
+						// success
+						Fire.$emit('caseeBeneficiariesChanged');
+						Swal.fire(
+							'Deactivated!',
+							'It has been deactivated.',
+							'success'
+						)
+						this.$Progress.finish();
+					})
+					.catch(() => {
+						// error
+						Swal("Failed!", "There was something wrong.", "warning");
+					});
+				}
+			})
+		},
+
+        deleteBeneficiary(beneficiary){
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			})
+			.then((result) => {
+				if (result.isConfirmed) {
+					this.$Progress.start();
+					axios.delete('/api/beneficiaries/'+beneficiary.id)
+					.then(() => {
+						// success
+						Fire.$emit('caseeBeneficiariesChanged');
+						Swal.fire(
+							'Deleted!',
+							'It has been deleted.',
+							'success'
+						)
+						this.$Progress.finish();
+					})
+					.catch(() => {
+						// error
+						Swal("Failed!", "There was something wrong.", "warning");
+					});
+				}
+			})
+		},
     },
     created() {
-        this.getCasee(this.caseeId);
         this.getCaseeBeneficiaries(this.caseeId);
 
-        Fire.$on('caseebeneficiariesChanged', () => {
+        Fire.$on('caseeBeneficiariesChanged', () => {
             this.getCaseeBeneficiaries(this.caseeId);
         });
     }

@@ -17,7 +17,8 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
-
+$black: #000000;
+$secondary: #6c757d;
 
 
 .blue{
@@ -60,8 +61,13 @@ $cyan: #6cb2eb;
     color: $cyan;
 }
 
+.black{
+    color: $black;
+}
 
-
+.secondary{
+    color: $secondary;
+}
 
 .clickable {
     cursor: pointer

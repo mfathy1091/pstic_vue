@@ -72,7 +72,7 @@
 
         </div>
 
-		<ReferralModal v-if="casee" :caseeId="casee.id"
+		<ReferralModal
 		:v-if="selectedReferral.id"
 		:referralEditMode='referralEditMode' 
 		:selectedReferral='selectedReferral' 
@@ -105,7 +105,6 @@ export default {
     },
     data(){
         return {
-            casee: '',
             caseeReferrals: [],
             referralEditMode: false,
 			selectedReferral: {},
@@ -127,7 +126,6 @@ export default {
 
     },
     created() {
-        this.getCasee(this.caseeId);
         this.getCaseeReferrals(this.caseeId);
 
         Fire.$on('caseebeneficiariesChanged', () => {
