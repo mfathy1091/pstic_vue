@@ -22,6 +22,13 @@ class ReferralController extends Controller
     {
         $referrals = Referral::query();
 
+        if($request->user_id == 'current_user'){
+            $referrals->where('current_assigned_psw_id', Auth::id());
+        }
+        if($request->user_id != -1 && $request->user_id != 'current_user'){
+            $referrals->where('current_assigned_psw_id', $request->user_id);
+        }
+
         $referrals->whereHas('records', function($q) use($request){
             if($request->is_new != -1){
                 $q->where('is_new', $request->is_new);
@@ -35,22 +42,6 @@ class ReferralController extends Controller
             return $q;
         });
 
-
-
-        // if($request->month_id != -1){
-        //     $referrals->whereHas('records', function($q) use($request){
-        //         return $q->where('month_id', $request->month_id);
-        //     });
-        // }
-
-        // if($request->status_id != -1){
-        //     $referrals->whereHas('records', function($q) use($request){
-        //         return $q->where('status_id', $request->status_id);
-        //     });
-        // }
-
-
-
         $referrals->with(
             'casee',
             'referralSource',
@@ -58,7 +49,6 @@ class ReferralController extends Controller
             'records', 
             'records.month', 
             'records.status');
-        //     ->where('current_assigned_psw_id', Auth::id())
 
         $data = [
             'data' => $referrals->get(),
@@ -86,24 +76,6 @@ class ReferralController extends Controller
         return response($data, 200);
     }
 
-    public function getCurrentPswReferrals(Request $request)
-    {
-        $referrals =  Referral::with(
-            'casee',
-            'referralSource',
-            'current_assigned_psw',
-            'records', 
-            'records.month', 
-            'records.status')
-            ->where('current_assigned_psw_id', Auth::id())
-            ->get();
-
-        $data = [
-            'data' => $referrals,
-        ];
-
-        return response($data, 200);
-    }
 
     public function getIndividualReferrals(Request $request)
     {

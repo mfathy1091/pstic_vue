@@ -53,7 +53,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     // PSS Referrals
     Route::apiResources(['referrals'=> 'API\ReferralController']);
-    Route::get('current-psw/referrals', 'API\ReferralController@getCurrentPswReferrals');
     Route::get('casees/{casee}/referrals', 'API\ReferralController@getCaseeReferrals');
     Route::get('beneficiaries/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
@@ -97,7 +96,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('ability/{id}', 'API\AbilityController@destroy');
 
 
-    Route::apiResources(['user'=> 'API\UserController']);
+    Route::apiResources(['users'=> 'API\UserController']);
     Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
 
     Route::get('activities', 'API\ActivityController@index');

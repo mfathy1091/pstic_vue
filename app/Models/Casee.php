@@ -24,6 +24,11 @@ class Casee extends Model
         return $this->hasMany(Referral::class);
     }
 
+    public function housingReferrals()
+    {
+        return $this->hasMany(HousingReferral::class);
+    }
+
     public function pssCases()
     {
         return $this->hasMany(PssCase::class);

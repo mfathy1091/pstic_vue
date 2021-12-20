@@ -47,6 +47,13 @@
                         </li>
 
                         <li class="nav-item">
+                            <router-link to="/referrals/pss-referrals" class="nav-link">
+                               <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Referrals</p>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-item">
                             <router-link to="/dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>

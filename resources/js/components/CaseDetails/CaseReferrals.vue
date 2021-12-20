@@ -5,7 +5,6 @@
     <div class="card-body">
         <div class="row ml-2">
             <button class="btn btn-success btn-sm mr-2" @click="showCreateReferralModal">
-            <!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
                 <i class="fas fa-plus-circle"></i><span><b> Referral</b></span>
             </button>
             <button class="btn btn-secondary btn-sm" @click="getCaseeReferrals(caseeId)">

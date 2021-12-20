@@ -13,19 +13,17 @@ import usecom from '../vuex/usecom'
 //import LoginForm from './components/LoginForm'
 
 import Dashboard from "../components/Dashboard/Dashboard"
-import Cases from "../components/Cases/Container"
 
 import NotFound from '../components/NotFound'
 
 const routes = [
 
+    { path: '/cases', name: "cases", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Cases.vue'), children: [] },
 
+    { path: '/referrals', name: "referrals", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Referrals/Referrals.vue'), children: [
+        { path: "pss-referrals", name: "pssReferrals", props: true, component: () => import(/* webpackChunkName: "workerPssReferrals" */ '../components/Referrals/PssReferrals.vue') },
 
-    {
-        path: "/cases", name: "cases", component: Cases,
-        children: []
-    },
-
+    ] },
 
     { path: '/home', name: "home", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Home/Home.vue'), children: [
         { path: "worker-pss-referrals", name: "workerPssReferrals", props: true, component: () => import(/* webpackChunkName: "workerPssReferrals" */ '../components/Home/WorkerPssReferrals.vue') },

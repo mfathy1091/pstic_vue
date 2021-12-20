@@ -70,13 +70,14 @@
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 import UserModal from './UserModal'
+import axiosMixin from '../../mixins/axiosMixin'
 
 export default {
 	components: { 
 		Multiselect,
 		UserModal,
 	},
-
+	mixins: [axiosMixin],
 	data() {
 		return {
 			editMode: false,
@@ -87,11 +88,7 @@ export default {
 	},
 	methods: {
 
-		getUsers(){			
-			this.$Progress.start();
-			axios.get("/api/user").then(({data}) => (this.users = data.data));
-			this.$Progress.finish();
-		},
+
 
 		showCreateUserModal(){
 			this.editMode = false;
@@ -132,7 +129,6 @@ export default {
 						this.$Progress.finish();
 					})
 					.catch(() => {
-						// error
 						Swal("Failed!", "There was something wrong.", "warning");
 					});
 				}
@@ -143,7 +139,6 @@ export default {
 	created() {
 		// console.log($getPermissions());
 		
-
 		this.getUsers()
 		
 		Fire.$on('usersChanged', () => {

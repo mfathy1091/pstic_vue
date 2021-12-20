@@ -124,6 +124,7 @@ export default {
                 is_new: '-1',
                 status_id: '-1',
                 month_id: '-1',
+                user_id: 'current_user'
             }
 		}
 	},
@@ -131,7 +132,7 @@ export default {
 
         getPswReferrals(){
 			this.$Progress.start();
-			axios.get('/api/referrals', { params: { is_new: this.filter.is_new, status_id: this.filter.status_id, month_id: this.filter.month_id,} })
+			axios.get('/api/referrals', { params: { is_new: this.filter.is_new, status_id: this.filter.status_id, month_id: this.filter.month_id, user_id: this.filter.user_id} })
 			.then((response) => {
 				// success
 				this.pswReferrals = response.data.data;
@@ -145,6 +146,19 @@ export default {
 		},
 
 	},
+
+    computed:{
+        currentUser: {
+            get(){
+                return this.$store.state.currentUser.user;
+            }
+        }
+    },
+    watch: {
+        currentUser (n, o) {
+            // this.filter.user_id = _.cloneDeep(n).id;
+        }
+    },
 
 	created() {
         this.getPswReferrals();

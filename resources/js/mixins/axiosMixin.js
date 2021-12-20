@@ -188,8 +188,21 @@ export default {
 				console.log(e);
 			})
 		},
-	},
 
+		getUsers(){
+			this.$Progress.start();
+			axios.get('/api/users/')
+			.then((response) => {
+				this.users = response.data.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
+	},
 
 
 

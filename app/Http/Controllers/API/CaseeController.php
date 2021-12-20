@@ -27,15 +27,56 @@ class CaseeController extends Controller
     }
 
 
-    public function index(){
-        $casees = Casee::with('beneficiaries', 'referrals', 'beneficiaries.nationality', 'beneficiaries.gender','beneficiaries.relationship')->get();
+    public function index(Request $request){
+        $casees = Casee::query();
+
+        $casees->has('referrals');
+
+        if($request->month_id != -1){
+            $casees->where('month_id', $request->month_id);
+        }
         
-        // return the created user and token
+        $casees->with(
+            'beneficiaries',
+            'referrals',
+            'housingReferrals',
+            'beneficiaries.nationality', 
+            'beneficiaries.gender',
+            'beneficiaries.relationship'
+            )->get();
+        
+
         $response = [
-            'data' => $casees,
+            'data' => $casees->get(),
         ];
 
         return response($response, 200);
+
+
+
+
+
+        $referrals->whereHas('records', function($q) use($request){
+            if($request->is_new != -1){
+                $q->where('is_new', $request->is_new);
+            }
+            if($request->month_id != -1){
+                $q->where('month_id', $request->month_id);
+            }
+            if($request->status_id != -1){
+                $q->where('status_id', $request->status_id);
+            }
+            return $q;
+        });
+
+        $referrals->with(
+            'casee',
+            'referralSource',
+            'current_assigned_psw',
+            'records', 
+            'records.month', 
+            'records.status');
+
     }
 
 
