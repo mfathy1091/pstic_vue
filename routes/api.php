@@ -108,6 +108,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('emergency-types', 'API\EmergencyTypeController@index');
 
+
+    // Test
+    Route::get('test', 'API\TestController@index');
+
+    Route::get('months', 'API\MonthController@index');
+
+
 });
 
 Route::group(['middleware' => ['auth.gates']], function () {

@@ -17,9 +17,13 @@ $fa-font-path: "../webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
-.router-link-active{
+.nav-link.router-link-active{
     background-color: #3d5b95 !important;
     color: #fff !important;
+}
+
+.tab-header.active{
+    background-color: #ffffff !important;
 }
 
 .individual-card{
@@ -29,4 +33,8 @@ $fa-font-path: "../webfonts";
 
 .edit-button :hover{
     color: green;
+}
+
+.clickable {
+    cursor: pointer
 }

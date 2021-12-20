@@ -159,6 +159,20 @@ export default {
 				console.log(e);
 			})
 		},
+		getMonths(){
+			this.$Progress.start();
+			axios.get('/api/months/')
+			.then((response) => {
+				// success
+				this.months = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
 
 		getCaseeBeneficiaries(caseeId){
 			this.$Progress.start();

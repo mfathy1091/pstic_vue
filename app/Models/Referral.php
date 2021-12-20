@@ -46,6 +46,10 @@ class Referral extends Model
         return $this->belongsTo(ReferralSource::class, 'referral_source_id');
     }
 
+    public function beneficiaries()
+    {
+        return $this->belongsToMany(Beneficiary::class, 'referrals_beneficiaries', 'referral_id', 'beneficiary_id');
+    }
 
 
     // Child tables

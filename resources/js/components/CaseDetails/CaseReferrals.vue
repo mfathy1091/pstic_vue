@@ -1,25 +1,22 @@
 <style scoped>
-.clickable {
-    cursor: pointer
-}
+
 </style>
 <template>
+    <div class="card-body">
+        <div class="row ml-2">
+            <button class="btn btn-success btn-sm mr-2" @click="showCreateReferralModal">
+            <!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
+                <i class="fas fa-plus-circle"></i><span><b> Referral</b></span>
+            </button>
+            <button class="btn btn-secondary btn-sm" @click="getCaseeReferrals(caseeId)">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
 
-    <div>
-        <div class="card">
-            <div class="row m-3">
-				<button class="btn btn-success btn-sm mr-2" @click="showCreateReferralModal">
-				<!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
-					<i class="fas fa-plus-circle"></i><span><b> Referral</b></span>
-				</button>
-				<button class="btn btn-secondary btn-sm" @click="getCaseeReferrals(caseeId)">
-					<i class="fas fa-sync-alt"></i>
-				</button>
-			</div>
+        <div class="row mt-3">
+            <p v-show="!caseeReferrals.length" class="font-italic ml-5">This case has no referrals!</p>
 
-            <p v-show="!caseeReferrals.length" class="font-italic ml-3">This case has no referrals!</p>
-
-            <table v-show="caseeReferrals.length" class="table table-hover table-sm">
+            <table v-show="caseeReferrals.length" class="border table table-hover table-sm">
                 <thead>
                     <tr>
                         <th>Source</th>
@@ -67,9 +64,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            
-
         </div>
 
 		<ReferralModal

@@ -68033,9 +68033,13 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
-.router-link-active {
+.nav-link.router-link-active {
   background-color: #3d5b95 !important;
   color: #fff !important;
+}
+
+.tab-header.active {
+  background-color: #ffffff !important;
 }
 
 .individual-card {
@@ -68044,4 +68048,8 @@ readers do not read off random characters that represent icons */
 
 .edit-button :hover {
   color: green;
+}
+
+.clickable {
+  cursor: pointer;
 }

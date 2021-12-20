@@ -5,8 +5,8 @@
 </style>
 <template>
     <div>
-        <div class="card-body bg-white pt-2 pl-2 p-0">
-            <div class="row m-3">
+        <div class="card-body">
+            <div class="row ml-2">
 				<button class="btn btn-success btn-sm mr-2" @click="showCreateBeneficiaryModal">
 					<i class="fas fa-plus-circle"></i><span><b> Beneficiary</b></span>
 				</button>
@@ -17,10 +17,8 @@
 			</div>
 
 
-            <div class="row m-0" v-if="caseeBeneficiaries.length">
-                <p v-if="!caseeBeneficiaries.length" class="ml-5 text-primary">
-                    <b>This case has no linked beneficiaries!</b>
-                </p>
+            <div class="row mt-3">
+					<p v-if="!caseeBeneficiaries.length" class="font-italic ml-5">This case has no linked beneficiaries!</p>
 
                 <!-- beneficiaries -->
                 <div v-for="beneficiary in caseeBeneficiaries" :key="beneficiary.id">

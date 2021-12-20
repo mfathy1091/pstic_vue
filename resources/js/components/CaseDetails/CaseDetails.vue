@@ -1,27 +1,5 @@
 <style scoped>
-    .clickable {
-        cursor: pointer
-    }
 
-    .router-link-active{
-        background-color: #ffffff !important;
-        color: #459adf !important;
-        
-    }
-
-    .router-link-active.tab-header{
-        /* border-top: 1px solid;
-        border-left: 1px solid;
-        border-right: 1px solid; */
-    }
-
-    .back-btn{
-        background-color: #f4f6f9 !important;
-    }
-
-    .my-breadcrumb{
-        background-color: #e9ecef !important;
-    }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
@@ -32,7 +10,6 @@
                 <li class="breadcrumb-item">
                     <router-link
                     :to="{ name: 'cases' }"
-                    class="my-breadcrumb"
                     > 
                         Cases 
                     </router-link>
@@ -44,12 +21,10 @@
         <div class="row mt-3 mb-3">
             <router-link
             :to="{ name: 'cases' }"
-            class="back-btn pl-3 pr-3"> 
+            class="pl-3 pr-3"> 
                 <i class="fas fa-arrow-left"></i>
             </router-link>
-            <h5>        
-                {{ casee.file_number }}
-            </h5>
+            <h5>{{ casee.file_number }}</h5>
             <span @click="showEditCaseeModal"
                 id='clickableAwesomeFont' class="ml-5">
                     <i class="fas fa-pencil-alt blue"></i>
@@ -92,32 +67,35 @@
 			</div>
 		</div>
 
-        <ul class="nav">
-            <li class="nav-item">
-                <router-link
-                    :to="{ name: 'caseBeneficiaries' }"
-                    class="nav-link tab-header">   
-                    Beneficiaries
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link
-                    :to="{ name: 'caseReferrals' }"
-                    class="nav-link tab-header">
-                    PSS Referrals
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link
-                    :to="{ name: 'caseHousingReferrals' }"
-                    class="nav-link tab-header">
-                    Housing Referrals
-                </router-link>
-            </li>
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'caseBeneficiaries' }"
+                            class="nav-link tab-header" active-class="active">   
+                            Beneficiaries
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'caseReferrals' }"
+                            class="nav-link tab-header" active-class="active">
+                            PSS Referrals
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'caseHousingReferrals' }"
+                            class="nav-link tab-header" active-class="active">
+                            Housing Referrals
+                        </router-link>
+                    </li>
 
-        </ul>
-
-        <router-view :key="$route.path"></router-view>
+                </ul>
+            </div>
+            <router-view :key="$route.path"></router-view>
+        </div>
 
     </div>
 </template>

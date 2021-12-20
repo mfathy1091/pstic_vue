@@ -9,7 +9,7 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
-	<div class="container-fluid">
+	    <div class="container-fluid">
                 <nav aria-label="breadcrumb">
             <ol class="breadcrumb mt-2">
                 <li class="breadcrumb-item active" aria-current="page">Cases</li>

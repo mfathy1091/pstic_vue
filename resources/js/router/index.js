@@ -12,32 +12,25 @@ import Forms from '../views/Forms'
 import usecom from '../vuex/usecom'
 //import LoginForm from './components/LoginForm'
 
-import Dashboard from "../components/dashboard/Container"
+import Dashboard from "../components/Dashboard/Dashboard"
 import Cases from "../components/Cases/Container"
 
-import ShowReferral from '../components/showReferral/Container'
 import NotFound from '../components/NotFound'
-import Home from '../components/Home'
-import MyReferrals from '../components/MyReferrals/MyReferrals'
 
 const routes = [
-    {
-        path: "/",
-        name: "home",
-        component: Home,
-        props: true,
-    },
-    {
-        path: "/myreferrals",
-        name: "myReferrals",
-        component: MyReferrals,
-        props: true,
-    },
+
+
 
     {
         path: "/cases", name: "cases", component: Cases,
         children: []
     },
+
+
+    { path: '/home', name: "home", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Home/Home.vue'), children: [
+        { path: "worker-pss-referrals", name: "workerPssReferrals", props: true, component: () => import(/* webpackChunkName: "workerPssReferrals" */ '../components/Home/WorkerPssReferrals.vue') },
+
+    ] },
     
     { path: '/cases/:caseeId', name: "caseDetails", props: true, component: () => import(/* webpackChunkName: "caseDetails" */ '../components/CaseDetails/CaseDetails.vue'), children: [
         { path: "beneficiaries", name: "caseBeneficiaries", props: true, component: () => import(/* webpackChunkName: "caseBeneficiaries" */ '../components/CaseDetails/CaseBeneficiaries/CaseBeneficiaries.vue') },

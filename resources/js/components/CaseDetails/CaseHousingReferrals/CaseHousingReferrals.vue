@@ -6,8 +6,8 @@
 <template>
 
     <div>
-        <div class="card">
-            <div class="row m-3">
+        <div class="card-body">
+            <div class="row ml-2">
 				<button class="btn btn-success btn-sm mr-2" @click="showCreateHousingReferralModal">
 				<!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->
 					<i class="fas fa-plus-circle"></i><span><b> Referral</b></span>
@@ -16,51 +16,50 @@
 					<i class="fas fa-sync-alt"></i>
 				</button>
 			</div>
+            <div class="row mt-3">
+                <p v-show="!caseeHousingReferrals.length" class="font-italic ml-5">This case has no referrals!</p>
 
-            <p v-show="!caseeHousingReferrals.length" class="font-italic ml-3">This case has no referrals!</p>
+                <table v-show="caseeHousingReferrals.length" class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Referral Date</th>
+                            <th>Grant Status</th>
+                            <th>Grant Amount</th>
+                            <th>Assigned Housing Advocate</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="this.caseeHousingReferrals">
+                        <tr v-for="referral in this.caseeHousingReferrals" :key="referral.id">
+                            <td>{{ referral.referral_source.name  }}</td>
+                            <td>{{ referral.referral_date | myDate }}</td>
+                            <td>
+                                <span v-show="referral.grant_status.name == 'Accepted'" class="badge badge-pill badge-success">{{ referral.grant_status.name }}</span>
+                                <span v-show="referral.grant_status.name == 'Rejected'" class="badge badge-pill badge-danger">{{ referral.grant_status.name }}</span>
+                                <span v-show="referral.grant_status.name == 'Pending'" class="badge badge-pill badge-warning">{{ referral.grant_status.name }}</span>
+                            </td>
+                            <td>{{ referral.grant_amount }}</td>
+                            <td>{{ referral.assigned_housing_advocate.name }}</td>
 
-            <table v-show="caseeHousingReferrals.length" class="table table-hover table-sm">
-                <thead>
-                    <tr>
-                        <th>Source</th>
-                        <th>Referral Date</th>
-                        <th>Grant Status</th>
-                        <th>Grant Amount</th>
-                        <th>Assigned Housing Advocate</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody v-if="this.caseeHousingReferrals">
-                    <tr v-for="referral in this.caseeHousingReferrals" :key="referral.id">
-                        <td>{{ referral.referral_source.name  }}</td>
-                        <td>{{ referral.referral_date | myDate }}</td>
-                        <td>
-                            <span v-show="referral.grant_status.name == 'Accepted'" class="badge badge-pill badge-success">{{ referral.grant_status.name }}</span>
-                            <span v-show="referral.grant_status.name == 'Rejected'" class="badge badge-pill badge-danger">{{ referral.grant_status.name }}</span>
-                            <span v-show="referral.grant_status.name == 'Pending'" class="badge badge-pill badge-warning">{{ referral.grant_status.name }}</span>
-                        </td>
-                        <td>{{ referral.grant_amount }}</td>
-                        <td>{{ referral.assigned_housing_advocate.name }}</td>
+                            <td>
+                                <!-- <router-link
+                                :to="{name: 'referralDetails', params: { caseeId: caseeId, referralId: referral.id }}"
+                                class="fa fa-eye blue align-middle mr-2">
+                                </router-link> -->
+                                <a class="clickable" @click="showEditHousingReferralModal(referral)">
+                                    <i class="fas fa-pencil-alt blue mr-2"></i>
+                                </a>
+                                
+                                <a class="clickable">
+                                    <i class="fa fa-trash red"></i>
+                                </a>
 
-                        <td>
-                            <!-- <router-link
-                            :to="{name: 'referralDetails', params: { caseeId: caseeId, referralId: referral.id }}"
-                            class="fa fa-eye blue align-middle mr-2">
-                            </router-link> -->
-                            <a class="clickable" @click="showEditHousingReferralModal(referral)">
-                                <i class="fas fa-pencil-alt blue mr-2"></i>
-                            </a>
-                            
-                            <a class="clickable">
-                                <i class="fa fa-trash red"></i>
-                            </a>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 

@@ -18,6 +18,56 @@ Use Exception;
 class ReferralController extends Controller
 {
 
+    public function index(Request $request)
+    {
+        $referrals = Referral::query();
+
+        $referrals->whereHas('records', function($q) use($request){
+            if($request->is_new != -1){
+                $q->where('is_new', $request->is_new);
+            }
+            if($request->month_id != -1){
+                $q->where('month_id', $request->month_id);
+            }
+            if($request->status_id != -1){
+                $q->where('status_id', $request->status_id);
+            }
+            return $q;
+        });
+
+
+
+        // if($request->month_id != -1){
+        //     $referrals->whereHas('records', function($q) use($request){
+        //         return $q->where('month_id', $request->month_id);
+        //     });
+        // }
+
+        // if($request->status_id != -1){
+        //     $referrals->whereHas('records', function($q) use($request){
+        //         return $q->where('status_id', $request->status_id);
+        //     });
+        // }
+
+
+
+        $referrals->with(
+            'casee',
+            'referralSource',
+            'current_assigned_psw',
+            'records', 
+            'records.month', 
+            'records.status');
+        //     ->where('current_assigned_psw_id', Auth::id())
+
+        $data = [
+            'data' => $referrals->get(),
+        ];
+
+        return response($data, 200);
+    }
+
+
     public function getCaseeReferrals(Request $request, $caseeId)
     {
         $referrals =  Referral::with(
@@ -39,13 +89,13 @@ class ReferralController extends Controller
     public function getCurrentPswReferrals(Request $request)
     {
         $referrals =  Referral::with(
+            'casee',
             'referralSource',
             'current_assigned_psw',
             'records', 
             'records.month', 
             'records.status')
-            ->where('casee_id', $request->casee_id)
-            ->where('current_assigned_psw', Auth::id())
+            ->where('current_assigned_psw_id', Auth::id())
             ->get();
 
         $data = [
@@ -177,6 +227,7 @@ class ReferralController extends Controller
             ]);
             
             $record->beneficiaries()->sync($beneficiariesIds);
+            $referral->beneficiaries()->sync($beneficiariesIds);
 
 
             //$referralbeneficiaries = $request->referral_beneficiaries;
