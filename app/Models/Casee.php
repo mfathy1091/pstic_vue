@@ -9,6 +9,7 @@ class Casee extends Model
 {
     protected $fillable = ['number', 'created_user_id'];
 
+
     public function createdUser()
     {
         return $this->belongsTo(User::class, 'created_user_id');

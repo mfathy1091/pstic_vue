@@ -32,22 +32,27 @@ class CaseeSeeder extends Seeder
         $casees = [
             [
                 'file_number' => '555-11C01264',
+                'is_family' => '1',
                 'created_user_id' => '1',
             ],
             [
                 'file_number' => '914-16C02867',
+                'is_family' => '1',
                 'created_user_id' => '1',
             ],
             [
                 'file_number' => '555-20C01750',
+                'is_family' => '0',
                 'created_user_id' => '1',
             ],
             [
                 'file_number' => '555-19C01310',
+                'is_family' => '0',
                 'created_user_id' => '1',
             ],
             [
                 'file_number' => '555-18C00400',
+                'is_family' => '0',
                 'created_user_id' => '1',
             ],
         ];

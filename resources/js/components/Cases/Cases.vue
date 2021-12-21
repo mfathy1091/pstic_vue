@@ -72,17 +72,20 @@
                         <thead>
                             <tr>
                                 <th>File #</th>
-                                <th>File Owner</th>
+                                <th>Case Type</th>
                                 <th>Beneficiaries</th>
-                                <th>PSS Referrals</th>
-                                <th>Housing Referrals</th>
+                                <th># of PSS Intake</th>
+                                <th># of Housing Intake</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                                 <tr v-for="casee in casees" :key="casee.id">
                                     <td class="align-middle">{{ casee.file_number }}</td>
-                                    <td class="align-middle"></td>
+                                    <td class="align-middle">
+                                        <span v-show="casee.is_family == '0'">Individual</span>
+                                        <span v-show="casee.is_family == '1'">Family</span>
+                                    </td>
                                     <td>
                                         <div class="list-unstyled">
                                             <li v-for="beneficiary in casee.beneficiaries" :key="beneficiary.id">
@@ -93,22 +96,10 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="list-unstyled">
-                                            <li v-for="referral in casee.referrals" :key="referral.id">
-                                                <div>
-                                                    <span>{{ referral.referral_date }}</span>
-                                                </div>
-                                            </li>
-                                        </div>
+                                        <span>{{ casee.referrals_count }}</span>
                                     </td>
                                     <td>
-                                        <div class="list-unstyled">
-                                            <li v-for="housingReferral in casee.housing_referrals" :key="housingReferral.id">
-                                                <div>
-                                                    <span>{{ housingReferral.referral_date }}</span>
-                                                </div>
-                                            </li>
-                                        </div>
+                                        <span>{{ casee.housing_referrals_count }}</span>
                                     </td>
                                     <td class="align-middle">
                                         <router-link

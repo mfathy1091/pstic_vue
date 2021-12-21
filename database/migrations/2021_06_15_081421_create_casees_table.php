@@ -16,6 +16,7 @@ class CreateCaseesTable extends Migration
         Schema::create('casees', function (Blueprint $table) {
             $table->id();
             $table->string('file_number')->unique();
+            $table->boolean('is_family')->default(0);
             $table->unsignedInteger('created_user_id');
             $table->timestamps();
         });

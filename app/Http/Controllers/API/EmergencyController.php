@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Emergency;
-
+use App\Models\Record;
 class EmergencyController extends Controller
 {
 
@@ -39,7 +39,7 @@ class EmergencyController extends Controller
             'emergency_type_id' => $request['emergency_type_id'],
             'user_id' => Auth::id(),
         ]);
-        
+
         $data = [
             'data' => $emergency,
         ];
@@ -78,9 +78,17 @@ class EmergencyController extends Controller
             return response('', 201);
         }
 
+    }
 
-        
+    public function destroy($id)
+    {
+        $emergency = emergency::findOrFail($id);
 
+        if($emergency){
+            $emergency->delete();
+        }
+
+        return ['message' => 'Service deleted'];
     }
 
     

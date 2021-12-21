@@ -1,5 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/home.js": "/js/home.js",
+    "/js/workerPssReferrals.js": "/js/workerPssReferrals.js",
     "/js/caseDetails.js": "/js/caseDetails.js",
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
     "/js/caseReferrals.js": "/js/caseReferrals.js",
@@ -11,7 +13,5 @@
     "/js/create-emergency.js": "/js/create-emergency.js",
     "/js/users.js": "/js/users.js",
     "/js/roles.js": "/js/roles.js",
-    "/css/app.css": "/css/app.css",
-    "/js/home.js": "/js/home.js",
-    "/js/workerPssReferrals.js": "/js/workerPssReferrals.js"
+    "/css/app.css": "/css/app.css"
 }

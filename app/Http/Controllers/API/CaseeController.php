@@ -30,11 +30,11 @@ class CaseeController extends Controller
     public function index(Request $request){
         $casees = Casee::query();
 
-        $casees->has('referrals');
+        // $casees->has('referrals');
 
-        if($request->month_id != -1){
-            $casees->where('month_id', $request->month_id);
-        }
+        // if($request->month_id != -1){
+        //     $casees->where('month_id', $request->month_id);
+        // }
         
         $casees->with(
             'beneficiaries',
@@ -43,7 +43,7 @@ class CaseeController extends Controller
             'beneficiaries.nationality', 
             'beneficiaries.gender',
             'beneficiaries.relationship'
-            )->get();
+        )->withCount('referrals', 'housingReferrals');
         
 
         $response = [

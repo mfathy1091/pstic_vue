@@ -51,6 +51,8 @@
                 <table v-show="pswReferrals.length" class="border table table-hover table-sm">
                     <thead>
                         <tr>
+                            <th>Case</th>
+                            <th>Affected Beneficiaries</th>
                             <th>Source</th>
                             <th>Referral Date</th>
                             <th>Current Month Status</th>
@@ -60,6 +62,8 @@
                     </thead>
                     <tbody v-if="pswReferrals">
                         <tr v-for="referral in this.pswReferrals" :key="referral.id">
+                            <td><span>{{ referral.casee.file_number }}</span></td>
+                            <td></td>
                             <td>{{ referral.referral_source.name  }}</td>
                             <td>{{ referral.referral_date | myDate }}</td>
                             <td>

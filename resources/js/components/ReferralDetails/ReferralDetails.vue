@@ -116,6 +116,9 @@
                                     <a class="clickable" @click="showEditEmergencyModal(emergency)">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
+                                    <a class="clickable" @click="deleteEmergency(emergency)">
+                                        <i class="fas fa-trash red"></i>
+                                    </a>
                                 </li>
                             </div>
                         </td>
@@ -187,6 +190,38 @@ export default {
 			this.emergencyEditMode = true;
 			this.selectedEmergency = emergency;
 			$('#emergencyModal').modal('show')
+		},
+
+        deleteEmergency(emergency){
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			})
+			.then((result) => {
+				if (result.isConfirmed) {
+					this.$Progress.start();
+					axios.delete('/api/emergencies/'+emergency.id)
+					.then(() => {
+						// success
+						Fire.$emit('referralChanged');
+						Swal.fire(
+							'Deleted!',
+							'It has been deleted.',
+							'success'
+						)
+						this.$Progress.finish();
+					})
+					.catch(() => {
+						// error
+						Swal("Failed!", "There was something wrong.", "warning");
+					});
+				}
+			})
 		},
     },
     created(){

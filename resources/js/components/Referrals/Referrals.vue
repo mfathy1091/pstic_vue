@@ -7,12 +7,12 @@
     <div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mt-2">
-                <li class="breadcrumb-item active" aria-current="page">Referrals</li>
+                <li class="breadcrumb-item active" aria-current="page">Intake</li>
             </ol>
         </nav>
         
         <div class="row mt-3 mb-3 pl-3">
-            <h5>Referrals</h5>
+            <h5>Intake</h5>
         </div>
 
         <div class="card">
