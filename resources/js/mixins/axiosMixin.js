@@ -36,7 +36,7 @@ export default {
 			this.$Progress.start();
 			axios.get("/api/referral_reasons")
 			.then(({data}) => {
-				this.referral_reasons = data.data
+				this.referralReasons = data.data
 			});
 			this.$Progress.finish();
 		},
@@ -60,11 +60,7 @@ export default {
 		// 	.then(({data}) => (this.abilities = data.data));
 		// 	this.$Progress.finish();
 		// },
-		getServices(){			
-			this.$Progress.start();
-			axios.get("/api/services").then(({data}) => (this.services = data.data));
-			this.$Progress.finish();
-		},
+
 
 		getCasee(caseeId){
 			this.$Progress.start();
@@ -202,9 +198,19 @@ export default {
 			})
 		},
 
+		getServiceTypes(){
+			this.$Progress.start();
+			axios.get('/api/service-types/')
+			.then((response) => {
+				this.serviceTypes = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
 	},
-
-
 
 	
 };

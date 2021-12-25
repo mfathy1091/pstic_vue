@@ -20,13 +20,16 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'bio',
         'photo',
         'type'
     ];
+
+    protected $appends = ['full_name'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -65,8 +68,27 @@ class User extends Authenticatable
     }
 
     public function hasPermission(string $permissionName)
-{
-    return null !== $this->permissions()->where('name', $permissionName)->first();
-}
+    {
+        return null !== $this->permissions()->where('name', $permissionName)->first();
+    }
+
+    // Accessors
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    // Mutators
+    public function setFirstNameAttribute($value)
+    {
+        $this->attributes['first_name'] = ucfirst(strtolower($value));
+        
+    }
+
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = ucfirst(strtolower($value));
+        
+    }
 
 }

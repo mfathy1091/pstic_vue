@@ -20,6 +20,16 @@ class Emergency extends Model
     {
         return $this->belongsTo(Record::class, 'record_id');
     }
+    
+    public function referral()
+    {
+        return $this->belongsTo(Referral::class, 'referral_id');
+    }
+
+    public function casee()
+    {
+        return $this->belongsTo(Casee::class, 'casee_id');
+    }
 
     public function user()
     {

@@ -16,6 +16,8 @@ class CreateEmergenciesTable extends Migration
         Schema::create('emergencies', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('record_id');
+            $table->unsignedInteger('referral_id');
+            $table->unsignedInteger('casee_id');
             $table->unsignedInteger('user_id');
             $table->date('emergency_date');
             $table->text('comment');
@@ -24,6 +26,8 @@ class CreateEmergenciesTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('record_id')->references('id')->on('records')->onDelete('cascade');
+            $table->foreign('referral_id')->references('id')->on('referrals')->onDelete('cascade');
+            $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');
             $table->foreign('emergency_type_id')->references('id')->on('emergency_types')->onDelete('cascade');
         });
     }

@@ -1,6 +1,9 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/home.js": "/js/home.js",
+    "/js/pss.js": "/js/pss.js",
+    "/js/pssReferrals.js": "/js/pssReferrals.js",
+    "/js/pssEmergencies.js": "/js/pssEmergencies.js",
     "/js/workerPssReferrals.js": "/js/workerPssReferrals.js",
     "/js/caseDetails.js": "/js/caseDetails.js",
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
@@ -8,10 +11,15 @@
     "/js/caseHousingReferrals.js": "/js/caseHousingReferrals.js",
     "/js/referralDetails.js": "/js/referralDetails.js",
     "/js/RecordDetails.js": "/js/RecordDetails.js",
-    "/js/statistics.js": "/js/statistics.js",
-    "/js/create-activity.js": "/js/create-activity.js",
-    "/js/create-emergency.js": "/js/create-emergency.js",
+    "/js/userSetttings.js": "/js/userSetttings.js",
     "/js/users.js": "/js/users.js",
     "/js/roles.js": "/js/roles.js",
+    "/js/setttings.js": "/js/setttings.js",
+    "/js/nationalities.js": "/js/nationalities.js",
+    "/js/referralSources.js": "/js/referralSources.js",
+    "/js/referralReasons.js": "/js/referralReasons.js",
+    "/js/serviceTypes.js": "/js/serviceTypes.js",
+    "/js/create-activity.js": "/js/create-activity.js",
+    "/js/create-emergency.js": "/js/create-emergency.js",
     "/css/app.css": "/css/app.css"
 }

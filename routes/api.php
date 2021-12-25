@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['nationalities'=> 'API\NationalityController']);
     Route::apiResources(['relationships'=> 'API\RelationshipController']);
     Route::apiResources(['referral_reasons'=> 'API\ReasonController']);
-    Route::apiResources(['servicetypes'=> 'API\ServicetypeController']);
+    Route::apiResources(['service-types'=> 'API\ServicetypeController']);
     Route::apiResources(['disabilities'=> 'API\DisabilityController']);
 
 

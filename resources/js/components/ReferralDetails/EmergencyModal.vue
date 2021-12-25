@@ -15,7 +15,7 @@
 
 							<div class="form-group">
 								<label for="worker_name" class="form-label">Worker Name</label>
-								<input id="worker_name" type="text" name="worker_name" class="form-control" autocomplete="off" :value="currentUser.name" disabled>
+								<input id="worker_name" type="text" name="worker_name" class="form-control" autocomplete="off" :value="currentUser.full_name" disabled>
 								<!-- <HasError :form="emergencyForm" field="worker_name" /> -->
 							</div>
 
@@ -49,11 +49,11 @@
 								<!-- <HasError :form="emergencyForm" field="comment" /> -->
 							</div>
 
-							<div class="form-group">
+							<div class="form-group" v-if="referral">
 								<label class="typo__label">Affected Beneficiaries</label>
 								<multiselect 
-								v-model="emergencyForm.emergencyBeneficiaries" 
-								:options="caseeBeneficiaries" 
+								v-model="emergencyForm.beneficiaries" 
+								:options="referral.beneficiaries" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -104,21 +104,24 @@ export default {
 	data() {
 		return {
 			referral: "",
-			caseeBeneficiaries: [],
 			emergencyTypes: [],
 			emergencyForm: new Form({
 				id: '',
 				record_id: '',
+				referral_id: '',
+				casee_id: '',
                 emergency_date: '',
                 comment: '',
                 emergency_type_id: '',
-				emergencyBeneficiaries: [],
+				beneficiaries: [],
 			})
 		}
 	},
     watch: {
         selectedEmergency (next, prev){
             this.emergencyForm.fill(this.selectedEmergency);
+			this.emergencyForm.referral_id = this.$route.params.referralId
+			this.emergencyForm.casee_id = this.$route.params.caseeId
         }
     },
 
@@ -188,7 +191,6 @@ export default {
 
     created (){
 		this.getReferral(this.$route.params.referralId)
-        this.getCaseeBeneficiaries(this.$route.params.caseeId);
         this.getEmergencyTypes();
 		console.log(this.$route.params.referralId);
     },

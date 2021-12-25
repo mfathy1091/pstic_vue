@@ -12,11 +12,65 @@
 					</div>
 					<form @submit.prevent="activityEditMode ? updateActivity() : createActivity()">
 						<div class="modal-body">
+
 							<div class="form-group">
-								<label for="name" class="form-label">Activity Date</label>
-								<input id="name" v-model="activityForm.activity_date" type="text" name="activity_date" class="form-control">
-								<HasError :form="activityForm" field="activity_date" />
+								<label for="worker_name" class="form-label">Worker Name</label>
+								<input id="worker_name" type="text" name="worker_name" class="form-control" autocomplete="off" :value="currentUser.full_name" disabled>
+								<!-- <HasError :form="activityForm" field="worker_name" /> -->
 							</div>
+
+							<div class="form-group">
+								<label for="activity_date" class="form-label">Activity Date</label>
+								<input v-model="activityForm.activity_date" id="activity_date" type="text" name="activity_date" class="form-control" autocomplete="off" placeholder="YYYY-MM-DD">
+								<!-- <HasError :form="activityForm" field="activity_date" /> -->
+							</div>
+							
+							<div class="form-group">
+								<label for="location" class="form-label">Activity Month</label>
+								<select v-model="activityForm.record_id" name="location" id="location" class="form-control">
+									<option value='0' disabled selected>Choose</option>
+									<option :value="record.id" v-for="record in referral.records" :key="record.id">{{ record.month.name }}</option>
+								</select>
+								<!-- <HasError :form="activityForm" field="location" /> -->
+							</div>
+
+							<div class="form-group">
+								<label for="location" class="form-label">Service Type</label>
+								<select v-model="activityForm.service_type_id" name="location" id="location" class="form-control">
+									<option value='0' disabled selected>Choose</option>
+									<option :value="serviceType.id" v-for="serviceType in serviceTypes" :key="serviceType.id">{{ serviceType.name }}</option>
+								</select>
+								<!-- <HasError :form="activityForm" field="location" /> -->
+							</div>
+
+							<div class="form-group">
+								<label for="comment" class="form-label">Comment</label>
+								<textarea class="form-control" rows="3" v-model="activityForm.comment" name="comment"></textarea>
+								<!-- <HasError :form="activityForm" field="comment" /> -->
+							</div>
+							<hr>
+							<label class="typo__label">Services provided</label>
+							
+							<div v-if="serviceTypes">
+								<div class="form-group" v-for="beneficiary in referral.beneficiaries" :key="beneficiary.id">
+									{{ beneficiary.name }}
+									<multiselect 
+									v-model="activityForm.beneficiaries" 
+									:options="serviceTypes" 
+									:multiple="true" 
+									:close-on-select="false" 
+									:clear-on-select="false" 
+									:preserve-search="true" 
+									placeholder="Pick some" 
+									label="name" 
+									track-by="name" 
+									:preselect-first="true">
+										<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+									</multiselect>
+									<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+								</div>
+							</div>
+
 
 						</div>
 						<div class="modal-footer">
@@ -32,58 +86,100 @@
 
 <script>
 import Form from 'vform'
-import axiosMixin from '../../mixins/axiosMixin'	
+import axiosMixin from '../../mixins/axiosMixin'
+import Multiselect from 'vue-multiselect'
 
 export default {
 	mixins: [axiosMixin],
+	components: { Multiselect },
     props:{
-        activityEditMode: Boolean,
-        selectedActivity: Object,
+		// recordId: {
+        //     type: Number,
+        //     required: true
+        // },
+        activityEditMode: {
+            type: Boolean,
+            required: true
+        },
+		selectedActivity: {
+            // type: Object,
+            required: true
+        },
     },
 	data() {
 		return {
+			referral: "",
+			serviceTypes: [],
 			activityForm: new Form({
 				id: '',
-				activity_date: '',
+				record_id: '',
+				referral_id: '',
+				casee_id: '',
+                activity_date: '',
+                comment: '',
+                service_type_id: '',
+				beneficiaries: [],
 			})
 		}
 	},
     watch: {
         selectedActivity (next, prev){
-            this.activityForm.fill(this.selectedActivity)
+            this.activityForm.fill(this.selectedActivity);
+			this.activityForm.referral_id = this.$route.params.referralId
+			this.activityForm.casee_id = this.$route.params.caseeId
         }
     },
 
 	methods: {
+		appendBeneficiaries() {
 
-		createActivity() {
+		},
+
+        getServiceTypes() {
 			this.$Progress.start();
-			this.activityForm.post('/api/activities')
-			.then(() => {
+			axios.get('/api/service-types/')
+			.then((response) => {
 				// success
-				Fire.$emit('recordsChanged');
+                this.serviceTypes = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                console.log(e);
+			})
+		},
 
+        createActivity() {
+			this.$Progress.start();
+			// this.activityForm.record_id = this.recordId
+			this.activityForm.post('/api/activities')
+			.then((response) => {
+				// success
 				$('#activityModal').modal('hide')
+				Fire.$emit('referralChanged');
+								
 				Toast.fire({
 					icon: 'success',
 					title: 'Added successfully'
 				})
-				
 				this.$Progress.finish();
 			})
-			.catch(() => {
-				// error
+			.catch((e) => {
 				this.$Progress.fail();
+                Toast.fire({
+                    icon: 'error',
+                    title: e
+                })
 			})
 		},
 
 		updateActivity(){
-            
 			this.$Progress.start();
-			this.activityForm.put('/api/nationalities/'+this.activityForm.id)
+			this.activityForm.put('/api/activities/'+this.activityForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('recordsChanged');
+				Fire.$emit('referralChanged');
 				$('#activityModal').modal('hide')
 				Swal.fire(
 					'Updated!',
@@ -100,7 +196,17 @@ export default {
 
 	},
 
-	created() {
-	}
+    created (){
+		this.getReferral(this.$route.params.referralId)
+        this.getServiceTypes();
+		console.log(this.$route.params.referralId);
+    },
+    computed:{
+        currentUser: {
+            get(){
+                return this.$store.state.currentUser.user;
+            }
+        }
+    },
 }
 </script>

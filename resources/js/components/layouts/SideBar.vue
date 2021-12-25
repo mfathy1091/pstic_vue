@@ -16,12 +16,12 @@
                     <!-- <img src="./img/profile.png" class="img-circle elevation-2" alt="User Image"> -->
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">{{ currentUser.name }}</a>
+                    <a href="#" class="d-block">{{ currentUser.full_name }}</a>
                 </div>
             </div>
 
             <!-- SidebarSearch Form -->
-            <div class="form-inline">
+            <!-- <div class="form-inline">
                 <div class="input-group" data-widget="sidebar-search">
                     <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
                     <div class="input-group-append">
@@ -30,61 +30,64 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
-
-
-                        <li class="nav-item">
-                            <router-link to="/home" class="nav-link">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>Home</p>
-                            </router-link>
-                        </li>
                         <li class="nav-item">
                             <router-link
                             to='/cases' class="nav-link">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>All Cases</p>
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Cases</p>
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/referrals/pss-referrals" class="nav-link">
+                            <router-link :to="{ name: 'pss' }" class="nav-link">
                                 <i class="nav-icon fas fa-file-alt"></i>
-                                <p>Intake</p>
+                                <p>PSS Intake</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-header">My Pages</li>
+
+                        <li class="nav-item">
+                            <router-link to="/home" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>My PSS Intake</p>
                             </router-link>
                         </li>
 
-                        <li class="nav-item">
+
+                        <!-- <li class="nav-item">
                             <router-link to="/dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </router-link>
-                        </li>
+                        </li> -->
 
-                        
-
-                        <li class="nav-header">All Cases</li>
-
-                        <li class="nav-item">
-                            <router-link to="/search" class="nav-link">
-                                <i class="nav-icon far fa-circle"></i>
-                                <p>Add New Case</p>
-                            </router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link to="/emergencies" class="nav-link">
-                                <i class="nav-icon far fa-circle"></i>
-                                <p>Emergencies</p>
-                            </router-link>
-                        </li>
 
                     <li class="nav-header">Settings</li>
-                    <li class="nav-item">
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'userSettings'}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Users</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'settings'}" class="nav-link">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>Settings</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'profile'}" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>Profile</p>
+                            </router-link>
+                        </li>
+                    <!-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
                             <p>
@@ -95,56 +98,24 @@
                         
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <router-link to="/users" class="nav-link">
+                                <router-link :to="{ name: 'userSettings'}" class="nav-link">
                                     <i class="fas fa-minus nav-icon"></i>
-                                    <p>Users</p>
+                                    <p>Users / Roles</p>
                                 </router-link>
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <router-link to="/roles" class="nav-link">
+                                <router-link :to="{ name: 'settings'}" class="nav-link">
                                     <i class="fas fa-minus nav-icon"></i>
-                                    <p>Roles</p>
+                                    <p>Settings</p>
                                 </router-link>
                             </li>
                         </ul>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <router-link to="/nationalities" class="nav-link">
-                                    <i class="fas fa-minus nav-icon"></i>
-                                    <p>nationality</p>
-                                </router-link>
-                            </li>
-                        </ul>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <router-link to="/referral_sources" class="nav-link">
-                                    <i class="fas fa-minus nav-icon"></i>
-                                    <p>Referral Sources</p>
-                                </router-link>
-                            </li>
-                        </ul>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <router-link to="/referral_reasons" class="nav-link">
-                                    <i class="fas fa-minus nav-icon"></i>
-                                    <p>Referral Reasons</p>
-                                </router-link>
-                            </li>
-                        </ul>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <router-link to="/servicetypes" class="nav-link">
-                                    <i class="fas fa-minus nav-icon"></i>
-                                    <p>Service Types</p>
-                                </router-link>
-                            </li>
-                        </ul>
-                    </li>
+                    </li> -->
                     
                     <!-- @can('pss-menu') -->
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
@@ -160,7 +131,7 @@
                                 </router-link>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                     <!-- @endcan -->
 
                     <li class="nav-item">

@@ -12,7 +12,7 @@
         </nav>
         
         <div class="row mt-3 mb-3 pl-3">
-            <h5>{{ currentUser.name }}</h5>
+            <h5>{{ currentUser.full_name }}</h5>
         </div>
 
         <div class="card">

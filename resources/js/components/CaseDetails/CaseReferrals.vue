@@ -44,7 +44,7 @@
                             </div>
 
                         </td>
-                        <td>{{ referral.current_assigned_psw.name }}</td>
+                        <td>{{ referral.current_assigned_psw.full_name }}</td>
 
                         <td>
                             <router-link

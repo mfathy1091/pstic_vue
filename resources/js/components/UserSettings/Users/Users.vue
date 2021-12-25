@@ -1,0 +1,156 @@
+<style scoped>
+.badge{
+	font-size: 0.7rem;
+	margin-left: 2px;
+	
+}
+</style>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
+<template>
+	<div>
+		<div class="card-body">
+			<div class="form-inline ml-2">
+				<button class="btn btn-success btn-sm mr-2" @click="showCreateUserModal" v-if="$can('user_create')">
+					<i class="fas fa-plus-circle"></i><span><b> User</b></span>
+				</button>
+
+                <button class="btn btn-secondary btn-sm mr-5" @click="getUsers">
+					<i class="fas fa-sync-alt"></i>
+				</button>
+
+                <select @change="getUsers" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value='-1' disabled>Worker...</option>
+					<!-- <option v-for='user in users' :value='user.id' :key="user.id">{{ user.name }}</option> -->
+                </select>                
+            </div>
+			<div class="row mt-3">
+				<table class="border table table-hover">
+					<thead>
+						<tr>
+							<th>Full Name</th>
+							<th>Email</th>
+							<th>Registered At</th>
+							<th>Roles</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="user in users" :key="user.id">
+							<td>{{ user.full_name }}</td>
+							<td>{{ user.email }}</td>
+							<td>{{ user.created_at | myDate }}</td>
+							<td>
+								<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
+							</td>
+							<td>
+								<!-- <a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')"> -->
+								<a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')">
+									<i class="fa fa-edit blue"></i>
+								</a>
+								
+								<a class="clickable" @click="deleteUser(user.id)" v-if="$can('user_delete')">
+									<i class="fa fa-trash red"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+		<!-- Modal -->
+		<UserModal 
+		:v-if="selectedUser.id"
+		:editMode='editMode' 
+		:selectedUser='selectedUser' 
+		v-on:usersChanged="getUsers()">
+		</UserModal>
+
+	</div>
+</template>
+<script>
+import Form from 'vform'
+import Multiselect from 'vue-multiselect'
+import UserModal from './UserModal'
+import axiosMixin from '../../../mixins/axiosMixin'
+
+export default {
+	components: { 
+		Multiselect,
+		UserModal,
+	},
+	mixins: [axiosMixin],
+	data() {
+		return {
+			editMode: false,
+			selectedUser: {},
+			users: {},
+			roles: [],
+		}
+	},
+	methods: {
+
+
+
+		showCreateUserModal(){
+			this.editMode = false;
+			this.selectedUser = {};
+			$('#userModal').modal('show')
+		},
+
+
+		showEditUserModal(user){
+			this.editMode = true;
+			this.selectedUser = user;
+			$('#userModal').modal('show')
+		},
+
+
+		deleteUser(id){
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			})
+			.then((result) => {
+				if (result.isConfirmed) {
+					this.$Progress.start();
+					axios.delete('/api/user/'+id)
+					.then(() => {
+						// success
+						Fire.$emit('usersChanged');
+						Swal.fire(
+							'Deleted!',
+							'It has been deleted.',
+							'success'
+						)
+						this.$Progress.finish();
+					})
+					.catch(() => {
+						Swal("Failed!", "There was something wrong.", "warning");
+					});
+				}
+			})
+		},
+	},
+
+	created() {
+		// console.log($getPermissions());
+		
+		this.getUsers()
+		
+		Fire.$on('usersChanged', () => {
+			this.getUsers();
+		});
+
+		
+	}
+}
+</script>

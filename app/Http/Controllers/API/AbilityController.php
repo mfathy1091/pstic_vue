@@ -21,7 +21,7 @@ class AbilityController extends Controller
         $permissions = Auth::user()->roles()->with('permissions')->get()
             ->pluck('permissions')
             ->flatten()
-            ->pluck('name')
+            ->pluck('slug')
             ->toArray();
         
         return new AbilityResource($permissions);

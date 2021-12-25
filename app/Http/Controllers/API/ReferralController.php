@@ -44,6 +44,7 @@ class ReferralController extends Controller
 
         $referrals->with(
             'casee',
+            'beneficiaries',
             'referralSource',
             'current_assigned_psw',
             'records', 
@@ -91,12 +92,17 @@ class ReferralController extends Controller
     public function show($id)
     {
         $referral = Referral::with(
+        'beneficiaries',
         'originalDirectIndividual', 
         'referralSource', 
         'casee',
         'casee.beneficiaries',
         'records.emergencies.user',
         'reasons', 
+        'emergencies.record.month',
+        'emergencies.user',
+        'emergencies.emergencyType',
+        'emergencies.beneficiaries',
         'records', 
         'records.month', 
         'records.status', 

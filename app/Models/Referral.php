@@ -88,6 +88,10 @@ class Referral extends Model
         ->withPivot(['assigned_worker_id', 'direct_beneficiary_id', 'current_status_id'])
         ->using(ReferralSection::class);
     }
+    public function emergencies()
+    {
+        return $this->hasMany(Emergency::class)->orderBy('emergency_date', 'DESC');
+    }
 
     public function records()
     {

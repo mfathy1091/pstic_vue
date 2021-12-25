@@ -14,7 +14,7 @@ class EmergencyController extends Controller
     
     public function index()
     {
-        $emergencies =  Emergency::with('emergencyType', 'user')->get();
+        $emergencies =  Emergency::with('emergencyType', 'user', 'beneficiaries')->get();
 
         $data = [
             'data' => $emergencies,
@@ -27,6 +27,8 @@ class EmergencyController extends Controller
     {
         $this->validate($request, [
             'record_id' => 'required',
+            'referral_id' => 'required',
+            'casee_id' => 'required',
             'emergency_date' => 'required',
             'comment' => 'required',
             'emergency_type_id' => 'required',
@@ -34,11 +36,16 @@ class EmergencyController extends Controller
 
         $emergency = Emergency::create([
             'record_id' => $request['record_id'],
+            'referral_id' => $request['referral_id'],
+            'casee_id' => $request['casee_id'],
             'emergency_date' => $request['emergency_date'],
             'comment' => $request['comment'],
             'emergency_type_id' => $request['emergency_type_id'],
             'user_id' => Auth::id(),
         ]);
+
+        $beneficiariesIds = collect($request->input('beneficiaries'))->pluck('id');
+        $emergency->beneficiaries()->sync($beneficiariesIds);
 
         $data = [
             'data' => $emergency,
@@ -56,6 +63,8 @@ class EmergencyController extends Controller
             
             $this->validate($request, [
                 'record_id' => 'required',
+                'referral_id' => 'required',
+                'casee_id' => 'required',
                 'emergency_date' => 'required',
                 'comment' => 'required',
                 'emergency_type_id' => 'required',
@@ -63,12 +72,17 @@ class EmergencyController extends Controller
 
             $emergency->update([
                 'record_id' => $request['record_id'],
+                'referral_id' => $request['referral_id'],
+                'casee_id' => $request['casee_id'],
                 'emergency_date' => $request['emergency_date'],
                 'comment' => $request['comment'],
                 'emergency_type_id' => $request['emergency_type_id'],
                 'user_id' => Auth::id(),
             ]);
             
+            $beneficiariesIds = collect($request->input('beneficiaries'))->pluck('id');
+            $emergency->beneficiaries()->sync($beneficiariesIds);
+
             $data = [
                 'data' => $emergency,
             ];

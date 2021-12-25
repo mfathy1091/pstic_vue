@@ -43,7 +43,7 @@
 							<label class="typo__label">Referral Reasons</label>
 							<multiselect 
 							v-model="referralForm.referral_reasons" 
-							:options="referral_reasons" 
+							:options="referralReasons" 
 							:multiple="true" 
 							:close-on-select="false" 
 							:clear-on-select="false" 
@@ -97,10 +97,10 @@ export default {
 
 			referralSources: [],
             nationalities: [],
-			referral_reasons: [],
+			referralReasons: [],
 
 
-			users: {},
+			users: [],
 			roles: [],
 			referralForm : new Form({
 				id: '',

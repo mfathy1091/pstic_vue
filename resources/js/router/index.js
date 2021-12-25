@@ -20,8 +20,9 @@ const routes = [
 
     { path: '/cases', name: "cases", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Cases.vue'), children: [] },
 
-    { path: '/referrals', name: "referrals", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Referrals/Referrals.vue'), children: [
-        { path: "pss-referrals", name: "pssReferrals", props: true, component: () => import(/* webpackChunkName: "workerPssReferrals" */ '../components/Referrals/PssReferrals.vue') },
+    { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
+        { path: "pss-referrals", name: "pssReferrals", props: true, component: () => import(/* webpackChunkName: "pssReferrals" */ '../components/PSS/PssReferrals.vue') },
+        { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
 
     ] },
 
@@ -34,26 +35,32 @@ const routes = [
         { path: "beneficiaries", name: "caseBeneficiaries", props: true, component: () => import(/* webpackChunkName: "caseBeneficiaries" */ '../components/CaseDetails/CaseBeneficiaries/CaseBeneficiaries.vue') },
         { path: "referrals", name: "caseReferrals", props: true, component: () => import(/* webpackChunkName: "caseReferrals" */ '../components/CaseDetails/CaseReferrals.vue') , children: [] },
         { path: "housing-referrals", name: "caseHousingReferrals", props: true, component: () => import(/* webpackChunkName: "caseHousingReferrals" */ '../components/CaseDetails/CaseHousingReferrals/CaseHousingReferrals.vue') },
-        { path: 'referrals/:referralId', name: 'referralDetails', props: true, component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/ReferralDetails.vue'), children: [
-            {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
-        ] },
+
     ] },
 
+    { path: '/cases/:caseeId/referrals/:referralId', name: 'referralDetails', props: true, component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/ReferralDetails.vue'), children: [
+        // {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
+    ] },
 
+    { path: '/user-settings', name: "userSettings", props: true, component: () => import(/* webpackChunkName: "userSetttings" */ '../components/UserSettings/UserSettings.vue'), children: [
+        { path: "users", name: "users", props: true, component: () => import(/* webpackChunkName: "users" */ '../components/UserSettings/Users/Users.vue') },
+        { path: "roles", name: "roles", props: true, component: () => import(/* webpackChunkName: "roles" */ '../components/UserSettings/Roles/Roles.vue') },
 
-    
+    ] },
+
+    { path: '/settings', name: "settings", props: true, component: () => import(/* webpackChunkName: "setttings" */ '../components/Settings/Settings.vue'), children: [
+        { path: "nationalities", name: "nationalities", props: true, component: () => import(/* webpackChunkName: "nationalities" */ '../components/Settings/Nationalities/Nationalities.vue') },
+        { path: "referral_sources", name: "referralSources", props: true, component: () => import(/* webpackChunkName: "referralSources" */ '../components/Settings/ReferralSources.vue') },
+        { path: "referral_reasons", name: "referralReasons", props: true, component: () => import(/* webpackChunkName: "referralReasons" */ '../components/Settings/ReferralReasons.vue') },
+        { path: "service_types", name: "serviceTypes", props: true, component: () => import(/* webpackChunkName: "serviceTypes" */ '../components/Settings/ServiceTypes.vue') },
+
+    ] },
 
     {
         path: "/dashboard", name: "dashboard", component: Dashboard,
         children: []
     },
 
-    {
-        path: '/emergencies',
-        name:'emergencies',
-        component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics/Container.vue'),
-        props: true
-    },
     
     {
         path: '/records/:recordId/activities/create',
@@ -71,18 +78,7 @@ const routes = [
     
 
 
-    { 
-        path: '/users', 
-        name: 'users',
-        component: () => import(/* webpackChunkName: "users" */ "../components/users/Container"),
-        props: true
-    },
-    { 
-        path: '/roles', 
-        name: 'roles',
-        component: () => import(/* webpackChunkName: "roles" */ "../components/roles/Container"),
-        props: true
-    },
+
 
     // { 
     //     path: '/referrals/:referralId', 
@@ -96,12 +92,9 @@ const routes = [
 
     { path: '/referrals/create', component: require('../components/AddReferral.vue').default },
 
-    { path: '/nationalities', component: require('../components/Nationalities/Container.vue').default },
-    { path: '/referral_sources', component: require('../components/ReferralSources.vue').default },
-    { path: '/referral_reasons', component: require('../components/ReferralReasons.vue').default },
-    { path: '/servicetypes', component: require('../components/Servicetypes.vue').default },
 
-    { path: '/profile', component: require('../components/Profile.vue').default },
+
+    { path: '/profile', name: 'profile', component: require('../components/Profile.vue').default },
     { path: '/beneficiaries/check', component: require('../components/AddReferral/CheckIndividual.vue').default },
     { path: '/beneficiaries/create_registered', component: require('../components/AddRegisteredIndividual.vue').default },
     { path: '/beneficiaries/:id', component: ShowIndividual },

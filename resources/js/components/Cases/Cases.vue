@@ -1,9 +1,5 @@
 <style scoped>
-.badge{
-	font-size: 0.7rem;
-	margin-left: 2px;
-	
-}
+
 </style>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
@@ -16,7 +12,7 @@
             </ol>
         </nav>
 
-        <div class="row mt-3 mb-3 pl-3">
+        <div class="row mt-3 mb-3 pl-3"> 
             <h5>Cases</h5>
         </div>
 
@@ -34,17 +30,31 @@
             </div>
             <!-- <router-view :key="$route.path"></router-view> -->
 
-            <div class="card-body">
-                <div class="row ml-2">
+            <div class="card-body align-top">
+                <div class="form-inline ml-2">
                     <button class="btn btn-success btn-sm mr-2">
                         <i class="fas fa-plus-circle"></i><span><b> Case</b></span>
                     </button>
-                    <button class="btn btn-secondary btn-sm" @click="getCasees(casee)">
+                    <button class="btn btn-secondary btn-sm mr-5" @click="getCasees(casee)">
                         <i class="fas fa-sync-alt"></i>
                     </button>
-                </div>
 
-                <div class="form-inline mt-3 ml-2">
+                    <ValidationObserver v-slot="{ handleSubmit }">
+                        <form @submit.prevent="handleSubmit(search)">
+                            <ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
+                                <div class="input-group">
+                                    <input v-model="searchForm.fileNumber" type="search" :placeholder="mask" class="form-control form-control-sidebar" aria-label="Search">
+                                    <div class="input-group-append">
+                                        <button type="sumbit" class="btn btn-sidebar">
+                                            <i class="fas fa-search fa-fw"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-danger">{{ errors[0] }}</span>
+                            </ValidationProvider>
+                        </form>
+                    </ValidationObserver>
+
                     <select v-model="filter.status_id" @change="getCasees" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                         <option value="-1" disabled>Filter by...</option>
                         <option value="1">Cases with PSS Referrals</option>
@@ -52,23 +62,9 @@
                     </select>
                 </div>
 
-                <div class="row mt-3 ml-2">
-                    <ValidationObserver v-slot="{ handleSubmit }">
-                        <label for="file-number" class="form-label">Search By File Number</label>
-                        <form @submit.prevent="handleSubmit(search)">
-                            <ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
-                            <div class="form-group mr-2">
-                                <input v-model="searchForm.fileNumber" type="text" :placeholder="mask" class="form-control">
-                                <span class="text-danger">{{ errors[0] }}</span>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Search</button>
-                            </ValidationProvider>
-                        </form>
-                    </ValidationObserver>
-                </div>
 
                 <div class="row mt-3" v-if="casees">	
-                    <table class="border table table-hover table-sm">
+                    <table class=" table table-hover border table-sm">
                         <thead>
                             <tr>
                                 <th>File #</th>
