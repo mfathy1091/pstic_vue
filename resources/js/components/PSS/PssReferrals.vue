@@ -18,13 +18,18 @@
 
                 <select v-model="filter.user_id" @change="getReferrals" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value='-1' disabled>Worker...</option>
-					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.name }}</option>
+					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
 
                 <select v-model="filter.is_new" @change="getReferrals" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                     <option value="-1" disabled>New / Ongoing...</option>
                     <option value="1">New</option>
                     <option value="0">Ongoing</option>
+                </select>
+                <select v-model="filter.year_id" @change="getEmergencies" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>All Years...</option>
+                    <option value='2021'>2021</option>
+					<!-- <option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option> -->
                 </select>
                 
                 <select v-model="filter.month_id" @change="getReferrals" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
@@ -133,6 +138,7 @@ export default {
             filter: {
                 is_new: '-1',
                 status_id: '-1',
+                year_id: '2021',
                 month_id: '-1',
                 user_id: '-1'
             }

@@ -15,6 +15,7 @@ class AdminUserSeeder extends Seeder
             'last_name' => 'Fathy',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('pstic12345'),
+            'budget_id' => '1',
         ]);
     
         // $role = Role::create(['name' => 'Admin']);

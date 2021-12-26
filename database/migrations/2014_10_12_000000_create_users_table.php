@@ -21,8 +21,12 @@ class CreateUsersTable extends Migration
             $table->string('password');
             // $table->mediumText('bio')->nullable();
             $table->string('photo')->default('profile.png');
+            $table->boolean('is_active')->default(1);
+            $table->unsignedBigInteger('budget_id');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('budget_id')->references('id')->on('budgets')->onDelete('cascade');
         });
     }
 

@@ -12,7 +12,6 @@
                 <form @submit.prevent="referralEditMode ? updateReferral() : createReferral()">
                     <div class="modal-body">
 						<div class="form-group">
-
 							<label for="referral_source_id" class="form-label">Referral Source</label>
 							<select name="referral_source_id" v-model="referralForm.referral_source_id" id="referral_source_id" class="form-control" :class="{ 'is-invalid': referralForm.errors.has('referral_source_id') }">
 								<option value='0' disabled>Choose...</option>

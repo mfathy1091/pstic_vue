@@ -16,6 +16,11 @@ class Emergency extends Model
         return $this->belongsToMany(Beneficiary::class, 'beneficiaries_emergencies', 'emergency_id', 'beneficiary_id');
     }
 
+    public function emergencyTypes()
+    {
+        return $this->belongsToMany(EmergencyType::class, 'emergencies_emergency_types', 'emergency_id', 'emergency_type_id');
+    }
+
     public function record()
     {
         return $this->belongsTo(Record::class, 'record_id');
@@ -36,8 +41,4 @@ class Emergency extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function emergencyType()
-    {
-        return $this->belongsTo(EmergencyType::class, 'emergency_type_id');
-    }
 }

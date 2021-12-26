@@ -35,15 +35,6 @@
 							</div>
 
 							<div class="form-group">
-								<label for="location" class="form-label">Service Type</label>
-								<select v-model="activityForm.service_type_id" name="location" id="location" class="form-control">
-									<option value='0' disabled selected>Choose</option>
-									<option :value="serviceType.id" v-for="serviceType in serviceTypes" :key="serviceType.id">{{ serviceType.name }}</option>
-								</select>
-								<!-- <HasError :form="activityForm" field="location" /> -->
-							</div>
-
-							<div class="form-group">
 								<label for="comment" class="form-label">Comment</label>
 								<textarea class="form-control" rows="3" v-model="activityForm.comment" name="comment"></textarea>
 								<!-- <HasError :form="activityForm" field="comment" /> -->
@@ -51,11 +42,11 @@
 							<hr>
 							<label class="typo__label">Services provided</label>
 							
-							<div v-if="serviceTypes">
-								<div class="form-group" v-for="beneficiary in referral.beneficiaries" :key="beneficiary.id">
+							<div>
+								<div class="form-group" v-for="beneficiary in referralBeneficiaries" v-bind:key="beneficiary.id">
 									{{ beneficiary.name }}
 									<multiselect 
-									v-model="activityForm.beneficiaries" 
+									v-model="activityForm.services" 
 									:options="serviceTypes" 
 									:multiple="true" 
 									:close-on-select="false" 
@@ -110,6 +101,7 @@ export default {
 		return {
 			referral: "",
 			serviceTypes: [],
+			referralBeneficiaries: [],
 			activityForm: new Form({
 				id: '',
 				record_id: '',
@@ -117,23 +109,87 @@ export default {
 				casee_id: '',
                 activity_date: '',
                 comment: '',
-                service_type_id: '',
-				beneficiaries: [],
+                services: [],
+				activityBeneficiaries: [
+					{ beneficiary: '', services: [] }
+
+				],
 			})
 		}
 	},
     watch: {
         selectedActivity (next, prev){
             this.activityForm.fill(this.selectedActivity);
-			this.activityForm.referral_id = this.$route.params.referralId
-			this.activityForm.casee_id = this.$route.params.caseeId
+
+        }
+    },
+
+	watch: {
+        selectedActivity (next, prev){
+            if(this.activityEditMode){
+                this.activityForm.fill(this.selectedActivity)
+            }else{
+                this.resetUserForm();
+            }
+            
         }
     },
 
 	methods: {
-		appendBeneficiaries() {
+		resetUserForm() { // for create
+			this.activityForm.id = ''
+			this.activityForm.record_id = ''
+			this.activityForm.referral_id = this.$route.params.referralId
+			this.activityForm.casee_id = this.$route.params.caseeId
+			this.activityForm.activity_date = ''
+			this.activityForm.comment = ''
+			this.activityForm.services = []
+			// this.activityForm.beneficiariesServices = []
+			// this.appendToBeneficiariesArray()
+        },
+		appendToBeneficiariesArray(){
+			for (let i = 0; i < 3; i++) {
+				this.activityForm.beneficiariesServices.push({
+					beneficiary:'',
+					services: [],
+				})
+			}
 
+
+			// let beneficiaries = this.referral.beneficiaries;
+			// console.log(beneficiaries);
 		},
+        addToBeneficiariesArray(beneficiary)
+        {
+			
+            let status = document.getElementById('status'+beneficiary.id).value;
+
+            // check if the beneficiary already in the array
+            let found = this.recordForm.recordBeneficiaries.find(o => o.beneficiary_id === beneficiary.id);
+            
+            // if aleady in the array; just update the status
+            if(found){
+                // if status is execlude; remove the beneficiary
+                if($status == -1){
+                    this.recordForm.recordBeneficiaries.remove(found);
+                }
+                found.status = status;
+            }
+            // if not found; added it to the array
+            else{
+                //if($status == 1 || $status == 0){
+                    let recordBeneficiary = {
+                        "beneficiary_id": beneficiary.id,
+                        "status": status,
+                    };
+                    this.recordForm.recordBeneficiaries.push(recordBeneficiary);
+                //}
+
+            } 
+            console.log(found);
+            
+
+        },
 
         getServiceTypes() {
 			this.$Progress.start();
@@ -199,7 +255,8 @@ export default {
     created (){
 		this.getReferral(this.$route.params.referralId)
         this.getServiceTypes();
-		console.log(this.$route.params.referralId);
+		this.getReferralBeneficiaries(this.$route.params.referralId);
+		
     },
     computed:{
         currentUser: {

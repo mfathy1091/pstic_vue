@@ -32,6 +32,13 @@
                             PSS Emergencies
                         </router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'pssActivities' }"
+                            class="nav-link tab-header" active-class="active">   
+                            PSS Activities
+                        </router-link>
+                    </li>
                 </ul>
             </div>
             <router-view :key="$route.path"></router-view>

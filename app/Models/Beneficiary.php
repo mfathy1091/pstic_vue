@@ -20,6 +20,12 @@ class Beneficiary extends Model
         return $this->belongsToMany(Record::class, 'record_beneficiary', 'beneficiary_id', 'record_id');
     }
 
+
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'beneficiary_id');
+    }
+
     
     public function gender()
     {
@@ -54,9 +60,9 @@ class Beneficiary extends Model
         return $this->belongsTo(Casee::class, 'casee_id');
     }
 
-    public function beneficiaries()
+    public function referrals()
     {
-        return $this->hasMany(Beneficiary::class, 'beneficiary_id');
+        return $this->belongsToMany(Referral::class, 'referrals_beneficiaries', 'beneficiary_id', 'referral_id');
     }
 
 /*     public function pssCases()

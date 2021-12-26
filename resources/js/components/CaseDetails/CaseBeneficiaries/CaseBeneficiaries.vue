@@ -91,7 +91,7 @@ import BeneficiaryModal from './BeneficiaryModal'
 import axiosMixin from '../../../mixins/axiosMixin'
 
 export default {
-    name: 'Caseebeneficiaries',
+    name: 'Casebeneficiaries',
     mixins: [axiosMixin], 
 
     components: {

@@ -11,13 +11,42 @@ use App\Models\Record;
 class EmergencyController extends Controller
 {
 
-    
-    public function index()
+    public function index(Request $request)
     {
-        $emergencies =  Emergency::with('emergencyType', 'user', 'beneficiaries')->get();
+        $emergencies = Emergency::query();
+        // year_id: '2021',
+        // month_id: '',
+        // user_id: '',
+        // direct_only: '',
+
+        if($request->user_id != ''){
+            $emergencies->where('user_id', $request->user_id);
+        }
+
+        $emergencies->whereHas('record', function($q) use($request){
+            if($request->month_id != ''){
+                $q->where('month_id', $request->month_id);
+            }
+            // if($request->month_id != -1){
+            //     $q->where('month_id', $request->month_id);
+            // }
+            // if($request->status_id != -1){
+            //     $q->where('status_id', $request->status_id);
+            // }
+            return $q;
+        });
+
+        $emergencies->with(
+            'casee',
+            'beneficiaries',
+            'emergencyTypes',
+            'user',
+            'record', 
+            'record.month', 
+            'record.status');
 
         $data = [
-            'data' => $emergencies,
+            'data' => $emergencies->get(),
         ];
 
         return response($data, 200);
@@ -31,7 +60,7 @@ class EmergencyController extends Controller
             'casee_id' => 'required',
             'emergency_date' => 'required',
             'comment' => 'required',
-            'emergency_type_id' => 'required',
+            // 'emergency_types' => 'required',
         ]);
 
         $emergency = Emergency::create([
@@ -40,12 +69,14 @@ class EmergencyController extends Controller
             'casee_id' => $request['casee_id'],
             'emergency_date' => $request['emergency_date'],
             'comment' => $request['comment'],
-            'emergency_type_id' => $request['emergency_type_id'],
             'user_id' => Auth::id(),
         ]);
 
         $beneficiariesIds = collect($request->input('beneficiaries'))->pluck('id');
         $emergency->beneficiaries()->sync($beneficiariesIds);
+
+        $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
+        $emergency->emergencyTypes()->sync($emergencyTypesIds);
 
         $data = [
             'data' => $emergency,
@@ -67,7 +98,6 @@ class EmergencyController extends Controller
                 'casee_id' => 'required',
                 'emergency_date' => 'required',
                 'comment' => 'required',
-                'emergency_type_id' => 'required',
             ]);
 
             $emergency->update([
@@ -76,20 +106,20 @@ class EmergencyController extends Controller
                 'casee_id' => $request['casee_id'],
                 'emergency_date' => $request['emergency_date'],
                 'comment' => $request['comment'],
-                'emergency_type_id' => $request['emergency_type_id'],
                 'user_id' => Auth::id(),
             ]);
             
             $beneficiariesIds = collect($request->input('beneficiaries'))->pluck('id');
             $emergency->beneficiaries()->sync($beneficiariesIds);
 
+            $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
+            $emergency->emergencyTypes()->sync($emergencyTypesIds);
+
             $data = [
                 'data' => $emergency,
             ];
             
-            return response($data, 201);
-        }else{
-            return response('', 201);
+            return response($data, 200);
         }
 
     }

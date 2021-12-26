@@ -3,13 +3,13 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 v-show="!editMode" class="modal-title" id="userModalLabel">Create New User</h5>
-                    <h5 v-show="editMode" class="modal-title" id="userModalLabel">Edit User</h5>
+                    <h5 v-show="!userEditMode" class="modal-title" id="userModalLabel">Create New User</h5>
+                    <h5 v-show="userEditMode" class="modal-title" id="userModalLabel">Edit User</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editMode ? updateUser() : createUser()">
+                <form @submit.prevent="userEditMode ? updateUser() : createUser()">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name" class="form-label">First Name</label>
@@ -46,19 +46,32 @@
                             </multiselect>
                             <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
                         </div>
-
                         <div class="form-group">
+							<label for="budget_id" class="form-label">Budget</label>
+							<select name="budget_id" v-model="userForm.budget_id" id="budget_id" class="form-control" :class="{ 'is-invalid': userForm.errors.has('budget_id') }">
+								<option value=''>Choose...</option>
+								<option v-for='budget in budgets' :value='budget.id' :key="budget.id">{{ budget.name }}</option>
+							</select>
+							<HasError :form="userForm" field="budget_id" />
+						</div>
+
+                        <div v-show="!userEditMode" class="form-group">
                             <label for="password" class="form-label">Password</label>
                             <input v-model="userForm.password" type="password" name="password" id="password"
                             class="form-control" :class="{ 'is-invalid': userForm.errors.has('password') }">
                             <has-error :form="userForm" field="password"></has-error>
                         </div>
 
+                        <div class="form-group form-check">
+                            <input v-model="userForm.is_active" type="checkbox" class="form-check-input" id="is_active">
+                            <label class="form-check-label" for="is_active">Active?</label>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button v-show="!editMode" type="submit" class="btn btn-success">Create</button>
-                        <button v-show="editMode" type="submit" class="btn btn-primary">Update</button>
+                        <button v-show="!userEditMode" type="submit" class="btn btn-success">Create</button>
+                        <button v-show="userEditMode" type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
@@ -74,15 +87,16 @@ export default {
 	mixins: [axiosMixin],
 	components: { Multiselect },
     props:{
-        editMode: Boolean,
+        userEditMode: Boolean,
         selectedUser: Object,
     },
 	data() {
 		return {
-			// editMode: false,
+			// userEditMode: false,
             //  selected: this.selectedUser;,
 			users: {},
 			roles: [],
+            budgets: [],
 			userForm: new Form({
 				id: '',
 				first_name: '',
@@ -91,17 +105,35 @@ export default {
 				password: '',
 				photo: '',
 				roles: [],
+                budget_id: '',
+                is_active: '',
 			})
 		}
 	},
     watch: {
         selectedUser (next, prev){
-            this.userForm.fill(this.selectedUser)
+            if(this.userEditMode){
+                this.userForm.fill(this.selectedUser)
+            }else{
+                this.resetUserForm();
+            }
+            
         }
     },
 
 	methods: {
 
+        resetUserForm() {
+            this.userForm.id = '';
+            this.userForm.first_name = '';
+            this.userForm.last_name = '';
+            this.userForm.email = '';
+            this.userForm.password = '';
+            this.userForm.photo = '';
+            this.userForm.roles = [];
+            this.userForm.budget_id = '';
+            this.userForm.is_active = false;
+        },
 		createUser() {
 			this.$Progress.start();
 			this.userForm.post('/api/users')
@@ -148,6 +180,7 @@ export default {
 
 	created() {
 		this.getRoles();
+        this.getBudgets();
 	}
 }
 </script>

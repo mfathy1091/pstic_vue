@@ -45,6 +45,7 @@ class ReferralController extends Controller
         $referrals->with(
             'casee',
             'beneficiaries',
+            'emergencies',
             'referralSource',
             'current_assigned_psw',
             'records', 
@@ -101,7 +102,7 @@ class ReferralController extends Controller
         'reasons', 
         'emergencies.record.month',
         'emergencies.user',
-        'emergencies.emergencyType',
+        'emergencies.emergencyTypes',
         'emergencies.beneficiaries',
         'records', 
         'records.month', 

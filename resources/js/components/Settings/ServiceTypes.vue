@@ -12,7 +12,7 @@
 
 				<select @change="getNationalities" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value='-1' disabled>Worker...</option>
-					<!-- <option v-for='user in users' :value='user.id' :key="user.id">{{ user.name }}</option> -->
+					<!-- <option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option> -->
 				</select>                
 			</div>
 

@@ -20,10 +20,28 @@
 					<i class="fas fa-sync-alt"></i>
 				</button>
 
-                <select @change="getUsers" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value='-1' disabled>Worker...</option>
-					<!-- <option v-for='user in users' :value='user.id' :key="user.id">{{ user.name }}</option> -->
-                </select>                
+				<div class="input-group mr-2">
+					<input v-model="filter.name" type="search" placeholder="Search by Name" class="form-control form-control-sidebar" aria-label="Search">
+					<div class="input-group-append">
+						<button type="sumbit" class="btn btn-sidebar" @click="getUsers">
+							<i class="fas fa-search fa-fw"></i>
+						</button>
+					</div>
+				</div>
+
+                <select v-model="filter.role_id" @change="getUsers" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>Select Role</option>
+					<option v-for='role in roles' :value='role.id' :key="role.id">{{ role.name }}</option>
+                </select>
+				<select v-model="filter.is_active" @change="getUsers" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>Select Status</option>
+					<option value='0'>Inactive</option>
+					<option value='1'>Active</option>
+                </select>
+				<select v-model="filter.budget_id" @change="getUsers" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>Select Budget</option>
+					<option v-for='budget in budgets' :value='budget.id' :key="budget.id">{{ budget.name }}</option>
+                </select>                 
             </div>
 			<div class="row mt-3">
 				<table class="border table table-hover">
@@ -33,6 +51,8 @@
 							<th>Email</th>
 							<th>Registered At</th>
 							<th>Roles</th>
+							<th>Is Active</th>
+							<th>Budget</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -44,6 +64,11 @@
 							<td>
 								<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
 							</td>
+							<td>
+								<span v-show="user.is_active == '0'" class="badge badge-pill badge-secondary">Inactive</span>
+                    			<span v-show="user.is_active == '1'" class="badge badge-pill badge-success">Active</span>
+							</td>
+							<td>{{ user.budget.name }}</td>
 							<td>
 								<!-- <a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')"> -->
 								<a class="clickable" @click="showEditUserModal(user)" v-if="$can('user_edit')">
@@ -89,6 +114,13 @@ export default {
 			selectedUser: {},
 			users: {},
 			roles: [],
+			budgets: [],
+			filter: {
+				role_id: '',
+				is_active: '',
+				name: '',
+				budget_id: '',
+			}
 		}
 	},
 	methods: {
@@ -122,7 +154,7 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					axios.delete('/api/user/'+id)
+					axios.delete('/api/users/'+id)
 					.then(() => {
 						// success
 						Fire.$emit('usersChanged');
@@ -144,7 +176,9 @@ export default {
 	created() {
 		// console.log($getPermissions());
 		
-		this.getUsers()
+		this.getUsers();
+		this.getRoles();
+		this.getBudgets();
 		
 		Fire.$on('usersChanged', () => {
 			this.getUsers();

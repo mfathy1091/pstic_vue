@@ -24,7 +24,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="worker_name" class="form-label">Worker Name</label>
-                                    <input id="worker_name" type="text" name="worker_name" class="form-control" autocomplete="off" :value="currentUser.name" disabled>
+                                    <input id="worker_name" type="text" name="worker_name" class="form-control" autocomplete="off" :value="currentUser.full_name" disabled>
                                     <!-- <HasError :form="emergencyForm" field="worker_name" /> -->
                                 </div>
 

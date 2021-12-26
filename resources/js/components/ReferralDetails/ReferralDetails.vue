@@ -124,7 +124,13 @@
                         <tr v-for="emergency in referral.emergencies" :key="emergency.id">
                             <td><span>{{ emergency.record.month.name }}</span></td>
                             <td><span>{{ emergency.emergency_date | myDate }}</span></td>
-                            <td>{{ emergency.emergency_type.name }}</td>
+                            <td>
+                                <div class="list-unstyled">
+                                    <li v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id">
+                                        <span>{{ emergencyType.name }}</span>
+                                    </li>
+                                </div>
+                            </td>
                             <td>
                                 <div class="list-unstyled">
                                     <li v-for="beneficiary in emergency.beneficiaries" :key="beneficiary.id">
@@ -183,7 +189,7 @@
                 </table>
             </div>
 
-			<div class="row mt-3">
+			<!-- <div class="row mt-3">
 				<table class="border table table-hover">
                     <thead>
                         <tr>
@@ -206,7 +212,7 @@
                                 <div class="list-unstyled">
                                     <li v-for="emergency in record.emergencies" :key="emergency.id">
                                         <span>{{ emergency.emergency_date | myDate }}</span>
-                                        <span>{{ emergency.user.name }}</span>
+                                        <span>{{ emergency.user.full_name }}</span>
                                         <a class="clickable" @click="showEditEmergencyModal(emergency)">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
@@ -231,7 +237,48 @@
                         </tr>
                     </tbody>
                 </table>
+            </div> -->
+
+            <h5>Services</h5>
+            <div class="row mt-3">
+				<table class="border table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Beneficiary</th>
+                            <th>Service</th>
+                            <th>Emergencies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="beneficiary in referral.beneficiarys" :key="beneficiary.id">
+                            <td>
+                                <span>{{ record.month.name }}</span>
+                                <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
+                                <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
+                                <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
+                                <span v-show="record.is_new == 1" class="badge badge-pill badge-info">New</span>
+                            </td>
+                            <td></td>
+                            <td>
+
+                            </td>
+                            <td>
+                                
+                                <a class="clickable">
+                                    <i class="fa fa-trash red"></i>
+                                </a>
+                                <router-link
+                                :to="{name: 'RecordDetails', params: { recordId: record.id }}"
+                                class="fa fa-eye blue align-middle"
+                                >
+                                
+                                </router-link>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+
         </div>
 <br><br>
 
@@ -380,7 +427,6 @@ export default {
         tooltips.forEach(t => {
             new bootstrap.Tooltip(t)
         })
-        console.log(tooltips)
         this.getReferral(this.referralId);
         this.getCaseeBeneficiaries(this.$route.params.caseeId);
         Fire.$on('referralChanged', () => {

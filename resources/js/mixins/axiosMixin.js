@@ -172,7 +172,7 @@ export default {
 
 		getCaseeBeneficiaries(caseeId){
 			this.$Progress.start();
-			axios.get('/api/casees/'+ caseeId +'/beneficiaries', { params: { casee_id: caseeId } })
+			axios.get('/api/beneficiaries/', { params: { casee_id: caseeId } })
 			.then((response) => {
 				// success
 				this.caseeBeneficiaries = response.data.data;
@@ -185,9 +185,24 @@ export default {
 			})
 		},
 
+		getReferralBeneficiaries(referralId){
+			this.$Progress.start();
+			axios.get('/api/beneficiaries/', { params: {referral_id: referralId } })
+			.then((response) => {
+				// success
+				this.referralBeneficiaries = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
 		getUsers(){
 			this.$Progress.start();
-			axios.get('/api/users/')
+			axios.get('/api/users/', { params: { name: this.filter.name, role_id: this.filter.role_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
 			.then((response) => {
 				this.users = response.data.data.data;
 				this.$Progress.finish();
@@ -206,6 +221,34 @@ export default {
 				this.$Progress.finish();
 			})
 			.catch((e) => {
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
+		getBudgets(){
+			this.$Progress.start();
+			axios.get('/api/budgets/')
+			.then((response) => {
+				this.budgets = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
+		getEmergencies(){
+			this.$Progress.start();
+			axios.get('/api/emergencies', { params: {month_id: this.filter.month_id, user_id: this.filter.user_id} })
+            .then((response) => {
+				// success
+				this.emergencies = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
 				this.$Progress.fail();
 				console.log(e);
 			})

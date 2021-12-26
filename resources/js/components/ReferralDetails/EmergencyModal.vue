@@ -35,15 +35,6 @@
 							</div>
 
 							<div class="form-group">
-								<label for="location" class="form-label">Emergency Type</label>
-								<select v-model="emergencyForm.emergency_type_id" name="location" id="location" class="form-control">
-									<option value='0' disabled selected>Choose</option>
-									<option :value="emergencyType.id" v-for="emergencyType in emergencyTypes" :key="emergencyType.id">{{ emergencyType.name }}</option>
-								</select>
-								<!-- <HasError :form="emergencyForm" field="location" /> -->
-							</div>
-
-							<div class="form-group">
 								<label for="comment" class="form-label">Comment</label>
 								<textarea class="form-control" rows="3" v-model="emergencyForm.comment" name="comment"></textarea>
 								<!-- <HasError :form="emergencyForm" field="comment" /> -->
@@ -54,6 +45,24 @@
 								<multiselect 
 								v-model="emergencyForm.beneficiaries" 
 								:options="referral.beneficiaries" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							</div>
+
+							<div class="form-group" v-if="referral">
+								<label class="typo__label">Emergency Types</label>
+								<multiselect 
+								v-model="emergencyForm.emergency_types" 
+								:options="emergencyTypes" 
 								:multiple="true" 
 								:close-on-select="false" 
 								:clear-on-select="false" 
@@ -112,7 +121,7 @@ export default {
 				casee_id: '',
                 emergency_date: '',
                 comment: '',
-                emergency_type_id: '',
+                emergency_types: [],
 				beneficiaries: [],
 			})
 		}

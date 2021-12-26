@@ -13,15 +13,26 @@
 				</button>
 
                 <select v-model="filter.user_id" @change="getEmergencies" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value='-1' disabled>Worker...</option>
-					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.name }}</option>
+					<option value=''>All Workers...</option>
+					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
-                
+
+                <select v-model="filter.year_id" @change="getEmergencies" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>All Years...</option>
+                    <option value='2021'>2021</option>
+					<!-- <option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option> -->
+                </select>
+
                 <select v-model="filter.month_id" @change="getEmergencies" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value='-1' disabled>Month...</option>
+					<option value=''>All Months...</option>
 					<option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option>
                 </select>
                 
+                <select v-model="filter.direct_only" @change="getEmergencies" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>All Beneficiaries...</option>
+                    <option value='1'>Direct Only</option>
+                </select>
+
             </div>
             
             <div class="row mt-3">
@@ -31,15 +42,15 @@
                     <thead>
                         <tr>
                             <th>Case</th>
-                            <th>Affected Beneficiaries</th>
                             <th>Emergency Date</th>
+                            <th>Affected Beneficiaries</th>
                             <th>Emergency Type</th>
                             <th>Assigned Worker</th>
                         </tr>
                     </thead>
                     <tbody v-if="emergencies">
                         <tr v-for="emergency in this.emergencies" :key="emergency.id">
-                            <!-- <td><span>{{ emergency.casee.file_number }}</span></td> -->
+                            <td><span>{{ emergency.casee.file_number }}</span></td>
                             <td>
                                 <div class="list-unstyled">
                                     <li v-for="beneficiary in emergency.beneficiaries" :key="beneficiary.id">
@@ -47,10 +58,15 @@
                                     </li>
                                 </div>
                             </td>
-                            <td></td>
                             <td>{{ emergency.emergency_date | myDate }}</td>
-                            <td>{{ emergency.emergency_type.name }}</td>
-                            <td>{{ emergency.user.name }}</td>
+                            <td>
+                                <div class="list-unstyled">
+                                    <li v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id">
+                                        <span>{{ emergencyType.name }}</span>
+                                    </li>
+                                </div>
+                            </td>
+                            <td>{{ emergency.user.full_name }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -84,30 +100,16 @@ export default {
             regex: '^',
             mask: 'XXX-XXCXXXXX',
             filter: {
-                is_new: '-1',
-                status_id: '-1',
-                month_id: '-1',
-                user_id: '-1'
+                year_id: '2021',
+                month_id: '',
+                user_id: '',
+                direct_only: '',
             }
 		}
 	},
 	methods: {
 
-        getEmergencies(){
-			this.$Progress.start();
-			// axios.get('/api/emergencies', { params: { is_new: this.filter.is_new, status_id: this.filter.status_id, month_id: this.filter.month_id, user_id: this.filter.user_id} })
-			axios.get('/api/emergencies')
-            .then((response) => {
-				// success
-				this.emergencies = response.data.data;
-				this.$Progress.finish();
-			})
-			.catch((e) => {
-				// error
-				this.$Progress.fail();
-				console.log(e);
-			})
-		},
+
 
 	},
 

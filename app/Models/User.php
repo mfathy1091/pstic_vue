@@ -24,9 +24,9 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
-        'bio',
+        'budget_id',
         'photo',
-        'type'
+        'is_active'
     ];
 
     protected $appends = ['full_name'];
@@ -65,6 +65,11 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
     }
 
     public function hasPermission(string $permissionName)

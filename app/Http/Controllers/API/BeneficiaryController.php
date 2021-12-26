@@ -29,12 +29,32 @@ class BeneficiaryController extends Controller
         ]);
     }
 
-    public function getCaseeBeneficiaries(Request $request, $caseeId)
+    public function index(Request $request)
     {
-        $beneficiaries =  Beneficiary::with('casee', 'casee.beneficiaries', 'relationship', 'gender', 'nationality')->where('casee_id', $caseeId)->get();
+        $beneficiaries = Beneficiary::query();
+
+        if($request->casee_id != ""){
+            $beneficiaries->where('casee_id', $request->casee_id);
+        }
+
+        if($request->referral_id != ""){
+            $beneficiaries->whereHas('referrals', function($q) use($request){
+                $q->where('referral_id', $request->referral_id);
+                return $q;
+            });
+        }
+
+        $beneficiaries->with(
+            'casee',
+            'relationship',
+            'gender',
+            'nationality',
+            'services',
+            // 'emergencies',
+        );
 
         $data = [
-            'data' => $beneficiaries,
+            'data' => $beneficiaries->get(),
         ];
 
         return response($data, 200);

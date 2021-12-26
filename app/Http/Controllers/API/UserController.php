@@ -12,14 +12,44 @@ use App\Models\User;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
+        $users = User::query();
+        
+        if($request->name != ""){
+            $users->where('first_name', 'LIKE','%'.$request->name.'%')
+            ->orWhere('last_name', 'LIKE','%'.$request->name.'%');
+        }
+        
+
+        if($request->role_id != ""){
+            $users->whereHas('roles', function($q) use($request){
+                $q->where('role_id', $request->role_id);
+                return $q;
+            });
+        }
+
+
+        if($request->is_active != ""){
+            $users->where('is_active', $request->is_active);
+        }
+
+        if($request->budget_id != ""){
+            $users->where('budget_id', $request->budget_id);
+        }
+        
+        $users->with(
+            'roles',
+            'budget',
+        );
+
         $data = [
-            'data' => User::latest()->with('roles')->paginate(10),
+            'data' => $users->paginate(10),
         ];
 
-        return response($data, 200); 
+        return response($data, 200);
     }
+
 
     public function currentUser(){
         return Auth::user();
@@ -33,6 +63,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'budget_id' => 'required',
         ]);
 
         $user = User::create([
@@ -41,6 +72,8 @@ class UserController extends Controller
             'email' => $request['email'],
             // 'photo' => $request['photo'],
             'password' => Hash::make($request['password']),
+            'budget_id' => $request['budget_id'],
+            'is_active' => $request['is_active'],
         ]);
 
         $rolesIds = collect($request->input('roles'))->pluck('id');
@@ -73,6 +106,7 @@ class UserController extends Controller
                 'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
                 // sometimes is like unrequired
                 'password' => 'sometimes|string|min:8',
+                'budget_id' => 'required',
             ]);
 
             $user->update([
@@ -82,6 +116,8 @@ class UserController extends Controller
                 // 'photo' => $request['photo'],
                 
                 // 'password' => Hash::make($request['password']),
+                'budget_id' => $request['budget_id'],
+                'is_active' => $request['is_active'],
             ]);
 
             $rolesIds = collect($request->input('roles'))->pluck('id');
