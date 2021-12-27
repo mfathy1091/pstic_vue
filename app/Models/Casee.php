@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Casee extends Model
 {
-    protected $fillable = ['number', 'created_user_id'];
+    protected $fillable = ['file_number', 'is_family', 'created_user_id'];
 
 
     public function createdUser()

@@ -76,7 +76,7 @@ class BeneficiaryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'casee_id' => 'required|string|max:255',
+            'casee_id' => 'required',
             'name' => 'required',
             'passport_number' => 'required|string|max:255',
             'age' => 'required|string|max:255',
@@ -171,7 +171,7 @@ class BeneficiaryController extends Controller
             $beneficiary = Beneficiary::findOrFail($id);
 
             $this->validate($request, [
-                'casee_id' => 'required|string|max:255',
+                'casee_id' => 'required',
                 'name' => 'required',
                 'passport_number' => 'required|string|max:255',
                 'age' => 'required|string|max:255',

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Casee;
 use App\Models\Beneficiary;
-
+use Illuminate\Support\Facades\Auth;
 
 class CaseeController extends Controller
 {
@@ -175,6 +175,29 @@ class CaseeController extends Controller
             'data' => $casee,
             'isNewCasee' => false,
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'file_number' => 'required',
+            'is_family' => 'required',
+            // 'created_user_id' => 'required',
+        ]);
+
+        $casee = Casee::create([
+            'file_number' => $request->file_number,
+            'is_family' => $request->is_family,
+            'created_user_id' => Auth::id(),
+        ]);
+
+
+        $data = [
+            'data' => $casee,
+        ];
+
+        return response($data, 201);
+
     }
 
 }

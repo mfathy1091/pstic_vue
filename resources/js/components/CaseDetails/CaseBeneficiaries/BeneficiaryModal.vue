@@ -72,6 +72,11 @@
 								<HasError :form="BeneficiaryForm" field="beneficiary_id" />
 							</div>
 
+							<div class="form-group form-check">
+								<input v-model="BeneficiaryForm.is_active" type="checkbox" class="form-check-input" id="is_active">
+								<label class="form-check-label" for="is_active">Is Active?</label>
+							</div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -112,7 +117,7 @@ export default {
                 gender_id: '',
                 nationality_id: '',
                 phone_number: '',
-
+				is_active: true,
 				is_registered: '',
                 file_individual_number: '',
                 relationship_id: '',

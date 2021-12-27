@@ -32,7 +32,7 @@
 
             <div class="card-body align-top">
                 <div class="form-inline ml-2">
-                    <button class="btn btn-success btn-sm mr-2">
+                    <button class="btn btn-success btn-sm mr-2" @click="showCreateCaseeModal">
                         <i class="fas fa-plus-circle"></i><span><b> Case</b></span>
                     </button>
                     <button class="btn btn-secondary btn-sm mr-5" @click="getCasees(casee)">
@@ -114,7 +114,12 @@
 
 
 
-
+		<CaseModal 
+		:v-if="selectedCasee.id"
+		:caseeEditMode='caseeEditMode' 
+		:selectedCasee='selectedCasee' 
+		v-on:caseesChanged="getCasees()">
+		</CaseModal>
 
         
 
@@ -125,15 +130,19 @@
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 import router from '../../router'
+import CaseModal from './CaseModal'
+
 
 export default {
 	components: { 
 		Multiselect,
+        CaseModal,
 	},
 
 	data() {
 		return {
-			editMode: false,
+			caseeEditMode: false,
+            selectedCasee: '',
 			casees: [],
             searchText: '',
             searchForm: {
@@ -184,6 +193,20 @@ export default {
             }
             
         },
+        
+        showCreateCaseeModal(){
+			this.caseeEditMode = false;
+			this.selectedCasee = {};
+			$('#caseeModal').modal('show')
+            console.log('hi')
+		},
+
+
+		showEditcaseeModal(user){
+			this.caseeEditMode = true;
+			this.selectedCasee = user;
+			$('#caseeModal').modal('show')
+		},
 	},
 
     mounted() {
@@ -212,7 +235,9 @@ export default {
 
 	created() {
         this.getCasees();
-		
+		Fire.$on('caseesChanged', () => {
+			this.getCasees();
+		});
 	}
 }
 </script>
