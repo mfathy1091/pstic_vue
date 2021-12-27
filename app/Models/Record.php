@@ -39,6 +39,11 @@ class Record extends Model
         return $this->hasMany(Emergency::class);
     }
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
     public function services()
     {
         return $this->hasMany(Servicetype::class);

@@ -101,6 +101,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
 
     Route::get('activities', 'API\ActivityController@index');
+    Route::post('activities', 'API\ActivityController@store');
+    Route::put('activities/{id}', 'API\ActivityController@update');
+    Route::delete('activities/{id}', 'API\ActivityController@destroy');
 
     // Emergencies
     Route::get('emergencies', 'API\EmergencyController@index');

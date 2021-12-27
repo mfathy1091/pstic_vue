@@ -49,7 +49,7 @@ class BeneficiaryController extends Controller
             'relationship',
             'gender',
             'nationality',
-            'services',
+            'providedServices.serviceType',
             // 'emergencies',
         );
 

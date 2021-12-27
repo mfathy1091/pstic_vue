@@ -86,15 +86,12 @@
             </ul>
 
             <hr>
-            <h5>Emergencies</h5>
+            <h5>Activities</h5>
 
             <div class="form-inline ml-2">
 
 				<button class="btn btn-success btn-sm mr-2" @click="showCreateActivityModal">
 					<i class="fas fa-plus-circle"></i><span><b> Activity</b></span>
-				</button>
-                <button class="btn btn-success btn-sm mr-2" @click="showCreateEmergencyModal">
-					<i class="fas fa-plus-circle"></i><span><b> Emergency</b></span>
 				</button>
 				<button class="btn btn-secondary btn-sm mr-5" @click="getReferral(this.referralId)">
 					<i class="fas fa-sync-alt"></i>
@@ -109,7 +106,55 @@
             </div>
 
             <div class="row mt-3">
-				<table class="border table table-hover">
+				<table class="border table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Date</th>
+                            <th>beneficiary</th>
+                            <th>Services Provided</th>
+                            <th>Assigned Worker</th>
+                            <th>Modify</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="referral.activities">
+                        <tr v-for="activity in referral.activities" :key="activity.id">
+                            <td><span>{{ activity.record.month.name }}</span></td>
+                            <td><span>{{ activity.activity_date | myDate }}</span></td>
+                            <td><span>{{ activity.beneficiary.name }}</span></td>
+                            <td>
+                                <span v-for="providedService in activity.provided_services" :key="providedService.id" class="badge badge-pill badge-primary">{{providedService.service_type.name}}</span>
+                            </td>
+                            <td>{{ activity.user.full_name }}</td>
+                            <td>
+                                <a class="clickable mr-2" @click="showEditActivityModal(activity)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a class="clickable" @click="deleteActivity(activity)">
+                                    <i class="fas fa-trash red"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+            <h5>Emergencies</h5>
+
+            <div class="form-inline ml-2">
+                <button class="btn btn-success btn-sm mr-2" @click="showCreateEmergencyModal">
+					<i class="fas fa-plus-circle"></i><span><b> Emergency</b></span>
+				</button>
+				<button class="btn btn-secondary btn-sm mr-5" @click="getReferral(this.referralId)">
+					<i class="fas fa-sync-alt"></i>
+				</button>
+
+            
+            </div>
+
+            <div class="row mt-3">
+				<table class="border table table-hover table-sm">
                     <thead>
                         <tr>
                             <th>Month</th>
@@ -152,42 +197,7 @@
                 </table>
             </div>
 
-            <div class="row mt-3">
-				<table class="border table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Affected Beneficiaries</th>
-                            <th>Assigned Worker</th>
-                            <th>Modify</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="referral.activities">
-                        <tr v-for="activity in referral.activities" :key="activity.id">
-                            <td><span>{{ activity.record.month.name }}</span></td>
-                            <td><span>{{ activity.activity_date | myDate }}</span></td>
-                            <td>
-                                <div class="list-unstyled">
-                                    <li v-for="beneficiary in activity.beneficiaries" :key="beneficiary.id">
-                                        <span>{{ beneficiary.name }}</span>
-                                    </li>
-                                </div>
-                            </td>
-                            <td>{{ activity.user.full_name }}</td>
-                            <td>
-                                <a class="clickable mr-2" @click="showEditActivityModal(activity)">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a class="clickable" @click="deleteActivity(activity)">
-                                    <i class="fas fa-trash red"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
 
 			<!-- <div class="row mt-3">
 				<table class="border table table-hover">
@@ -239,45 +249,7 @@
                 </table>
             </div> -->
 
-            <h5>Services</h5>
-            <div class="row mt-3">
-				<table class="border table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Beneficiary</th>
-                            <th>Service</th>
-                            <th>Emergencies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="beneficiary in referral.beneficiarys" :key="beneficiary.id">
-                            <td>
-                                <span>{{ record.month.name }}</span>
-                                <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
-                                <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
-                                <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
-                                <span v-show="record.is_new == 1" class="badge badge-pill badge-info">New</span>
-                            </td>
-                            <td></td>
-                            <td>
-
-                            </td>
-                            <td>
-                                
-                                <a class="clickable">
-                                    <i class="fa fa-trash red"></i>
-                                </a>
-                                <router-link
-                                :to="{name: 'RecordDetails', params: { recordId: record.id }}"
-                                class="fa fa-eye blue align-middle"
-                                >
-                                
-                                </router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        
 
         </div>
 <br><br>

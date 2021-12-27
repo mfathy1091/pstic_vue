@@ -40,26 +40,33 @@
 								<!-- <HasError :form="activityForm" field="comment" /> -->
 							</div>
 							<hr>
-							<label class="typo__label">Services provided</label>
+
+							<div class="form-group">
+								<label for="location" class="form-label">Beneficiary</label>
+								<select v-model="activityForm.beneficiary_id" name="location" id="location" class="form-control">
+									<option value='' selected>Choose..</option>
+									<option :value="beneficiary.id" v-for="beneficiary in referralBeneficiaries" v-bind:key="beneficiary.id">{{ beneficiary.name }}</option>
+								</select>
+								<!-- <HasError :form="activityForm" field="location" /> -->
+							</div>
+
+							<label class="typo__label">Provided Services</label>
 							
 							<div>
-								<div class="form-group" v-for="beneficiary in referralBeneficiaries" v-bind:key="beneficiary.id">
-									{{ beneficiary.name }}
-									<multiselect 
-									v-model="activityForm.services" 
-									:options="serviceTypes" 
-									:multiple="true" 
-									:close-on-select="false" 
-									:clear-on-select="false" 
-									:preserve-search="true" 
-									placeholder="Pick some" 
-									label="name" 
-									track-by="name" 
-									:preselect-first="true">
-										<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
-									</multiselect>
-									<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-								</div>
+								<multiselect 
+								v-model="activityForm.service_types" 
+								:options="serviceTypes" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 							</div>
 
 
@@ -109,26 +116,27 @@ export default {
 				casee_id: '',
                 activity_date: '',
                 comment: '',
-                services: [],
-				activityBeneficiaries: [
-					{ beneficiary: '', services: [] }
-
-				],
+				beneficiary_id: '',
+                service_types: [],
+				provided_services: [],
 			})
 		}
 	},
-    watch: {
-        selectedActivity (next, prev){
-            this.activityForm.fill(this.selectedActivity);
-
-        }
-    },
 
 	watch: {
         selectedActivity (next, prev){
-            if(this.activityEditMode){
+            if(this.activityEditMode){ // edit
                 this.activityForm.fill(this.selectedActivity)
-            }else{
+				
+				// this.activityForm
+				// $this.activityForm.provided_services.forEach(myFunction);
+
+				// function myFunction(item) {
+				// 	sum += item;
+				// }
+			}
+			else
+			{ // create
                 this.resetUserForm();
             }
             
@@ -143,7 +151,7 @@ export default {
 			this.activityForm.casee_id = this.$route.params.caseeId
 			this.activityForm.activity_date = ''
 			this.activityForm.comment = ''
-			this.activityForm.services = []
+			this.activityForm.service_types = []
 			// this.activityForm.beneficiariesServices = []
 			// this.appendToBeneficiariesArray()
         },
@@ -151,7 +159,7 @@ export default {
 			for (let i = 0; i < 3; i++) {
 				this.activityForm.beneficiariesServices.push({
 					beneficiary:'',
-					services: [],
+					service_types: [],
 				})
 			}
 

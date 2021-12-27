@@ -21,9 +21,9 @@ class Beneficiary extends Model
     }
 
 
-    public function services()
+    public function providedServices()
     {
-        return $this->hasMany(Service::class, 'beneficiary_id');
+        return $this->hasMany(ProvidedService::class, 'beneficiary_id');
     }
 
     

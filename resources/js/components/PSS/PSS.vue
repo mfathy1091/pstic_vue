@@ -7,12 +7,12 @@
     <div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mt-2">
-                <li class="breadcrumb-item active" aria-current="page">Intake</li>
+                <li class="breadcrumb-item active" aria-current="page">PSS</li>
             </ol>
         </nav>
         
         <div class="row mt-3 mb-3 pl-3">
-            <h5>Intake</h5>
+            <h5>PSS</h5>
         </div>
 
         <div class="card">
@@ -34,9 +34,9 @@
                     </li>
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'pssActivities' }"
+                            :to="{ name: 'pssServices' }"
                             class="nav-link tab-header" active-class="active">   
-                            PSS Activities
+                            PSS Services
                         </router-link>
                     </li>
                 </ul>

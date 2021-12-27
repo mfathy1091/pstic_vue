@@ -93,6 +93,11 @@ class Referral extends Model
         return $this->hasMany(Emergency::class)->orderBy('emergency_date', 'DESC');
     }
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class)->orderBy('activity_date', 'DESC');
+    }
+
     public function records()
     {
         return $this->hasMany(Record::class)->orderBy('month_id', 'DESC');

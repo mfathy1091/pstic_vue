@@ -23,7 +23,7 @@ const routes = [
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
         { path: "pss-referrals", name: "pssReferrals", props: true, component: () => import(/* webpackChunkName: "pssReferrals" */ '../components/PSS/PssReferrals.vue') },
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
-        { path: "pss-activities", name: "pssActivities", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssActivities.vue') },
+        { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
 
     ] },
 
