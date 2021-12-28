@@ -4,6 +4,7 @@
     "/js/pss.js": "/js/pss.js",
     "/js/pssReferrals.js": "/js/pssReferrals.js",
     "/js/pssEmergencies.js": "/js/pssEmergencies.js",
+    "/js/pssServices.js": "/js/pssServices.js",
     "/js/workerPssReferrals.js": "/js/workerPssReferrals.js",
     "/js/caseDetails.js": "/js/caseDetails.js",
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
@@ -20,6 +21,5 @@
     "/js/serviceTypes.js": "/js/serviceTypes.js",
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/create-emergency.js": "/js/create-emergency.js",
-    "/css/app.css": "/css/app.css",
-    "/js/pssServices.js": "/js/pssServices.js"
+    "/css/app.css": "/css/app.css"
 }
