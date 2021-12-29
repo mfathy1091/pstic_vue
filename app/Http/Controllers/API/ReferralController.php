@@ -115,7 +115,7 @@ class ReferralController extends Controller
         'records.status', 
         'records.recordBeneficiaries',
         'records.recordBeneficiaries.individual',
-        //'records.recordBeneficiaries.services' 
+        'currentRecord.status' 
         )->findOrFail($id);
 
         if($referral){
@@ -266,7 +266,21 @@ class ReferralController extends Controller
         return response($data, 201);
 
     }
+    
 
+    public function closeReferral(Request $request, $id)
+    {
+        $referral = Referral::findOrFail($id);
+
+        // if it exists
+        if($referral){
+            $record = $referral->records->first();
+
+            $record->status_id = 3;
+            $record->save();
+            return $record;
+        }
+    }
 
     public function update(Request $request, $id)
     {

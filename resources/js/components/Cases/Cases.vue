@@ -63,7 +63,7 @@
                 </div>
 
 
-                <div class="row mt-3" v-if="casees">	
+                <div class="row mt-3 table-responsive" v-if="casees">	
                     <table class=" table table-hover border table-sm">
                         <thead>
                             <tr>

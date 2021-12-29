@@ -57,7 +57,7 @@
                     <tbody v-if="pswReferrals">
                         <tr v-for="referral in this.pswReferrals" :key="referral.id">
                             <td>{{ referral.referral_source.name  }}</td>
-                            <td>{{ referral.referral_date | myDate }}</td>
+                            <td>{{ referral.referral_date | myDateShort }}</td>
                             <td>
                                 <div class="list-unstyled">
                                     <li v-for="record in referral.records" :key="record.id">

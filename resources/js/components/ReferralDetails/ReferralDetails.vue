@@ -12,7 +12,7 @@
         </nav>
 
         <div class="row mt-3 mb-3 pl-3"> 
-            <h5>PSS Referral</h5>
+            <h5>PSS Intake</h5>
         </div>
         <div class="row mt-3" v-if="referral">
             <router-link
@@ -22,7 +22,7 @@
             </router-link>
 
             <h5>        
-                {{ this.referral.referral_source.name }}  {{ this.referral.referral_date | myDate  }}
+                {{ this.referral.referral_source.name }}  {{ this.referral.referral_date | myDateShort  }}
             </h5>
             <span @click="showEditReferralModal"
                 id='clickableAwesomeFont' class="ml-5">
@@ -34,6 +34,7 @@
 
         <div class="card-body" v-if="this.referral">
             <h5>Referral Details</h5>
+            <button class="btn btn-danger" @click="closePssIntake">Close</button>
             <div class="row m-3">
                 <div class="col mb-4">
                     <h6 class="card-subtitle mb-2 text-muted">Referral Source</h6>
@@ -120,7 +121,7 @@
                     <tbody v-if="referral.activities">
                         <tr v-for="activity in referral.activities" :key="activity.id">
                             <td><span>{{ activity.record.month.name }}</span></td>
-                            <td><span>{{ activity.activity_date | myDate }}</span></td>
+                            <td><span>{{ activity.activity_date | myDateShort }}</span></td>
                             <td><span>{{ activity.beneficiary.name }}</span></td>
                             <td>
                                 <span v-for="providedService in activity.provided_services" :key="providedService.id" class="badge badge-pill badge-primary">{{providedService.service_type.name}}</span>
@@ -168,7 +169,7 @@
                     <tbody>
                         <tr v-for="emergency in referral.emergencies" :key="emergency.id">
                             <td><span>{{ emergency.record.month.name }}</span></td>
-                            <td><span>{{ emergency.emergency_date | myDate }}</span></td>
+                            <td><span>{{ emergency.emergency_date | myDateShort }}</span></td>
                             <td>
                                 <div class="list-unstyled">
                                     <li v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id">
@@ -221,7 +222,7 @@
                             <td>
                                 <div class="list-unstyled">
                                     <li v-for="emergency in record.emergencies" :key="emergency.id">
-                                        <span>{{ emergency.emergency_date | myDate }}</span>
+                                        <span>{{ emergency.emergency_date | myDateShort }}</span>
                                         <span>{{ emergency.user.full_name }}</span>
                                         <a class="clickable" @click="showEditEmergencyModal(emergency)">
                                             <i class="fas fa-pencil-alt"></i>
@@ -302,6 +303,51 @@ export default {
         }
     },
     methods: {
+
+        closePssIntake(){
+            let currentRecord = this.referral['current_record'];
+            if(currentRecord['is_new'] == 1){
+                Swal.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: 'Cannot Close!',
+                    text: 'A new case cannot be closed, you can close it next month',
+                    showConfirmButton: true,
+                    // timer: 1500
+                })
+
+            }else{
+            
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are going to close this case!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, close it!'
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        this.$Progress.start();
+                        axios.put('/api/referrals/'+this.referral.id + '/close')
+                        .then(() => {
+                            // success
+                            Fire.$emit('referralChanged');
+                            Swal.fire(
+                                'Case Closed!',
+                                'success'
+                            )
+                            this.$Progress.finish();
+                        })
+                        .catch(() => {
+                            // error
+                            Swal("Failed!", "There was something wrong.", "warning");
+                        });
+                    }
+                })
+            }
+        },
 
         showEditReferralModal(){
 

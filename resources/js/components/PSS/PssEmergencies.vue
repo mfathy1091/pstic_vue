@@ -58,7 +58,7 @@
                                     </li>
                                 </div>
                             </td>
-                            <td>{{ emergency.emergency_date | myDate }}</td>
+                            <td>{{ emergency.emergency_date | myDateShort }}</td>
                             <td>
                                 <div class="list-unstyled">
                                     <li v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id">

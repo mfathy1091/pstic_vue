@@ -78,8 +78,12 @@ Vue.filter('upText', function(text){
     return text.charAt(0).toUpperCase() + text.slice(1);
 });
 
-Vue.filter('myDate', function(date){
+Vue.filter('myDateFull', function(date){
     return moment(date).format('Do MMMM YYYY');
+});
+
+Vue.filter('myDateShort', function(date){
+    return moment(date).format('D/M/YYYY');
 });
 
 window.Fire = new Vue();

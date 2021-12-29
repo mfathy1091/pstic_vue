@@ -79,16 +79,16 @@
                     </li>
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'caseReferrals' }"
+                            :to="{ name: 'casePssIntakes' }"
                             class="nav-link tab-header" active-class="active">
-                            PSS Intake History
+                            PSS Intakes
                         </router-link>
                     </li>
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'caseHousingReferrals' }"
+                            :to="{ name: 'caseHousingIntakes' }"
                             class="nav-link tab-header" active-class="active">
-                            Housing Intake History
+                            Housing Intakes
                         </router-link>
                     </li>
 
@@ -103,9 +103,8 @@
 <script>
 import Form from 'vform'
 import Caseebeneficiaries from './CaseBeneficiaries/CaseBeneficiaries.vue'
-import CaseeReferrals from './CaseReferrals.vue'
+import CaseeReferrals from './CasePssIntakes/CasePssIntakes.vue'
 import Multiselect from 'vue-multiselect'
-import ReferralModal from './ReferralModal'
 import axiosMixin from '../../mixins/axiosMixin'	
 import router from '../../router'
 
@@ -116,7 +115,6 @@ export default {
         Caseebeneficiaries,
         CaseeReferrals,
         Multiselect,
-        ReferralModal,
     },
 
     props: {

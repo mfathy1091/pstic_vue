@@ -93,7 +93,7 @@
 <script>
 import Form from 'vform'
 import Caseebeneficiaries from './CaseBeneficiaries/CaseBeneficiaries.vue'
-import CaseeReferrals from './CaseReferrals.vue'
+import CaseeReferrals from './CasePssIntake/CasePssIntakes.vue'
 import Multiselect from 'vue-multiselect'
 import ReferralModal from './ReferralModal'
 import axiosMixin from '../../mixins/axiosMixin'	

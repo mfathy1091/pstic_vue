@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     
     // PSS Referrals
+    Route::put('referrals/{id}/close', 'API\ReferralController@closeReferral');
     Route::apiResources(['referrals'=> 'API\ReferralController']);
     Route::get('casees/{casee}/referrals', 'API\ReferralController@getCaseeReferrals');
     Route::get('beneficiaries/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
@@ -80,7 +81,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('beneficiaries/get/{caseeId}', 'API\BeneficiaryController@getbeneficiaries');
     Route::get('beneficiaries/{individual}/other_casee_beneficiaries', 'API\BeneficiaryController@getOtherCaseebeneficiaries');
     Route::get('passport_beneficiaries/get_individual_by_passport/{passport_number}', 'API\Individual\PassportBeneficiaryController@getIndividualByPassword');
-    Route::put('beneficiaries/{individual}/unlink', 'API\BeneficiaryController@unlinkCasee');
     Route::get('casees/{casee}/beneficiaries', 'API\BeneficiaryController@getCaseeBeneficiaries');
 
     

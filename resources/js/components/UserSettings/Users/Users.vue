@@ -60,7 +60,7 @@
 						<tr v-for="user in users" :key="user.id">
 							<td>{{ user.full_name }}</td>
 							<td>{{ user.email }}</td>
-							<td>{{ user.created_at | myDate }}</td>
+							<td>{{ user.created_at | myDateShort }}</td>
 							<td>
 								<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
 							</td>

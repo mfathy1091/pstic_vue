@@ -21,7 +21,7 @@ const routes = [
     { path: '/cases', name: "cases", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Cases.vue'), children: [] },
 
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
-        { path: "pss-referrals", name: "pssReferrals", props: true, component: () => import(/* webpackChunkName: "pssReferrals" */ '../components/PSS/PssReferrals.vue') },
+        { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
         { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
 
@@ -34,8 +34,8 @@ const routes = [
     
     { path: '/cases/:caseeId', name: "caseDetails", props: true, component: () => import(/* webpackChunkName: "caseDetails" */ '../components/CaseDetails/CaseDetails.vue'), children: [
         { path: "beneficiaries", name: "caseBeneficiaries", props: true, component: () => import(/* webpackChunkName: "caseBeneficiaries" */ '../components/CaseDetails/CaseBeneficiaries/CaseBeneficiaries.vue') },
-        { path: "referrals", name: "caseReferrals", props: true, component: () => import(/* webpackChunkName: "caseReferrals" */ '../components/CaseDetails/CaseReferrals.vue') , children: [] },
-        { path: "housing-referrals", name: "caseHousingReferrals", props: true, component: () => import(/* webpackChunkName: "caseHousingReferrals" */ '../components/CaseDetails/CaseHousingReferrals/CaseHousingReferrals.vue') },
+        { path: "pss-intakes", name: "casePssIntakes", props: true, component: () => import(/* webpackChunkName: "casePssIntakes" */ '../components/CaseDetails/CasePssIntakes/CasePssIntakes.vue') , children: [] },
+        { path: "housing-intakes", name: "caseHousingIntakes", props: true, component: () => import(/* webpackChunkName: "caseHousingIntakes" */ '../components/CaseDetails/CaseHousingIntakes/CaseHousingIntakes.vue') },
 
     ] },
 
