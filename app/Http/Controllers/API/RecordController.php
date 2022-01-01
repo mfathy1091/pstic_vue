@@ -20,7 +20,57 @@ class RecordController extends Controller
         
     }
 
-  
+    public function index(Request $request)
+    {
+        $records = Record::query();
+
+        if($request->user_id == 'current_user'){
+            $referrals->where('current_assigned_psw_id', Auth::id());
+        }
+        elseif($request->user_id != ''){
+            $referrals->where('current_assigned_psw_id', $request->user_id);
+        }
+        
+        if($request->casee_id != ''){
+            $referrals->where('casee_id', $request->casee_id);
+        }
+
+        if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
+            $referrals->whereHas('records', function($q) use($request){
+                if($request->is_new != ''){
+                    $q->where('is_new', $request->is_new);
+                }
+                if($request->month_id != ''){
+                    $q->where('month_id', $request->month_id);
+                }
+                if($request->status_id != ''){
+                    $q->where('status_id', $request->status_id);
+                }
+                return $q;
+            });
+        }
+
+
+        $referrals->with(
+            'casee',
+            'beneficiaries',
+            'emergencies',
+            'activities.providedServices.serviceType',
+            'referralSource',
+            'current_assigned_psw',
+            'records', 
+            'records.month', 
+            'records.status',
+            'currentRecord.status' );
+
+        $data = [
+            'data' => $referrals->get(),
+        ];
+
+        return response($data, 200);
+    }
+
+
     public function show($id)
     {
         $record = Record::with(

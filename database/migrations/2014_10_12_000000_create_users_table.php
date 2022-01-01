@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('photo')->default('profile.png');
             $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('budget_id');
+            $table->date('hire_date')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

@@ -15,42 +15,42 @@
         <div class="row mt-3 table-responsive">
             <p v-show="!caseeReferrals.length" class="font-italic ml-5">This case has no PSS Intakes!</p>
 
-            <table v-show="caseeReferrals.length" class="border table table-hover table-sm">
+            <table v-show="caseeReferrals.length" class="border table table-hover table-sm table-striped">
                 <thead>
                     <tr>
-                        <th>Source</th>
-                        <th>Intake Date</th>
-                        <th>Close Date</th>
-                        <th>Current Status</th>
                         <th>Assigned Worker</th>
+                        <th>Intake / Close Date</th>
+                        <th>Direct Beneficiaries</th>
+                        <th>Source</th>
+                        <th>Current Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody v-if="this.caseeReferrals">
                     <tr v-for="referral in this.caseeReferrals" :key="referral.id">
-                        <td>{{ referral.referral_source.name  }}</td>
-                        <td>{{ referral.referral_date | myDateShort }}</td>
-                        <td></td>
+                        <td><span class="text-nowrap">{{ referral.current_assigned_psw.full_name }}</span></td>
                         <td>
-                            <div class="list-unstyled">
-                                <li v-for="(record, i) in referral.records" :key="record.id">
-                                    <div v-show="i==0">
-                                        <span v-show="record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ record.status.name }}</span>
-                                        <span v-show="record.status.name == 'Active'" class="badge badge-pill badge-success">{{ record.status.name }}</span>
-                                        <span v-show="record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ record.status.name }}</span>
-                                        <span v-show="record.is_new == 1" class="badge badge-pill badge-info">New</span>
-                                        <span v-show="record.is_new == 0" class="badge badge-pill badge-warning">Ongoing</span>
-                                    </div>
-
-                                </li>
-                            </div>
-
+                            <span class="text-nowrap">{{ referral.referral_date | myDateFull }}</span>
+                            <br>
+                            <span class="font-italic mx-auto">to</span>
+                            <br>
+                            <span class="text-nowrap" v-if="referral.close_date">{{ referral.close_date | myDateFull }}</span>
+                            <span v-if="!referral.close_date">Now</span>
                         </td>
-                        <td>{{ referral.current_assigned_psw.full_name }}</td>
-
+                        <td></td>
+                        <td>{{ referral.referral_source.name  }}</td>
+                        <td>
+                            <span v-show="referral.current_record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ referral.current_record.status.name }}</span>
+                            <span v-show="referral.current_record.status.name == 'Active'" class="badge badge-pill badge-success">{{ referral.current_record.status.name }}</span>
+                            <span v-show="referral.current_record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ referral.current_record.status.name }}</span>
+                            <span v-show="referral.current_record.status.name != 'Closed'">
+                                <span v-show="referral.current_record.is_new == 1" class="badge badge-pill badge-info">New</span>
+                                <span v-show="referral.current_record.is_new == 0" class="badge badge-pill badge-warning">Ongoing</span>
+                            </span>
+                        </td>
                         <td>
                             <router-link
-                            :to="{name: 'referralDetails', params: { caseeId: caseeId, referralId: referral.id }}"
+                            :to="{name: 'pssIntakeDetails', params: { caseeId: caseeId, referralId: referral.id }}"
                             class="fa fa-eye blue align-middle mr-2">
                             </router-link>
                             <a class="clickable" @click="showEditPssIntake(referral)">
@@ -85,7 +85,6 @@ import router from '../../../router'
 import axiosMixin from '../../../mixins/axiosMixin'
 
 export default {
-    name: 'caseeReferrals',
     components: {
         Multiselect,
         PssIntakeModal,

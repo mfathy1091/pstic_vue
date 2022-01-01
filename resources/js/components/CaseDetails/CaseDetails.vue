@@ -81,7 +81,7 @@
                         <router-link
                             :to="{ name: 'casePssIntakes' }"
                             class="nav-link tab-header" active-class="active">
-                            PSS Intakes
+                            Case PSS History
                         </router-link>
                     </li>
                     <li class="nav-item">

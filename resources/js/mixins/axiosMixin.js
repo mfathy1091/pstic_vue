@@ -90,7 +90,7 @@ export default {
 
 		getCaseeReferrals(caseeId){
 			this.$Progress.start();
-			axios.get('/api/casees/'+ caseeId +'/referrals', { params: { casee_id: caseeId } } )
+			axios.get('/api/referrals', { params: { casee_id: caseeId } } )
 			.then((response) => {
 				// success
                 this.caseeReferrals = response.data.data;

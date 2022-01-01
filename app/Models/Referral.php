@@ -108,7 +108,10 @@ class Referral extends Model
         return $this->hasOne(Record::class)->where('month_id', '12');
     }
 
-    
+    public function selectedRecord()
+    {
+        return $this->hasOne(Record::class)->where('month_id', '12');
+    }
 }
 
 

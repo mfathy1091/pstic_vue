@@ -25,22 +25,28 @@ class ReferralController extends Controller
         if($request->user_id == 'current_user'){
             $referrals->where('current_assigned_psw_id', Auth::id());
         }
-        if($request->user_id != -1 && $request->user_id != 'current_user'){
+        elseif($request->user_id != ''){
             $referrals->where('current_assigned_psw_id', $request->user_id);
         }
+        
+        if($request->casee_id != ''){
+            $referrals->where('casee_id', $request->casee_id);
+        }
 
-        $referrals->whereHas('records', function($q) use($request){
-            if($request->is_new != -1){
-                $q->where('is_new', $request->is_new);
-            }
-            if($request->month_id != -1){
-                $q->where('month_id', $request->month_id);
-            }
-            if($request->status_id != -1){
-                $q->where('status_id', $request->status_id);
-            }
-            return $q;
-        });
+        if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
+            $referrals->whereHas('records', function($q) use($request){
+                if($request->is_new != ''){
+                    $q->where('is_new', $request->is_new);
+                }
+                if($request->month_id != ''){
+                    $q->where('month_id', $request->month_id);
+                }
+                if($request->status_id != ''){
+                    $q->where('status_id', $request->status_id);
+                }
+                return $q;
+            });
+        }
 
         $referrals->with(
             'casee',
@@ -51,7 +57,15 @@ class ReferralController extends Controller
             'current_assigned_psw',
             'records', 
             'records.month', 
-            'records.status');
+            'records.status',
+            'currentRecord.status' );
+        
+        // selected record
+        $referrals->with(["records" => function($q) use($request){
+            $q->where('month_id', '=', 12)->first();
+        }]);
+
+
 
         $data = [
             'data' => $referrals->get(),
@@ -158,7 +172,7 @@ class ReferralController extends Controller
         $ConvertedReferralDate = strtotime($referralDate);
         $referralMonth = date("Y-m", $ConvertedReferralDate);
         $currentMonth = date("Y-m");
-        
+
         // Get Months List
         $period = \Carbon\CarbonPeriod::create($referralMonth, '1 month', $currentMonth);
 
@@ -271,6 +285,8 @@ class ReferralController extends Controller
     public function closeReferral(Request $request, $id)
     {
         $referral = Referral::findOrFail($id);
+        $referral->close_date = date("Y-m-d");
+        $referral->save();
 
         // if it exists
         if($referral){

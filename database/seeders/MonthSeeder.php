@@ -66,6 +66,10 @@ class MonthSeeder extends Seeder
                 'code' => '2021-12',
                 'name' => 'December 2021',
             ],
+            [
+                'code' => '2022-01',
+                'name' => 'January 2022',
+            ],
         ];
 
         foreach ($data as $n) {

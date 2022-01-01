@@ -19,8 +19,8 @@
 		<div class="content-wrapper">
 
 			<!-- Main content -->
-			<div class="content">
-				<div class="container-fluid" >
+			<div class="content p-0">
+				<div class="container-fluid p-2" >
 					
 					<router-view :key="$route.path"></router-view>
 					

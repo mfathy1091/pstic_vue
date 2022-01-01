@@ -27,11 +27,13 @@ const routes = [
 
     ] },
 
-    { path: '/home', name: "home", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Home/Home.vue'), children: [
-        { path: "worker-pss-referrals", name: "workerPssReferrals", props: true, component: () => import(/* webpackChunkName: "workerPssReferrals" */ '../components/Home/WorkerPssReferrals.vue') },
-
+    { path: '/pss-worker', name: "pssWorker", props: true, component: () => import(/* webpackChunkName: "pssWorker" */ '../components/PssWorker/PssWorker.vue'), children: [
+        { path: "home", name: "pssWorkerHome", props: true, component: () => import(/* webpackChunkName: "pssWorkerHome" */ '../components/PssWorker/PssWorkerHome.vue') },
+        { path: "pss-referrals", name: "pssWorkerReferrals", props: true, component: () => import(/* webpackChunkName: "pssWorkerReferrals" */ '../components/PssWorker/PssWorkerCases.vue') },
+        { path: "pss-referrals-stats", name: "pssWorkerReferralsStats", props: true, component: () => import(/* webpackChunkName: "pssWorkerReferralsStats" */ '../components/PssWorker/PssWorkerCasesStats.vue') },
     ] },
     
+
     { path: '/cases/:caseeId', name: "caseDetails", props: true, component: () => import(/* webpackChunkName: "caseDetails" */ '../components/CaseDetails/CaseDetails.vue'), children: [
         { path: "beneficiaries", name: "caseBeneficiaries", props: true, component: () => import(/* webpackChunkName: "caseBeneficiaries" */ '../components/CaseDetails/CaseBeneficiaries/CaseBeneficiaries.vue') },
         { path: "pss-intakes", name: "casePssIntakes", props: true, component: () => import(/* webpackChunkName: "casePssIntakes" */ '../components/CaseDetails/CasePssIntakes/CasePssIntakes.vue') , children: [] },
@@ -39,7 +41,7 @@ const routes = [
 
     ] },
 
-    { path: '/cases/:caseeId/referrals/:referralId', name: 'referralDetails', props: true, component: () => import(/* webpackChunkName: "referralDetails" */ '../components/ReferralDetails/ReferralDetails.vue'), children: [
+    { path: '/cases/:caseeId/referrals/:referralId', name: 'pssIntakeDetails', props: true, component: () => import(/* webpackChunkName: "pssIntakeDetails" */ '../components/PssIntakeDetails/PssIntakeDetails.vue'), children: [
         // {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
     ] },
 

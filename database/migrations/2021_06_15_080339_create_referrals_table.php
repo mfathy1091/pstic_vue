@@ -17,6 +17,7 @@ class CreateReferralsTable extends Migration
             $table->id();
             $table->unsignedInteger('referral_source_id');
             $table->date('referral_date')->nullable();
+            $table->date('close_date')->nullable();
             $table->string('referring_person_name');
             $table->string('referring_person_email');
             $table->text('referral_narrative_reason');

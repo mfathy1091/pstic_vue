@@ -72,11 +72,10 @@
                                 <th>Beneficiaries</th>
                                 <th># of PSS Intake</th>
                                 <th># of Housing Intake</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                                <tr v-for="casee in casees" :key="casee.id">
+                                <tr v-for="casee in casees" :key="casee.id" @click="goToCaseDetails(casee)">
                                     <td class="align-middle">{{ casee.file_number }}</td>
                                     <td class="align-middle">
                                         <span v-show="casee.is_family == '0'">Individual</span>
@@ -96,13 +95,6 @@
                                     </td>
                                     <td>
                                         <span>{{ casee.housing_referrals_count }}</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <router-link
-                                            class="fa fa-eye blue align-middle"
-                                            :to="{ name: 'caseBeneficiaries', params: { caseeId: casee.id } }"
-                                        >
-                                        </router-link>
                                     </td>
                                 </tr>
                         </tbody>
@@ -162,8 +154,8 @@ export default {
 	},
 	methods: {
 
-        goToCaseePage(casee){
-            router.push({ path: '/casees/'+casee.id })
+        goToCaseDetails(casee){
+            router.push({ name: 'caseDetails', params: {caseeId: casee.id} })
         },
 
         getCasees(){

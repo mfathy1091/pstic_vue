@@ -19,6 +19,11 @@ Vue.component('ValidationProvider', ValidationProvider);
 
 // import Permissions from './mixins/Permissions';
 // Vue.mixin(Permissions);
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+
+Vue.use(Chartkick.use(Chart))
+
 
 import VueProgressBar from 'vue-progressbar'
 const options = {
@@ -79,7 +84,8 @@ Vue.filter('upText', function(text){
 });
 
 Vue.filter('myDateFull', function(date){
-    return moment(date).format('Do MMMM YYYY');
+    // return moment(date).format('Do MMMM YYYY');
+    return moment(date).format('MMMM YYYY');
 });
 
 Vue.filter('myDateShort', function(date){

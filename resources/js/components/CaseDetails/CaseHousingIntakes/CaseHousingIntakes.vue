@@ -83,7 +83,6 @@ import router from '../../../router'
 import axiosMixin from '../../../mixins/axiosMixin'
 
 export default {
-    name: 'caseHousingReferrals',
     components: {
         Multiselect,
         HousingIntakeModal,
