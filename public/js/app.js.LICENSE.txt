@@ -11,6 +11,13 @@
  */
 
 /*!
+ * Chart.js v2.9.4
+ * https://www.chartjs.org
+ * (c) 2020 Chart.js Contributors
+ * Released under the MIT License
+ */
+
+/*!
  * Select2 4.1.0-rc.0
  * https://select2.github.io
  *
