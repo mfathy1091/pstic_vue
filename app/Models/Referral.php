@@ -106,8 +106,6 @@ class Referral extends Model
 
     public function currentRecord()
     {
-        // return $this->hasOne(Record::class)->where('month_id', '13');
-
         return $this->hasOne(Record::class)->whereHas('month', function($q){
             $q->where('code', Carbon::now()->format("Y-m"));
 

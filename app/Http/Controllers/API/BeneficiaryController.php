@@ -10,6 +10,8 @@ use App\Models\Beneficiary;
 use App\Models\ServiceType;
 Use Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class BeneficiaryController extends Controller
 {
@@ -78,39 +80,74 @@ class BeneficiaryController extends Controller
 
     public function search(Request $request)
     {
+        $dates = DB::table('provided_services')->select('provision_date')->distinct()->get()->pluck('provision_date')->sort();
+        
+        $years = $dates->map(function ($date) {
+            return Carbon::parse($date)->format('Y');
+        })->unique();
+
+        $selectedYear = $request->year;
+        $selectedYearDates = DB::table('provided_services')->whereYear('provision_date', $selectedYear)->select('provision_date')->distinct()->get()->pluck('provision_date')->sort();
+        
+        $months = $selectedYearDates->map(function ($date) {
+            return Carbon::parse($date)->format('m');
+        })->unique();
+
         $beneficiaries = Beneficiary::query();
 
-        // $beneficiaries->with('providedServices', function($q){
-        //     $q->whereYear('provision_date' , '>=', '2022')
-        // );
-        //    return $q;
-        // });
+        $beneficiaries->with('providedServices', function($q) use($request){
+            if($request->filled('year')){
+                $q->whereYear('provision_date', '=', $request->year);
+            }
+            if($request->filled('month')){
+                $q->whereMonth('provision_date', '=', $request->month);
+            }
+            return $q->with('ServiceType');
+        })
+        ->whereHas('providedServices', function($q) use($request){
+            if($request->filled('year')){
+                $q->whereYear('provision_date', '=', $request->year);
+            }
+            if($request->filled('month')){
+                $q->whereMonth('provision_date', '=', $request->month);
+            }
+            return $q;
+        });
+
+        $beneficiaries->with(
+            'casee',
+            'relationship',
+            'gender',
+            'nationality',
+            // 'providedServices.serviceType',
+            // 'emergencies',
+        );
+
+        $data = [
+            'data' => $beneficiaries->get(),
+            'years' => $years,
+            'months' =>$months,
+        ];
+
+        return response($data, 200);
     }
 
     public function index(Request $request)
     {
         $beneficiaries = Beneficiary::query();
 
-        $beneficiaries->with('providedServices', function($q){
-            $q->whereYear('provision_date', '=', '2021')
-            ->with('ServiceType');
-            return $q;
-        })
-        ->whereHas('providedServices', function($q){
-            $q->whereYear('provision_date', '=', '2021');
-            return $q;
-        });
 
-        // if($request->casee_id != ""){
-        //     $beneficiaries->where('casee_id', $request->casee_id);
-        // }
 
-        // if($request->referral_id != ""){
-        //     $beneficiaries->whereHas('referrals', function($q) use($request){
-        //         $q->where('referral_id', $request->referral_id);
-        //         return $q;
-        //     });
-        // }
+        if($request->casee_id != ""){
+            $beneficiaries->where('casee_id', $request->casee_id);
+        }
+
+        if($request->referral_id != ""){
+            $beneficiaries->whereHas('referrals', function($q) use($request){
+                $q->where('referral_id', $request->referral_id);
+                return $q;
+            });
+        }
 
         $beneficiaries->with(
             'casee',

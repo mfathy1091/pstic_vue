@@ -17,15 +17,16 @@
 					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
 
-                <select v-model="filter.year_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value=''>All Years...</option>
+                <select v-model="filter.year" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>Choose Year...</option>
                     <option value='2021'>2021</option>
+                    <option value='2022'>2022</option>
 					<!-- <option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option> -->
                 </select>
 
-                <select v-model="filter.month_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value=''>All Months...</option>
-					<option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option>
+                <select v-model="filter.month" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value=''>Choose Month...</option>
+					<option v-for='month in months' :value='month' :key="month">{{ month }}</option>
                 </select>
                 
                 <select v-model="filter.direct_only" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
@@ -90,8 +91,8 @@ export default {
             budgets: [],
             beneficiaries: [],
             filter: {
-                year_id: '2021',
-                month_id: '',
+                year: '2021',
+                month: '',
                 user_id: '',
                 direct_only: '',
                 budget_id: '',
@@ -101,9 +102,10 @@ export default {
 	methods: {
 		getBeneficiaries(){
 			this.$Progress.start();
-			axios.get('/api/beneficiaries/', { params: { user_id: this.user_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
+			axios.get('/api/beneficiaries/search', { params: { year: this.filter.year, month: this.filter.month, user_id: this.user_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
 			.then((response) => {
 				this.beneficiaries = response.data.data;
+                this.months = response.data.months;
 				this.$Progress.finish();
 			})
 			.catch((e) => {
@@ -117,7 +119,6 @@ export default {
 
 	created() {
         this.getUsers();
-		this.getMonths();
         this.getBudgets();
         this.getBeneficiaries();
 	}
