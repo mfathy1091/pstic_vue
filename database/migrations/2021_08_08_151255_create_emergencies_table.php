@@ -18,11 +18,13 @@ class CreateEmergenciesTable extends Migration
             $table->unsignedInteger('record_id');
             $table->unsignedInteger('referral_id');
             $table->unsignedInteger('casee_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('beneficiary_id');
             $table->date('emergency_date');
             $table->text('comment');
+            $table->unsignedInteger('user_id');
             $table->timestamps();
 
+            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('record_id')->references('id')->on('records')->onDelete('cascade');
             $table->foreign('referral_id')->references('id')->on('referrals')->onDelete('cascade');

@@ -69,7 +69,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Records
     Route::get('referrals/{referral_id}/latest-record', 'API\RecordController@latestReferralRecord');
     Route::put('records/{record}', 'API\RecordController@update');
+    Route::get('records/search', 'API\RecordController@search');
     Route::get('records/{record}', 'API\RecordController@show');
+   
 
 
     // beneficiaries

@@ -27,6 +27,13 @@
                     </li>
                     <li class="nav-item">
                         <router-link
+                            :to="{ name: 'pssRecords' }"
+                            class="nav-link tab-header" active-class="active">   
+                            PSS Records
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
                             :to="{ name: 'pssEmergencies' }"
                             class="nav-link tab-header" active-class="active">   
                             PSS Emergencies

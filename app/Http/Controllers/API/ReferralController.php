@@ -14,12 +14,14 @@ use App\Models\Beneficiary;
 use App\Models\Reason;
 use App\Models\Casee;
 Use Exception;
+use \Carbon\Carbon;
 
 class ReferralController extends Controller
 {
 
     public function index(Request $request)
     {
+        // return Carbon::now()->format("Y-m");
         $referrals = Referral::query();
 
         if($request->user_id == 'current_user'){
@@ -58,14 +60,24 @@ class ReferralController extends Controller
             'records', 
             'records.month', 
             'records.status',
-            'currentRecord.status' );
+            'currentRecord.status' 
+        );
         
         // selected record
         $referrals->with(["records" => function($q) use($request){
             $q->where('month_id', '=', 12)->first();
         }]);
 
+        // $statusesCounts = array_fill(1, 3, 0);  // status 1 to 3 - default count: 0
 
+        // foreach($referrals as $referral)
+        //     $statusesCounts[]
+
+
+        // $referrals->whereHas('records', function($q) use($request){
+        //         $q->where('month_id', $request->month_id);
+        //     return $q;
+        // });
 
         $data = [
             'data' => $referrals->get(),
@@ -118,7 +130,7 @@ class ReferralController extends Controller
         'emergencies.record.month',
         'emergencies.user',
         'emergencies.emergencyTypes',
-        'emergencies.beneficiaries',
+        'emergencies.beneficiary',
         'activities.providedServices.serviceType',
         'activities.serviceTypes',
         'activities.record.month',
@@ -220,6 +232,7 @@ class ReferralController extends Controller
             }
             $record = Record::create([
                 'month_id' => $month->id,
+                'elapsed_months_since_intake' => $i-1,
                 'referral_id' => $referral->id,
                 'status_id' => '2',
                 'is_new' => $is_new,

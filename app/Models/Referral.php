@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \Carbon\Carbon;
 
 class Referral extends Model
 {
@@ -105,7 +106,13 @@ class Referral extends Model
 
     public function currentRecord()
     {
-        return $this->hasOne(Record::class)->where('month_id', '12');
+        // return $this->hasOne(Record::class)->where('month_id', '13');
+
+        return $this->hasOne(Record::class)->whereHas('month', function($q){
+            $q->where('code', Carbon::now()->format("Y-m"));
+
+            return $q;
+        });
     }
 
     public function selectedRecord()

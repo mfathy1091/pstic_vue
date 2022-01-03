@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Casee;
 use App\Models\Beneficiary;
 Use Exception;
+use Carbon\Carbon;
 
 class BeneficiaryController extends Controller
 {
@@ -27,6 +28,51 @@ class BeneficiaryController extends Controller
         return response()->json([
             'data' => $data,
         ]);
+    }
+
+    public function getStats(Request $request)
+    {
+
+        $ranges = [ // the start of each age-range.
+            '18-24' => 18,
+            '25-35' => 25,
+            '36-45' => 36,
+            '46+' => 46
+        ];
+
+        $output = Beneficiary::query()
+            ->get()
+            ->map(function ($beneficiary) use ($ranges) {
+                // $age = Carbon::parse($beneficiary->dob)->age;
+                $age = $beneficiary->age;
+                foreach($ranges as $key => $breakpoint)
+                {
+                    if ($breakpoint >= $age)
+                    {
+                        $beneficiary->range = $key;
+                        break;
+                    }
+                }
+
+                return $beneficiary;
+            })
+            ->mapToGroups(function ($beneficiary, $key) {
+                return [$beneficiary->range => $beneficiary];
+            })
+            ->map(function ($group) {
+                return count($group);
+            })
+            ->sortKeys();
+
+        dd($output);
+
+
+
+        $data = [
+            'data' => $output,
+        ];
+
+        return response($data, 200);
     }
 
     public function index(Request $request)

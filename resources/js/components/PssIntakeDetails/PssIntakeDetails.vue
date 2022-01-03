@@ -160,8 +160,8 @@
                         <tr>
                             <th>Month</th>
                             <th>Date</th>
-                            <th>Type</th>
-                            <th>Affected Beneficiaries</th>
+                            <th>Beneficiary</th>
+                            <th>EmergencyType</th>
                             <th>Assigned Worker</th>
                             <th>Modify</th>
                         </tr>
@@ -170,19 +170,11 @@
                         <tr v-for="emergency in referral.emergencies" :key="emergency.id">
                             <td><span>{{ emergency.record.month.name }}</span></td>
                             <td><span>{{ emergency.emergency_date | myDateShort }}</span></td>
+                            <td><span>{{ emergency.beneficiary.name }}</span></td>
                             <td>
-                                <div class="list-unstyled">
-                                    <li v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id">
-                                        <span>{{ emergencyType.name }}</span>
-                                    </li>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="list-unstyled">
-                                    <li v-for="beneficiary in emergency.beneficiaries" :key="beneficiary.id">
-                                        <span>{{ beneficiary.name }}</span>
-                                    </li>
-                                </div>
+                                <span v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id" class="badge badge-pill badge-primary">
+                                    {{ emergencyType.name }}
+                                </span>
                             </td>
                             <td>{{ emergency.user.full_name }}</td>
                             <td>

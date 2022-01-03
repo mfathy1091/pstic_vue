@@ -17,6 +17,7 @@ class CreateRecordsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('referral_id');
             $table->unsignedBigInteger('month_id');
+            $table->unsignedBigInteger('elapsed_months_since_intake');
             $table->unsignedBigInteger('status_id');
             $table->boolean('is_new');
             $table->timestamps();

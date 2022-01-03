@@ -40,22 +40,13 @@
 								<!-- <HasError :form="emergencyForm" field="comment" /> -->
 							</div>
 
-							<div class="form-group" v-if="referral">
-								<label class="typo__label">Affected Beneficiaries</label>
-								<multiselect 
-								v-model="emergencyForm.beneficiaries" 
-								:options="referral.beneficiaries" 
-								:multiple="true" 
-								:close-on-select="false" 
-								:clear-on-select="false" 
-								:preserve-search="true" 
-								placeholder="Pick some" 
-								label="name" 
-								track-by="name" 
-								:preselect-first="true">
-									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
-								</multiselect>
-								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							<div class="form-group">
+								<label for="location" class="form-label">Beneficiary</label>
+								<select v-model="emergencyForm.beneficiary_id" name="location" id="location" class="form-control">
+									<option value='' selected>Choose..</option>
+									<option :value="beneficiary.id" v-for="beneficiary in referralBeneficiaries" v-bind:key="beneficiary.id">{{ beneficiary.name }}</option>
+								</select>
+								<!-- <HasError :form="emergencyForm" field="location" /> -->
 							</div>
 
 							<div class="form-group" v-if="referral">
@@ -114,6 +105,7 @@ export default {
 		return {
 			referral: "",
 			emergencyTypes: [],
+			referralBeneficiaries: [],
 			emergencyForm: new Form({
 				id: '',
 				record_id: '',
@@ -121,9 +113,10 @@ export default {
 				casee_id: '',
                 emergency_date: '',
                 comment: '',
+				beneficiary_id: '',
                 emergency_types: [],
-				beneficiaries: [],
 			})
+
 		}
 	},
     watch: {
@@ -201,7 +194,8 @@ export default {
     created (){
 		this.getReferral(this.$route.params.referralId)
         this.getEmergencyTypes();
-		console.log(this.$route.params.referralId);
+		this.getReferralBeneficiaries(this.$route.params.referralId);
+
     },
     computed:{
         currentUser: {

@@ -24,5 +24,8 @@
     "/js/serviceTypes.js": "/js/serviceTypes.js",
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/create-emergency.js": "/js/create-emergency.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/js/pssWorkerEmergencies.js": "/js/pssWorkerEmergencies.js",
+    "/js/PssRecords.js": "/js/PssRecords.js",
+    "/js/pssRecords.js": "/js/pssRecords.js"
 }

@@ -51,7 +51,6 @@
 							</div>
 
 							<label class="typo__label">Provided Services</label>
-							
 							<div>
 								<multiselect 
 								v-model="activityForm.service_types" 

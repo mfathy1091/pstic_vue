@@ -45,6 +45,14 @@
                             All Cases
                         </router-link>
                     </li>
+                    
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'pssWorkerEmergencies' }"
+                            class="nav-link tab-header" active-class="active">   
+                            Emergencies
+                        </router-link>
+                    </li>
                 </ul>
             </div>
                 <router-view :key="$route.path"></router-view>

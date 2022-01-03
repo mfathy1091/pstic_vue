@@ -43,7 +43,7 @@
                         <tr>
                             <th>Case</th>
                             <th>Emergency Date</th>
-                            <th>Affected Beneficiaries</th>
+                            <th>Beneficiary</th>
                             <th>Emergency Type</th>
                             <th>Assigned Worker</th>
                         </tr>
@@ -51,20 +51,12 @@
                     <tbody v-if="emergencies">
                         <tr v-for="emergency in this.emergencies" :key="emergency.id">
                             <td><span>{{ emergency.casee.file_number }}</span></td>
-                            <td>
-                                <div class="list-unstyled">
-                                    <li v-for="beneficiary in emergency.beneficiaries" :key="beneficiary.id">
-                                        <span>{{ beneficiary.name }}</span>
-                                    </li>
-                                </div>
-                            </td>
                             <td>{{ emergency.emergency_date | myDateShort }}</td>
+                            <td><span>{{ emergency.beneficiary.name }}</span></td>
                             <td>
-                                <div class="list-unstyled">
-                                    <li v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id">
-                                        <span>{{ emergencyType.name }}</span>
-                                    </li>
-                                </div>
+                                <span v-for="emergencyType in emergency.emergency_types" :key="emergencyType.id" class="badge badge-pill badge-primary">
+                                    {{ emergencyType.name }}
+                                </span>
                             </td>
                             <td>{{ emergency.user.full_name }}</td>
                         </tr>

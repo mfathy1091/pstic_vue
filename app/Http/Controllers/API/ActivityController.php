@@ -70,8 +70,8 @@ class ActivityController extends Controller
             'casee_id' => $request['casee_id'],
             'activity_date' => $request['activity_date'],
             'comment' => $request['comment'],
-            'user_id' => Auth::id(),
             'beneficiary_id' => $request['beneficiary_id'],
+            'user_id' => Auth::id(),
         ]);
 
         $serviceTypesIds = collect($request->input('service_types'))->pluck('id');
@@ -97,6 +97,7 @@ class ActivityController extends Controller
                 'casee_id' => 'required',
                 'activity_date' => 'required',
                 'comment' => 'required',
+                'beneficiary_id' => 'required',
             ]);
 
             $activity->update([
@@ -105,8 +106,8 @@ class ActivityController extends Controller
                 'casee_id' => $request['casee_id'],
                 'activity_date' => $request['activity_date'],
                 'comment' => $request['comment'],
-                'user_id' => Auth::id(),
                 'beneficiary_id' => $request['beneficiary_id'],
+                'user_id' => Auth::id(),
             ]);
             
             $serviceTypesIds = collect($request->input('service_types'))->pluck('id');

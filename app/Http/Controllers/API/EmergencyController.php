@@ -38,12 +38,14 @@ class EmergencyController extends Controller
 
         $emergencies->with(
             'casee',
-            'beneficiaries',
+            'beneficiary',
             'emergencyTypes',
             'user',
             'record', 
             'record.month', 
             'record.status');
+
+        $stats = 
 
         $data = [
             'data' => $emergencies->get(),
@@ -60,6 +62,7 @@ class EmergencyController extends Controller
             'casee_id' => 'required',
             'emergency_date' => 'required',
             'comment' => 'required',
+            'beneficiary_id' => 'required',
             // 'emergency_types' => 'required',
         ]);
 
@@ -69,11 +72,9 @@ class EmergencyController extends Controller
             'casee_id' => $request['casee_id'],
             'emergency_date' => $request['emergency_date'],
             'comment' => $request['comment'],
+            'beneficiary_id' => $request['beneficiary_id'],
             'user_id' => Auth::id(),
         ]);
-
-        $beneficiariesIds = collect($request->input('beneficiaries'))->pluck('id');
-        $emergency->beneficiaries()->sync($beneficiariesIds);
 
         $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
         $emergency->emergencyTypes()->sync($emergencyTypesIds);
@@ -98,6 +99,7 @@ class EmergencyController extends Controller
                 'casee_id' => 'required',
                 'emergency_date' => 'required',
                 'comment' => 'required',
+                'beneficiary_id' => 'required',
             ]);
 
             $emergency->update([
@@ -106,12 +108,10 @@ class EmergencyController extends Controller
                 'casee_id' => $request['casee_id'],
                 'emergency_date' => $request['emergency_date'],
                 'comment' => $request['comment'],
+                'beneficiary_id' => $request['beneficiary_id'],
                 'user_id' => Auth::id(),
             ]);
             
-            $beneficiariesIds = collect($request->input('beneficiaries'))->pluck('id');
-            $emergency->beneficiaries()->sync($beneficiariesIds);
-
             $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
             $emergency->emergencyTypes()->sync($emergencyTypesIds);
 

@@ -11,9 +11,14 @@ class Emergency extends Model
 
     protected $guarded = [];
     
-    public function beneficiaries()
+    // public function beneficiaries()
+    // {
+    //     return $this->belongsToMany(Beneficiary::class, 'beneficiaries_emergencies', 'emergency_id', 'beneficiary_id');
+    // }
+
+    public function beneficiary()
     {
-        return $this->belongsToMany(Beneficiary::class, 'beneficiaries_emergencies', 'emergency_id', 'beneficiary_id');
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
     }
 
     public function emergencyTypes()
