@@ -1,0 +1,20 @@
+Case/Referrals
+- use Referral it self
+
+
+------------
+PSW / All Referrals (with filter)
+- use Records as you want to get a specific time range of each Referral
+
+
+
+------------
+Emergencies
+- Use it directly and get beneficiarties and emergency_types from each emergency
+- it has emergency_date field - use it to filter without using records and referrals
+
+
+----------
+Activities
+- Use it directly and get beneficiarties and provided_service from each activity
+- it has activity_date field - use it to filter without using records and referrals

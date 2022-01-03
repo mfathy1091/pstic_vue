@@ -5,10 +5,12 @@
     "/js/pssIntake.js": "/js/pssIntake.js",
     "/js/pssEmergencies.js": "/js/pssEmergencies.js",
     "/js/pssServices.js": "/js/pssServices.js",
+    "/js/pssRecords.js": "/js/pssRecords.js",
     "/js/pssWorker.js": "/js/pssWorker.js",
     "/js/pssWorkerHome.js": "/js/pssWorkerHome.js",
     "/js/pssWorkerReferrals.js": "/js/pssWorkerReferrals.js",
     "/js/pssWorkerReferralsStats.js": "/js/pssWorkerReferralsStats.js",
+    "/js/pssWorkerEmergencies.js": "/js/pssWorkerEmergencies.js",
     "/js/caseDetails.js": "/js/caseDetails.js",
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
     "/js/casePssIntakes.js": "/js/casePssIntakes.js",
@@ -24,8 +26,5 @@
     "/js/serviceTypes.js": "/js/serviceTypes.js",
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/create-emergency.js": "/js/create-emergency.js",
-    "/css/app.css": "/css/app.css",
-    "/js/pssWorkerEmergencies.js": "/js/pssWorkerEmergencies.js",
-    "/js/PssRecords.js": "/js/PssRecords.js",
-    "/js/pssRecords.js": "/js/pssRecords.js"
+    "/css/app.css": "/css/app.css"
 }
