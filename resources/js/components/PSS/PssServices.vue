@@ -8,27 +8,27 @@
 	<div>
         <div class="card-body">
             <div class="form-inline ml-2">
-                <button class="btn btn-secondary btn-sm mr-2" @click="getBeneficiaries">
+                <button class="btn btn-secondary btn-sm mr-2" @click="getProvidedServices">
 					<i class="fas fa-sync-alt"></i>
 				</button>
 
-                <select v-model="filter.user_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.user_id" @change="getProvidedServices" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>All Workers...</option>
 					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
 
-                <select v-model="filter.year_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.year_id" @change="getProvidedServices" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>All Years...</option>
                     <option value='2021'>2021</option>
 					<!-- <option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option> -->
                 </select>
 
-                <select v-model="filter.month_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.month_id" @change="getProvidedServices" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>All Months...</option>
 					<option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option>
                 </select>
                 
-                <select v-model="filter.direct_only" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.direct_only" @change="getProvidedServices" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>All Beneficiaries...</option>
                     <option value='1'>Direct Only</option>
                 </select>
@@ -40,27 +40,28 @@
             </div>
             
             <div class="row mt-3">
-                <p v-show="!beneficiaries.length" class="font-italic ml-5">No data found!</p>
+                <p v-show="!providedServices.length" class="font-italic ml-5">No data found!</p>
 
-                <table v-show="beneficiaries.length" class="border table table-hover table-sm">
+                <table v-show="providedServices.length" class="border table table-hover table-sm">
                     <thead>
                         <tr>
                             <th>Case</th>
-                            <th>Name</th>
-                            <th>Provided Services</th>
+                            <th>Beneficiary</th>
+                            <th>Service Type</th>
                             <th>Assigned Worker</th>
                         </tr>
                     </thead>
-                    <tbody v-if="beneficiaries">
-                        <tr v-for="beneficiary in this.beneficiaries" :key="beneficiary.id">
-                            <td>{{ beneficiary.casee.file_number }}</td>
-                            <td>{{ beneficiary.name }}</td>
+                    <tbody v-if="providedServices">
+                        <tr v-for="providedService in this.providedServices" :key="providedService.id">
+                            <td>{{ providedService.beneficiary.casee.file_number }}</td>
+                            <td>{{ providedService.beneficiary.name }}</td>
+                            <td>{{ providedService.service_type.name }}</td>
                             <td>
-                                <div class="list-unstyled">
+                                <!-- <div class="list-unstyled">
                                     <li v-for="provided_service in beneficiary.provided_services" :key="provided_service.id">
                                         <span>{{ provided_service.service_type.name }}</span>
                                     </li>
-                                </div>
+                                </div> -->
                             </td>
                         </tr>
                     </tbody>
@@ -87,10 +88,10 @@ export default {
             users: [],
             months: [],
             budgets: [],
-            beneficiaries: [],
+            providedServices: [],
             filter: {
                 year_id: '2021',
-                month_id: '',
+                month_id: '13',
                 user_id: '',
                 direct_only: '',
                 budget_id: '',
@@ -98,11 +99,11 @@ export default {
 		}
 	},
 	methods: {
-		getBeneficiaries(){
+        getProvidedServices(){
 			this.$Progress.start();
-			axios.get('/api/beneficiaries/', { params: { user_id: this.user_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
+			axios.get('/api/provided-services/', { params: { user_id: this.filter.user_id, month_id: this.filter.month_id} } )
 			.then((response) => {
-				this.beneficiaries = response.data.data;
+				this.providedServices = response.data.data;
 				this.$Progress.finish();
 			})
 			.catch((e) => {
@@ -118,7 +119,7 @@ export default {
         this.getUsers();
 		this.getMonths();
         this.getBudgets();
-        this.getBeneficiaries();
+        this.getProvidedServices();
 	}
 }
 </script>

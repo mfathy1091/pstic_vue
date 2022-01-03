@@ -46,6 +46,13 @@
                             PSS Services
                         </router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'pssBeneficiaries' }"
+                            class="nav-link tab-header" active-class="active">   
+                            PSS Beneficiaries
+                        </router-link>
+                    </li>
                 </ul>
             </div>
             <router-view :key="$route.path"></router-view>

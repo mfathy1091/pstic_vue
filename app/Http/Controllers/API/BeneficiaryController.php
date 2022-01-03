@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Casee;
 use App\Models\Beneficiary;
+use App\Models\ServiceType;
 Use Exception;
 use Carbon\Carbon;
 
@@ -75,27 +76,48 @@ class BeneficiaryController extends Controller
         return response($data, 200);
     }
 
+    public function search(Request $request)
+    {
+        $beneficiaries = Beneficiary::query();
+
+        // $beneficiaries->with('providedServices', function($q){
+        //     $q->whereYear('provision_date' , '>=', '2022')
+        // );
+        //    return $q;
+        // });
+    }
+
     public function index(Request $request)
     {
         $beneficiaries = Beneficiary::query();
 
-        if($request->casee_id != ""){
-            $beneficiaries->where('casee_id', $request->casee_id);
-        }
+        $beneficiaries->with('providedServices', function($q){
+            $q->whereYear('provision_date', '=', '2021')
+            ->with('ServiceType');
+            return $q;
+        })
+        ->whereHas('providedServices', function($q){
+            $q->whereYear('provision_date', '=', '2021');
+            return $q;
+        });
 
-        if($request->referral_id != ""){
-            $beneficiaries->whereHas('referrals', function($q) use($request){
-                $q->where('referral_id', $request->referral_id);
-                return $q;
-            });
-        }
+        // if($request->casee_id != ""){
+        //     $beneficiaries->where('casee_id', $request->casee_id);
+        // }
+
+        // if($request->referral_id != ""){
+        //     $beneficiaries->whereHas('referrals', function($q) use($request){
+        //         $q->where('referral_id', $request->referral_id);
+        //         return $q;
+        //     });
+        // }
 
         $beneficiaries->with(
             'casee',
             'relationship',
             'gender',
             'nationality',
-            'providedServices.serviceType',
+            // 'providedServices.serviceType',
             // 'emergencies',
         );
 

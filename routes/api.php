@@ -40,7 +40,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('housing-grant-statuses', 'API\StatusController@getHousingGrantStatuses');
     Route::get('beneficiary-statuses', 'API\StatusController@getBeneficiaryStatuses');
 
-    
+    // Provided Services
+    Route::get('provided-services', 'API\ProvidedServiceController@index');
+
     
     // Casees
     Route::get('casees/create_or_get', 'API\CaseeController@createOrGetCasee');

@@ -24,11 +24,12 @@ const routes = [
         { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
         { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
+        { path: "pss-beneficiaries", name: "pssBeneficiaries", props: true, component: () => import(/* webpackChunkName: "pssBeneficiaries" */ '../components/PSS/PssBeneficiaries.vue') },
         { path: "pss-records", name: "pssRecords", props: true, component: () => import(/* webpackChunkName: "pssRecords" */ '../components/PSS/PssRecords.vue') },
     ] },
 
     
-
+    
     { path: '/pss-worker', name: "pssWorker", props: true, component: () => import(/* webpackChunkName: "pssWorker" */ '../components/PssWorker/PssWorker.vue'), children: [
         { path: "home", name: "pssWorkerHome", props: true, component: () => import(/* webpackChunkName: "pssWorkerHome" */ '../components/PssWorker/PssWorkerHome.vue') },
         { path: "pss-referrals", name: "pssWorkerReferrals", props: true, component: () => import(/* webpackChunkName: "pssWorkerReferrals" */ '../components/PssWorker/PssWorkerCases.vue') },
