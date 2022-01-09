@@ -69,12 +69,30 @@ class BeneficiaryController extends Controller
         // dd($output);
 
 
-        $stats = Beneficiary::select('nationality_id', DB::raw('count(*) as total', function($query){
-            $query->where('age', '>=', 0)
-            ->where('age', '<=', 5);
-            return $query;
-        }))
-            ->groupBy('nationality_id');
+        $stats = Beneficiary::select('nationality_id', 
+                                    DB::raw('count(*) as total'), 
+                                    DB::raw("sum (case when beneficiaries.age > 0 and beneficiaries.age <= 5 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_0_5_m"), 
+                                    DB::raw("sum (case when beneficiaries.age > 0 and beneficiaries.age <= 5 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_0_5_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 6 and beneficiaries.age <= 9 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_6_9_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 6 and beneficiaries.age <= 9 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_6_9_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 10 and beneficiaries.age <= 14 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_10_14_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 10 and beneficiaries.age <= 14 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_10_14_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 15 and beneficiaries.age <= 17 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_15_17_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 15 and beneficiaries.age <= 17 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_15_17_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 18 and beneficiaries.age <= 24 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_18_24_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 18 and beneficiaries.age <= 24 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_18_24_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 25 and beneficiaries.age <= 49 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_25_49_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 25 and beneficiaries.age <= 49 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_25_49_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 50 and beneficiaries.age <= 59 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_50_59_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 50 and beneficiaries.age <= 59 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_50_59_f"),
+                                    DB::raw("sum (case when beneficiaries.age >= 60 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_gt_60_m"), 
+                                    DB::raw("sum (case when beneficiaries.age >= 60 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_gt_60_f"),
+        // function($query){
+        //     $query->where('age', '>=', 0)
+        //     ->where('age', '<=', 5);
+        //     return $query;
+        // })
+        )->groupBy('nationality_id');
         
         $data = [
             'stats' => $stats->get(),
@@ -82,6 +100,33 @@ class BeneficiaryController extends Controller
 
         return response($data, 200);
     }
+    // $stats = Beneficiary::select('nationality_id', 
+    // DB::raw('count(*) as total'), 
+    // DB::raw("sum (case when beneficiary.age > 0 and beneficiary.age <= 5 and beneficiary.gender = 'male' then 1 else 0 end) as age_0_5_m") 
+    // )->groupBy('nationality_id');
+    
+
+    // DB::table("caselog_beneficiary as beneficiary")
+    // ->select("beneficiary.id", 
+    //         "beneficiary.nationality", 
+    //         "count (beneficiary.id) as total", 
+    //         "sum (case when beneficiary.age > 0 and beneficiary.age <= 5 and beneficiary.gender = 'male' then 1 else 0 end) as age_0_5_m", 
+    //         "sum (case when beneficiary.age > 0 and beneficiary.age <= 5 and beneficiary.gender = 'female' then 1 else 0 end) as age_0_5_f", 
+    //         "sum (case when beneficiary.age >= 6 and beneficiary.age <= 9 and beneficiary.gender = 'male' then 1 else 0 end) as age_6_9_m", 
+    //         "sum (case when beneficiary.age >= 6 and beneficiary.age <= 9 and beneficiary.gender = 'female' then 1 else 0 end) as age_6_9_f", 
+    //         "sum (case when beneficiary.age >= 10 and beneficiary.age <= 14 and beneficiary.gender = 'male' then 1 else 0 end) as age_10_14_m", 
+    //         "sum (case when beneficiary.age >= 10 and beneficiary.age <= 14 and beneficiary.gender = 'female' then 1 else 0 end) as age_10_14_f", 
+    //         "sum (case when beneficiary.age >= 15 and beneficiary.age <= 17 and beneficiary.gender = 'male' then 1 else 0 end) as age_15_17_m", 
+    //         "sum (case when beneficiary.age >= 15 and beneficiary.age <= 17 and beneficiary.gender = 'female' then 1 else 0 end) as age_15_17_f", 
+    //         "sum (case when beneficiary.age >= 18 and beneficiary.age <= 24 and beneficiary.gender = 'male' then 1 else 0 end) as age_18_24_m", 
+    //         "sum (case when beneficiary.age >= 18 and beneficiary.age <= 24 and beneficiary.gender = 'female' then 1 else 0 end) as age_18_24_f", 
+    //         "sum (case when beneficiary.age >= 25 and beneficiary.age <= 49 and beneficiary.gender = 'male' then 1 else 0 end) as age_25_49_m", 
+    //         "sum (case when beneficiary.age >= 25 and beneficiary.age <= 49 and beneficiary.gender = 'female' then 1 else 0 end) as age_25_49_f", 
+    //         "sum (case when beneficiary.age >= 50 and beneficiary.age <= 59 and beneficiary.gender = 'male' then 1 else 0 end) as age_50_59_m", 
+    //         "sum (case when beneficiary.age >= 50 and beneficiary.age <= 59 and beneficiary.gender = 'female' then 1 else 0 end) as age_50_59_f", 
+    //         "sum (case when beneficiary.age >= 60 and beneficiary.gender = 'male' then 1 else 0 end) as age_gt60_m", 
+    //         "sum (case when beneficiary.age >= 60 and beneficiary.gender = 'female' then 1 else 0 end) as age_gt60_f")
+    // ->get();
 
     public function search(Request $request)
     {

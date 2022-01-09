@@ -49,7 +49,6 @@
                             <th>Case</th>
                             <th>Name</th>
                             <th>Provided Services</th>
-                            <th>Assigned Worker</th>
                         </tr>
                     </thead>
                     <tbody v-if="beneficiaries">
