@@ -87,11 +87,6 @@ class BeneficiaryController extends Controller
                                     DB::raw("sum (case when beneficiaries.age >= 50 and beneficiaries.age <= 59 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_50_59_f"),
                                     DB::raw("sum (case when beneficiaries.age >= 60 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_gt_60_m"), 
                                     DB::raw("sum (case when beneficiaries.age >= 60 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_gt_60_f"),
-        // function($query){
-        //     $query->where('age', '>=', 0)
-        //     ->where('age', '<=', 5);
-        //     return $query;
-        // })
         )->groupBy('nationality_id');
         
         $data = [
@@ -127,6 +122,29 @@ class BeneficiaryController extends Controller
     //         "sum (case when beneficiary.age >= 60 and beneficiary.gender = 'male' then 1 else 0 end) as age_gt60_m", 
     //         "sum (case when beneficiary.age >= 60 and beneficiary.gender = 'female' then 1 else 0 end) as age_gt60_f")
     // ->get();
+
+    "UNION
+        SELECT
+            logentry.id,
+           "TOTAL",
+            COUNT(logentry.id) AS total,
+            sum(case when logentry.age > 0 AND logentry.age <= 5 AND logentry.gender ='Male' Then 1 else 0 end) As age_0_5_M,
+            sum(case when logentry.age > 0 AND logentry.age <= 5 AND logentry.gender ='Female' Then 1 else 0 end) As age_0_5_F,
+            sum(case when logentry.age >= 6 AND logentry.age <= 9 AND logentry.gender ='Male' Then 1 else 0 end) As age_6_9_M,
+            sum(case when logentry.age >= 6 AND logentry.age <= 9 AND logentry.gender ='Female' Then 1 else 0 end) As age_6_9_F,
+            sum(case when logentry.age >= 10 AND logentry.age <= 14 AND logentry.gender ='Male' Then 1 else 0 end) As age_10_14_M,
+            sum(case when logentry.age >= 10 AND logentry.age <= 14 AND logentry.gender ='Female' Then 1 else 0 end) As age_10_14_F,
+            sum(case when logentry.age >= 15 AND logentry.age <= 17 AND logentry.gender ='Male' Then 1 else 0 end) As age_15_17_M,
+            sum(case when logentry.age >= 15 AND logentry.age <= 17 AND logentry.gender ='Female' Then 1 else 0 end) As age_15_17_F,
+            sum(case when logentry.age >= 18 AND logentry.age <= 24 AND logentry.gender ='Male' Then 1 else 0 end) As age_18_24_M,
+            sum(case when logentry.age >= 18 AND logentry.age <= 24 AND logentry.gender ='Female' Then 1 else 0 end) As age_18_24_F,
+            sum(case when logentry.age >= 25 AND logentry.age <= 49 AND logentry.gender ='Male' Then 1 else 0 end) As age_25_49_M,
+            sum(case when logentry.age >= 25 AND logentry.age <= 49 AND logentry.gender ='Female' Then 1 else 0 end) As age_25_49_F,
+            sum(case when logentry.age >= 50 AND logentry.age <= 59 AND logentry.gender ='Male' Then 1 else 0 end) As age_50_59_M,
+            sum(case when logentry.age >= 50 AND logentry.age <= 59 AND logentry.gender ='Female' Then 1 else 0 end) As age_50_59_F,
+            sum(case when logentry.age >= 60 AND logentry.gender ='Male' Then 1 else 0 end) As age_gt60_M,
+            sum(case when logentry.age >= 60 AND logentry.gender ='Female' Then 1 else 0 end) As age_gt60_F
+        FROM caselog_logentry AS logentry"
 
     public function search(Request $request)
     {
