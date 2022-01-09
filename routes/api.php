@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     // beneficiaries
+    Route::get('beneficiaries/stats/', 'API\BeneficiaryController@getStats');
     Route::get('beneficiaries/search/', 'API\BeneficiaryController@search');
     Route::put('beneficiaries/{individual}/deactivate', 'API\BeneficiaryController@deactivateBeneficiary');
     Route::put('beneficiaries/{individual}/activate', 'API\BeneficiaryController@activateBeneficiary');

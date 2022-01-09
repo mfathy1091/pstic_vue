@@ -7,6 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Month extends Model
 {
+    public const MONTHS = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ];
+
     protected $fillable =['name'];
 
     public function records()

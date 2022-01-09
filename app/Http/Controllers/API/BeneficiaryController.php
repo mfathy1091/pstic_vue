@@ -35,44 +35,49 @@ class BeneficiaryController extends Controller
 
     public function getStats(Request $request)
     {
+        // $ranges = [ // the start of each age-range.
+        //     '18-24' => 18,
+        //     '25-35' => 25,
+        //     '36-45' => 36,
+        //     '46+' => 46
+        // ];
 
-        $ranges = [ // the start of each age-range.
-            '18-24' => 18,
-            '25-35' => 25,
-            '36-45' => 36,
-            '46+' => 46
-        ];
+        // $output = Beneficiary::query()
+        //     ->get()
+        //     ->map(function ($beneficiary) use ($ranges) {
+        //         // $age = Carbon::parse($beneficiary->dob)->age;
+        //         $age = $beneficiary->age;
+        //         foreach($ranges as $key => $breakpoint)
+        //         {
+        //             if ($breakpoint >= $age)
+        //             {
+        //                 $beneficiary->range = $key;
+        //                 break;
+        //             }
+        //         }
 
-        $output = Beneficiary::query()
-            ->get()
-            ->map(function ($beneficiary) use ($ranges) {
-                // $age = Carbon::parse($beneficiary->dob)->age;
-                $age = $beneficiary->age;
-                foreach($ranges as $key => $breakpoint)
-                {
-                    if ($breakpoint >= $age)
-                    {
-                        $beneficiary->range = $key;
-                        break;
-                    }
-                }
+        //         return $beneficiary;
+        //     })
+        //     ->mapToGroups(function ($beneficiary, $key) {
+        //         return [$beneficiary->range => $beneficiary];
+        //     })
+        //     ->map(function ($group) {
+        //         return count($group);
+        //     })
+        //     ->sortKeys();
 
-                return $beneficiary;
-            })
-            ->mapToGroups(function ($beneficiary, $key) {
-                return [$beneficiary->range => $beneficiary];
-            })
-            ->map(function ($group) {
-                return count($group);
-            })
-            ->sortKeys();
-
-        dd($output);
-
+        // dd($output);
 
 
+        $stats = Beneficiary::select('nationality_id', DB::raw('count(*) as total', function($query){
+            $query->where('age', '>=', 0)
+            ->where('age', '<=', 5);
+            return $query;
+        }))
+            ->groupBy('nationality_id');
+        
         $data = [
-            'data' => $output,
+            'stats' => $stats->get(),
         ];
 
         return response($data, 200);
@@ -92,6 +97,14 @@ class BeneficiaryController extends Controller
         $months = $selectedYearDates->map(function ($date) {
             return Carbon::parse($date)->format('m');
         })->unique();
+
+       //  $monthsWithKeys = $months->collect();
+        $monthsWithKeys = $months->collect()->mapWithKeys(function($item, $key){
+            return[
+                $key => $item,
+            ];
+        
+        });
 
         $beneficiaries = Beneficiary::query();
 
@@ -127,6 +140,7 @@ class BeneficiaryController extends Controller
             'data' => $beneficiaries->get(),
             'years' => $years,
             'months' =>$months,
+            'monthsWithKeys' => $monthsWithKeys,
         ];
 
         return response($data, 200);

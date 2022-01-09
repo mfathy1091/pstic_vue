@@ -67,6 +67,10 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div>
+                <h5>Statistics</h5>
 
             </div>
         </div>
@@ -90,6 +94,7 @@ export default {
             months: [],
             budgets: [],
             beneficiaries: [],
+            stats: [],
             filter: {
                 year: '2021',
                 month: '',
@@ -114,13 +119,26 @@ export default {
 			})
 		},
 
-
+		getBeneficiariesStats(){
+			this.$Progress.start();
+			axios.get('/api/beneficiaries/stats' )
+			.then((response) => {
+				this.stats = response.data.data;
+                // this.months = response.data.months;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
 	},
 
 	created() {
         this.getUsers();
         this.getBudgets();
         this.getBeneficiaries();
+        this.getBeneficiariesStats();
 	}
 }
 </script>
