@@ -68,9 +68,56 @@
                 </table>
             </div>
 
-            <div>
+            <div class="row mt-3">
                 <h5>Statistics</h5>
+                <table class="table table table-sm shade_last_row" style="text-align: center;">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nationality</th>
+                            <th>Total # of Beneficiaries</th>
+                            <th>0-5 M</th>
+                            <th>0-5 F</th>
+                            <th>6-9 M</th>
+                            <th>6-9 F</th>
+                            <th>10-14 M</th>
+                            <th>10-14 F</th>
+                            <th>15-17 M</th>
+                            <th>15-17 F</th>
+                            <th>18-24 M</th>
+                            <th>18-24 F</th>
+                            <th>25-49 M</th>
+                            <th>25-49 F</th>
+                            <th>50-59 M</th>
+                            <th>50-59 F</th>
+                            <th>+60 M</th>
+                            <th>+60 F</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="stats">
+                        <tr v-for="stat in this.stats" :key="stat.id">
+                            <td>{{ stat.nationality.name }}</td>
+                            <td>{{ stat.total }}</td>
+                            <td>{{ stat.age_0_5_m }}</td>
+                            <td>{{ stat.age_0_5_f }}</td>
+                            <td>{{ stat.age_6_9_m }}</td>
+                            <td>{{ stat.age_6_9_f }}</td>
+                            <td>{{ stat.age_10_14_m }}</td>
+                            <td>{{ stat.age_10_14_f }}</td>
+                            <td>{{ stat.age_15_17_m }}</td>
+                            <td>{{ stat.age_15_17_f }}</td>
+                            <td>{{ stat.age_18_24_m }}</td>
+                            <td>{{ stat.age_18_24_f }}</td>
+                            <td>{{ stat.age_25_49_m }}</td>
+                            <td>{{ stat.age_25_49_f }}</td>
+                            <td>{{ stat.age_50_59_m }}</td>
+                            <td>{{ stat.age_50_59_f }}</td>
+                            <td>{{ stat.age_gt_60_m }}</td>
+                            <td>{{ stat.age_gt_60_f }}</td>
+                        </tr>
 
+
+                        </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -122,7 +169,7 @@ export default {
 			this.$Progress.start();
 			axios.get('/api/beneficiaries/stats' )
 			.then((response) => {
-				this.stats = response.data.data;
+				this.stats = response.data.stats;
                 // this.months = response.data.months;
 				this.$Progress.finish();
 			})
