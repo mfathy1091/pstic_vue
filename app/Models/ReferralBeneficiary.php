@@ -10,4 +10,10 @@ class ReferralBeneficiary extends Model
     use HasFactory;
 
     protected $table = 'referrals_beneficiaries';
+
+
+    public function beneficiary()
+    {
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
+    }
 }

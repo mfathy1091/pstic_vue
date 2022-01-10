@@ -61,15 +61,21 @@
             </div>
 
             <hr>
-            <h5>Included Beneficiary
+            <h5>Affected Beneficiaries
                 <span class="clickable ml-3 secondary tt" data-bs-placement="bottom" id="tooltip1" data-toggle="tooltip" title="You don't have to choose all the beneficiaries">
                     <i class="fas fa-info-circle"></i>
                 </span>
             </h5>
             
             <ul v-if="referral">
-                <li v-for="beneficiary in referral.beneficiaries" :key="beneficiary.id">
-                    {{ beneficiary.name }}
+                <li v-for="referralBeneficiary in referral.referral_beneficiaries" :key="referralBeneficiary.id">
+                    {{ referralBeneficiary.beneficiary.name }}
+                    <span v-show="referralBeneficiary.status == '0'" class="badge badge-pill badge-warning">Not affected</span>
+                    <span v-show="referralBeneficiary.status == '1'" class="badge badge-pill badge-success">Direct</span>
+                    <span v-show="referralBeneficiary.status == '2'" class="badge badge-pill badge-secondary">Indirect</span>
+                    <a class="clickable ml-2" @click="showEditActivityModal(activity)">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
                 </li>
             </ul>
 

@@ -75,7 +75,7 @@ class ActivityController extends Controller
         ]);
 
         $serviceTypesIds = collect($request->input('service_types'))->pluck('id');
-        $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['beneficiary_id' => $request->beneficiary_id, 'provision_date' => $request->activity_date, 'user_id' => Auth::id()]);
+        $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['referral_beneficiary_id' => $request->referral_beneficiary_id, 'beneficiary_id' => $request->beneficiary_id, 'provision_date' => $request->activity_date, 'user_id' => Auth::id()]);
 
         $data = [
             'data' => $activity,

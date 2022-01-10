@@ -32,14 +32,19 @@ class Referral extends Model
         return $this->belongsTo(Casee::class, 'casee_id');
     }
 
-    public function directIndividual()
+    public function referralBeneficiaries()
     {
-        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
+        return $this->hasMany(ReferralBeneficiary::class);
     }
-    
-    public function originalDirectIndividual()
+
+    public function directReferralBeneficiaries()
     {
-        return $this->belongsTo(Beneficiary::class, 'original_direct_beneficiary_id');
+        return $this->hasMany(ReferralBeneficiary::class)->where('status', 1);
+    }
+
+    public function inDirectReferralBeneficiaries()
+    {
+        return $this->hasMany(ReferralBeneficiary::class)->where('status', 2);
     }
     
     public function referralSource()

@@ -121,7 +121,7 @@ class ReferralController extends Controller
     {
         $referral = Referral::with(
         'beneficiaries',
-        'originalDirectIndividual', 
+        'referralBeneficiaries.beneficiary',
         'referralSource', 
         'casee',
         'casee.beneficiaries',
