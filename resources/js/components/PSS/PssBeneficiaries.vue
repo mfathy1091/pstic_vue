@@ -95,7 +95,8 @@
                     </thead>
                     <tbody v-if="stats">
                         <tr v-for="stat in this.stats" :key="stat.id">
-                            <td>{{ stat.nationality.name }}</td>
+                            <td v-if="stat.nationality">{{ stat.nationality.name }}</td>
+                            <td v-if="!stat.nationality">TOTAL</td>
                             <td>{{ stat.total }}</td>
                             <td>{{ stat.age_0_5_m }}</td>
                             <td>{{ stat.age_0_5_f }}</td>
