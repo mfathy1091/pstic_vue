@@ -21,6 +21,11 @@ class ProvidedService extends Model
         return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
     }
 
+    public function referralBeneficiary()
+    {
+        return $this->belongsTo(ReferralBeneficiary::class, 'referral_beneficiary_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
