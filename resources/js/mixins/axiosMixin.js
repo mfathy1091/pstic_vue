@@ -185,9 +185,9 @@ export default {
 			})
 		},
 
-		getReferralBeneficiaries(referralId){
+		getActiveReferralBeneficiaries(referralId){
 			this.$Progress.start();
-			axios.get('/api/beneficiaries/', { params: {referral_id: referralId } })
+			axios.get('/api/referral-beneficiaries/', { params: {referral_id: referralId, is_active: 1 } })
 			.then((response) => {
 				// success
 				this.referralBeneficiaries = response.data.data;

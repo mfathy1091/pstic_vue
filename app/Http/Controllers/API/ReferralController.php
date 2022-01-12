@@ -135,7 +135,7 @@ class ReferralController extends Controller
         'activities.serviceTypes',
         'activities.record.month',
         'activities.user',
-        'activities.beneficiary',
+        'activities.referralBeneficiary.beneficiary',
         'records', 
         'records.month', 
         'records.status', 

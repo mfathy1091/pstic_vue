@@ -16,7 +16,6 @@ class CreateProvidedServicesTable extends Migration
         Schema::create('provided_services', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('activity_id');
-            $table->unsignedInteger('beneficiary_id');
             $table->unsignedBigInteger('referral_beneficiary_id');
             $table->unsignedInteger('service_type_id');
             $table->date('provision_date')->nullable();
@@ -24,7 +23,6 @@ class CreateProvidedServicesTable extends Migration
             $table->timestamps();            
 
             $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade');
-            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
             $table->foreign('referral_beneficiary_id')->references('id')->on('referrals_beneficiaries')->onDelete('cascade');
             $table->foreign('service_type_id')->references('id')->on('service_types')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

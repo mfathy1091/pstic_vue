@@ -8,28 +8,28 @@
 	<div>
         <div class="card-body">
             <div class="form-inline ml-2">
-                <button class="btn btn-secondary btn-sm mr-2" @click="getBeneficiaries">
+                <button class="btn btn-secondary btn-sm mr-2" @click="getReferralBeneficiaries">
 					<i class="fas fa-sync-alt"></i>
 				</button>
 
-                <select v-model="filter.user_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.user_id" @change="getReferralBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>All Workers...</option>
 					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
 
-                <select v-model="filter.year" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.year" @change="getReferralBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>Choose Year...</option>
                     <option value='2021'>2021</option>
                     <option value='2022'>2022</option>
 					<!-- <option v-for='month in months' :value='month.id' :key="month.id">{{ month.name }}</option> -->
                 </select>
 
-                <select v-model="filter.month" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.month" @change="getReferralBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>Choose Month...</option>
 					<option v-for='month in months' :value='month' :key="month">{{ month }}</option>
                 </select>
                 
-                <select v-model="filter.direct_only" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select v-model="filter.direct_only" @change="getReferralBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
 					<option value=''>All Beneficiaries...</option>
                     <option value='1'>Direct Only</option>
                 </select>
@@ -41,9 +41,9 @@
             </div>
             
             <div class="row mt-3">
-                <p v-show="!beneficiaries.length" class="font-italic ml-5">No data found!</p>
+                <p v-show="!referralBeneficiaries.length" class="font-italic ml-5">No data found!</p>
 
-                <table v-show="beneficiaries.length" class="border table table-hover table-sm">
+                <table v-show="referralBeneficiaries.length" class="border table table-hover table-sm">
                     <thead>
                         <tr>
                             <th>Case</th>
@@ -51,13 +51,13 @@
                             <th>Provided Services</th>
                         </tr>
                     </thead>
-                    <tbody v-if="beneficiaries">
-                        <tr v-for="beneficiary in this.beneficiaries" :key="beneficiary.id">
-                            <td>{{ beneficiary.casee.file_number }}</td>
-                            <td>{{ beneficiary.name }}</td>
+                    <tbody v-if="referralBeneficiaries">
+                        <tr v-for="referralBeneficiary in this.referralBeneficiaries" :key="referralBeneficiary.id">
+                            <td>{{ referralBeneficiary.beneficiary.casee.file_number }}</td>
+                            <td>{{ referralBeneficiary.beneficiary.name }}</td>
                             <td>
                                 <div class="list-unstyled">
-                                    <li v-for="provided_service in beneficiary.provided_services" :key="provided_service.id">
+                                    <li v-for="provided_service in referralBeneficiary.provided_services" :key="provided_service.id">
                                         <span>{{ provided_service.service_type.name }} </span>
                                         <span> | {{ provided_service.provision_date }}</span>
                                     </li>
@@ -140,7 +140,7 @@ export default {
             users: [],
             months: [],
             budgets: [],
-            beneficiaries: [],
+            referralBeneficiaries: [],
             stats: [],
             filter: {
                 year: '2021',
@@ -152,11 +152,11 @@ export default {
 		}
 	},
 	methods: {
-		getBeneficiaries(){
+		getReferralBeneficiaries(){
 			this.$Progress.start();
-			axios.get('/api/beneficiaries/search', { params: { year: this.filter.year, month: this.filter.month, user_id: this.user_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
+			axios.get('/api/referral-beneficiaries/search', { params: { year: this.filter.year, month: this.filter.month, user_id: this.user_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
 			.then((response) => {
-				this.beneficiaries = response.data.data;
+				this.referralBeneficiaries = response.data.data;
                 this.months = response.data.months;
 				this.$Progress.finish();
 			})
@@ -166,9 +166,9 @@ export default {
 			})
 		},
 
-		getBeneficiariesStats(){
+		getReferralBeneficiariesStats(){
 			this.$Progress.start();
-			axios.get('/api/beneficiaries/stats' )
+			axios.get('/api/referral-beneficiaries/stats' )
 			.then((response) => {
 				this.stats = response.data.stats;
                 // this.months = response.data.months;
@@ -184,8 +184,8 @@ export default {
 	created() {
         this.getUsers();
         this.getBudgets();
-        this.getBeneficiaries();
-        this.getBeneficiariesStats();
+        this.getReferralBeneficiaries();
+        this.getReferralBeneficiariesStats();
 	}
 }
 </script>

@@ -77,7 +77,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     // beneficiaries
-    Route::get('beneficiaries/stats/', 'API\BeneficiaryController@getStats');
     Route::get('beneficiaries/search/', 'API\BeneficiaryController@search');
     Route::put('beneficiaries/{individual}/deactivate', 'API\BeneficiaryController@deactivateBeneficiary');
     Route::put('beneficiaries/{individual}/activate', 'API\BeneficiaryController@activateBeneficiary');
@@ -87,8 +86,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('passport_beneficiaries/get_individual_by_passport/{passport_number}', 'API\Individual\PassportBeneficiaryController@getIndividualByPassword');
     Route::get('casees/{casee}/beneficiaries', 'API\BeneficiaryController@getCaseeBeneficiaries');
     
+    // Referral Beneficiaries
+    Route::get('referral-beneficiaries/', 'API\ReferralBeneficiaryController@search');
+    Route::get('referral-beneficiaries/search', 'API\ReferralBeneficiaryController@search');
+    Route::get('referral-beneficiaries/stats/', 'API\ReferralBeneficiaryController@getStats');
 
-    
     // Record Beneficiaries
     // Route::apiResources(['record-beneficiaries'=> 'API\RecordBeneficiaryController']);
     Route::put('record-beneficiaries/{id}', 'API\RecordBeneficiaryController@update');

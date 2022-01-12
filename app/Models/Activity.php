@@ -11,9 +11,9 @@ class Activity extends Model
 
     protected $guarded = [];
 
-    public function beneficiary()
+    public function referralBeneficiary()
     {
-        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
+        return $this->belongsTo(ReferralBeneficiary::class, 'referral_beneficiary_id');
     }
 
     public function record()

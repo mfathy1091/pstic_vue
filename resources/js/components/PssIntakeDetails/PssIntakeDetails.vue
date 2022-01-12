@@ -68,8 +68,8 @@
             </h5>
             
             <ul v-if="referral">
-                <li v-for="referralBeneficiary in referral.referral_beneficiaries" :key="referralBeneficiary.id">
-                    {{ referralBeneficiary.beneficiary.name }}
+                <li v-for="referralBeneficiary in referralBeneficiaries" :key="referralBeneficiary.id">
+                    {{ referralBeneficiary.name }}
                     <span v-show="referralBeneficiary.status == '0'" class="badge badge-pill badge-warning">Not affected</span>
                     <span v-show="referralBeneficiary.status == '1'" class="badge badge-pill badge-success">Direct</span>
                     <span v-show="referralBeneficiary.status == '2'" class="badge badge-pill badge-secondary">Indirect</span>
@@ -128,7 +128,7 @@
                         <tr v-for="activity in referral.activities" :key="activity.id">
                             <td><span>{{ activity.record.month.name }}</span></td>
                             <td><span>{{ activity.activity_date | myDateShort }}</span></td>
-                            <td><span>{{ activity.beneficiary.name }}</span></td>
+                            <td><span>{{ activity.referral_beneficiary.beneficiary.name }}</span></td>
                             <td>
                                 <span v-for="providedService in activity.provided_services" :key="providedService.id" class="badge badge-pill badge-primary">{{providedService.service_type.name}}</span>
                             </td>
@@ -293,6 +293,7 @@ export default {
     data(){
         return {
             referral: "",
+            referralBeneficiaries: [],
             caseeBeneficiaries: [],
             selectedEmergency: {},
             selectedActivity: {},
@@ -448,6 +449,7 @@ export default {
         Fire.$on('referralChanged', () => {
 			this.getReferral(this.referralId);
 		});
+        this.getActiveReferralBeneficiaries(this.$route.params.referralId);
     }
 }
 </script>

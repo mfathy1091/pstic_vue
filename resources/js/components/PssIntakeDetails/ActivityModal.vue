@@ -43,9 +43,9 @@
 
 							<div class="form-group">
 								<label for="location" class="form-label">Beneficiary</label>
-								<select v-model="activityForm.beneficiary_id" name="location" id="location" class="form-control">
+								<select v-model="activityForm.referral_beneficiary_id" name="location" id="location" class="form-control">
 									<option value='' selected>Choose..</option>
-									<option :value="beneficiary.id" v-for="beneficiary in referralBeneficiaries" v-bind:key="beneficiary.id">{{ beneficiary.name }}</option>
+									<option :value="referralBeneficiary.id" v-for="referralBeneficiary in referralBeneficiaries" v-bind:key="referralBeneficiary.id">{{ referralBeneficiary.name }}</option>
 								</select>
 								<!-- <HasError :form="activityForm" field="location" /> -->
 							</div>
@@ -115,7 +115,7 @@ export default {
 				casee_id: '',
                 activity_date: '',
                 comment: '',
-				beneficiary_id: '',
+				referral_beneficiary_id: '',
                 service_types: [],
 				provided_services: [],
 			})
@@ -268,7 +268,7 @@ export default {
     created (){
 		this.getReferral(this.$route.params.referralId)
         this.getServiceTypes();
-		this.getReferralBeneficiaries(this.$route.params.referralId);
+		this.getActiveReferralBeneficiaries(this.$route.params.referralId);
 		
     },
     computed:{

@@ -21,10 +21,7 @@ class Beneficiary extends Model
     }
 
 
-    public function providedServices()
-    {
-        return $this->hasMany(ProvidedService::class, 'beneficiary_id');
-    }
+
 
     
     public function gender()

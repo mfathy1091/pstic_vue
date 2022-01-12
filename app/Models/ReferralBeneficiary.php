@@ -16,4 +16,9 @@ class ReferralBeneficiary extends Model
     {
         return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
     }
+
+    public function providedServices()
+    {
+        return $this->hasMany(ProvidedService::class, 'referral_beneficiary_id');
+    }
 }

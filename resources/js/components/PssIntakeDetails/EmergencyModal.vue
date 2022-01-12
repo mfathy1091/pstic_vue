@@ -194,7 +194,7 @@ export default {
     created (){
 		this.getReferral(this.$route.params.referralId)
         this.getEmergencyTypes();
-		this.getReferralBeneficiaries(this.$route.params.referralId);
+		this.getActiveReferralBeneficiaries(this.$route.params.referralId);
 
     },
     computed:{
