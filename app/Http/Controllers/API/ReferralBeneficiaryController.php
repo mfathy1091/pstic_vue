@@ -70,7 +70,12 @@ class ReferralBeneficiaryController extends Controller
             if($request->filled('month')){
                 $q->whereMonth('provision_date', '=', $request->month);
             }
-            return $q->with('ServiceType');
+            
+            // $q->with('ServiceType');
+            $q->join('service_types', 'provided_services.id', '=', 'provided_services.referral_beneficiary_id');
+            //$q->select(['service_type_id', 'name', 'id']);
+            return $q;
+
         })
         ->whereHas('providedServices', function($q) use($request){
             if($request->filled('year')){
@@ -90,6 +95,10 @@ class ReferralBeneficiaryController extends Controller
             // 'providedServices.serviceType',
             // 'emergencies',
         );
+
+        // $test = return $referralBeneficiaries->get()->mapToDictionary(function ($item){
+        //     return [$item['product'] =>]
+        // });
 
         $data = [
             'data' => $referralBeneficiaries->get(),
