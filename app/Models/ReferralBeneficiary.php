@@ -21,4 +21,17 @@ class ReferralBeneficiary extends Model
     {
         return $this->hasMany(ProvidedService::class, 'referral_beneficiary_id');
     }
+
+    public function providedPss()
+    {
+        return $this->hasMany(ProvidedService::class, 'referral_beneficiary_id')->where('service_type_id', '1');
+    }
+    public function providedInfoSharing()
+    {
+        return $this->hasMany(ProvidedService::class, 'referral_beneficiary_id')->where('service_type_id', '2');
+    }
+    public function providedBasicNeed()
+    {
+        return $this->hasMany(ProvidedService::class, 'referral_beneficiary_id')->where('service_type_id', '3');
+    }
 }

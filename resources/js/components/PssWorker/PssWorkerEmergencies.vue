@@ -228,6 +228,7 @@ export default {
 
 	created() {
         this.getPswReferrals();
+        this.getPswReferralsCountByStatus();
 		this.getMonths();
 	}
 }

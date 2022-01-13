@@ -86,6 +86,73 @@ class ReferralController extends Controller
         return response($data, 200);
     }
 
+    public function index2(Request $request)
+    {
+        // return Carbon::now()->format("Y-m");
+        $referrals = Referral::query();
+
+        if($request->user_id == 'current_user'){
+            $referrals->where('current_assigned_psw_id', Auth::id());
+        }
+        elseif($request->user_id != ''){
+            $referrals->where('current_assigned_psw_id', $request->user_id);
+        }
+        
+        if($request->casee_id != ''){
+            $referrals->where('casee_id', $request->casee_id);
+        }
+
+        if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
+            $referrals->whereHas('records', function($q) use($request){
+                if($request->is_new != ''){
+                    $q->where('is_new', $request->is_new);
+                }
+                if($request->month_id != ''){
+                    $q->where('month_id', $request->month_id);
+                }
+                if($request->status_id != ''){
+                    $q->where('status_id', $request->status_id);
+                }
+                return $q;
+            });
+        }
+
+        $referrals->with(
+            'casee',
+            'beneficiaries',
+            'emergencies',
+            'activities.providedServices.serviceType',
+            'referralSource',
+            'current_assigned_psw',
+            'records', 
+            'records.month', 
+            'records.status',
+            'currentRecord.status' 
+        );
+        
+        // selected record
+        $referrals->with(["records" => function($q) use($request){
+            $q->where('month_id', '=', 12)->first();
+        }]);
+
+        // $statusesCounts = array_fill(1, 3, 0);  // status 1 to 3 - default count: 0
+
+        // foreach($referrals as $referral)
+        //     $statusesCounts[]
+
+
+        // $referrals->whereHas('records', function($q) use($request){
+        //         $q->where('month_id', $request->month_id);
+        //     return $q;
+        // });
+
+        $data = [
+            'data' => $referrals->get(),
+        ];
+
+        return response($data, 200);
+    }
+
 
     public function getCaseeReferrals(Request $request, $caseeId)
     {

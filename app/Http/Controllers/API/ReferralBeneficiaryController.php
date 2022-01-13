@@ -60,23 +60,62 @@ class ReferralBeneficiaryController extends Controller
         // if($request->filled('year')){
         //     $referralBeneficiaries->whereYear('provision_date', '=', $request->year);
         // }
-
+        
         $referralBeneficiaries = ReferralBeneficiary::query();
 
-        $referralBeneficiaries->with('providedServices', function($q) use($request){
+        $referralBeneficiaries->withCount(['providedPss' => function ($query) use($request)
+        {
             if($request->filled('year')){
-                $q->whereYear('provision_date', '=', $request->year);
+                $query->whereYear('provision_date', '=', $request->year);
             }
             if($request->filled('month')){
-                $q->whereMonth('provision_date', '=', $request->month);
+                $query->whereMonth('provision_date', '=', $request->month);
             }
+        }]);
+
+        $referralBeneficiaries->withCount(['providedInfoSharing' => function ($query) use($request)
+        {
+            if($request->filled('year')){
+                $query->whereYear('provision_date', '=', $request->year);
+            }
+            if($request->filled('month')){
+                $query->whereMonth('provision_date', '=', $request->month);
+            }
+        }]);
+
+        $referralBeneficiaries->withCount(['providedBasicNeed' => function ($query) use($request)
+        {
+            if($request->filled('year')){
+                $query->whereYear('provision_date', '=', $request->year);
+            }
+            if($request->filled('month')){
+                $query->whereMonth('provision_date', '=', $request->month);
+            }
+        }]);
+
+        $referralBeneficiaries->with('providedServices', function($q) use($request){
+            // $q->withCount('providedServices.');
+
+            // $q->select('provided_services.*',
+            //     DB::raw("sum (case when provided_services.service_type_id = '1' then 1 else 0 end) as pss"),
+            //     DB::raw("sum (case when provided_services.service_type_id = '5' then 1 else 0 end) as housing_advocacy"),);
             
-            // $q->with('ServiceType');
-            $q->join('service_types', 'provided_services.id', '=', 'provided_services.referral_beneficiary_id');
+            // $q->groupBy('service_type_id')->count();
+
+            // if($request->filled('year')){
+            //     $q->whereYear('provision_date', '=', $request->year);
+            // }
+            // if($request->filled('month')){
+            //     $q->whereMonth('provision_date', '=', $request->month);
+            // }
+            
+            $q->with('ServiceType');
+            // $q->join('service_types', 'provided_services.id', '=', 'provided_services.referral_beneficiary_id');
             //$q->select(['service_type_id', 'name', 'id']);
             return $q;
 
         })
+
         ->whereHas('providedServices', function($q) use($request){
             if($request->filled('year')){
                 $q->whereYear('provision_date', '=', $request->year);
