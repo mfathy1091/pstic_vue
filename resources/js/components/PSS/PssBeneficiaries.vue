@@ -165,7 +165,7 @@ export default {
 				console.log(e);
 			})
 		},
-
+        
 		getReferralBeneficiariesStats(){
 			this.$Progress.start();
 			axios.get('/api/referral-beneficiaries/stats' )

@@ -53,15 +53,11 @@
                         <li class="nav-header">My Pages</li>
 
                         <li class="nav-item">
-                            <router-link :to="{name: 'pssWorker'}" class="nav-link">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>My December Cases</p>
-                            </router-link>
-                            <router-link :to="{name: 'pssWorker'}" class="nav-link">
+                            <router-link :to="{name: 'psWorker'}" class="nav-link">
                                 <i class="nav-icon fas fa-file-alt"></i>
                                 <p>My Cases</p>
                             </router-link>
-                        </li>
+
 
 
 

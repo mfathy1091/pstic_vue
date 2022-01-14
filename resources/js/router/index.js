@@ -30,11 +30,11 @@ const routes = [
 
     
     
-    { path: '/pss-worker', name: "pssWorker", props: true, component: () => import(/* webpackChunkName: "pssWorker" */ '../components/PssWorker/PssWorker.vue'), children: [
-        { path: "home", name: "pssWorkerHome", props: true, component: () => import(/* webpackChunkName: "pssWorkerHome" */ '../components/PssWorker/PssWorkerHome.vue') },
-        { path: "pss-referrals", name: "pssWorkerReferrals", props: true, component: () => import(/* webpackChunkName: "pssWorkerReferrals" */ '../components/PssWorker/PssWorkerCases.vue') },
-        { path: "pss-referrals-stats", name: "pssWorkerReferralsStats", props: true, component: () => import(/* webpackChunkName: "pssWorkerReferralsStats" */ '../components/PssWorker/PssWorkerCasesStats.vue') },
-        { path: "pss-emergencies", name: "pssWorkerEmergencies", props: true, component: () => import(/* webpackChunkName: "pssWorkerEmergencies" */ '../components/PssWorker/PssWorkerEmergencies.vue') },
+    { path: '/ps_worker', name: "psWorker", props: true, component: () => import(/* webpackChunkName: "psWorker" */ '../components/PsWorker/PsWorker.vue'), children: [
+        { path: "home", name: "psWorkerHome", props: true, component: () => import(/* webpackChunkName: "psWorkerHome" */ '../components/PsWorker/PsWorkerHome.vue') },
+        { path: "pss-cases", name: "psWorkerCases", props: true, component: () => import(/* webpackChunkName: "psWorkerReferrals" */ '../components/PsWorker/PsWorkerCases.vue') },
+        { path: "pss-beneficiaries", name: "psWorkerBeneficiaries", props: true, component: () => import(/* webpackChunkName: "psWorkerPss" */ '../components/PsWorker/PsWorkerBeneficiaries.vue') },
+        { path: "pss-emergencies", name: "psWorkerEmergencies", props: true, component: () => import(/* webpackChunkName: "psWorkerEmergencies" */ '../components/PsWorker/PsWorkerEmergencies.vue') },
 
     ] },
     

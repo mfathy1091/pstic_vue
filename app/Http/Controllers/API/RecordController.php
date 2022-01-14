@@ -11,7 +11,54 @@ use App\Models\RecordBeneficiary;
 class RecordController extends Controller
 {
 
-    
+    public function index(Request $request)
+    {
+        // $statusesCounts = array_fill(1, 3, 0);  // status 1 to 3 - default count: 0
+
+        // foreach($referrals as $referral)
+        //     $statusesCounts[]
+
+
+        // $referrals->whereHas('records', function($q) use($request){
+        //         $q->where('month_id', $request->month_id);
+        //     return $q;
+        // });
+
+        $ReferralDetails = Record::join('referrals', 'records.referral_id', 'referrals.id');
+        if($request->month_id != ''){
+            $ReferralDetails->where('records.month_id', $request->month_id);
+        }
+        if($request->month_id != ''){
+            $ReferralDetails->where('records.month_id', $request->month_id);
+        }
+        if($request->user_id == 'current_user'){
+            $ReferralDetails->where('current_assigned_psw_id', Auth::id());
+        }
+        elseif($request->user_id != ''){
+            $ReferralDetails->where('current_assigned_psw_id', $request->user_id);
+        }
+
+
+        $ReferralDetails->with(
+            'referral.casee',
+        //     'referral.beneficiaries',
+        //     'referral.emergencies',
+        //     'activities.providedServices.serviceType',
+        //     'referralSource',
+        //     'current_assigned_psw',
+        //     'records', 
+        //     'records.month', 
+        //     'records.status',
+        //     'currentRecord.status' 
+        );
+
+        $data = [
+            'data' => $ReferralDetails->get(),
+            'ReferralDetails' => $ReferralDetails->get(),
+        ];
+
+        return response($data, 200);
+    }
 
     public function latestReferralRecord($referralId)
     {

@@ -14,16 +14,23 @@ class ReferralBeneficiaryController extends Controller
 {
     public function index(Request $request)
     {
-        $referralBeneficiaries = DB::table('beneficiaries')
-        ->join('referrals_beneficiaries', 'beneficiaries.id', '=', 'referrals_beneficiaries.beneficiary_id');
-        
-        if($request->filled('is_active')){
-            $referralBeneficiaries->where('is_active', '=', 1);
+        $referralBeneficiaries = ReferralBeneficiary::join('referrals', 'referrals_beneficiaries.referral_id', 'referrals.id')
+        ->join('records', 'records.referral_id', 'referrals.id');
+        if($request->month_id != ''){
+            $referralBeneficiaries->where('records.month_id', $request->month_id);
         }
 
-        if($request->filled('referral_id')){
-            $referralBeneficiaries->where('referral_id', '=', $request->referral_id);
-        }
+
+
+
+        $referralBeneficiaries->with(
+            'beneficiary.casee',
+            'beneficiary.relationship',
+            'beneficiary.gender',
+            'beneficiary.nationality',
+            // 'providedServices.serviceType',
+            // 'emergencies',
+        );
 
         $data = [
             'data' => $referralBeneficiaries->get(),
@@ -149,6 +156,7 @@ class ReferralBeneficiaryController extends Controller
 
         return response($data, 200);
     }
+
 
 
     public function getStats(Request $request)

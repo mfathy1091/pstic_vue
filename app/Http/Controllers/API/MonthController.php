@@ -14,7 +14,7 @@ use App\Models\Beneficiary;
 use App\Models\Reason;
 use App\Models\Casee;
 Use Exception;
-
+use \Carbon\Carbon;
 class MonthController extends Controller
 {
 
@@ -24,6 +24,17 @@ class MonthController extends Controller
         
         $data = [
             'data' => $months,
+        ];
+
+        return response($data, 200);
+    }
+
+    public function currentMonth()
+    {
+        $currentMonth =  Month::where('code', Carbon::now()->format("Y-m"))->first();
+        
+        $data = [
+            'data' => $currentMonth,
         ];
 
         return response($data, 200);

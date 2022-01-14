@@ -15,72 +15,64 @@ use App\Models\Reason;
 use App\Models\Casee;
 Use Exception;
 use \Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class ReferralController extends Controller
 {
 
     public function index(Request $request)
     {
-        // return Carbon::now()->format("Y-m");
-        $referrals = Referral::query();
-
+        $query = Referral::join('records', 'records.referral_id', 'referrals.id')
+        ->join('casees', 'referrals.casee_id', 'casees.id')
+        ->join('statuses', 'records.status_id', 'statuses.id');
+        if($request->month_id != ''){
+            $query->where('records.month_id', $request->month_id);
+        }
         if($request->user_id == 'current_user'){
-            $referrals->where('current_assigned_psw_id', Auth::id());
+            $query->where('current_assigned_psw_id', Auth::id());
         }
         elseif($request->user_id != ''){
-            $referrals->where('current_assigned_psw_id', $request->user_id);
+            $query->where('current_assigned_psw_id', $request->user_id);
         }
+        $ReferralsQuery = clone $query;
         
-        if($request->casee_id != ''){
-            $referrals->where('casee_id', $request->casee_id);
+        if($request->status_id != ''){
+            $ReferralsQuery->where('status_id', $request->status_id);
         }
-
-        if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
-            $referrals->whereHas('records', function($q) use($request){
-                if($request->is_new != ''){
-                    $q->where('is_new', $request->is_new);
-                }
-                if($request->month_id != ''){
-                    $q->where('month_id', $request->month_id);
-                }
-                if($request->status_id != ''){
-                    $q->where('status_id', $request->status_id);
-                }
-                return $q;
-            });
-        }
-
-        $referrals->with(
-            'casee',
-            'beneficiaries',
-            'emergencies',
-            'activities.providedServices.serviceType',
+        $ReferralsQuery->with(
+            //'referral.casee',
+            // 'referral.beneficiaries',
+            // 'referral.emergencies',
+            // 'activities.providedServices.serviceType',
             'referralSource',
             'current_assigned_psw',
-            'records', 
-            'records.month', 
-            'records.status',
-            'currentRecord.status' 
+            // 'records', 
+            // 'records.month', 
+            // 'records.status',
+            // 'currentRecord.status' 
         );
+        $referralsResult = $ReferralsQuery->get();
         
-        // selected record
-        $referrals->with(["records" => function($q) use($request){
-            $q->where('month_id', '=', 12)->first();
-        }]);
+        
+        $statusesCountQuery = clone $query;
 
-        // $statusesCounts = array_fill(1, 3, 0);  // status 1 to 3 - default count: 0
+        $statusesCountQuery->select('name', DB::raw('count(*) as total'))->groupBy('name');
+        $statusesCountResult = $statusesCountQuery->get();
 
-        // foreach($referrals as $referral)
-        //     $statusesCounts[]
+        
+        $statusesCountResult = $statusesCountResult->mapWithKeys(function($item, $key){
+            // if($item['status_id'] == 1){
+                // return $item = $item['status_id'] *5;
+                return [$item['name'] => $item['total']];
+            // }    
+        });
 
 
-        // $referrals->whereHas('records', function($q) use($request){
-        //         $q->where('month_id', $request->month_id);
-        //     return $q;
-        // });
 
         $data = [
-            'data' => $referrals->get(),
+            'data' => $referralsResult,
+            'statusesCount' => $statusesCountResult,
         ];
 
         return response($data, 200);
@@ -88,52 +80,54 @@ class ReferralController extends Controller
 
     public function index2(Request $request)
     {
-        // return Carbon::now()->format("Y-m");
-        $referrals = Referral::query();
+        $ReferralDetails = Record::query();
+        $ReferralDetails->join('referrals', 'records.referral_id', 'referrals.id');
 
-        if($request->user_id == 'current_user'){
-            $referrals->where('current_assigned_psw_id', Auth::id());
-        }
-        elseif($request->user_id != ''){
-            $referrals->where('current_assigned_psw_id', $request->user_id);
-        }
+
+
+        // if($request->user_id == 'current_user'){
+        //     $referrals->where('current_assigned_psw_id', Auth::id());
+        // }
+        // elseif($request->user_id != ''){
+        //     $referrals->where('current_assigned_psw_id', $request->user_id);
+        // }
         
-        if($request->casee_id != ''){
-            $referrals->where('casee_id', $request->casee_id);
-        }
+        // if($request->casee_id != ''){
+        //     $referrals->where('casee_id', $request->casee_id);
+        // }
 
-        if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
-            $referrals->whereHas('records', function($q) use($request){
-                if($request->is_new != ''){
-                    $q->where('is_new', $request->is_new);
-                }
-                if($request->month_id != ''){
-                    $q->where('month_id', $request->month_id);
-                }
-                if($request->status_id != ''){
-                    $q->where('status_id', $request->status_id);
-                }
-                return $q;
-            });
-        }
+        // if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
+        //     $referrals->whereHas('records', function($q) use($request){
+        //         if($request->is_new != ''){
+        //             $q->where('is_new', $request->is_new);
+        //         }
+        //         if($request->month_id != ''){
+        //             $q->where('month_id', $request->month_id);
+        //         }
+        //         if($request->status_id != ''){
+        //             $q->where('status_id', $request->status_id);
+        //         }
+        //         return $q;
+        //     });
+        // }
 
-        $referrals->with(
-            'casee',
-            'beneficiaries',
-            'emergencies',
-            'activities.providedServices.serviceType',
-            'referralSource',
-            'current_assigned_psw',
-            'records', 
-            'records.month', 
-            'records.status',
-            'currentRecord.status' 
-        );
+        // $referrals->with(
+        //     'casee',
+        //     'beneficiaries',
+        //     'emergencies',
+        //     'activities.providedServices.serviceType',
+        //     'referralSource',
+        //     'current_assigned_psw',
+        //     'records', 
+        //     'records.month', 
+        //     'records.status',
+        //     'currentRecord.status' 
+        // );
         
-        // selected record
-        $referrals->with(["records" => function($q) use($request){
-            $q->where('month_id', '=', 12)->first();
-        }]);
+        // // selected record
+        // $referrals->with(["records" => function($q) use($request){
+        //     $q->where('month_id', '=', 12)->first();
+        // }]);
 
         // $statusesCounts = array_fill(1, 3, 0);  // status 1 to 3 - default count: 0
 
@@ -147,7 +141,63 @@ class ReferralController extends Controller
         // });
 
         $data = [
-            'data' => $referrals->get(),
+            'data' => $ReferralDetails->get(),
+        ];
+
+        return response($data, 200);
+    }
+
+    public function getActiveCount(Request $request)
+    {
+        // return Carbon::now()->format("Y-m");
+        $referrals = Referral::query();
+
+        // if($request->user_id == 'current_user'){
+        //     $referrals->where('current_assigned_psw_id', Auth::id());
+        // }
+        // elseif($request->user_id != ''){
+        //     $referrals->where('current_assigned_psw_id', $request->user_id);
+        // }
+        
+        // if($request->casee_id != ''){
+        //     $referrals->where('casee_id', $request->casee_id);
+        // }
+
+        if($request->is_new != '' || $request->month_id != '' || $request->status_id != ''){
+            $referrals->whereHas('records', function($q) use($request){
+                // if($request->is_new != ''){
+                //     $q->where('is_new', $request->is_new);
+                // }
+                if($request->month_id != ''){
+                    $q->where('month_id', $request->month_id);
+                }
+                // if($request->status_id != ''){
+                //     $q->where('status_id', $request->status_id);
+                // }
+                $q->where('status_id', '1');
+                return $q;
+            });
+        }
+
+        
+        // selected record
+        // $referrals->with(["records" => function($q) use($request){
+        //     $q->where('month_id', '=', 12)->first();
+        // }]);
+
+        // $statusesCounts = array_fill(1, 3, 0);  // status 1 to 3 - default count: 0
+
+        // foreach($referrals as $referral)
+        //     $statusesCounts[]
+
+
+        // $referrals->whereHas('records', function($q) use($request){
+        //         $q->where('month_id', $request->month_id);
+        //     return $q;
+        // });
+
+        $data = [
+            'data' => $referrals->count(),
         ];
 
         return response($data, 200);
