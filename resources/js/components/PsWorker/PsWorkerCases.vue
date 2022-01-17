@@ -34,8 +34,8 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
-	<div class="p-0">
 
+	<div class="p-0">
         <div class="form-inline mr-2 ml-2 mt-3">
             <button class="btn btn-success btn-sm m-1">
             <!-- <button class="btn btn-success btn-sm mr-2" @click="showCreateRoleModal" v-if="$can('role_create')"> -->

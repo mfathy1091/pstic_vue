@@ -17,6 +17,7 @@
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
+			<spinner/>
 
 			<!-- Main content -->
 			<div class="content p-0">
@@ -38,10 +39,12 @@
 <script>
 import SideBar from "./layouts/SideBar.vue"
 import Footer from "./layouts/Footer.vue"
+import Spinner from './Spinner.vue'
 export default {
 	components: {
 		SideBar,
 		Footer,
+		Spinner,
 	},
 
     async created(){

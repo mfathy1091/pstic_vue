@@ -8,6 +8,20 @@ use App\Models\Status;
 
 class StatusController extends Controller
 {
+    public function index(Request $request)
+    {
+        $statuses =  Status::where('type', 'Psychosocial')->withCount(['records' => function($q){
+            $q->withFilters();
+        }])
+        ->get();
+
+        $data = [
+            'data' => $statuses,
+        ];
+
+        return response($data, 200);
+    }
+
     public function getHousingGrantStatuses(Request $request)
     {
         $housingGrantStatuses =  Status::where('type', 'Housing Grant')
