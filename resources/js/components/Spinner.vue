@@ -1,36 +1,37 @@
 <template>
-    <div class="spin">
-        <div class="ring">
-            <div class="lds-ring">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
-
+<div class="loading-box">
+    <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
+    <div>{{ text }}</div>
+</div>
+
+
 </template>
 <script>
 export default {
-    
+    props: {
+      text: {
+        required: false,
+        type: String,
+        default: 'loading',
+      }
+    }
 }
 </script>
 <style lang="scss" scoped>
-.spin {
-    
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.2);
-    position: fixed;
-}
-.ring{
-    z-index: -10;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: 0 auto;
-    height: 100;
+.loading-box{
+  position: fixed;
+  top: 40%;
+  width: 25%;
+  margin: auto;
+  left: 0px;
+  right: 0px;
+  z-index: 999;
+  text-align: center;
 }
 .lds-ring {
   display: inline-block;
@@ -45,10 +46,10 @@ export default {
   width: 64px;
   height: 64px;
   margin: 8px;
-  border: 8px solid #3d5b95;
+  border: 8px solid #343a40;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #3d5b95 transparent transparent transparent;
+  border-color: #343a40 transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;

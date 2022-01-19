@@ -2,10 +2,13 @@ import axios from "axios";
 
 const state = {
     user:{},
-    abilities: {}
+    abilities: {},
+    showLoading: true,
 };
 
-const getters = {};
+const getters = {
+    isLoading: state => state.showLoading
+};
 const actions = {
     async getUser({commit}){
         try{

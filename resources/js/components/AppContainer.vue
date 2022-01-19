@@ -13,11 +13,12 @@
 
 
 		<SideBar></SideBar>
+		<spinner v-if="showLoading"/>
 
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
-			<spinner/>
+			<!-- <spinner/> -->
 
 			<!-- Main content -->
 			<div class="content p-0">
@@ -40,11 +41,17 @@
 import SideBar from "./layouts/SideBar.vue"
 import Footer from "./layouts/Footer.vue"
 import Spinner from './Spinner.vue'
+import { mapState } from 'vuex'
 export default {
 	components: {
 		SideBar,
 		Footer,
 		Spinner,
+	},
+	computed: {
+		...mapState({
+			showLoading: state => state.showLoading
+		})
 	},
 
     async created(){

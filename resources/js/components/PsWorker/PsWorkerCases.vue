@@ -51,10 +51,10 @@
             </select>
             
         </div>
-
     
         <br>
 
+{{ isLoading }}
         <div class="card mb-0">
             <div class="card-header bg-white">
             <ul class="nav nav-fill">
@@ -168,6 +168,8 @@
     </div>
 </template>
 <script>
+import { HalfCircleSpinner } from 'epic-spinners'
+import { mapGetters } from 'vuex';
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 import router from '../../router'
@@ -179,8 +181,21 @@ export default {
 	},
     mixins: [axiosMixin],
 
+    computed: {
+        
+        isLoading() {
+            return this.$store.state.main.showLoading;
+        },
+        currentUser: {
+            get(){
+                return this.$store.state.currentUser.user;
+            }
+        }
+    },
+
 	data() {
 		return {
+            loading:true,
             currentMonth: '',
             statusesCount: '',
             months: [],
@@ -246,13 +261,6 @@ export default {
 
 	},
 
-    computed:{
-        currentUser: {
-            get(){
-                return this.$store.state.currentUser.user;
-            }
-        }
-    },
     watch: {
         currentUser (n, o) {
             // this.filter.user_id = _.cloneDeep(n).id;
