@@ -13,7 +13,7 @@
 
 
 		<SideBar></SideBar>
-		<spinner v-if="showLoading"/>
+		<spinner v-if="isLoading"/>
 
 
 		<!-- Content Wrapper. Contains page content -->
@@ -48,11 +48,12 @@ export default {
 		Footer,
 		Spinner,
 	},
-	computed: {
-		...mapState({
-			showLoading: state => state.showLoading
-		})
-	},
+
+    computed: {
+        isLoading() {
+            return this.$store.state.main.showLoading;
+        },
+    },
 
     async created(){
 		if(localStorage.hasOwnProperty("blog_token")){

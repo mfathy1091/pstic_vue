@@ -1,3 +1,5 @@
+import store from '../store/index';
+
 export default {
 	// data(){
     //     return{
@@ -64,41 +66,49 @@ export default {
 
 		getCasee(caseeId){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get("/api/casees/"+caseeId)
             .then(({data}) => {
                 this.casee = data.data
             });
 			this.$Progress.finish();
+			this.$store.state.main.showLoading = false;
         },
 
 
 
 		getCaseeHousingReferrals(caseeId){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get('/api/casees/'+ caseeId +'/housing-referrals', { params: { casee_id: caseeId } } )
 			.then((response) => {
 				// success
                 this.caseeHousingReferrals = response.data.data;
 				this.$Progress.finish();
+				this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				// error
 				this.$Progress.fail();
+				this.$store.state.main.showLoading = false;
                 console.log(e);
 			})
 		},
 
 		getCaseeReferrals(caseeId){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get('/api/casees/' + caseeId + '/referrals', { params: { casee_id: caseeId } } )
 			.then((response) => {
 				// success
                 this.caseeReferrals = response.data.data;
 				this.$Progress.finish();
+				this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				// error
 				this.$Progress.fail();
+				this.$store.state.main.showLoading = false;
                 console.log(e);
 			})
 		},
@@ -157,15 +167,18 @@ export default {
 		},
 		getMonths(){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get('/api/months/')
 			.then((response) => {
 				// success
 				this.months = response.data.data;
 				this.$Progress.finish();
+				this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				// error
 				this.$Progress.fail();
+				this.$store.state.main.showLoading = false;
 				console.log(e);
 			})
 		},
@@ -215,42 +228,51 @@ export default {
 
 		getServiceTypes(){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get('/api/service-types/')
 			.then((response) => {
 				this.serviceTypes = response.data.data;
 				this.$Progress.finish();
+				this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				this.$Progress.fail();
+				this.$store.state.main.showLoading = false;
 				console.log(e);
 			})
 		},
 
 		getBudgets(){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get('/api/budgets/')
 			.then((response) => {
 				this.budgets = response.data.data;
 				this.$Progress.finish();
+				this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				this.$Progress.fail();
+				this.$store.state.main.showLoading = false;
 				console.log(e);
 			})
 		},
 
 		getEmergencies(){
 			this.$Progress.start();
+			this.$store.state.main.showLoading = true;
 			axios.get('/api/emergencies', { params: {month_id: this.filter.month_id, user_id: this.filter.user_id} })
             .then((response) => {
 				// success
 				this.emergencies = response.data.data;
 				this.$Progress.finish();
+				this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				// error
 				this.$Progress.fail();
 				console.log(e);
+				this.$store.state.main.showLoading = false;
 			})
 		},
 	},

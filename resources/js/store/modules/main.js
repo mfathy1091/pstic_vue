@@ -3,11 +3,11 @@ import axios from "axios";
 const state = {
     user:{},
     abilities: {},
-    showLoading: true,
+    showLoading: false,
 };
 
 const getters = {
-    isLoading: state => state.showLoading
+    isLoading: (state) => () => state.showLoading
 };
 const actions = {
     async getUser({commit}){
@@ -61,6 +61,9 @@ const mutations = {
     },
     setAbilities(state, data){
         state.abilities = data;
+    },
+    setShowLoading(state, data){
+        state.showLoading = data;
     }
 };
 

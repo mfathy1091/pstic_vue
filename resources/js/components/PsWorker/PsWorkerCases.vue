@@ -54,7 +54,6 @@
     
         <br>
 
-{{ isLoading }}
         <div class="card mb-0">
             <div class="card-header bg-white">
             <ul class="nav nav-fill">
@@ -226,16 +225,19 @@ export default {
 
         getPswReferrals(){
 			this.$Progress.start();
+            this.$store.state.main.showLoading = true;
 			axios.get('/api/referrals', { params: { is_new: this.filter.is_new, status_id: this.filter.status_id, month_id: this.filter.month.id, user_id: this.filter.user_id} })
 			.then((response) => {
 				// success
 				this.pswReferrals = response.data.data;
                 this.statusesCount = response.data.statusesCount;
 				this.$Progress.finish();
+                this.$store.state.main.showLoading = false;
 			})
 			.catch((e) => {
 				// error
 				this.$Progress.fail();
+                this.$store.state.main.showLoading = false;
 				console.log(e);
 			})
 		},
