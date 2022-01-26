@@ -10,8 +10,68 @@ use Illuminate\Support\Facades\DB;
 Use Exception;
 use Carbon\Carbon;
 
+
 class ReferralBeneficiaryController extends Controller
 {
+    public function getMonthlyReferralBeneficiaries(Request $request)
+    {
+        $referralBeneficiaries = ReferralBeneficiary::join('beneficiaries', 'referrals_beneficiaries.beneficiary_id', 'beneficiaries.id');
+
+        // if($request->start_date !='' && $request->end_date !=''){
+        //     $referralBeneficiaries->whereHas('activities', function($q) use($request){
+        //         $q->where('activity_date', '>=', $request->start_date);
+        //         $q->where('activity_date', '<=', $request->end_date);
+        //         return $q;
+        //     });
+        // }
+
+        // if($request->month_id != ''){
+        //     $referralBeneficiaries->where('records.month_id', $request->month_id);
+        // }
+
+        // $query = Referral::join('casees', 'referrals.casee_id', 'casees.id');
+        // if($request->user_id == 'current_user'){
+        //     $query->where('current_assigned_psw_id', Auth::id());
+        // }
+        // elseif($request->user_id != ''){
+        //     $query->where('current_assigned_psw_id', $request->user_id);
+        // }
+        // New at Certain month
+        // $query->whereMonth('referral_date', '=', date('m'));
+
+        // $ReferralsQuery = clone $query;
+
+        // if($request->start_date !='' && $request->end_date !=''){
+        //     $ReferralsQuery->whereHas('activities', function($q) use($request){
+        //         $q->where('activity_date', '>=', $request->start_date);
+        //         $q->where('activity_date', '<=', $request->end_date);
+        //         return $q;
+        //     });
+        // }
+
+        
+        // $ReferralsQuery->with(
+        //     //'referral.casee',
+        //     // 'referral.beneficiaries',
+        //     // 'referral.emergencies',
+        //     // 'activities.providedServices.serviceType',
+        //     'referralSource',
+        //     'current_assigned_psw',
+        //     'directReferralBeneficiaries',
+        //     'inDirectReferralBeneficiaries',
+        // );
+        $referralBeneficiaries->get();
+
+
+
+        $data = [
+            'data' => $referralBeneficiaries,
+            // 'statusesCount' => $statusesCountResult,
+        ];
+
+        return response($data, 200);
+    }
+    
     public function index(Request $request)
     {
         $referralBeneficiaries = ReferralBeneficiary::join('referrals', 'referrals_beneficiaries.referral_id', 'referrals.id')

@@ -46,6 +46,8 @@ class CaseeController extends Controller
         $referrals->with(
             'casee',
             'beneficiaries',
+            'directReferralBeneficiaries.beneficiary',
+            'indirectReferralBeneficiaries.beneficiary',
             'emergencies',
             'activities.providedServices.serviceType',
             'referralSource',

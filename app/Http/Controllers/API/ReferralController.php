@@ -21,6 +21,95 @@ use Illuminate\Support\Facades\DB;
 class ReferralController extends Controller
 {
 
+    public function getCurrentMonthReferrals(Request $request)
+    {
+        $query = Referral::join('casees', 'referrals.casee_id', 'casees.id');
+        if($request->user_id == 'current_user'){
+            $query->where('current_assigned_psw_id', Auth::id());
+        }
+        elseif($request->user_id != ''){
+            $query->where('current_assigned_psw_id', $request->user_id);
+        }
+        // New at Certain month
+        $query->whereMonth('referral_date', '=', date('m'));
+
+        $ReferralsQuery = clone $query;
+
+    if($request->status_id == 1){
+        $ReferralsQuery->whereHas('activities', function($q) use($request){
+            $q->whereMonth('activity_date', '=', date('m'));
+            return $q;
+        });
+    }
+
+        
+        $ReferralsQuery->with(
+            //'referral.casee',
+            // 'referral.beneficiaries',
+            // 'referral.emergencies',
+            // 'activities.providedServices.serviceType',
+            'referralSource',
+            'current_assigned_psw',
+            'directReferralBeneficiaries',
+            'inDirectReferralBeneficiaries',
+        );
+        $referralsResult = $ReferralsQuery->get();
+
+
+
+        $data = [
+            'data' => $referralsResult,
+            // 'statusesCount' => $statusesCountResult,
+        ];
+
+        return response($data, 200);
+    }
+
+    public function getMonthlyReferrals(Request $request)
+    {
+        $query = Referral::join('casees', 'referrals.casee_id', 'casees.id');
+        if($request->user_id == 'current_user'){
+            $query->where('current_assigned_psw_id', Auth::id());
+        }
+        elseif($request->user_id != ''){
+            $query->where('current_assigned_psw_id', $request->user_id);
+        }
+        // New at Certain month
+        // $query->whereMonth('referral_date', '=', date('m'));
+
+        $ReferralsQuery = clone $query;
+
+        if($request->start_date !='' && $request->end_date !=''){
+            $ReferralsQuery->whereHas('activities', function($q) use($request){
+                $q->where('activity_date', '>=', $request->start_date);
+                $q->where('activity_date', '<=', $request->end_date);
+                return $q;
+            });
+        }
+
+        
+        $ReferralsQuery->with(
+            //'referral.casee',
+            // 'referral.beneficiaries',
+            // 'referral.emergencies',
+            // 'activities.providedServices.serviceType',
+            'referralSource',
+            'current_assigned_psw',
+            'directReferralBeneficiaries',
+            'inDirectReferralBeneficiaries',
+        );
+        $referralsResult = $ReferralsQuery->get();
+
+
+
+        $data = [
+            'data' => $referralsResult,
+            // 'statusesCount' => $statusesCountResult,
+        ];
+
+        return response($data, 200);
+    }
+
     public function index(Request $request)
     {
         $query = Referral::join('records', 'records.referral_id', 'referrals.id')
@@ -47,6 +136,8 @@ class ReferralController extends Controller
             // 'activities.providedServices.serviceType',
             'referralSource',
             'current_assigned_psw',
+            'directReferralBeneficiaries',
+            'inDirectReferralBeneficiaries',
             // 'records', 
             // 'records.month', 
             // 'records.status',
@@ -238,6 +329,8 @@ class ReferralController extends Controller
     {
         $referral = Referral::with(
         'beneficiaries',
+        'directReferralBeneficiaries',
+        'indirectReferralBeneficiaries',
         'referralBeneficiaries.beneficiary',
         'referralSource', 
         'casee',
@@ -332,9 +425,26 @@ class ReferralController extends Controller
         /////* Insert Records *///////
         //$this->insertDefaultRecords($pssCase->id, $referralMonth);
 
+        
+
+
+        $directBeneficiariesIds = collect($request->input('direct_referral_beneficiaries'))->pluck('id')->toArray();
 
         $casee = Casee::find($request->casee_id);
-        $beneficiariesIds = $casee->beneficiaries->pluck('id')->toArray();
+        $ActiveBeneficiariesIds = $casee->activeBeneficiaries->pluck('id');
+
+        $ActiveBeneficiariesIds = $ActiveBeneficiariesIds->mapWithKeys(function($item, $key) use($directBeneficiariesIds){
+            if(in_array($item, $directBeneficiariesIds) ){
+                return [$item => ['status' => 1]];
+            }else{
+                return [$item => ['status' => 0]];
+            }    
+        });
+
+        $referral->beneficiaries()->sync($ActiveBeneficiariesIds);
+
+
+
 
         $i = 0;
         foreach($monthsCodes as $monthCode)
@@ -355,51 +465,8 @@ class ReferralController extends Controller
                 'is_new' => $is_new,
             ]);
             
-            $record->beneficiaries()->sync($beneficiariesIds);
-            $referral->beneficiaries()->sync($beneficiariesIds);
-
-
-            //$referralbeneficiaries = $request->referral_beneficiaries;
-            // $directbeneficiaries = collect($request->direct_beneficiaries)->pluck('id')->toArray();
-            // if(!empty($referralbeneficiaries)){
-            //     foreach($referralbeneficiaries as $beneficiary)
-            //     {
-            //         $status = in_array($beneficiary['id'], $directbeneficiaries) ? 1 : 0;
-            //         RecordBeneficiary::create([
-            //             'beneficiary_id' => $beneficiary['id'],
-            //             'record_id' => $record->id,
-            //             'status' => $status
-            //         ]);
-            //     }
-            // }
-
-
-            // // Insert Direct Beneficiary In Each Record
-            // $directbeneficiariesIds = $request->direct_beneficiaries_ids;
-            // if(!empty($directbeneficiariesIds)){
-            //     foreach($directbeneficiariesIds as $directBeneficiaryId)
-            //     {
-            //         RecordBeneficiary::create([
-            //             'beneficiary_id' => $directBeneficiaryId,
-            //             'record_id' => $record->id,
-            //             'status' => '1',
-            //         ]);
-            //     }
-            // }
-
-
-            // // Insert Indirect beneficiaries In Each Record
-            // $indirectbeneficiariesIds = $request->indirect_beneficiaries_ids;
-            // if(!empty($indirectbeneficiariesIds)){
-            //     foreach($indirectbeneficiariesIds as $indirectIndividualId)
-            //     {
-            //         RecordBeneficiary::create([
-            //             'beneficiary_id' => $indirectIndividualId,
-            //             'record_id' => $record->id,
-            //             'status' => '0',
-            //         ]);
-            //     }
-            // }
+            // $record->beneficiaries()->sync($beneficiariesIds->toArray());
+    
         }
 
         $data = [
@@ -461,6 +528,21 @@ class ReferralController extends Controller
             $reasonsIds = collect($request->input('referral_reasons'))->pluck('id');
             $referral->reasons()->sync($reasonsIds);
             
+            // Attach Beneficiaries to Referral
+            $directBeneficiariesIds = collect($request->input('direct_referral_beneficiaries'))->pluck('id')->toArray();
+
+            $casee = Casee::find($request->casee_id);
+            $ActiveBeneficiariesIds = $casee->activeBeneficiaries->pluck('id');
+    
+            $ActiveBeneficiariesIds = $ActiveBeneficiariesIds->mapWithKeys(function($item, $key) use($directBeneficiariesIds){
+                if(in_array($item, $directBeneficiariesIds) ){
+                    return [$item => ['status' => 1]];
+                }else{
+                    return [$item => ['status' => 0]];
+                }    
+            });
+    
+            $referral->beneficiaries()->sync($ActiveBeneficiariesIds);
             
             return ['message' => 'Referral updated'];
         }

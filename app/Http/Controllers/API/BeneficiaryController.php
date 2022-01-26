@@ -279,6 +279,10 @@ class BeneficiaryController extends Controller
             $beneficiaries->where('casee_id', $request->casee_id);
         }
 
+        if($request->is_active != ""){
+            $beneficiaries->where('is_active', $request->is_active);
+        }
+
         if($request->referral_id != ""){
             $beneficiaries->whereHas('referrals', function($q) use($request){
                 $q->where('referral_id', $request->referral_id);
