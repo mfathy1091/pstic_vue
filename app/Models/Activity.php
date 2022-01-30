@@ -46,4 +46,9 @@ class Activity extends Model
         return $this->belongsToMany(ServiceType::class, 'provided_services', 'activity_id', 'service_type_id');
     }
 
+    public function emergencyTypes()
+    {
+        return $this->belongsToMany(EmergencyType::class, 'activities_emergency_types', 'activity_id', 'emergency_type_id');
+    }
+
 }

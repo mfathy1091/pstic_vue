@@ -11,6 +11,10 @@
 					<i class="fas fa-plus-circle"></i><span><b> Beneficiary</b></span>
 				</button>
 
+				<button class="btn btn-success btn-sm mr-2" @click="showCreateBeneficiaryModal2">
+					<i class="fas fa-plus-circle"></i><span><b>Multiple Beneficiaries</b></span>
+				</button>
+
                 <button class="btn btn-secondary btn-sm" @click="getCaseeBeneficiaries(caseeId)">
 					<i class="fas fa-sync-alt"></i>
 				</button>
@@ -81,6 +85,13 @@
 		v-on:caseeBeneficiariesChanged="getCaseeBeneficiaries(caseeId)">
 		</BeneficiaryModal>
 
+		<BeneficiaryModal2
+		:v-if="selectedBeneficiary.id"
+		:beneficiaryEditMode='beneficiaryEditMode' 
+		:selectedBeneficiary='selectedBeneficiary' 
+		v-on:caseeBeneficiariesChanged="getCaseeBeneficiaries(caseeId)">
+		</BeneficiaryModal2>
+
     </div>
 </template>
 
@@ -88,6 +99,7 @@
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 import BeneficiaryModal from './BeneficiaryModal'
+import BeneficiaryModal2 from './BeneficiaryModal2'
 import axiosMixin from '../../../mixins/axiosMixin'
 
 export default {
@@ -97,6 +109,8 @@ export default {
     components: {
         Multiselect,
         BeneficiaryModal,
+		BeneficiaryModal2,
+
     },
 
     props: {
@@ -139,6 +153,12 @@ export default {
 			this.beneficiaryEditMode = false;
 			this.selectedBeneficiary = {};
 			$('#beneficiaryModal').modal('show')
+		},
+
+		showCreateBeneficiaryModal2(){
+			this.beneficiaryEditMode = false;
+			this.selectedBeneficiary = {};
+			$('#beneficiaryModal2').modal('show')
 		},
 
         showEditBeneficiaryModal(beneficiary){

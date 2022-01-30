@@ -7,7 +7,7 @@
     <div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mt-2">
-                <li class="breadcrumb-item active" aria-current="page">Cases</li>
+                <li class="breadcrumb-item active" aria-current="page">Cases / {{ this.referral.casee.number }}</li>
             </ol>
         </nav>
 
@@ -33,7 +33,7 @@
         <div class="card">
 
         <div class="card-body" v-if="this.referral">
-            <h5>Referral Details</h5>
+            <h5>Intake Details</h5>
             <button class="btn btn-danger" @click="closePssIntake">Close</button>
             <div class="row m-3">
                 <div class="col mb-4">
@@ -51,33 +51,30 @@
                     <div class="ml-4" v-for="reason in this.referral.reasons" :key="reason.id">
                         <li>{{ reason.name  }}</li>
                     </div>
-                </div>
-                <div class="col mb-4" >
-                    <h6 class="card-subtitle mb-2 text-muted">Reason of Referral - Narrative</h6>
-                    <div class="ml-4">
+                    <div>
                         <li>{{ this.referral.referral_narrative_reason  }}</li>
                     </div>
                 </div>
+                <div class="col mb-4" >
+                    <h6 class="card-subtitle mb-2 text-muted">Beneficiaries</h6>
+                    <div class="ml-4">
+                        <li v-for="directBeneficiary in this.referral.direct_referral_beneficiaries" :key="directBeneficiary.id">
+                            <div>
+                                <span>{{ directBeneficiary.name }}</span>
+                            </div>
+                        </li>
+                    </div>
+                    <br>
+                    <h6 class="card-subtitle mb-2 text-muted">Indirect Beneficiaries</h6>
+                    <div class="ml-4">
+                        <li v-for="indirectBeneficiary in this.referral.indirect_referral_beneficiaries" :key="indirectBeneficiary.id">
+                            <div>
+                                <span>{{ indirectBeneficiary.name }}</span>
+                            </div>
+                        </li>
+                    </div>
+                </div>
             </div>
-
-            <hr>
-            <h5>Affected Beneficiaries
-                <span class="clickable ml-3 secondary tt" data-bs-placement="bottom" id="tooltip1" data-toggle="tooltip" title="You don't have to choose all the beneficiaries">
-                    <i class="fas fa-info-circle"></i>
-                </span>
-            </h5>
-            
-            <ul v-if="referral">
-                <li v-for="referralBeneficiary in referralBeneficiaries" :key="referralBeneficiary.id">
-                    {{ referralBeneficiary.name }}
-                    <span v-show="referralBeneficiary.status == '0'" class="badge badge-pill badge-warning">Not affected</span>
-                    <span v-show="referralBeneficiary.status == '1'" class="badge badge-pill badge-success">Direct</span>
-                    <span v-show="referralBeneficiary.status == '2'" class="badge badge-pill badge-secondary">Indirect</span>
-                    <a class="clickable ml-2" @click="showEditActivityModal(activity)">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
-                </li>
-            </ul>
 
             <hr>
             <h5>Case Status History</h5>
@@ -93,7 +90,7 @@
             </ul>
 
             <hr>
-            <h5>Activities</h5>
+            <h5>Activity Log</h5>
 
             <div class="form-inline ml-2">
 
@@ -112,26 +109,35 @@
                 </select>                
             </div>
 
-            <div class="row mt-3">
-				<table class="border table table-hover table-sm">
+            <p v-if="!referral.activities.length" class="font-italic ml-5 mt-3">There are no records!</p>
+    
+            <div v-if="referral.activities.length" class="row mt-3 table-responsive m-1">
+                <table class=" table table-hover border table-sm">
                     <thead>
                         <tr>
-                            <th>Month</th>
                             <th>Date</th>
                             <th>beneficiary</th>
                             <th>Services Provided</th>
+                            <th>Is Emergency</th>
+                            <th>Emergency Type</th>
                             <th>Assigned Worker</th>
                             <th>Modify</th>
                         </tr>
                     </thead>
-                    <tbody v-if="referral.activities">
+                    <tbody>
                         <tr v-for="activity in referral.activities" :key="activity.id">
-                            <td><span>{{ activity.record.month.name }}</span></td>
                             <td><span>{{ activity.activity_date | myDateShort }}</span></td>
                             <td><span>{{ activity.referral_beneficiary.beneficiary.name }}</span></td>
                             <td>
                                 <span v-for="providedService in activity.provided_services" :key="providedService.id" class="badge badge-pill badge-primary">{{providedService.service_type.name}}</span>
                             </td>
+                            <td>
+                                <span>{{ activity.is_emergency }}</span>
+                            </td>
+                            <td>
+                                <span v-for="emergencyType in activity.emergency_types" :key="emergencyType.id" class="badge badge-pill badge-primary">{{emergencyType.name}}</span>
+                            </td>
+
                             <td>{{ activity.user.full_name }}</td>
                             <td>
                                 <a class="clickable mr-2" @click="showEditActivityModal(activity)">
@@ -146,7 +152,7 @@
                 </table>
             </div>
 
-            <hr>
+            <!-- <hr>
             <h5>Emergencies</h5>
 
             <div class="form-inline ml-2">
@@ -194,7 +200,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
 
 
 

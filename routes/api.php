@@ -55,6 +55,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('casees/exists/{n}', 'API\CaseeController@exists');
     
     // PSS Referrals
+    
+    Route::get('referrals/monthly', 'API\ReferralController@getMonthlyReferrals');
+    Route::get('beneficiaries/monthly_referral_beneficiaries', 'API\BeneficiaryController@getMonthlyReferralBeneficiaries');
+
+    Route::get('referrals/currentMonth', 'API\ReferralController@getCurrentMonthReferrals');
     Route::get('referrals/activeCount', 'API\ReferralController@getActiveCount');
     Route::put('referrals/{id}/close', 'API\ReferralController@closeReferral');
     Route::apiResources(['referrals'=> 'API\ReferralController']);

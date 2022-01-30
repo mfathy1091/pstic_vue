@@ -81,14 +81,14 @@
                         <router-link
                             :to="{ name: 'casePssIntakes' }"
                             class="nav-link tab-header" active-class="active">
-                            Case PSS History
+                            PS Intake Log
                         </router-link>
                     </li>
                     <li class="nav-item">
                         <router-link
                             :to="{ name: 'caseHousingIntakes' }"
                             class="nav-link tab-header" active-class="active">
-                            Housing Intakes
+                            Housing Intake Log
                         </router-link>
                     </li>
 

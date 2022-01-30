@@ -198,6 +198,21 @@ export default {
 			})
 		},
 
+		getCaseeActiveBeneficiaries(caseeId){
+			this.$Progress.start();
+			axios.get('/api/beneficiaries/', { params: { casee_id: caseeId, is_active: 1  } })
+			.then((response) => {
+				// success
+				this.CaseeActiveBeneficiaries = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+				console.log(e);
+			})
+		},
+
 		getActiveReferralBeneficiaries(referralId){
 			this.$Progress.start();
 			axios.get('/api/referral-beneficiaries/', { params: {referral_id: referralId, is_active: 1 } })

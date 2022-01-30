@@ -10,7 +10,7 @@
 
         <!-- Sidebar -->
         <div class="sidebar">
-            <!-- Sidebar user panel (optional) -->
+            <!-- Sidebar user panel (optional) --> 
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <!-- <img src="./img/profile.png" class="img-circle elevation-2" alt="User Image"> -->
@@ -37,11 +37,24 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
+                        <!-- <li class="nav-item">
+                            <router-link
+                            to='/add-beneficiaries' class="nav-link">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Add Beneficiaries</p>
+                            </router-link>
+                        </li> -->
                         <li class="nav-item">
                             <router-link
                             to='/cases' class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Cases</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'addCase' }" class="nav-link">
+                                <i class="nav-icon fas fa-plus-circle"></i>
+                                <p>Add Case</p>
                             </router-link>
                         </li>
                         <li class="nav-item">
@@ -53,12 +66,10 @@
                         <li class="nav-header">My Pages</li>
 
                         <li class="nav-item">
-                            <router-link :to="{name: 'psWorker'}" class="nav-link">
+                            <router-link :to="{name: 'workerPssLog'}" class="nav-link">
                                 <i class="nav-icon fas fa-file-alt"></i>
-                                <p>My Cases</p>
+                                <p>My January PSS Log</p>
                             </router-link>
-
-
 
 
                         <!-- <li class="nav-item">

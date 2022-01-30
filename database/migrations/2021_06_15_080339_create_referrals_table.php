@@ -18,6 +18,7 @@ class CreateReferralsTable extends Migration
             $table->unsignedInteger('referral_source_id');
             $table->date('referral_date')->nullable();
             $table->date('close_date')->nullable();
+            // $table->unsignedBigInteger('elapsed_months_since_intake');
             $table->string('referring_person_name');
             $table->string('referring_person_email');
             $table->text('referral_narrative_reason');
@@ -25,6 +26,7 @@ class CreateReferralsTable extends Migration
 
             $table->unsignedBigInteger('current_status_id')->nullable();
             $table->unsignedBigInteger('current_assigned_psw_id')->nullable();
+            
             $table->timestamps();
 
             $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');

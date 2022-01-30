@@ -16,6 +16,91 @@ use Illuminate\Support\Facades\DB;
 
 class BeneficiaryController extends Controller
 {
+
+    public function getMonthlyReferralBeneficiaries(Request $request)
+    {
+        $referralBeneficiaries = ReferralBeneficiary::join('beneficiaries', 'referrals_beneficiaries.beneficiary_id', 'beneficiaries.id')
+        ->join('casees', 'casees.id', 'beneficiaries.casee_id')
+        ->select('referrals_beneficiaries.id', 'casees.file_number', 'beneficiaries.file_individual_number', 'beneficiaries.name', 'referrals_beneficiaries.is_direct');
+
+        if($request->start_date !='' && $request->end_date !=''){
+            $referralBeneficiaries->with('providedServices', function($q) use($request){
+                $q->where('provision_date', '>=', $request->start_date);
+                $q->where('provision_date', '<=', $request->end_date);
+                return $q->with('ServiceType');
+            });
+
+        
+            $referralBeneficiaries->whereHas('providedServices', function($q) use($request){
+                $q->where('provision_date', '>=', $request->start_date);
+                $q->where('provision_date', '<=', $request->end_date);
+                return $q;
+            });
+        }else
+        {
+            $referralBeneficiaries->with('providedServices', function($q) use($request){
+                $q->where('provision_date', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'));
+                $q->where('provision_date', '<=', Carbon::now()->format('Y-m-d'));
+                return $q->with('ServiceType');
+            });
+
+        
+            $referralBeneficiaries->whereHas('providedServices', function($q) use($request){
+                $q->where('provision_date', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'));
+                $q->where('provision_date', '<=', Carbon::now()->format('Y-m-d'));
+                return $q;
+            });
+        }
+
+        if($request->is_direct != ''){
+            $referralBeneficiaries->where('is_direct', $request->is_direct);
+        }
+
+        // $query = Referral::join('casees', 'referrals.casee_id', 'casees.id');
+        // if($request->user_id == 'current_user'){
+        //     $query->where('current_assigned_psw_id', Auth::id());
+        // }
+        // elseif($request->user_id != ''){
+        //     $query->where('current_assigned_psw_id', $request->user_id);
+        // }
+        // New at Certain month
+        // $query->whereMonth('referral_date', '=', date('m'));
+
+        // $ReferralsQuery = clone $query;
+
+        // if($request->start_date !='' && $request->end_date !=''){
+        //     $ReferralsQuery->whereHas('activities', function($q) use($request){
+        //         $q->where('activity_date', '>=', $request->start_date);
+        //         $q->where('activity_date', '<=', $request->end_date);
+        //         return $q;
+        //     });
+        // }
+
+        
+        // $ReferralsQuery->with(
+        //     //'referral.casee',
+        //     // 'referral.beneficiaries',
+        //     // 'referral.emergencies',
+        //     // 'activities.providedServices.serviceType',
+        //     'referralSource',
+        //     'current_assigned_psw',
+        //     'directReferralBeneficiaries',
+        //     'inDirectReferralBeneficiaries',
+        // );
+        
+
+
+
+        $data = [
+            'data' => $referralBeneficiaries->get(),
+            // 'statusesCount' => $statusesCountResult,
+        ];
+
+        return response($data, 200);
+    }
+
+
+
     public function liveSearch(Request $request)
     {
         $data = Beneficiary::where('name', 'LIKE','%'.$request->keyword.'%')->get();

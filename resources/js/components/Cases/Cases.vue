@@ -70,8 +70,8 @@
                                 <th>File #</th>
                                 <th>Case Type</th>
                                 <th>Beneficiaries</th>
-                                <th># of PSS Intake</th>
-                                <th># of Housing Intake</th>
+                                <!-- <th># of PSS Intake</th>
+                                <th># of Housing Intake</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -90,12 +90,12 @@
                                             </li>
                                         </div>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <span>{{ casee.referrals_count }}</span>
                                     </td>
                                     <td>
                                         <span>{{ casee.housing_referrals_count }}</span>
-                                    </td>
+                                    </td> -->
                                 </tr>
                         </tbody>
                     </table>

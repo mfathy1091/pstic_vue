@@ -20,6 +20,11 @@ class Casee extends Model
         return $this->hasMany(Beneficiary::class);
     }
 
+    public function activeBeneficiaries()
+    {
+        return $this->hasMany(Beneficiary::class)->where('is_active', '1');
+    }
+
     public function referrals()
     {
         return $this->hasMany(Referral::class);

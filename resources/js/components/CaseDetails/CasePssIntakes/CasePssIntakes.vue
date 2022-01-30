@@ -12,6 +12,8 @@
             </button>
         </div>
 
+        <h5 class="mt-2">This case is open with 2 Workers</h5>
+
         <div class="row mt-3 table-responsive">
             <p v-show="!caseeReferrals.length" class="font-italic ml-5">This case has no PSS Intakes!</p>
 
@@ -19,8 +21,9 @@
                 <thead>
                     <tr>
                         <th>Assigned Worker</th>
-                        <th>Intake / Close Date</th>
+                        <th>Open / Close Date</th>
                         <th>Direct Beneficiaries</th>
+                        <th>Indirect Beneficiaries</th>
                         <th>Source</th>
                         <th>Current Status</th>
                         <th>Actions</th>
@@ -37,16 +40,33 @@
                             <span class="text-nowrap" v-if="referral.close_date">{{ referral.close_date | myDateFull }}</span>
                             <span v-if="!referral.close_date">Now</span>
                         </td>
-                        <td></td>
+                        <td>
+                            <div class="list-unstyled">
+                                <li v-for="directBeneficiary in referral.direct_referral_beneficiaries" :key="directBeneficiary.id">
+                                    <div>
+                                        <span>{{ directBeneficiary.name }}</span>
+                                    </div>
+                                </li>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="list-unstyled">
+                                <li v-for="indirectBeneficiary in referral.indirect_referral_beneficiaries" :key="indirectBeneficiary.id">
+                                    <div>
+                                        <span>{{ indirectBeneficiary.name }}</span>
+                                    </div>
+                                </li>
+                            </div>
+                        </td>
                         <td>{{ referral.referral_source.name  }}</td>
                         <td>
                             <span v-show="referral.current_record.status.name == 'Inactive'" class="badge badge-pill badge-secondary">{{ referral.current_record.status.name }}</span>
                             <span v-show="referral.current_record.status.name == 'Active'" class="badge badge-pill badge-success">{{ referral.current_record.status.name }}</span>
                             <span v-show="referral.current_record.status.name == 'Closed'" class="badge badge-pill badge-dark">{{ referral.current_record.status.name }}</span>
-                            <span v-show="referral.current_record.status.name != 'Closed'">
+                            <!-- <span v-show="referral.current_record.status.name != 'Closed'">
                                 <span v-show="referral.current_record.is_new == 1" class="badge badge-pill badge-info">New</span>
                                 <span v-show="referral.current_record.is_new == 0" class="badge badge-pill badge-warning">Ongoing</span>
-                            </span>
+                            </span> -->
                         </td>
                         <td>
                             <router-link

@@ -18,7 +18,7 @@
     <div>
         
         <div class="row mt-3 mb-3 pl-3">
-            <h5>{{ currentUser.full_name }}</h5>
+            <h5>{{ currentUser.full_name }} | PSS</h5>
         </div>
         <div class="card">
             <div class="card-header bg-white p-0">
@@ -33,26 +33,34 @@
 
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'psWorkerCases' }"
+                            :to="{ name: 'workerPsCases' }"
                             class="nav-link tab-header" active-class="active">   
                             My Cases
                         </router-link>
                     </li>
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'psWorkerBeneficiaries' }"
+                            :to="{ name: 'psWorkerCases2' }"
                             class="nav-link tab-header" active-class="active">   
-                            My Beneficiaries
+                            My Cases 2
+                        </router-link>
+                    </li>
+
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'workerPsIntakeLog' }"
+                            class="nav-link tab-header" active-class="active">   
+                            My Intake Log
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'workerPsActivityLog' }"
+                            class="nav-link tab-header" active-class="active">   
+                            My Activity Log
                         </router-link>
                     </li>
                     
-                    <li class="nav-item">
-                        <router-link
-                            :to="{ name: 'psWorkerEmergencies' }"
-                            class="nav-link tab-header" active-class="active">   
-                            My Emergencies
-                        </router-link>
-                    </li>
                 </ul>
             </div>
                 <router-view :key="$route.path"></router-view>

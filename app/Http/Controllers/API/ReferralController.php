@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\DB;
 class ReferralController extends Controller
 {
 
-    public function getCurrentMonthReferrals(Request $request)
+    
+    public function getMonthReferrals(Request $request)
     {
         $query = Referral::join('casees', 'referrals.casee_id', 'casees.id');
         if($request->user_id == 'current_user'){
@@ -343,6 +344,7 @@ class ReferralController extends Controller
         'emergencies.beneficiary',
         'activities.providedServices.serviceType',
         'activities.serviceTypes',
+        'activities.emergencyTypes',
         'activities.record.month',
         'activities.user',
         'activities.referralBeneficiary.beneficiary',
@@ -435,9 +437,9 @@ class ReferralController extends Controller
 
         $ActiveBeneficiariesIds = $ActiveBeneficiariesIds->mapWithKeys(function($item, $key) use($directBeneficiariesIds){
             if(in_array($item, $directBeneficiariesIds) ){
-                return [$item => ['status' => 1]];
+                return [$item => ['is_direct' => 1]];
             }else{
-                return [$item => ['status' => 0]];
+                return [$item => ['is_direct' => 0]];
             }    
         });
 
@@ -536,9 +538,9 @@ class ReferralController extends Controller
     
             $ActiveBeneficiariesIds = $ActiveBeneficiariesIds->mapWithKeys(function($item, $key) use($directBeneficiariesIds){
                 if(in_array($item, $directBeneficiariesIds) ){
-                    return [$item => ['status' => 1]];
+                    return [$item => ['is_direct' => 1]];
                 }else{
-                    return [$item => ['status' => 0]];
+                    return [$item => ['is_direct' => 0]];
                 }    
             });
     

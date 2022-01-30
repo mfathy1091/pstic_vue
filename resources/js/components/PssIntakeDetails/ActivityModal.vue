@@ -45,13 +45,13 @@
 								<label for="location" class="form-label">Beneficiary</label>
 								<select v-model="activityForm.referral_beneficiary_id" name="location" id="location" class="form-control">
 									<option value='' selected>Choose..</option>
-									<option :value="referralBeneficiary.id" v-for="referralBeneficiary in referralBeneficiaries" v-bind:key="referralBeneficiary.id">{{ referralBeneficiary.name }}</option>
+									<option :value="referral_beneficiary.id" v-for="referral_beneficiary in referral.referral_beneficiaries" :key="referral_beneficiary.id">{{ referral_beneficiary.beneficiary.name }}</option>
 								</select>
 								<!-- <HasError :form="activityForm" field="location" /> -->
 							</div>
 
-							<label class="typo__label">Provided Services</label>
-							<div>
+							<div class="form-group" v-if="referral">
+								<label class="typo__label">Service Types</label>
 								<multiselect 
 								v-model="activityForm.service_types" 
 								:options="serviceTypes" 
@@ -67,7 +67,29 @@
 								</multiselect>
 								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 							</div>
-
+							
+							<div class="form-group form-check">
+								<input v-model="activityForm.is_emergency" type="checkbox" class="form-check-input" id="is_emergency">
+								<label class="form-check-label" for="is_emergency">Is Emergency?</label>
+							</div>
+							
+							<div class="form-group" v-if="activityForm.is_emergency">
+								<label class="typo__label">Emergency Types</label>
+								<multiselect 
+								v-model="activityForm.emergency_types" 
+								:options="emergencyTypes" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							</div>
 
 						</div>
 						<div class="modal-footer">
@@ -107,6 +129,7 @@ export default {
 		return {
 			referral: "",
 			serviceTypes: [],
+			emergencyTypes: [],
 			referralBeneficiaries: [],
 			activityForm: new Form({
 				id: '',
@@ -118,6 +141,8 @@ export default {
 				referral_beneficiary_id: '',
                 service_types: [],
 				provided_services: [],
+				is_emergency: false,
+				emergency_types: [],
 			})
 		}
 	},
@@ -157,6 +182,8 @@ export default {
 			this.activityForm.activity_date = ''
 			this.activityForm.comment = ''
 			this.activityForm.service_types = []
+			this.activityForm.is_emergency = false,
+			this.activityForm.emergency_types = []
 			// this.activityForm.beneficiariesServices = []
 			// this.appendToBeneficiariesArray()
         },
@@ -219,6 +246,21 @@ export default {
 			})
 		},
 
+		getEmergencyTypes() {
+			this.$Progress.start();
+			axios.get('/api/emergency-types/')
+			.then((response) => {
+				// success
+                this.emergencyTypes = response.data.data;
+				this.$Progress.finish();
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                console.log(e);
+			})
+		},
+
         createActivity() {
 			this.$Progress.start();
 			// this.activityForm.record_id = this.recordId
@@ -268,6 +310,7 @@ export default {
     created (){
 		this.getReferral(this.$route.params.referralId)
         this.getServiceTypes();
+		this.getEmergencyTypes();
 		this.getActiveReferralBeneficiaries(this.$route.params.referralId);
 		
     },

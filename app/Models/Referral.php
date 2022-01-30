@@ -39,12 +39,14 @@ class Referral extends Model
 
     public function directReferralBeneficiaries()
     {
-        return $this->hasMany(ReferralBeneficiary::class)->where('status', 1);
+        return $this->hasMany(ReferralBeneficiary::class)->where('is_direct', 1)
+                ->join('beneficiaries', 'referrals_beneficiaries.beneficiary_id', 'beneficiaries.id');
     }
 
     public function inDirectReferralBeneficiaries()
     {
-        return $this->hasMany(ReferralBeneficiary::class)->where('status', 2);
+        return $this->hasMany(ReferralBeneficiary::class)->where('is_direct', 0)
+        ->join('beneficiaries', 'referrals_beneficiaries.beneficiary_id', 'beneficiaries.id');
     }
     
     public function referralSource()

@@ -22,6 +22,7 @@ class CreateActivitiesTable extends Migration
             $table->date('activity_date')->nullable();
             $table->text('comment');
             $table->unsignedInteger('user_id');
+            $table->boolean('is_emergency');
             $table->timestamps();
 
             // foreign keys

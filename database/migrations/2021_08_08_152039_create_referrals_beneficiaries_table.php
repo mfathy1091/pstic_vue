@@ -17,7 +17,7 @@ class CreateReferralsBeneficiariesTable extends Migration
             $table->id();
             $table->unsignedInteger('referral_id');
             $table->unsignedInteger('beneficiary_id');
-            $table->boolean('status')->default(0);
+            $table->boolean('is_direct')->default(0);
             $table->timestamps();
 
             $table->foreign('referral_id')->references('id')->on('referrals')->onDelete('cascade');

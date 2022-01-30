@@ -62,6 +62,7 @@ class ActivityController extends Controller
             'activity_date' => 'required',
             'comment' => 'required',
             'referral_beneficiary_id' => 'required',
+            'is_emergency' => 'required',
         ]);
 
         $activity = Activity::create([
@@ -71,11 +72,20 @@ class ActivityController extends Controller
             'activity_date' => $request['activity_date'],
             'comment' => $request['comment'],
             'referral_beneficiary_id' => $request['referral_beneficiary_id'],
+            'is_emergency' => $request['is_emergency'],
             'user_id' => Auth::id(),
+            
         ]);
 
         $serviceTypesIds = collect($request->input('service_types'))->pluck('id');
         $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['referral_beneficiary_id' => $request->referral_beneficiary_id, 'provision_date' => $request->activity_date, 'user_id' => Auth::id()]);
+
+        if($request->is_emergency){
+            $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
+            $activity->emergencyTypes()->sync($emergencyTypesIds);
+        }else{
+            $activity->emergencyTypes()->detach();
+        }
 
         $data = [
             'data' => $activity,
@@ -98,6 +108,7 @@ class ActivityController extends Controller
                 'activity_date' => 'required',
                 'comment' => 'required',
                 'referral_beneficiary_id' => 'required',
+                'is_emergency' => 'required',
             ]);
 
             $activity->update([
@@ -107,11 +118,21 @@ class ActivityController extends Controller
                 'activity_date' => $request['activity_date'],
                 'comment' => $request['comment'],
                 'referral_beneficiary_id' => $request['referral_beneficiary_id'],
+                'is_emergency' => $request['is_emergency'],
                 'user_id' => Auth::id(),
             ]);
             
             $serviceTypesIds = collect($request->input('service_types'))->pluck('id');
             $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['referral_beneficiary_id' => $request->referral_beneficiary_id, 'provision_date' => $request->activity_date, 'user_id' => Auth::id()]);
+
+
+
+            if($request->is_emergency){
+                $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
+                $activity->emergencyTypes()->sync($emergencyTypesIds);
+            }else{
+                $activity->emergencyTypes()->detach();
+            }
 
             $data = [
                 'data' => $activity,

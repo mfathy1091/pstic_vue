@@ -12,6 +12,26 @@
                 <form @submit.prevent="pssIntakeEditMode ? updatePssIntake() : createPssIntake()">
                     <div class="modal-body">
 						<div class="form-group">
+							<label class="typo__label">Choose Direct Beneficiaries</label>
+							<div>
+								<multiselect 
+								v-model="pssIntakeForm.direct_referral_beneficiaries" 
+								:options="CaseeActiveBeneficiaries" 
+								:multiple="true" 
+								:close-on-select="false" 
+								:clear-on-select="false" 
+								:preserve-search="true" 
+								placeholder="Pick some" 
+								label="name" 
+								track-by="name" 
+								:preselect-first="true">
+									<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+								</multiselect>
+								<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+							</div>
+						</div>
+						
+						<div class="form-group">
 							<label for="referral_source_id" class="form-label">Referral Source</label>
 							<select name="referral_source_id" v-model="pssIntakeForm.referral_source_id" id="referral_source_id" class="form-control" :class="{ 'is-invalid': pssIntakeForm.errors.has('referral_source_id') }">
 								<option value='0' disabled>Choose...</option>
@@ -91,7 +111,7 @@ export default {
 		return {
 			// editMode: false,
             //  selected: this.selectedPssIntake;,
-            caseebeneficiaries: [],
+            CaseeActiveBeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
@@ -112,6 +132,7 @@ export default {
 				referral_narrative_reason: '',
 				referral_reasons: [],
 				casee_id: "",
+				direct_referral_beneficiaries: [],
             }),
 		}
 	},
@@ -174,6 +195,7 @@ export default {
 		this.getReferralSources()
 		this.getNationalities()
 		this.getReferralReasons()
+		this.getCaseeActiveBeneficiaries(this.$route.params.caseeId);
 	}
 }
 </script>

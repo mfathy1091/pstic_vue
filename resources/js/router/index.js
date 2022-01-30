@@ -18,6 +18,7 @@ import NotFound from '../components/NotFound'
 
 const routes = [
 
+    { path: '/add-case', name: "addCase", props: true, component: () => import(/* webpackChunkName: "addCase" */ '../components/Cases/AddCase.vue'), children: [] },
     { path: '/cases', name: "cases", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Cases.vue'), children: [] },
 
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
@@ -30,11 +31,13 @@ const routes = [
 
     
     
-    { path: '/ps_worker', name: "psWorker", props: true, component: () => import(/* webpackChunkName: "psWorker" */ '../components/PsWorker/PsWorker.vue'), children: [
+    { path: '/worker_pss_log', name: "workerPssLog", props: true, component: () => import(/* webpackChunkName: "psWorker" */ '../components/PsWorker/PsWorker.vue'), children: [
         { path: "home", name: "psWorkerHome", props: true, component: () => import(/* webpackChunkName: "psWorkerHome" */ '../components/PsWorker/PsWorkerHome.vue') },
-        { path: "pss-cases", name: "psWorkerCases", props: true, component: () => import(/* webpackChunkName: "psWorkerReferrals" */ '../components/PsWorker/PsWorkerCases.vue') },
-        { path: "pss-beneficiaries", name: "psWorkerBeneficiaries", props: true, component: () => import(/* webpackChunkName: "psWorkerPss" */ '../components/PsWorker/PsWorkerBeneficiaries.vue') },
-        { path: "pss-emergencies", name: "psWorkerEmergencies", props: true, component: () => import(/* webpackChunkName: "psWorkerEmergencies" */ '../components/PsWorker/PsWorkerEmergencies.vue') },
+        { path: "ps-cases", name: "workerPsCases", props: true, component: () => import(/* webpackChunkName: "workerPsCases" */ '../components/PsWorker/WorkerPsCases.vue') },
+        { path: "pss-cases2", name: "psWorkerCases2", props: true, component: () => import(/* webpackChunkName: "psWorkerReferrals2" */ '../components/PsWorker/PsWorkerCases2.vue') },
+        { path: "ps-intake-log", name: "workerPsIntakeLog", props: true, component: () => import(/* webpackChunkName: "workerPsIntakeLog" */ '../components/PsWorker/WorkerPsIntakeLog.vue') },
+        { path: "ps-activity-log", name: "workerPsActivityLog", props: true, component: () => import(/* webpackChunkName: "workerPsActivityLog" */ '../components/PsWorker/WorkerPsActivityLog.vue') },
+        { path: "ps-emergencies", name: "WorkerPsEmergencies", props: true, component: () => import(/* webpackChunkName: "psWorkerEmergencies" */ '../components/PsWorker/WorkerPsEmergencies.vue') },
 
     ] },
     

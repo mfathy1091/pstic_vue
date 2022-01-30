@@ -44,7 +44,7 @@
 								<label for="location" class="form-label">Beneficiary</label>
 								<select v-model="emergencyForm.beneficiary_id" name="location" id="location" class="form-control">
 									<option value='' selected>Choose..</option>
-									<option :value="beneficiary.id" v-for="beneficiary in referralBeneficiaries" v-bind:key="beneficiary.id">{{ beneficiary.name }}</option>
+									<option :value="beneficiary.id" v-for="beneficiary in referral.beneficiaries" v-bind:key="beneficiary.id">{{ beneficiary.name }}</option>
 								</select>
 								<!-- <HasError :form="emergencyForm" field="location" /> -->
 							</div>
