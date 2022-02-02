@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
-    "/js/addBeneficiaries.js": "/js/addBeneficiaries.js",
+    "/js/addCase.js": "/js/addCase.js",
     "/js/home.js": "/js/home.js",
     "/js/pss.js": "/js/pss.js",
     "/js/pssIntake.js": "/js/pssIntake.js",
@@ -10,10 +10,10 @@
     "/js/pssRecords.js": "/js/pssRecords.js",
     "/js/psWorker.js": "/js/psWorker.js",
     "/js/psWorkerHome.js": "/js/psWorkerHome.js",
-    "/js/psWorkerReferrals.js": "/js/psWorkerReferrals.js",
+    "/js/workerPsCases.js": "/js/workerPsCases.js",
     "/js/psWorkerReferrals2.js": "/js/psWorkerReferrals2.js",
-    "/js/psWorkerReferrals3.js": "/js/psWorkerReferrals3.js",
-    "/js/psWorkerPss.js": "/js/psWorkerPss.js",
+    "/js/workerPsIntakeLog.js": "/js/workerPsIntakeLog.js",
+    "/js/workerPsActivityLog.js": "/js/workerPsActivityLog.js",
     "/js/psWorkerEmergencies.js": "/js/psWorkerEmergencies.js",
     "/js/caseDetails.js": "/js/caseDetails.js",
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
@@ -30,14 +30,5 @@
     "/js/serviceTypes.js": "/js/serviceTypes.js",
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/create-emergency.js": "/js/create-emergency.js",
-    "/css/app.css": "/css/app.css",
-    "/js/Activities.js": "/js/Activities.js",
-    "/js/psWorkerActivities.js": "/js/psWorkerActivities.js",
-    "/js/workerPsIntakeLog.js": "/js/workerPsIntakeLog.js",
-    "/js/workerPsActivities.js": "/js/workerPsActivities.js",
-    "/js/WorkerPsCases.js": "/js/WorkerPsCases.js",
-    "/js/workerPsCases.js": "/js/workerPsCases.js",
-    "/js/workerPsActivit.js": "/js/workerPsActivit.js",
-    "/js/workerPsActivityLog.js": "/js/workerPsActivityLog.js",
-    "/js/addCase.js": "/js/addCase.js"
+    "/css/app.css": "/css/app.css"
 }
