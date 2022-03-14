@@ -20,6 +20,7 @@ const routes = [
 
     { path: '/add-case', name: "addCase", props: true, component: () => import(/* webpackChunkName: "addCase" */ '../components/Cases/AddCase.vue'), children: [] },
     { path: '/cases', name: "cases", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Cases.vue'), children: [] },
+    { path: '/beneficiaries', name: "beneficiaries", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Beneficiaries.vue'), children: [] },
 
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
         { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },

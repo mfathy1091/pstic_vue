@@ -52,6 +52,13 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
+                            <router-link
+                            to='/beneficiaries' class="nav-link">
+                                <i class="nav-icon fas fa-home"></i>
+                                <p>Beneficiaries</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
                             <router-link :to="{ name: 'addCase' }" class="nav-link">
                                 <i class="nav-icon fas fa-plus-circle"></i>
                                 <p>Add Case</p>
