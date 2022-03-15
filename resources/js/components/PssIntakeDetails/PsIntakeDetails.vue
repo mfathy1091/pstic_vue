@@ -5,38 +5,23 @@
 
 <template>
     <div>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mt-2">
-                <li class="breadcrumb-item active" aria-current="page">Cases / {{ this.referral.casee.number }}</li>
-            </ol>
-        </nav>
 
         <div class="row mt-3 mb-3 pl-3"> 
-            <h5>PSS Intake</h5>
-        </div>
-        <div class="row mt-3" v-if="referral">
-            <router-link
-            :to="{ name: 'caseReferrals' }"
-            class="back-btn pl-3 pr-3">
-                <i class="fas fa-arrow-left"></i>
-            </router-link>
-
-            <h5>        
-                {{ this.referral.referral_source.name }}  {{ this.referral.referral_date | myDateShort  }}
-            </h5>
-            <span @click="showEditReferralModal"
-                id='clickableAwesomeFont' class="ml-5">
-                    <i class="fa fa-edit blue"></i>
-            </span>
+            <h5>PS Intake | {{ this.referral.casee.file_number }} |  {{ this.referral.referral_date | myDateShort  }} | {{ this.referral.referral_source.name }}</h5>
         </div>
 
         <div class="card">
 
         <div class="card-body" v-if="this.referral">
-            <h5>Intake Details</h5>
-            <button class="btn btn-danger" @click="closePssIntake">Close</button>
+            <h5>Intake Details 
+                <span @click="showEditReferralModal"
+                    id='clickableAwesomeFont' class="ml-3 clickable">
+                        <i class="fas fa-pencil-alt blue"></i>
+                </span>
+            </h5>
+
             <div class="row m-3">
-                <div class="col mb-4">
+                <div class="col mb-6">
                     <h6 class="card-subtitle mb-2 text-muted">Referral Source</h6>
                     <div class="ml-4">
                         <li>{{ this.referral.referral_date }}</li>
@@ -46,7 +31,7 @@
                         <li>{{ this.referral.casee.file_number }}</li>
                     </div>
                 </div>
-                <div class="col mb-4" >
+                <div class="col mb-6" >
                     <h6 class="card-subtitle mb-2 text-muted">Reason of Referral</h6>
                     <div class="ml-4" v-for="reason in this.referral.reasons" :key="reason.id">
                         <li>{{ reason.name  }}</li>
@@ -55,8 +40,19 @@
                         <li>{{ this.referral.referral_narrative_reason  }}</li>
                     </div>
                 </div>
+                
+            </div>
+            <hr>
+            <h5>Affected Beneficiaries
+                <span @click="showEditReferralModal"
+                    id='clickableAwesomeFont' class="ml-3 clickable">
+                        <i class="fas fa-pencil-alt blue"></i>
+                </span>
+
+            </h5>
+            <div class="row m-3">
                 <div class="col mb-4" >
-                    <h6 class="card-subtitle mb-2 text-muted">Beneficiaries</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Direct Beneficiaries</h6>
                     <div class="ml-4">
                         <li v-for="directBeneficiary in this.referral.direct_referral_beneficiaries" :key="directBeneficiary.id">
                             <div>
@@ -75,9 +71,10 @@
                     </div>
                 </div>
             </div>
+            
 
             <hr>
-            <h5>Case Status History</h5>
+            <h5>Activity History</h5>
 
             <ul v-if="referral">
                 <li v-for="record in referral.records" :key="record.id">
@@ -106,7 +103,8 @@
 					<option v-for='record in referral.records' :value='record.id' :key="record.id">
                         <span>{{ record.month.name }}</span>
                     </option>
-                </select>                
+                </select>
+                <button class="btn btn-danger" @click="closePssIntake">Close</button>           
             </div>
 
             <p v-if="!referral.activities.length" class="font-italic ml-5 mt-3">There are no records!</p>
