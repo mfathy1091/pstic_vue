@@ -115,7 +115,8 @@ class ReferralController extends Controller
     {
         $query = Referral::join('records', 'records.referral_id', 'referrals.id')
         ->join('casees', 'referrals.casee_id', 'casees.id')
-        ->join('statuses', 'records.status_id', 'statuses.id');
+        ->join('statuses', 'records.status_id', 'statuses.id')
+        ->select('referrals.*', 'records.month_id', 'records.status_id');
         if($request->month_id != ''){
             $query->where('records.month_id', $request->month_id);
         }

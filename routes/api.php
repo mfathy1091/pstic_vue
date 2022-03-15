@@ -55,17 +55,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('casees/exists/{n}', 'API\CaseeController@exists');
     
     // PSS Referrals
-    
     Route::get('referrals/monthly', 'API\ReferralController@getMonthlyReferrals');
     Route::get('beneficiaries/monthly_referral_beneficiaries', 'API\BeneficiaryController@getMonthlyReferralBeneficiaries');
 
     Route::get('referrals/currentMonth', 'API\ReferralController@getCurrentMonthReferrals');
     Route::get('referrals/activeCount', 'API\ReferralController@getActiveCount');
     Route::put('referrals/{id}/close', 'API\ReferralController@closeReferral');
-    Route::apiResources(['referrals'=> 'API\ReferralController']);
     Route::get('beneficiaries/{individual}/referrals', 'API\ReferralController@getIndividualReferrals');
     Route::get('referrals/getIndividualReferrals', 'API\ReferralController@getIndividualReferrals');
-
+    Route::get('referrals', 'API\ReferralController@index')->where('id', '[0-9]+');
+    Route::get('referrals/{id}', 'API\ReferralController@show')->where('id', '[0-9]+');
 
     // Housing Referrals
     Route::get('casees/{casee}/housing-referrals', 'API\HousingReferralController@getCaseeHousingReferrals');

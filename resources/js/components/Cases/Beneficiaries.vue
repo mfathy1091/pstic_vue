@@ -6,14 +6,9 @@
 
 <template>
 	<div>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mt-2">
-                <li class="breadcrumb-item active" aria-current="page">Cases</li>
-            </ol>
-        </nav>
 
         <div class="row mt-3 mb-3 pl-3"> 
-            <h5>Cases</h5>
+            <h5>Beneficiaries</h5>
         </div>
 
         <div class="card">
@@ -23,7 +18,7 @@
                         <router-link
                             :to="{ name: 'workerPssReferrals' }"
                             class="nav-link tab-header" active-class="active">   
-                            Cases
+                            Beneficiaries
                         </router-link>
                     </li>
                 </ul>
@@ -33,9 +28,12 @@
             <div class="card-body align-top">
                 <div class="form-inline ml-2">
                     <button class="btn btn-success btn-sm mr-2" @click="showCreateCaseeModal">
-                        <i class="fas fa-plus-circle"></i><span><b> Case</b></span>
+                        <i class="fas fa-plus-circle"></i><span><b> Individual</b></span>
                     </button>
-                    <button class="btn btn-secondary btn-sm mr-5" @click="getCasees(casee)">
+                    <button class="btn btn-success btn-sm mr-2" @click="showCreateCaseeModal">
+                        <i class="fas fa-plus-circle"></i><span><b> Family</b></span>
+                    </button>
+                    <button class="btn btn-secondary btn-sm mr-5" @click="getBeneficiaries(casee)">
                         <i class="fas fa-sync-alt"></i>
                     </button>
 
@@ -55,7 +53,7 @@
                         </form>
                     </ValidationObserver>
 
-                    <select v-model="filter.status_id" @change="getCasees" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                    <select v-model="filter.status_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                         <option value="-1" disabled>Filter by...</option>
                         <option value="1">Cases with PSS Referrals</option>
                         <option value="2">Cases with Housing Referrals</option>
@@ -63,39 +61,22 @@
                 </div>
 
 
-                <div class="row mt-3 table-responsive" v-if="casees">	
+                <div class="row mt-3 table-responsive" v-if="beneficiaries">	
                     <table class=" table table-hover border table-sm">
                         <thead>
                             <tr>
-                                <th>File #</th>
-                                <th>Case Type</th>
-                                <th>Beneficiaries</th>
+                                <th>File Number</th>
+                                <th>Individual Number</th>
+                                <th>Name</th>
                                 <!-- <th># of PSS Intake</th>
                                 <th># of Housing Intake</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                                <tr v-for="casee in casees" :key="casee.id" @click="goToCaseDetails(casee)">
-                                    <td class="align-middle">{{ casee.file_number }}</td>
-                                    <td class="align-middle">
-                                        <span v-show="casee.is_family == '0'">Individual</span>
-                                        <span v-show="casee.is_family == '1'">Family</span>
-                                    </td>
-                                    <td>
-                                        <div class="list-unstyled">
-                                            <li v-for="beneficiary in casee.beneficiaries" :key="beneficiary.id">
-                                                <div>
-                                                    <span>{{ beneficiary.name }}</span>
-                                                </div>
-                                            </li>
-                                        </div>
-                                    </td>
-                                    <!-- <td>
-                                        <span>{{ casee.referrals_count }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ casee.housing_referrals_count }}</span>
-                                    </td> -->
+                                <tr v-for="beneficiary in beneficiaries" :key="beneficiary.id" @click="goToCaseDetails(casee)">
+                                    <td class="align-middle">{{ beneficiary.file_number }}</td>
+                                    <td class="align-middle">{{ beneficiary.file_individual_number }}</td>
+                                    <td class="align-middle">{{ beneficiary.name }}</td>
                                 </tr>
                         </tbody>
                     </table>
@@ -110,7 +91,7 @@
 		:v-if="selectedCasee.id"
 		:caseeEditMode='caseeEditMode' 
 		:selectedCasee='selectedCasee' 
-		v-on:caseesChanged="getCasees()">
+		v-on:beneficiariesChanged="getBeneficiaries()">
 		</CaseModal>
 
         
@@ -135,7 +116,7 @@ export default {
 		return {
 			caseeEditMode: false,
             selectedCasee: '',
-			casees: [],
+			beneficiaries: [],
             searchText: '',
             searchForm: {
                 fileNumber: '',
@@ -158,17 +139,17 @@ export default {
             router.push({ name: 'caseDetails', params: {caseeId: casee.id} })
         },
 
-        getCasees(){
+        getBeneficiaries(){
 			this.$Progress.start();
             axios({
             method: 'get',
-            url: '/api/casees',
+            url: '/api/beneficiaries',
             data: {
 
             }
             })
 			.then(({data}) => {
-				this.casees = data.data
+				this.beneficiaries = data.data
 			});
 			this.$Progress.finish();
 		},
@@ -226,9 +207,9 @@ export default {
     },
 
 	created() {
-        this.getCasees();
-		Fire.$on('caseesChanged', () => {
-			this.getCasees();
+        this.getBeneficiaries();
+		Fire.$on('beneficiariesChanged', () => {
+			this.getBeneficiaries();
 		});
 	}
 }

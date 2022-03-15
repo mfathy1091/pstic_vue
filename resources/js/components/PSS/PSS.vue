@@ -20,9 +20,9 @@
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'pssReferrals' }"
+                            :to="{ name: 'psIntakeLog' }"
                             class="nav-link tab-header" active-class="active">   
-                            PSS Referrals
+                            Intake Log
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -67,7 +67,6 @@ import axiosMixin from '../../mixins/axiosMixin'
 
 export default {
 	mixins: [axiosMixin],
-    name: 'Home',
     components: {
     },
 

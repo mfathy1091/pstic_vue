@@ -356,9 +356,8 @@ class BeneficiaryController extends Controller
     public function index(Request $request)
     {
 
-        $beneficiaries = Beneficiary::query();
-
-
+        $beneficiaries = Beneficiary::join('casees', 'casees.id', 'beneficiaries.casee_id')
+        ->select('beneficiaries.*', 'casees.file_number');
 
         if($request->casee_id != ""){
             $beneficiaries->where('casee_id', $request->casee_id);

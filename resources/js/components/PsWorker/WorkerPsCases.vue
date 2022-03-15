@@ -54,7 +54,7 @@
     
         <br>
 
-            <div class="card-header bg-white">
+        <div class="card-header bg-white">
             <ul class="nav nav-fill">
                 <li class="nav-item" role="presentation">
                     
@@ -150,6 +150,10 @@
 
 
         </div>
+
+
+
+
     </div>
 </template>
 <script>

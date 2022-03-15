@@ -24,6 +24,7 @@ const routes = [
 
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
         { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },
+        { path: "intake-log", name: "psIntakeLog", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog.vue') },
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
         { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
         { path: "pss-beneficiaries", name: "pssBeneficiaries", props: true, component: () => import(/* webpackChunkName: "pssBeneficiaries" */ '../components/PSS/PssBeneficiaries.vue') },
@@ -49,7 +50,7 @@ const routes = [
         { path: "housing-intakes", name: "caseHousingIntakes", props: true, component: () => import(/* webpackChunkName: "caseHousingIntakes" */ '../components/CaseDetails/CaseHousingIntakes/CaseHousingIntakes.vue') },
 
     ] },
-
+    { path: '/referrals/:referralId', name: 'psIntakeDetails', props: true, component: () => import(/* webpackChunkName: "psIntakeDetails" */ '../components/PssIntakeDetails/PsIntakeDetails.vue')},
     { path: '/cases/:caseeId/referrals/:referralId', name: 'pssIntakeDetails', props: true, component: () => import(/* webpackChunkName: "pssIntakeDetails" */ '../components/PssIntakeDetails/PssIntakeDetails.vue'), children: [
         // {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
     ] },
