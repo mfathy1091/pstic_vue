@@ -4,6 +4,7 @@
     "/js/home.js": "/js/home.js",
     "/js/pss.js": "/js/pss.js",
     "/js/pssIntake.js": "/js/pssIntake.js",
+    "/js/psIntakeLog.js": "/js/psIntakeLog.js",
     "/js/pssEmergencies.js": "/js/pssEmergencies.js",
     "/js/pssServices.js": "/js/pssServices.js",
     "/js/pssBeneficiaries.js": "/js/pssBeneficiaries.js",
@@ -19,6 +20,7 @@
     "/js/caseBeneficiaries.js": "/js/caseBeneficiaries.js",
     "/js/casePssIntakes.js": "/js/casePssIntakes.js",
     "/js/caseHousingIntakes.js": "/js/caseHousingIntakes.js",
+    "/js/psIntakeDetails.js": "/js/psIntakeDetails.js",
     "/js/pssIntakeDetails.js": "/js/pssIntakeDetails.js",
     "/js/userSetttings.js": "/js/userSetttings.js",
     "/js/users.js": "/js/users.js",
@@ -31,6 +33,5 @@
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/create-emergency.js": "/js/create-emergency.js",
     "/css/app.css": "/css/app.css",
-    "/js/psIntakeLog.js": "/js/psIntakeLog.js",
-    "/js/psIntakeDetails.js": "/js/psIntakeDetails.js"
+    "/js/addPsIntakeLog.js": "/js/addPsIntakeLog.js"
 }

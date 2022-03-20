@@ -30,6 +30,7 @@ const routes = [
         { path: "pss-beneficiaries", name: "pssBeneficiaries", props: true, component: () => import(/* webpackChunkName: "pssBeneficiaries" */ '../components/PSS/PssBeneficiaries.vue') },
         { path: "pss-records", name: "pssRecords", props: true, component: () => import(/* webpackChunkName: "pssRecords" */ '../components/PSS/PssRecords.vue') },
     ] },
+    { path: "/add-ps-intake", name: "addPsIntakeLog", props: true, component: () => import(/* webpackChunkName: "addPsIntakeLog" */ '../components/PSS/AddPsIntakeLog.vue') },
 
     
     

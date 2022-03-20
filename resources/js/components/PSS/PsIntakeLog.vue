@@ -38,9 +38,11 @@
         <div class="card-body">
             <div class="form-inline mr-2 ml-2 mt-3">
                 
-                <button class="btn btn-success btn-sm mr-2" @click="showCreatePsIntake">
-                    <i class="fas fa-plus-circle"></i><span><b> PS Intake</b></span>
-                </button>
+                <router-link class="btn btn-success btn-sm mr-2"
+                :to="{name: 'addPsIntakeLog'}">
+                <i class="fas fa-plus-circle"></i><span><b> Intake</b></span>
+                </router-link>
+
                 <button class="btn btn-secondary btn-sm mr-2" @click="executeFilter">
 					<i class="fas fa-sync-alt"></i>
 				</button>
