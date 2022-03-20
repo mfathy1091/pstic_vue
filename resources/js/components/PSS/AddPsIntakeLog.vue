@@ -16,8 +16,8 @@
                         <label for="referral_source_id" class="form-label">Affected Beneficiaries</label>
                         <br>
                         
-                        <a class="clickable" @click="showBeneficiariesModal">
-                            click here to add or modify
+                        <a class="clickable" @click="showSelectedBeneficiariesModal">
+                            add beneficiary
                         </a>
 
                         <br><hr>
@@ -82,6 +82,8 @@
                 </form>
         </div>
     
+		<SelectedBeneficiariesModal>
+		</SelectedBeneficiariesModal>
 
     </div>
 </template>
@@ -90,10 +92,11 @@
 import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 import axiosMixin from '../../mixins/axiosMixin'
+import SelectedBeneficiariesModal from './SelectedBeneficiariesModal'
 
 export default {
 	mixins: [axiosMixin],
-	components: { Multiselect },
+	components: { Multiselect, SelectedBeneficiariesModal },
     props:{
         psIntakeEditMode: Boolean,
         selectedPsIntake: Object,
@@ -136,8 +139,8 @@ export default {
     },
 
 	methods: {
-        showBeneficiariesModal(){
-
+        showSelectedBeneficiariesModal(){
+			$('#selectedBeneficiariesModal').modal('show')
         },
 
 		createPsIntake() {
