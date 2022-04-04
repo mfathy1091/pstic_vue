@@ -17,7 +17,9 @@
                         <br>
 						<div>
 							
-							<span v-for='beneficiary in selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.name }} <i class="fas fa-times clickable" @click="removeBeneficiary(beneficiary)"></i><br></span>
+							<span v-for='beneficiary in selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">
+								{{ beneficiary.name }} 
+								<i class="fas fa-times clickable" @click="removeBeneficiary(beneficiary)"></i><br></span>
 						</div>
                         
                         <a class="clickable" @click="showSelectedBeneficiariesModal">

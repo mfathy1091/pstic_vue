@@ -25,6 +25,7 @@ const routes = [
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
         { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },
         { path: "intake-log", name: "psIntakeLog", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog.vue') },
+        { path: "intake-log2", name: "psIntakeLog2", props: true, component: () => import(/* webpackChunkName: "psIntakeLog2" */ '../components/PSS/PsIntakeLog2.vue') },
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
         { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
         { path: "pss-beneficiaries", name: "pssBeneficiaries", props: true, component: () => import(/* webpackChunkName: "pssBeneficiaries" */ '../components/PSS/PssBeneficiaries.vue') },

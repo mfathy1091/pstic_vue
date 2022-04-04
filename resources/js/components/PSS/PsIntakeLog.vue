@@ -55,6 +55,13 @@
                     <option value=''>All Months...</option>
                     <option v-for='month in months' :value='month' :key="month.id">{{ month.name }}</option>
                 </select>
+                <select class="custom-select m-1" id="inlineFormCustomSelectPref">
+                    <option value='1'>New + Ongoing</option>
+                    <option value='1'>New</option>
+                    <option value='2'>Ongoing</option>
+                    <option value='3'>Inactive</option>
+                    <option value='4'>Closed</option>
+                </select>
                 
             </div>
             

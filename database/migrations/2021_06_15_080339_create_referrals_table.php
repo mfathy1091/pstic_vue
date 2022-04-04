@@ -31,7 +31,7 @@ class CreateReferralsTable extends Migration
 
             $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');
             $table->foreign('referral_source_id')->references('id')->on('referral_sources')->onDelete('cascade');
-            $table->foreign('current_status_id')->references('id')->on('statuses')->onDelete('cascade');
+            $table->foreign('current_status_id')->references('id')->on('ps_statuses')->onDelete('cascade');
             $table->foreign('current_assigned_psw_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
