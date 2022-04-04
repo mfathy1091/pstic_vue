@@ -99,8 +99,6 @@ class BeneficiaryController extends Controller
         return response($data, 200);
     }
 
-
-
     public function liveSearch(Request $request)
     {
         $data = Beneficiary::where('name', 'LIKE','%'.$request->keyword.'%')->get();
@@ -249,6 +247,30 @@ class BeneficiaryController extends Controller
     //         sum(case when logentry.age >= 60 AND logentry.gender ='Male' Then 1 else 0 end) As age_gt60_M,
     //         sum(case when logentry.age >= 60 AND logentry.gender ='Female' Then 1 else 0 end) As age_gt60_F
     //     FROM caselog_logentry AS logentry"
+
+    public function searchBeneficiaries(Request $request)
+    {
+        $beneficiaries = Beneficiary::query();
+        if($request->filled('name')){
+            $beneficiaries->where('name', 'like', '%' . $request->name . '%');
+
+            $data = [
+                'data' => $beneficiaries->get(),
+            ];
+    
+            return response($data, 200);
+        }
+        else{
+            return response(null, 200);
+        }
+
+
+
+
+
+
+    }
+
 
     public function search(Request $request)
     {

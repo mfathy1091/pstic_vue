@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // beneficiaries
     Route::get('beneficiaries/search/', 'API\BeneficiaryController@search');
+    Route::get('beneficiaries/searchBeneficiaries/', 'API\BeneficiaryController@searchBeneficiaries');
     Route::put('beneficiaries/{individual}/deactivate', 'API\BeneficiaryController@deactivateBeneficiary');
     Route::put('beneficiaries/{individual}/activate', 'API\BeneficiaryController@activateBeneficiary');
     Route::apiResources(['beneficiaries'=> 'API\BeneficiaryController']);

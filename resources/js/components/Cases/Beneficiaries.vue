@@ -37,21 +37,14 @@
                         <i class="fas fa-sync-alt"></i>
                     </button>
 
-                    <ValidationObserver v-slot="{ handleSubmit }">
-                        <form @submit.prevent="handleSubmit(search)">
-                            <ValidationProvider name="File Number" rules="required|length:12" v-slot="{ errors }">
-                                <div class="input-group">
-                                    <input v-model="searchForm.fileNumber" type="search" :placeholder="mask" class="form-control form-control-sidebar" aria-label="Search">
-                                    <div class="input-group-append">
-                                        <button type="sumbit" class="btn btn-sidebar">
-                                            <i class="fas fa-search fa-fw"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <span class="text-danger">{{ errors[0] }}</span>
-                            </ValidationProvider>
-                        </form>
-                    </ValidationObserver>
+                    <div class="input-group">
+                        <input v-model="searchForm.fileNumber" type="search" class="form-control form-control-sidebar" aria-label="Search">
+                        <div class="input-group-append">
+                            <button type="sumbit" class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
 
                     <select v-model="filter.status_id" @change="getBeneficiaries" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                         <option value="-1" disabled>Filter by...</option>
@@ -119,7 +112,7 @@ export default {
 			beneficiaries: [],
             searchText: '',
             searchForm: {
-                fileNumber: '',
+                name: '',
             },
             format: '',
             regex: '^',
@@ -157,8 +150,8 @@ export default {
         async search(){
             this.$Progress.start();
             try{
-                const response = await axios.get("/api/casees/search", { params: { fileNumber: this.searchForm.fileNumber } });
-                this.casees = response.data.data;
+                const response = await axios.get("/api/beneficiaries/searchBeneficiaries", { params: { name: this.searchForm.name } });
+                this.beneficiaries = response.data.data;
                 this.$Progress.finish();
             }catch (error){
                 this.$Progress.fail();

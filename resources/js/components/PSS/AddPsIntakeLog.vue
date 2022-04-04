@@ -15,10 +15,15 @@
                         
                         <label for="referral_source_id" class="form-label">Affected Beneficiaries</label>
                         <br>
+						<div>
+							
+							<span v-for='beneficiary in selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">{{ beneficiary.name }} <i class="fas fa-times clickable" @click="removeBeneficiary(beneficiary)"></i><br></span>
+						</div>
                         
                         <a class="clickable" @click="showSelectedBeneficiariesModal">
                             add beneficiary
                         </a>
+
 
                         <br><hr>
 						
@@ -106,13 +111,18 @@ export default {
 		return {
 			// editMode: false,
             //  selected: this.selectedPsIntake;,
+			selectedBeneficiaries: [],
             CaseeActiveBeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
             nationalities: [],
 			referralReasons: [],
-
+			selectedBeneficiary: '',
+			beneficiaries: [],
+			searchForm : new Form({
+				beneficiary_name: '',
+            }),
 
 			users: [],
 			roles: [],
@@ -139,6 +149,15 @@ export default {
     },
 
 	methods: {
+		addBeneficiary(beneficiary){
+			this.selectedBeneficiaries.push(beneficiary)
+			console.log(this.selectedBeneficiaries)
+		},
+		removeBeneficiary(beneficiary){
+			this.selectedBeneficiaries = this.selectedBeneficiaries.filter((element) => element.id != beneficiary.id)
+		},
+
+
         showSelectedBeneficiariesModal(){
 			$('#selectedBeneficiariesModal').modal('show')
         },
@@ -194,6 +213,10 @@ export default {
 		this.getNationalities()
 		this.getReferralReasons()
 		this.getCaseeActiveBeneficiaries(this.$route.params.caseeId);
+
+	Fire.$on('beneficiarySelected', (value) => {
+			this.addBeneficiary(value);
+		});
 	}
 }
 </script>

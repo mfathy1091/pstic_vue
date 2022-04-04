@@ -8,22 +8,27 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="setSelectedBeneficiaries()">
                     <div class="modal-body">
+						<div class="input-group">
+							<input v-model="searchForm.beneficiary_name" type="search" class="form-control form-control-sidebar" aria-label="Search">
+							<div class="input-group-append">
+								<button type="sumbit" class="btn btn-sidebar" @click="search">
+									<i class="fas fa-search fa-fw"></i>
+								</button>
+							</div>
+						</div>
 
-						<div class="form-group">
-							<label for="file_number" class="form-label">File Number</label>
-							<input id="file_number" v-model="beneficiaryForm.file_number" type="text" name="file_number" class="form-control">
-							<HasError :form="beneficiaryForm" field="file_number" />
+						<div>
+							<label class="typo__label">Select with search</label>
+							<multiselect v-model="selectedBeneficiary" :options="beneficiaries" placeholder="Select one" label="name" track-by="name" @search-change="search"></multiselect>
+							<pre class="language-json"><code>{{ selectedBeneficiary  }}</code></pre>
 						</div>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button v-show="!psIntakeEditMode" type="submit" class="btn btn-success">Create</button>
-                        <button v-show="psIntakeEditMode" type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" class="btn btn-success" @click="sendToParent">Add</button>
                     </div>
-                </form>
             </div>
         </div>
 		
@@ -44,75 +49,34 @@ export default {
 
 	data() {
 		return {
-			// editMode: false,
-            //  selected: this.selectedPsIntake;,
-            CaseeActiveBeneficiaries: [],
-			directIndividual: '',
-
-			referralSources: [],
-            nationalities: [],
-			referralReasons: [],
-
-
-			users: [],
-			roles: [],
-			beneficiaryForm : new Form({
-				id: '',
-				// referral_beneficiaries: [],
-				// direct_beneficiaries : [],
-				referral_source_id: '',
-				referral_date: '',
-				name: '',
-				referring_person_email: '',
-				referral_narrative_reason: '',
-				referral_reasons: [],
-				casee_id: "",
-				direct_referral_beneficiaries: [],
+			selectedBeneficiary: '',
+			beneficiaries: [],
+			searchForm : new Form({
+				beneficiary_name: '',
             }),
 		}
 	},
-    watch: {
-        selectedPsIntake (next, prev){
-            this.beneficiaryForm.fill(this.selectedPsIntake);
-			this.beneficiaryForm.casee_id = this.$route.params.caseeId;
-        }
-    },
+
 
 	methods: {
-
-		setSelectedBeneficiaries() {
-			this.$Progress.start();
-			this.beneficiaryForm.post('/api/referrals')
-			.then((res) => {
-				// success
-				$('#selectedBeneficiariesModal').modal('hide')
-				Fire.$emit('psIntakesChanged');
-				
-				this.createdIntake = res.data.referral
-				
-				Toast.fire({
-					icon: 'success',
-					title: 'Created successfully'
-				})
-				
-				this.$Progress.finish();
-
-				// router.push({ path: '/referrals/'+this.createdIntake.id })
-			})
-			.catch((e) => {
-				this.$Progress.fail();
-				console.log(e)
-			})
-			
+		sendToParent(){
+			Fire.$emit('beneficiarySelected', this.selectedBeneficiary);
 		},
+
+		async search(){
+            this.$Progress.start();
+            try{
+                const response = await axios.get("/api/beneficiaries/searchBeneficiaries", { params: { name: this.searchForm.beneficiary_name } });
+                this.beneficiaries = response.data.data;
+                this.$Progress.finish();
+            }catch (error){
+                this.$Progress.fail();
+                console.error(error);
+            }
+            
+        },
 
 	},
 
-	created() {
-		this.getReferralSources()
-		this.getNationalities()
-		this.getReferralReasons()
-		this.getCaseeActiveBeneficiaries(this.$route.params.caseeId);
-	}
 }
 </script>
