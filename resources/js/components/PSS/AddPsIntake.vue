@@ -17,7 +17,7 @@
                         <br>
 						<div>
 							
-							<span v-for='beneficiary in selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">
+							<span v-for='beneficiary in psIntakeForm.selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">
 								{{ beneficiary.name }} 
 								<i class="fas fa-times clickable" @click="removeBeneficiary(beneficiary)"></i><br></span>
 						</div>
@@ -56,8 +56,8 @@
 						<HasError :form="psIntakeForm" field="referring_person_email" />
 						</div>
 
-						<div class="form-group">
-							<label class="typo__label">Referral Reasons</label>
+						<!-- <div class="form-group">
+							<label class="typo__label">Referring Reasons</label>
 							<multiselect 
 							v-model="psIntakeForm.referral_reasons" 
 							:options="referralReasons" 
@@ -69,10 +69,8 @@
 							label="name" 
 							track-by="name" 
 							:preselect-first="true">
-								<!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
 							</multiselect>
-							<!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-						</div>
+						</div> -->
 
 						<div class="form-group">
 							<label for="referral_narrative_reason" class="form-label">Referral Narrative Reason</label>
@@ -113,13 +111,13 @@ export default {
 		return {
 			// editMode: false,
             //  selected: this.selectedPsIntake;,
-			selectedBeneficiaries: [],
+			
             CaseeActiveBeneficiaries: [],
 			directIndividual: '',
 
 			referralSources: [],
             nationalities: [],
-			referralReasons: [],
+			referringReasons: [],
 			selectedBeneficiary: '',
 			beneficiaries: [],
 			searchForm : new Form({
@@ -137,9 +135,10 @@ export default {
 				referring_person_name: '',
 				referring_person_email: '',
 				referral_narrative_reason: '',
-				referral_reasons: [],
+				selectedBeneficiaries: [],
+				//  referring_reasons: [],
 				casee_id: "",
-				direct_referral_beneficiaries: [],
+				// direct_referral_beneficiaries: [],
             }),
 		}
 	},
@@ -152,11 +151,11 @@ export default {
 
 	methods: {
 		addBeneficiary(beneficiary){
-			this.selectedBeneficiaries.push(beneficiary)
-			console.log(this.selectedBeneficiaries)
+			this.psIntakeForm.selectedBeneficiaries.push(beneficiary)
+			console.log(this.psIntakeForm.selectedBeneficiaries)
 		},
 		removeBeneficiary(beneficiary){
-			this.selectedBeneficiaries = this.selectedBeneficiaries.filter((element) => element.id != beneficiary.id)
+			this.psIntakeForm.selectedBeneficiaries = this.psIntakeForm.selectedBeneficiaries.filter((element) => element.id != beneficiary.id)
 		},
 
 
@@ -166,7 +165,7 @@ export default {
 
 		createPsIntake() {
 			this.$Progress.start();
-			this.psIntakeForm.post('/api/referrals')
+			this.psIntakeForm.post('/api/ps-intakes')
 			.then((res) => {
 				// success
 				$('#psIntakeModal').modal('hide')
@@ -213,7 +212,7 @@ export default {
 	created() {
 		this.getReferralSources()
 		this.getNationalities()
-		this.getReferralReasons()
+		this.getReferringReasons()
 		this.getCaseeActiveBeneficiaries(this.$route.params.caseeId);
 
 	Fire.$on('beneficiarySelected', (value) => {

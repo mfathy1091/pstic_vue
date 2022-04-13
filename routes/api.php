@@ -54,6 +54,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('casees/{id}', 'API\CaseeController@update')->where('id', '[0-9]+');
     Route::get('casees/exists/{n}', 'API\CaseeController@exists');
     
+    // PS Intakes
+    Route::get('ps-intakes', 'API\PsIntakeController@index');
+    Route::post('ps-intakes', 'API\PsIntakeController@store');
+    Route::get('ps-intakes/{id}', 'API\PsIntakeController@show')->where('id', '[0-9]+');
+    Route::put('ps-intakes/{id}', 'API\PsIntakeController@update')->where('id', '[0-9]+');
+
     // PSS Referrals
     Route::get('referrals/monthly', 'API\ReferralController@getMonthlyReferrals');
     Route::get('beneficiaries/monthly_referral_beneficiaries', 'API\BeneficiaryController@getMonthlyReferralBeneficiaries');

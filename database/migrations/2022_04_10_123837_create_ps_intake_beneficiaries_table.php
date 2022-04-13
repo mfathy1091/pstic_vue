@@ -15,12 +15,12 @@ class CreatePSIntakeBeneficiariesTable extends Migration
     {
         Schema::create('ps_intake_beneficiaries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('ps_intake');
+            $table->unsignedInteger('ps_intake_id');
             $table->unsignedInteger('beneficiary_id');
             $table->boolean('is_direct')->default(0);
             $table->timestamps();
 
-            $table->foreign('ps_intake')->references('id')->on('ps_intakes')->onDelete('cascade');
+            $table->foreign('ps_intake_id')->references('id')->on('ps_intakes')->onDelete('cascade');
             $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
         });
     }
