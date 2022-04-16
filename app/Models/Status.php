@@ -10,8 +10,4 @@ class Status extends Model
     protected $fillable =['name'];
 
 
-    public function psCases()
-    {
-        return $this->hasMany(PsCase::class);
-    }
 }

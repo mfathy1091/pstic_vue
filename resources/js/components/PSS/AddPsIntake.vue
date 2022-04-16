@@ -13,24 +13,28 @@
             <form @submit.prevent="createPsIntake()">
                     <div class="modal-body">
                         
-                        <label for="referral_source_id" class="form-label">Affected Beneficiaries</label>
+                        <label for="referral_source_id mr-3" class="form-label">Selected Beneficiaries</label>
+						<i class="fas fa-plus-circle clickable green"  @click="showSelectedBeneficiariesModal"></i>
                         <br>
 						<div>
-							
-							<span v-for='beneficiary in psIntakeForm.selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">
-								{{ beneficiary.name }} 
-								<i class="fas fa-times clickable" @click="removeBeneficiary(beneficiary)"></i><br></span>
+							<div class="form-inline" v-for='beneficiary in psIntakeForm.selectedBeneficiaries' :value='beneficiary.id' :key="beneficiary.id">
+								<div class="form-group mb-3">
+									<i class="fas fa-times clickable red mr-3" @click="removeBeneficiary(beneficiary)"></i>
+									<span class="mr-3">{{ beneficiary.name }}</span>
+									<select name="is_direct" class="form-control">
+										<option value='1'>Direct</option>
+										<option value='0'>Indirect</option>
+									</select>
+								</div>
+
+							</div>
 						</div>
-                        
-                        <a class="clickable" @click="showSelectedBeneficiariesModal">
-                            add beneficiary
-                        </a>
 
 
                         <br><hr>
 						
 						<div class="form-group">
-							<label for="referral_source_id" class="form-label">Referral Source</label>
+							<label for="ingal_source_id" class="form-label">Referral Source</label>
 							<select name="referral_source_id" v-model="psIntakeForm.referral_source_id" id="referral_source_id" class="form-control" :class="{ 'is-invalid': psIntakeForm.errors.has('referral_source_id') }">
 								<option value='0' disabled>Choose...</option>
 								<option v-for='referralSource in referralSources' :value='referralSource.id' :key="referralSource.id">{{ referralSource.name }}</option>
@@ -111,7 +115,7 @@ export default {
 		return {
 			// editMode: false,
             //  selected: this.selectedPsIntake;,
-			
+			lastCreatedPsIntake: '',
             CaseeActiveBeneficiaries: [],
 			directIndividual: '',
 
@@ -171,7 +175,7 @@ export default {
 				$('#psIntakeModal').modal('hide')
 				Fire.$emit('psIntakesChanged');
 				
-				this.createdIntake = res.data.referral
+				this.createdIntake = res.data.lastCreatedPsIntake
 				
 				Toast.fire({
 					icon: 'success',
@@ -212,7 +216,7 @@ export default {
 	created() {
 		this.getReferralSources()
 		this.getNationalities()
-		this.getReferringReasons()
+		this.getReferralReasons()
 		this.getCaseeActiveBeneficiaries(this.$route.params.caseeId);
 
 	Fire.$on('beneficiarySelected', (value) => {

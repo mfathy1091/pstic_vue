@@ -114,8 +114,8 @@ class PsIntakeController extends Controller
 
 
         $directBeneficiariesIds = [1000, 1001];
-        $beneficiariesIds = collect($request->beneficiaries)->pluck('id');
-
+        $beneficiariesIds = collect($request->selectedBeneficiaries)->pluck('id');
+        
         $beneficiariesIds = $beneficiariesIds->mapWithKeys(function($item, $key) use($directBeneficiariesIds){
             if(in_array($item, $directBeneficiariesIds) ){
                 return [$item => ['is_direct' => 1]];
@@ -125,8 +125,6 @@ class PsIntakeController extends Controller
         });
 
         $psIntake->beneficiaries()->sync($beneficiariesIds);
-
-
 
         $data = [
             'psIntake' => $psIntake,

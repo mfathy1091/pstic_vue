@@ -82,7 +82,7 @@
                         </thead>
                         <tbody v-if="psIntakes">
                             <tr v-for="psIntake in this.psIntakes" :key="psIntake.id">
-                                <td>{{ referral.file_number }}</td>
+                                <td>{{ psIntakes.file_number }}</td>
                                 <td></td>
                                 <td>{{ psIntake.referral_source.name  }}</td>
                                 <td>{{ psIntake.referral_date | myDateShort }}</td>
@@ -99,7 +99,7 @@
 
                                 <td>
                                     <router-link
-                                    :to="{name: 'psIntakeDetails', params: {psIntakeId: referral.id }}"
+                                    :to="{name: 'psIntakeDetails', params: {psIntakeId: psIntake.id }}"
                                     class="fa fa-eye blue align-middle mr-2">
                                     </router-link>
                                 </td>

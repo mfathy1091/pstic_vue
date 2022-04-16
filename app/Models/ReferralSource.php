@@ -9,8 +9,4 @@ class ReferralSource extends Model
 {
     protected $fillable =['name'];
 
-
-    public function ps_case(){
-        return $this->hasOne(PsCase::class);
-    }
 }

@@ -22,6 +22,11 @@ class PsIntake extends Model
     ];
 
         // Parent Tables
+        public function beneficiaries()
+        {
+            return $this->belongsToMany(Beneficiary::class, 'ps_intake_beneficiaries', 'ps_intake_id', 'beneficiary_id');
+        }
+        
         public function current_assigned_psw()
         {
             return $this->belongsTo(User::class, 'current_assigned_psw_id');
@@ -54,10 +59,7 @@ class PsIntake extends Model
             return $this->belongsTo(ReferralSource::class, 'referral_source_id');
         }
     
-        public function beneficiaries()
-        {
-            return $this->belongsToMany(Beneficiary::class, 'ps_intake_beneficiaries', 'ps_intake_id', 'beneficiary_id');
-        }
+
     
     
         // Child tables

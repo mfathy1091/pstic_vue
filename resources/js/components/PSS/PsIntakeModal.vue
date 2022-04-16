@@ -117,6 +117,7 @@ export default {
 			referralSources: [],
             nationalities: [],
 			referralReasons: [],
+			lastCreatedPsIntake: '',
 
 
 			users: [],
@@ -147,13 +148,13 @@ export default {
 
 		createPsIntake() {
 			this.$Progress.start();
-			this.psIntakeForm.post('/api/referrals')
+			this.psIntakeForm.post('/api/ps-intakes')
 			.then((res) => {
 				// success
 				$('#psIntakeModal').modal('hide')
 				Fire.$emit('psIntakesChanged');
 				
-				this.createdIntake = res.data.referral
+				this.createdIntake = res.data.lastCreatedPsIntake
 				
 				Toast.fire({
 					icon: 'success',
