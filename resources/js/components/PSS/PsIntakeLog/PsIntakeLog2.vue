@@ -72,7 +72,7 @@
                         <thead>
                             <tr>
                                 <th>Case Number</th>
-                                <th>Direct Beneficiaries</th>
+                                <th>Beneficiaries</th>
                                 <th>Source</th>
                                 <th>Referral Date</th>
                                 <th>Status in</th>
@@ -83,7 +83,15 @@
                         <tbody v-if="psIntakes">
                             <tr v-for="psIntake in this.psIntakes" :key="psIntake.id">
                                 <td>{{ psIntakes.file_number }}</td>
-                                <td></td>
+                                <td>
+                                    <div class="list-unstyled">
+                                        <li v-for="beneficiary in psIntake.beneficiaries" :key="beneficiary.id">
+                                            <div>
+                                                <span>{{ beneficiary.name }}</span>
+                                            </div>
+                                        </li>
+                                    </div>
+                                </td>
                                 <td>{{ psIntake.referral_source.name  }}</td>
                                 <td>{{ psIntake.referral_date | myDateShort }}</td>
                                 <td>

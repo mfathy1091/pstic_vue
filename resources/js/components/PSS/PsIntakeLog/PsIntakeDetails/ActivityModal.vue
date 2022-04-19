@@ -29,7 +29,7 @@
 								<label for="location" class="form-label">Activity Month</label>
 								<select v-model="activityForm.record_id" name="location" id="location" class="form-control">
 									<option value='0' disabled selected>Choose</option>
-									<option :value="record.id" v-for="record in referral.records" :key="record.id">{{ record.month.name }}</option>
+									<option :value="record.id" v-for="record in psIntake.records" :key="record.id">{{ record.month.name }}</option>
 								</select>
 								<!-- <HasError :form="activityForm" field="location" /> -->
 							</div>
@@ -43,14 +43,14 @@
 
 							<div class="form-group">
 								<label for="location" class="form-label">Beneficiary</label>
-								<select v-model="activityForm.referral_beneficiary_id" name="location" id="location" class="form-control">
+								<select v-model="activityForm.beneficiary_id" name="location" id="location" class="form-control">
 									<option value='' selected>Choose..</option>
-									<option :value="referral_beneficiary.id" v-for="referral_beneficiary in referral.referral_beneficiaries" :key="referral_beneficiary.id">{{ referral_beneficiary.beneficiary.name }}</option>
+									<option v-for="beneficiary in psIntake.beneficiaries" :value="beneficiary.id" :key="beneficiary.id">{{ beneficiary.name }}</option>
 								</select>
 								<!-- <HasError :form="activityForm" field="location" /> -->
 							</div>
 
-							<div class="form-group" v-if="referral">
+							<div class="form-group" v-if="psIntake">
 								<label class="typo__label">Service Types</label>
 								<multiselect 
 								v-model="activityForm.service_types" 
@@ -127,18 +127,19 @@ export default {
     },
 	data() {
 		return {
-			referral: "",
+			psIntake: "",
 			serviceTypes: [],
 			emergencyTypes: [],
+			beneficiaries: [],
 			referralBeneficiaries: [],
 			activityForm: new Form({
 				id: '',
+				beneficiary_id: '',
 				record_id: '',
-				referral_id: '',
+				psIntake_id: '',
 				casee_id: '',
                 activity_date: '',
                 comment: '',
-				referral_beneficiary_id: '',
                 service_types: [],
 				provided_services: [],
 				is_emergency: false,
@@ -177,7 +178,7 @@ export default {
 		resetUserForm() { // for create
 			this.activityForm.id = ''
 			this.activityForm.record_id = ''
-			this.activityForm.referral_id = this.$route.params.psIntakeId
+			this.activityForm.psIntake_id = this.$route.params.psIntakeId
 			this.activityForm.casee_id = this.$route.params.caseeId
 			this.activityForm.activity_date = ''
 			this.activityForm.comment = ''
@@ -196,7 +197,7 @@ export default {
 			}
 
 
-			// let beneficiaries = this.referral.beneficiaries;
+			// let beneficiaries = this.psIntake.beneficiaries;
 			// console.log(beneficiaries);
 		},
         addToBeneficiariesArray(beneficiary)
@@ -245,7 +246,7 @@ export default {
                 console.log(e);
 			})
 		},
-
+		
 		getEmergencyTypes() {
 			this.$Progress.start();
 			axios.get('/api/emergency-types/')
@@ -268,7 +269,7 @@ export default {
 			.then((response) => {
 				// success
 				$('#activityModal').modal('hide')
-				Fire.$emit('referralChanged');
+				Fire.$emit('psIntakeChanged');
 								
 				Toast.fire({
 					icon: 'success',
@@ -290,7 +291,7 @@ export default {
 			this.activityForm.put('/api/activities/'+this.activityForm.id)
 			.then(() => {
 				// success
-				Fire.$emit('referralChanged');
+				Fire.$emit('psIntakeChanged');
 				$('#activityModal').modal('hide')
 				Swal.fire(
 					'Updated!',

@@ -32,6 +32,7 @@ class PsIntakeController extends Controller
             'referralSource',
             'current_assigned_psw',
             'psIntakeBeneficiaries',
+            'beneficiaries'
             // 'directReferralBeneficiaries',
             // 'inDirectReferralBeneficiaries',
             // 'records', 
@@ -109,6 +110,7 @@ class PsIntakeController extends Controller
         // 'indirectReferralBeneficiaries',
         // 'referralBeneficiaries.beneficiary',
         'referralSource', 
+        'beneficiaries',
         // 'casee',
         // 'casee.beneficiaries',
         // 'records.emergencies.user',
