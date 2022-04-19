@@ -114,10 +114,10 @@ export default {
 		},
 
 
-		getReferral(referralId){			
+		getPsIntake(psIntakeId){			
 			this.$Progress.start();
-			axios.get("/api/referrals/"+referralId)
-            .then(({data}) => (this.referral = data.data));
+			axios.get("/api/ps-intakes/"+psIntakeId)
+            .then(({data}) => (this.psIntake = data.data));
 			this.$Progress.finish();
 		},
 

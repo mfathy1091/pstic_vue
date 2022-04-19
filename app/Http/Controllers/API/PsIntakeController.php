@@ -31,6 +31,7 @@ class PsIntakeController extends Controller
             // 'activities.providedServices.serviceType',
             'referralSource',
             'current_assigned_psw',
+            'psIntakeBeneficiaries',
             // 'directReferralBeneficiaries',
             // 'inDirectReferralBeneficiaries',
             // 'records', 
@@ -50,7 +51,9 @@ class PsIntakeController extends Controller
     {
 
         /* validate if referradate is in future (reject it - it must be today or older) */
-        $this->validate($request, [
+        $this->validate(
+            $request,
+            [
             'referral_source_id' => 'required',
             'referral_date' => 'required',
             'referring_person_name' => 'required',
@@ -58,6 +61,10 @@ class PsIntakeController extends Controller
             'referral_narrative_reason' => 'required',
             'current_status_id' => '',
             'current_assigned_psw_id' => '',
+            'ps_intake_beneficiaries' => 'required|array|min:1',
+        ],
+        [
+            'ps_intake_beneficiaries.required' => 'Please add at least 1 beneficiary'
         ]);
 
         // Create PsIntake
@@ -72,59 +79,18 @@ class PsIntakeController extends Controller
             'casee_id' => $request->casee_id,
         ]);
 
+
+        $ps_intake_beneficiaries = collect($request->ps_intake_beneficiaries);
         
-
-        // Referral Month
-        $referralDate = $request->referral_date;
-        $ConvertedReferralDate = strtotime($referralDate);
-        $referralMonth = date("Y-m", $ConvertedReferralDate);
-        $currentMonth = date("Y-m");
-
-        // Get Months List
-        $period = \Carbon\CarbonPeriod::create($referralMonth, '1 month', $currentMonth);
-
-        $i = 0;
-        foreach ($period as $dt)
-        {
-            $monthsCodes[$i] = $dt->format("Y-m");
-            $i++;
-        }
-
-        // dd($monthsCodes);
-
-
-    
-
-        // // insert Referring reasons
-        // $reasonsIds = $request->reasons_ids;
-        // foreach($reasonsIds as $reasonId)
-        // {
-        //     $reason = Reason::find($reasonId);
-        //     $psIntake->reasons()->attach($reason);
-        // }
-
-        // then sync
-        // $reasonsIds = collect($request->input('referral_reasons'))->pluck('id');
-        // $psIntake->reasons()->sync($reasonsIds);
-
-        /////* Insert Records *///////
-        //$this->insertDefaultRecords($pssCase->id, $referralMonth);
-
-        
-
-
-        $directBeneficiariesIds = [1000, 1001];
-        $beneficiariesIds = collect($request->selectedBeneficiaries)->pluck('id');
-        
-        $beneficiariesIds = $beneficiariesIds->mapWithKeys(function($item, $key) use($directBeneficiariesIds){
-            if(in_array($item, $directBeneficiariesIds) ){
-                return [$item => ['is_direct' => 1]];
+        $ps_intake_beneficiaries = $ps_intake_beneficiaries->mapWithKeys(function($item, $key){
+            if($item["is_direct"]){
+                return [$item["beneficiary_id"] => ['is_direct' => 1]];
             }else{
-                return [$item => ['is_direct' => 0]];
+                return [$item["beneficiary_id"] => ['is_direct' => 0]];
             }    
         });
 
-        $psIntake->beneficiaries()->sync($beneficiariesIds);
+        $psIntake->beneficiaries()->sync($ps_intake_beneficiaries);
 
         $data = [
             'psIntake' => $psIntake,
@@ -132,5 +98,43 @@ class PsIntakeController extends Controller
 
         return response($data, 201);
 
+    }
+
+
+    public function show($id)
+    {
+        $psIntake = PsIntake::with(
+        'beneficiaries',
+        // 'directReferralBeneficiaries',
+        // 'indirectReferralBeneficiaries',
+        // 'referralBeneficiaries.beneficiary',
+        'referralSource', 
+        // 'casee',
+        // 'casee.beneficiaries',
+        // 'records.emergencies.user',
+        // 'reasons', 
+        // 'emergencies.record.month',
+        'emergencies.user',
+        'emergencies.emergencyTypes',
+        'emergencies.beneficiary',
+        'activities.providedServices.serviceType',
+        'activities.serviceTypes',
+        'activities.emergencyTypes',
+        // 'activities.record.month',
+        'activities.user',
+        'activities.referralBeneficiary.beneficiary',
+        // 'records', 
+        // 'records.month', 
+        // 'records.status', 
+        // 'records.recordBeneficiaries',
+        // 'records.recordBeneficiaries.individual',
+        // 'currentRecord.status' 
+        )->findOrFail($id);
+
+        if($psIntake){
+            return ['data' => $psIntake];
+        }
+
+        return ['message' => 'beneficiary does not exist'];
     }
 }

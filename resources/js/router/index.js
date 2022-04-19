@@ -24,14 +24,14 @@ const routes = [
 
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
         { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },
-        { path: "intake-log", name: "psIntakeLog", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog.vue') },
-        { path: "intake-log2", name: "psIntakeLog2", props: true, component: () => import(/* webpackChunkName: "psIntakeLog2" */ '../components/PSS/PsIntakeLog2.vue') },
+        // { path: "intake-log", name: "psIntakeLog", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog.vue') },
+        { path: "intake-log2", name: "psIntakeLog2", props: true, component: () => import(/* webpackChunkName: "psIntakeLog2" */ '../components/PSS/PsIntakeLog/PsIntakeLog2.vue') },
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
         { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
         { path: "pss-beneficiaries", name: "pssBeneficiaries", props: true, component: () => import(/* webpackChunkName: "pssBeneficiaries" */ '../components/PSS/PssBeneficiaries.vue') },
         { path: "pss-records", name: "pssRecords", props: true, component: () => import(/* webpackChunkName: "pssRecords" */ '../components/PSS/PssRecords.vue') },
     ] },
-    { path: "/add-ps-intake", name: "addPsIntake", props: true, component: () => import(/* webpackChunkName: "addPsIntakeLog" */ '../components/PSS/AddPsIntake.vue') },
+    { path: "/add-ps-intake", name: "addPsIntake", props: true, component: () => import(/* webpackChunkName: "addPsIntake" */ '../components/PSS/PsIntakeLog/PsIntakeForm/AddPsIntake.vue') },
 
     
     
@@ -52,8 +52,8 @@ const routes = [
         { path: "housing-intakes", name: "caseHousingIntakes", props: true, component: () => import(/* webpackChunkName: "caseHousingIntakes" */ '../components/CaseDetails/CaseHousingIntakes/CaseHousingIntakes.vue') },
 
     ] },
-    { path: '/referrals/:referralId', name: 'psIntakeDetails', props: true, component: () => import(/* webpackChunkName: "psIntakeDetails" */ '../components/PssIntakeDetails/PsIntakeDetails.vue')},
-    { path: '/cases/:caseeId/referrals/:referralId', name: 'pssIntakeDetails', props: true, component: () => import(/* webpackChunkName: "pssIntakeDetails" */ '../components/PssIntakeDetails/PssIntakeDetails.vue'), children: [
+    { path: '/ps-intakes/:psIntakeId', name: 'psIntakeDetails', props: true, component: () => import(/* webpackChunkName: "psIntakeDetails" */ '../components/PSS/PsIntakeLog/PsIntakeDetails/PsIntakeDetails.vue')},
+    { path: '/cases/:caseeId/referrals/:referralId', name: 'pssIntakeDetails', props: true, component: () => import(/* webpackChunkName: "pssIntakeDetails" */ '../components/PSS/PsIntakeLog/PsIntakeDetails/PssIntakeDetails.vue'), children: [
         // {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
     ] },
 

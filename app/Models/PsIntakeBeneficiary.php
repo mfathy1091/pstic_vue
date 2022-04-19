@@ -9,7 +9,7 @@ class PsIntakeBeneficiary extends Model
 {
     use HasFactory;
 
-    protected $table = 'referrals_beneficiaries';
+    protected $table = 'ps_intake_beneficiaries';
 
 
     public function beneficiary()

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePSIntakeBeneficiariesTable extends Migration
+class CreatePsIntakeBeneficiariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -32,6 +32,6 @@ class CreatePSIntakeBeneficiariesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('p_s_intake_beneficiaries');
+        Schema::dropIfExists('ps_intake_beneficiaries');
     }
 }
