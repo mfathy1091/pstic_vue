@@ -48,6 +48,13 @@ export default {
 			.then(({data}) => (this.roles = data.data));
 			this.$Progress.finish();
 		},
+		getAreas(){			
+			this.$Progress.start();
+			axios.get("/api/areas")
+			.then(({data}) => (this.areas = data.data));
+			this.$Progress.finish();
+		},
+
 
 
 		getPermissions(){			

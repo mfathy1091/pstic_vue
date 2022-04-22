@@ -24,11 +24,20 @@ class UserSeeder extends Seeder
         
         $users = [
             [
+                'first_name' => 'Abdalmola',
+                'last_name' => 'Shablot',
+                'email' => 'Abdalmola@pstic-egypt.org',
+                'password' => Hash::make('pstic12345'),
+                'budget_id' => '1',
+                
+            ],
+            [
                 'first_name' => 'Ahmed',
                 'last_name' => 'Alrajeh',
                 'email' => 'ahmedalrajeh@pstic-egypt.org',
                 'password' => Hash::make('pstic12345'),
                 'budget_id' => '1',
+                'direct_manager_id' => '2'
             ],
             [
                 'first_name' => 'Maha',
@@ -37,6 +46,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('pstic12345'),
                 'is_active' => '0',
                 'budget_id' => '1',
+                'direct_manager_id' => '2'
             ],
             [
                 'first_name' => 'Maher',
@@ -44,6 +54,7 @@ class UserSeeder extends Seeder
                 'email' => 'maher@gmail.org',
                 'password' => Hash::make('pstic12345'),
                 'budget_id' => '1',
+                'direct_manager_id' => '2'
             ],
         ];
 

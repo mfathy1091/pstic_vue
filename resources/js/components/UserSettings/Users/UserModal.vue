@@ -46,6 +46,23 @@
                             </multiselect>
                             <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
                         </div>
+                        <div class="form-group" v-if="areas">
+                            <label class="typo__label">Areas</label>
+                            <multiselect 
+                            v-model="userForm.areas"
+                            :options="areas"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false" 
+                            :preserve-search="true"
+                            placeholder="Pick some"
+                            label="name" 
+                            track-by="name" 
+                            :preselect-first="true">
+                                <!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+                            </multiselect>
+                            <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+                        </div>
                         <div class="form-group">
 							<label for="budget_id" class="form-label">Budget</label>
 							<select name="budget_id" v-model="userForm.budget_id" id="budget_id" class="form-control" :class="{ 'is-invalid': userForm.errors.has('budget_id') }">
@@ -97,6 +114,7 @@ export default {
 			users: {},
 			roles: [],
             budgets: [],
+            areas: [],
 			userForm: new Form({
 				id: '',
 				first_name: '',
@@ -105,6 +123,7 @@ export default {
 				password: '',
 				photo: '',
 				roles: [],
+                areas: [],
                 budget_id: '',
                 is_active: '',
 			})
@@ -180,6 +199,7 @@ export default {
 
 	created() {
 		this.getRoles();
+        this.getAreas();
         this.getBudgets();
 	}
 }

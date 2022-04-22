@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['service-types'=> 'API\ServiceTypeController']);
     Route::apiResources(['disabilities'=> 'API\DisabilityController']);
     Route::apiResources(['budgets'=> 'API\BudgetController']);
+    Route::apiResources(['areas'=> 'API\AreaController']);
 
 
     // statuses
@@ -116,6 +117,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('ability/{id}', 'API\AbilityController@destroy');
 
 
+    Route::get('manager-team-members', 'API\UserController@managerTeamMembers');
     Route::apiResources(['users'=> 'API\UserController']);
     Route::apiResources(['referral_sources'=> 'API\ReferralSourceController']);
 

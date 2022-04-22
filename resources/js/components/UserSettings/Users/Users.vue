@@ -51,7 +51,9 @@
 							<th>Email</th>
 							<th>Registered At</th>
 							<th>Roles</th>
+							<th>Working Areas</th>
 							<th>Is Active</th>
+							<th>Direct Manager</th>
 							<th>Budget</th>
 							<th>Actions</th>
 						</tr>
@@ -62,11 +64,21 @@
 							<td>{{ user.email }}</td>
 							<td>{{ user.created_at | myDateShort }}</td>
 							<td>
-								<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
+								<div v-if="user.roles">
+									<span v-for="role in user.roles" :key="role.id" class="badge badge-pill badge-primary">{{role.name}}</span>
+								</div>
+							</td>
+							<td>
+								<div v-if="user.areas">
+									<span v-for="area in user.areas" :key="area.id" class="badge badge-pill badge-primary">{{area.name}}</span>
+								</div>
 							</td>
 							<td>
 								<span v-show="user.is_active == '0'" class="badge badge-pill badge-secondary">Inactive</span>
                     			<span v-show="user.is_active == '1'" class="badge badge-pill badge-success">Active</span>
+							</td>
+							<td>
+								<span v-if="user.direct_manager">{{ user.direct_manager.full_name }}</span>
 							</td>
 							<td>{{ user.budget.name }}</td>
 							<td>
@@ -89,7 +101,7 @@
 		<!-- Modal -->
 		<UserModal 
 		:v-if="selectedUser.id"
-		:editMode='editMode' 
+		:userEditMode='userEditMode' 
 		:selectedUser='selectedUser' 
 		v-on:usersChanged="getUsers()">
 		</UserModal>
@@ -110,7 +122,7 @@ export default {
 	mixins: [axiosMixin],
 	data() {
 		return {
-			editMode: false,
+			userEditMode: false,
 			selectedUser: {},
 			users: {},
 			roles: [],
@@ -128,14 +140,14 @@ export default {
 
 
 		showCreateUserModal(){
-			this.editMode = false;
+			this.userEditMode = false;
 			this.selectedUser = {};
 			$('#userModal').modal('show')
 		},
 
 
 		showEditUserModal(user){
-			this.editMode = true;
+			this.userEditMode = true;
 			this.selectedUser = user;
 			$('#userModal').modal('show')
 		},

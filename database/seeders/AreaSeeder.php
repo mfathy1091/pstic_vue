@@ -84,11 +84,11 @@ class AreaSeeder extends Seeder
                 'city_id' => '1',
             ],
             [    
-                'name' => 'Damietta',
-                'city_id' => '3',
+                'name' => 'Miami',
+                'city_id' => '2',
             ],
             [    
-                'name' => 'Alexandria',
+                'name' => 'Sidi Bishr',
                 'city_id' => '2',
             ],
             

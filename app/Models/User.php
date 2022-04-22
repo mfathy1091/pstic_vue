@@ -61,6 +61,22 @@ class User extends Authenticatable
     } */
 
     protected $table = 'users';
+    
+    public function areas()
+    {
+        return $this->belongsToMany(Area::class);
+        
+    }
+
+    public function directManager()
+    {
+        return $this->belongsTo(self::class, 'direct_manager_id');
+    }
+
+    public function directManagerTeam()
+    {
+        return $this->hasMany(self::class, 'direct_manager_id');
+    }
 
     public function roles()
     {

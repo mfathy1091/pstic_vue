@@ -23,11 +23,13 @@ class CreateUsersTable extends Migration
             $table->string('photo')->default('profile.png');
             $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('budget_id');
+            $table->unsignedBigInteger('direct_manager_id')->nullable();
             $table->date('hire_date')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
             $table->foreign('budget_id')->references('id')->on('budgets')->onDelete('cascade');
+            $table->foreign('direct_manager_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

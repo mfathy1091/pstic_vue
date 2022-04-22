@@ -12,6 +12,13 @@ use App\Models\User;
 class UserController extends Controller
 {
 
+    public function managerTeamMembers()
+    {
+        $manager = User::findOrFail(2);
+
+        return $manager->directManagerTeam;
+    }
+
     public function index(Request $request)
     {
         $users = User::query();
@@ -40,7 +47,9 @@ class UserController extends Controller
         
         $users->with(
             'roles',
+            'directManager',
             'budget',
+            'areas',
         );
 
         $data = [
@@ -78,6 +87,9 @@ class UserController extends Controller
 
         $rolesIds = collect($request->input('roles'))->pluck('id');
         $user->roles()->sync($rolesIds);
+
+        $areasIds = collect($request->input('areas'))->pluck('id');
+        $user->areas()->sync($areasIds);
 
         return $user;
     }
@@ -122,6 +134,9 @@ class UserController extends Controller
 
             $rolesIds = collect($request->input('roles'))->pluck('id');
             $user->roles()->sync($rolesIds);
+
+            $areasIds = collect($request->input('areas'))->pluck('id');
+            $user->areas()->sync($areasIds);
     
             return ['message' => 'User updated'];
         }
@@ -137,6 +152,7 @@ class UserController extends Controller
         if($user){
             // detach first
             $user->roles()->detach();
+            $user->areas()->detach();
             // then delete
             $user->delete();
         }
