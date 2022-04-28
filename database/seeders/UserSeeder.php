@@ -56,6 +56,27 @@ class UserSeeder extends Seeder
                 'budget_id' => '1',
                 'direct_manager_id' => '2'
             ],
+            [
+                'first_name' => 'Gihan',
+                'last_name' => 'Babiker',
+                'email' => 'gihan@gmail.org',
+                'password' => Hash::make('pstic12345'),
+                'budget_id' => '1',
+            ],
+            [
+                'first_name' => 'Osama',
+                'last_name' => 'Alhafez',
+                'email' => 'alhafez@gmail.org',
+                'password' => Hash::make('pstic12345'),
+                'budget_id' => '1',
+            ],
+            [
+                'first_name' => 'Yusuf',
+                'last_name' => 'Danhul',
+                'email' => 'yusuf@gmail.org',
+                'password' => Hash::make('pstic12345'),
+                'budget_id' => '1',
+            ],
         ];
 
         foreach($users as $n){

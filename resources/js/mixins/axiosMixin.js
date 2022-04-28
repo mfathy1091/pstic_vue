@@ -54,6 +54,12 @@ export default {
 			.then(({data}) => (this.areas = data.data));
 			this.$Progress.finish();
 		},
+		getDepartments(){			
+			this.$Progress.start();
+			axios.get("/api/departments")
+			.then(({data}) => (this.departments = data.data));
+			this.$Progress.finish();
+		},
 
 
 

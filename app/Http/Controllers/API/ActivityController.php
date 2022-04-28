@@ -40,7 +40,7 @@ class ActivityController extends Controller
         $activities->with(
             'casee',
             'beneficiary',
-            'providedServices',
+            'services.serviceTypes',
             'user',
             'record', 
             'record.month', 
@@ -56,29 +56,25 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'record_id' => 'required',
-            'referral_id' => 'required',
-            'casee_id' => 'required',
+            'beneficiary_id' => 'required',
+            'ps_intake_id' => 'required',
             'activity_date' => 'required',
             'comment' => 'required',
-            'referral_beneficiary_id' => 'required',
             'is_emergency' => 'required',
         ]);
 
         $activity = Activity::create([
-            'record_id' => $request['record_id'],
-            'referral_id' => $request['referral_id'],
-            'casee_id' => $request['casee_id'],
+            'beneficiary_id' => $request['beneficiary_id'],
+            'ps_intake_id' => $request['ps_intake_id'],
             'activity_date' => $request['activity_date'],
             'comment' => $request['comment'],
-            'referral_beneficiary_id' => $request['referral_beneficiary_id'],
             'is_emergency' => $request['is_emergency'],
             'user_id' => Auth::id(),
             
         ]);
 
         $serviceTypesIds = collect($request->input('service_types'))->pluck('id');
-        $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['referral_beneficiary_id' => $request->referral_beneficiary_id, 'provision_date' => $request->activity_date, 'user_id' => Auth::id()]);
+        $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['beneficiary_id' => $request->beneficiary_id,'ps_intake_id' => $request->ps_intake_id, 'service_date' => $request->activity_date, 'user_id' => Auth::id()]);
 
         if($request->is_emergency){
             $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');
@@ -102,30 +98,24 @@ class ActivityController extends Controller
         if($activity){
             
             $this->validate($request, [
-                'record_id' => 'required',
-                'referral_id' => 'required',
-                'casee_id' => 'required',
+                'beneficiary_id' => 'required',
+                'ps_intake_id' => 'required',
                 'activity_date' => 'required',
                 'comment' => 'required',
-                'referral_beneficiary_id' => 'required',
                 'is_emergency' => 'required',
             ]);
 
             $activity->update([
-                'record_id' => $request['record_id'],
-                'referral_id' => $request['referral_id'],
-                'casee_id' => $request['casee_id'],
+                'beneficiary_id' => $request['beneficiary_id'],
+                'ps_intake_id' => $request['ps_intake_id'],
                 'activity_date' => $request['activity_date'],
                 'comment' => $request['comment'],
-                'referral_beneficiary_id' => $request['referral_beneficiary_id'],
                 'is_emergency' => $request['is_emergency'],
                 'user_id' => Auth::id(),
             ]);
             
             $serviceTypesIds = collect($request->input('service_types'))->pluck('id');
-            $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['referral_beneficiary_id' => $request->referral_beneficiary_id, 'provision_date' => $request->activity_date, 'user_id' => Auth::id()]);
-
-
+            $activity->serviceTypes()->syncWithPivotValues($serviceTypesIds, ['beneficiary_id' => $request->beneficiary_id,'ps_intake_id' => $request->ps_intake_id, 'service_date' => $request->activity_date, 'user_id' => Auth::id()]);    
 
             if($request->is_emergency){
                 $emergencyTypesIds = collect($request->input('emergency_types'))->pluck('id');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
+use App\Models\PsIntake;
 use App\Models\ReferralBeneficiary;
 use Illuminate\Support\Facades\DB;
 Use Exception;
@@ -17,7 +18,7 @@ class ReferralBeneficiaryController extends Controller
     
     public function index(Request $request)
     {
-        $referralBeneficiaries = ReferralBeneficiary::join('referrals', 'referrals_beneficiaries.referral_id', 'referrals.id')
+        $referralBeneficiaries = ReferralBeneficiary::join('referrals', 'ps_intake_beneficiaries.referral_id', 'referrals.id')
         ->join('records', 'records.referral_id', 'referrals.id');
         if($request->month_id != ''){
             $referralBeneficiaries->where('records.month_id', $request->month_id);
@@ -161,8 +162,62 @@ class ReferralBeneficiaryController extends Controller
     }
 
 
-
     public function getStats(Request $request)
+    {
+        $query = PsIntake::join('ps_intake_beneficiaries', 'beneficiaries.id', 'ps_intake_beneficiaries.beneficiary_id')
+            ->join('services', 'ps_intake_beneficiaries.beneficiary_id', '=', 'services.referral_beneficiary_id')
+        ->select('beneficiaries.*', 'ps_intake_beneficiaries.status')
+        ->get();
+
+        $query = PsIntake::join('ps_intake_beneficiaries', 'beneficiaries.id', '=', 'ps_intake_beneficiaries.beneficiary_id')
+            ->join('beneficiaries', 'ps_intake_beneficiaries.beneficiary_id', 'beneficiaries.id')
+            // ->join('services', 'ps_intake_beneficiaries.beneficiary_id', '=', 'provided_services.referral_beneficiary_id')
+            ->select(
+                DB::raw("sum (case when provided_services.service_type_id = 1 then 1 else 0 end) as pss"),
+                'nationality_id', 
+                DB::raw('count(*) as total'),
+                DB::raw("sum (case when beneficiaries.age > 0 and beneficiaries.age <= 5 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_0_5_m"), 
+                DB::raw("sum (case when beneficiaries.age > 0 and beneficiaries.age <= 5 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_0_5_f"),
+                DB::raw("sum (case when beneficiaries.age >= 6 and beneficiaries.age <= 9 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_6_9_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 6 and beneficiaries.age <= 9 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_6_9_f"),
+                DB::raw("sum (case when beneficiaries.age >= 10 and beneficiaries.age <= 14 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_10_14_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 10 and beneficiaries.age <= 14 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_10_14_f"),
+                DB::raw("sum (case when beneficiaries.age >= 15 and beneficiaries.age <= 17 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_15_17_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 15 and beneficiaries.age <= 17 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_15_17_f"),
+                DB::raw("sum (case when beneficiaries.age >= 18 and beneficiaries.age <= 24 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_18_24_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 18 and beneficiaries.age <= 24 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_18_24_f"),
+                DB::raw("sum (case when beneficiaries.age >= 25 and beneficiaries.age <= 49 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_25_49_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 25 and beneficiaries.age <= 49 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_25_49_f"),
+                DB::raw("sum (case when beneficiaries.age >= 50 and beneficiaries.age <= 59 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_50_59_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 50 and beneficiaries.age <= 59 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_50_59_f"),
+                DB::raw("sum (case when beneficiaries.age >= 60 and beneficiaries.gender_id = '1' then 1 else 0 end) as age_gt_60_m"), 
+                DB::raw("sum (case when beneficiaries.age >= 60 and beneficiaries.gender_id = '2' then 1 else 0 end) as age_gt_60_f"),
+        );
+
+
+
+        // $query2 = clone $query1;
+
+        $query1 = clone $query;
+        $result1 = $query1->groupBy('nationality_id')->with('nationality')->get()->collect();
+
+        $query2 = clone $query;
+        $result2 = $query2->get()->collect();
+
+        $stats = $result1->merge($result2);
+        $data = [
+            'stats' => $stats,
+            'result1' => $result1,
+            'result2' => $result2,
+            // 'result1test' => $result1test,
+            // 'totals' => $query2->get(),
+            'test' => $test,
+        ];
+
+        return response($data, 200);
+    }
+
+    public function getStats2(Request $request)
     {
         // $ranges = [ // the start of each age-range.
         //     '18-24' => 18,
@@ -221,13 +276,13 @@ class ReferralBeneficiaryController extends Controller
 
         // $query1test = clone $query_test;
         // $result1test = $query1test->groupBy('nationality_id')->with('nationality')->get()->collect();
-        $test = Beneficiary::join('referrals_beneficiaries', 'beneficiaries.id', '=', 'referrals_beneficiaries.beneficiary_id')
-            ->join('provided_services', 'referrals_beneficiaries.beneficiary_id', '=', 'provided_services.referral_beneficiary_id')
-            ->select('beneficiaries.*', 'referrals_beneficiaries.status', DB::raw("sum (case when provided_services.service_type_id = 1 then 1 else 0 end) as pss"))
+        $test = Beneficiary::join('ps_intake_beneficiaries', 'beneficiaries.id', '=', 'ps_intake_beneficiaries.beneficiary_id')
+            ->join('provided_services', 'ps_intake_beneficiaries.beneficiary_id', '=', 'provided_services.referral_beneficiary_id')
+            ->select('beneficiaries.*', 'ps_intake_beneficiaries.status', DB::raw("sum (case when provided_services.service_type_id = 1 then 1 else 0 end) as pss"))
             ->get();
 
-        $query = Beneficiary::join('referrals_beneficiaries', 'beneficiaries.id', '=', 'referrals_beneficiaries.beneficiary_id')
-            ->join('provided_services', 'referrals_beneficiaries.beneficiary_id', '=', 'provided_services.referral_beneficiary_id')
+        $query = Beneficiary::join('ps_intake_beneficiaries', 'beneficiaries.id', '=', 'ps_intake_beneficiaries.beneficiary_id')
+            ->join('provided_services', 'ps_intake_beneficiaries.beneficiary_id', '=', 'provided_services.referral_beneficiary_id')
             ->select(
                 DB::raw("sum (case when provided_services.service_type_id = 1 then 1 else 0 end) as pss"),
                 'nationality_id', 

@@ -15,10 +15,9 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('record_id');
+            $table->unsignedBigInteger('beneficiary_id');
+            // $table->unsignedBigInteger('ps_intake_beneficiary_id');
             $table->unsignedInteger('ps_intake_id');
-            $table->unsignedInteger('casee_id');
-            $table->unsignedBigInteger('referral_beneficiary_id');
             $table->date('activity_date')->nullable();
             $table->text('comment');
             $table->unsignedInteger('user_id');
@@ -26,10 +25,9 @@ class CreateActivitiesTable extends Migration
             $table->timestamps();
 
             // foreign keys
-            // $table->foreign('record_id')->references('id')->on('records')->onDelete('cascade');
-            $table->foreign('referral_beneficiary_id')->references('id')->on('referrals_beneficiaries')->onDelete('cascade');
+            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
+            // $table->foreign('ps_intake_beneficiary_id')->references('id')->on('ps_intake_beneficiaries')->onDelete('cascade');
             $table->foreign('ps_intake_id')->references('id')->on('ps_intakes')->onDelete('cascade');
-            $table->foreign('casee_id')->references('id')->on('casees')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

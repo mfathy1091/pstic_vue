@@ -16,7 +16,7 @@
 		:v-if="selectedActivity.id"
 		:activityEditMode='activityEditMode' 
 		:selectedActivity='selectedActivity' 
-		v-on:recordsChanged="getActivities()">
+		v-on:psIntakeChanged="getActivities()">
 		</ActivityModal>
     </div>
 </template>

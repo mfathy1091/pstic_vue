@@ -8,4 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function serviceType()
+    {
+        return $this->belongsTo(ServiceType::class, 'service_type_id');
+    }
+
+    public function beneficiary()
+    {
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
+    }
+
+    public function referralBeneficiary()
+    {
+        return $this->belongsTo(ReferralBeneficiary::class, 'referral_beneficiary_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function activty()
+    {
+        return $this->belongsTo(Activity::class, 'activity_id');
+    }
 }

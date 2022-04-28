@@ -24,15 +24,6 @@
 								<input v-model="activityForm.activity_date" id="activity_date" type="text" name="activity_date" class="form-control" autocomplete="off" placeholder="YYYY-MM-DD">
 								<!-- <HasError :form="activityForm" field="activity_date" /> -->
 							</div>
-							
-							<div class="form-group">
-								<label for="location" class="form-label">Activity Month</label>
-								<select v-model="activityForm.record_id" name="location" id="location" class="form-control">
-									<option value='0' disabled selected>Choose</option>
-									<option :value="record.id" v-for="record in psIntake.records" :key="record.id">{{ record.month.name }}</option>
-								</select>
-								<!-- <HasError :form="activityForm" field="location" /> -->
-							</div>
 
 							<div class="form-group">
 								<label for="comment" class="form-label">Comment</label>
@@ -136,12 +127,11 @@ export default {
 				id: '',
 				beneficiary_id: '',
 				record_id: '',
-				psIntake_id: '',
+				ps_intake_id: '',
 				casee_id: '',
                 activity_date: '',
                 comment: '',
                 service_types: [],
-				provided_services: [],
 				is_emergency: false,
 				emergency_types: [],
 			})
@@ -178,7 +168,7 @@ export default {
 		resetUserForm() { // for create
 			this.activityForm.id = ''
 			this.activityForm.record_id = ''
-			this.activityForm.psIntake_id = this.$route.params.psIntakeId
+			this.activityForm.ps_intake_id = this.$route.params.psIntakeId
 			this.activityForm.casee_id = this.$route.params.caseeId
 			this.activityForm.activity_date = ''
 			this.activityForm.comment = ''

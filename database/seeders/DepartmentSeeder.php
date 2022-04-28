@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentSeeder extends Seeder
 {
@@ -15,15 +16,21 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         $data = [
-            'PSS',
-            'Housing',
-            'Management',
-            'N/A',
+            [    
+                'name' => 'PSS',
+                'manager_id' => '1',
+            ],
+            [    
+                'name' => 'Housing',
+                'manager_id' => '1',
+            ],
+            [    
+                'name' => 'Program',
+                'manager_id' => '1',
+            ],
         ];
 
+        DB::table('departments')->insert($data);
         
-        foreach ($data as $n) {
-            Department::create(['name' => $n]);
-        }
     }
 }

@@ -18,7 +18,12 @@ class AreaController extends Controller
      */
     public function index()
     {
-        return Area::paginate(10);
+        $areas = Area::get();
+
+        $content = [
+            'data' => $areas
+        ];
+        return response($content, 200);
         
     }
 

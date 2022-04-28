@@ -48,6 +48,44 @@ class PsIntakeController extends Controller
         return response($data, 200);
     }
 
+    public function show($id)
+    {
+        $psIntake = PsIntake::with(
+        'beneficiaries',
+        // 'directReferralBeneficiaries',
+        // 'indirectReferralBeneficiaries',
+        // 'referralBeneficiaries.beneficiary',
+        'referralSource', 
+        'beneficiaries',
+        // 'casee',
+        // 'casee.beneficiaries',
+        // 'records.emergencies.user',
+        // 'reasons', 
+        // 'emergencies.record.month',
+        'emergencies.user',
+        'emergencies.emergencyTypes',
+        'emergencies.beneficiary',
+        'activities.services.serviceType',
+        'activities.serviceTypes',
+        'activities.emergencyTypes',
+        'activities.record.month',
+        'activities.user',
+        'activities.beneficiary',
+        // 'records', 
+        // 'records.month', 
+        // 'records.status', 
+        // 'records.recordBeneficiaries',
+        // 'records.recordBeneficiaries.individual',
+        // 'currentRecord.status' 
+        )->findOrFail($id);
+
+        if($psIntake){
+            return ['data' => $psIntake];
+        }
+
+        return ['message' => 'beneficiary does not exist'];
+    }
+
     public function store(Request $request)
     {
 
@@ -102,41 +140,5 @@ class PsIntakeController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $psIntake = PsIntake::with(
-        'beneficiaries',
-        // 'directReferralBeneficiaries',
-        // 'indirectReferralBeneficiaries',
-        // 'referralBeneficiaries.beneficiary',
-        'referralSource', 
-        'beneficiaries',
-        // 'casee',
-        // 'casee.beneficiaries',
-        // 'records.emergencies.user',
-        // 'reasons', 
-        // 'emergencies.record.month',
-        'emergencies.user',
-        'emergencies.emergencyTypes',
-        'emergencies.beneficiary',
-        'activities.providedServices.serviceType',
-        'activities.serviceTypes',
-        'activities.emergencyTypes',
-        // 'activities.record.month',
-        'activities.user',
-        'activities.referralBeneficiary.beneficiary',
-        // 'records', 
-        // 'records.month', 
-        // 'records.status', 
-        // 'records.recordBeneficiaries',
-        // 'records.recordBeneficiaries.individual',
-        // 'currentRecord.status' 
-        )->findOrFail($id);
 
-        if($psIntake){
-            return ['data' => $psIntake];
-        }
-
-        return ['message' => 'beneficiary does not exist'];
-    }
 }

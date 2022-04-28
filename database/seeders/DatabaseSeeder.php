@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(CitySeeder::class);
         $this->call(AreaSeeder::class);
-        // $this->call(DepartmentSeeder::class);
+        $this->call(DepartmentSeeder::class);
         // $this->call(TeamSeeder::class);
 
         // $this->call(JobTitleSeeder::class);

@@ -71,6 +71,15 @@
 							</select>
 							<HasError :form="userForm" field="budget_id" />
 						</div>
+                        
+                        <div class="form-group">
+							<label for="department_id" class="form-label">Department</label>
+							<select name="department_id" v-model="userForm.department_id" id="department_id" class="form-control" :class="{ 'is-invalid': userForm.errors.has('department_id') }">
+								<option value=''>Choose...</option>
+								<option v-for='department in departments' :value='department.id' :key="department.id">{{ department.name }}</option>
+							</select>
+							<HasError :form="userForm" field="department_id" />
+						</div>
 
                         <div v-show="!userEditMode" class="form-group">
                             <label for="password" class="form-label">Password</label>
@@ -115,6 +124,7 @@ export default {
 			roles: [],
             budgets: [],
             areas: [],
+            departments: [],
 			userForm: new Form({
 				id: '',
 				first_name: '',
@@ -125,6 +135,7 @@ export default {
 				roles: [],
                 areas: [],
                 budget_id: '',
+                department_id: '',
                 is_active: '',
 			})
 		}
@@ -201,6 +212,7 @@ export default {
 		this.getRoles();
         this.getAreas();
         this.getBudgets();
+        this.getDepartments();
 	}
 }
 </script>

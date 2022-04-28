@@ -129,9 +129,9 @@
                     <tbody>
                         <tr v-for="activity in psIntake.activities" :key="activity.id">
                             <td><span>{{ activity.activity_date | myDateShort }}</span></td>
-                            <!-- <td><span>{{ activity.referral_beneficiary.beneficiary.name }}</span></td> -->
+                            <td><span>{{ activity.beneficiary.name }}</span></td>
                             <td>
-                                <span v-for="providedService in activity.provided_services" :key="providedService.id" class="badge badge-pill badge-primary">{{providedService.service_type.name}}</span>
+                                <span v-for="service in activity.services" :key="service.id" class="badge badge-pill badge-primary">{{service.service_type.name}}</span>
                             </td>
                             <td>
                                 <span>{{ activity.is_emergency }}</span>
@@ -277,14 +277,14 @@
             :v-if="selectedEmergency.id"
             :emergencyEditMode='emergencyEditMode' 
             :selectedEmergency='selectedEmergency'
-            v-on:recordsChanged="getPsIntake()">
+            v-on:psIntakeChanged="getPsIntake()">
             </EmergencyModal>
 
             <ActivityModal 
             :v-if="selectedActivity.id"
             :activityEditMode='activityEditMode' 
             :selectedActivity='selectedActivity'
-            v-on:recordsChanged="getPsIntake()">
+            v-on:psIntakeChanged="getPsIntake()">
             </ActivityModal>
     </div>
 </template>
@@ -464,7 +464,7 @@ export default {
         })
         this.getPsIntake(this.psIntakeId);
         this.getCaseeBeneficiaries(this.$route.params.caseeId);
-        Fire.$on('referralChanged', () => {
+        Fire.$on('psIntakeChanged', () => {
 			this.getPsIntake(this.psIntakeId);
 		});
         this.getActiveReferralBeneficiaries(this.$route.params.psIntakeId);

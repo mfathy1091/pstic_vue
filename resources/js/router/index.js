@@ -53,9 +53,7 @@ const routes = [
 
     ] },
     { path: '/ps-intakes/:psIntakeId', name: 'psIntakeDetails', props: true, component: () => import(/* webpackChunkName: "psIntakeDetails" */ '../components/PSS/PsIntakeLog/PsIntakeDetails/PsIntakeDetails.vue')},
-    { path: '/cases/:caseeId/referrals/:referralId', name: 'pssIntakeDetails', props: true, component: () => import(/* webpackChunkName: "pssIntakeDetails" */ '../components/PSS/PsIntakeLog/PsIntakeDetails/PssIntakeDetails.vue'), children: [
-        // {path: "records/:recordId", name: "RecordDetails", props: true, component: () => import(/* webpackChunkName: "RecordDetails" */ '../components/ReferralDetails/RecordDetails.vue') }
-    ] },
+
 
     { path: '/user-settings', name: "userSettings", props: true, component: () => import(/* webpackChunkName: "userSetttings" */ '../components/UserSettings/UserSettings.vue'), children: [
         { path: "users", name: "users", props: true, component: () => import(/* webpackChunkName: "users" */ '../components/UserSettings/Users/Users.vue') },

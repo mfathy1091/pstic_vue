@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResources(['disabilities'=> 'API\DisabilityController']);
     Route::apiResources(['budgets'=> 'API\BudgetController']);
     Route::apiResources(['areas'=> 'API\AreaController']);
-
+    Route::apiResources(['departments'=> 'API\DepartmentController']);
 
     // statuses
     Route::get('housing-grant-statuses', 'API\StatusController@getHousingGrantStatuses');

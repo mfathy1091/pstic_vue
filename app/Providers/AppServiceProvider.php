@@ -28,59 +28,59 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Activity::created(function($activity){
+        // Activity::created(function($activity){
 
-            $records = $activity->referral->records;
+        //     $records = $activity->referral->records;
             
-            foreach($records as $record){
-                if($record->activities->count()){
-                    // dd($record->activities);
-                    $record->status_id = 1;
-                    $record->save();
-                }
-                else{
-                    // dd("doesn't haave");
-                    $record->status_id = 2;
-                    $record->save();
-                }
-            }
-        });
+        //     foreach($records as $record){
+        //         if($record->activities->count()){
+        //             // dd($record->activities);
+        //             $record->status_id = 1;
+        //             $record->save();
+        //         }
+        //         else{
+        //             // dd("doesn't haave");
+        //             $record->status_id = 2;
+        //             $record->save();
+        //         }
+        //     }
+        // });
 
-        Activity::deleted(function($activity){
+        // Activity::deleted(function($activity){
 
-            $records = $activity->referral->records;
+        //     $records = $activity->referral->records;
             
-            foreach($records as $record){
-                if($record->activities->count()){
-                    // dd($record->activities);
-                    $record->status_id = 1;
-                    $record->save();
-                }
-                else{
-                    // dd("doesn't haave");
-                    $record->status_id = 2;
-                    $record->save();
-                }
-            }
-        });
+        //     foreach($records as $record){
+        //         if($record->activities->count()){
+        //             // dd($record->activities);
+        //             $record->status_id = 1;
+        //             $record->save();
+        //         }
+        //         else{
+        //             // dd("doesn't haave");
+        //             $record->status_id = 2;
+        //             $record->save();
+        //         }
+        //     }
+        // });
 
 
-        Activity::updated(function($activity){
+        // Activity::updated(function($activity){
 
-            $records = $activity->referral->records;
+        //     $records = $activity->referral->records;
             
-            foreach($records as $record){
-                if($record->activities->count()){
-                    // dd($record->activities);
-                    $record->status_id = 1;
-                    $record->save();
-                }
-                else{
-                    // dd("doesn't haave");
-                    $record->status_id = 2;
-                    $record->save();
-                }
-            }
+        //     foreach($records as $record){
+        //         if($record->activities->count()){
+        //             // dd($record->activities);
+        //             $record->status_id = 1;
+        //             $record->save();
+        //         }
+        //         else{
+        //             // dd("doesn't haave");
+        //             $record->status_id = 2;
+        //             $record->save();
+        //         }
+        //     }
 
             // if ($emergency->isDirty('record_id')){
             //     $old_record_id = $emergency->getOriginal('record_id');
@@ -94,6 +94,6 @@ class AppServiceProvider extends ServiceProvider
             //         $old_record->save();
             //     }
             // }
-        });
+        // });
     }
 }
