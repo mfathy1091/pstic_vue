@@ -16,19 +16,19 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedInteger('job_title_id');
-            $table->unsignedInteger('department_id');
-            $table->unsignedInteger('team_id')->nullable();
+            $table->unsignedBigInteger('job_title_id');
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('team_id')->nullable();
             $table->decimal('salary')->nullable();
-            $table->unsignedInteger('budget_id');
+            $table->unsignedBigInteger('budget_id');
             $table->date('hire_date');
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->boolean('is_supervisor')->nullable();
 
 
-            $table->unsignedInteger('age');
-            $table->unsignedInteger('gender_id');
-            $table->unsignedInteger('nationality_id');
+            $table->unsignedBigInteger('age');
+            $table->unsignedBigInteger('gender_id');
+            $table->unsignedBigInteger('nationality_id');
 
             $table->timestamps();
 

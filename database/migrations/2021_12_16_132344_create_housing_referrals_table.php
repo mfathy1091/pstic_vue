@@ -16,13 +16,13 @@ class CreateHousingReferralsTable extends Migration
         Schema::create('housing_referrals', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('casee_id')->nullable();
-            $table->unsignedInteger('referral_source_id');
+            $table->unsignedBigInteger('referral_source_id');
             $table->date('referral_date')->nullable();
             $table->string('referring_person_name');
             $table->string('referring_person_email');
             $table->text('referral_narrative_reason');
-            $table->unsignedInteger('grant_status_id');
-            $table->unsignedInteger('grant_amount');
+            $table->unsignedBigInteger('grant_status_id');
+            $table->unsignedBigInteger('grant_amount');
             $table->unsignedBigInteger('assigned_housing_advocate_id')->nullable();
             $table->timestamps();
 

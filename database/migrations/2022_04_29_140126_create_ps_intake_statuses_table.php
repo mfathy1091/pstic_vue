@@ -15,8 +15,8 @@ class CreatePsIntakeStatusesTable extends Migration
     {
         Schema::create('ps_intake_statuses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('ps_intake_id');
-            $table->unsignedInteger('status_id');
+            $table->unsignedBigInteger('ps_intake_id');
+            $table->unsignedBigInteger('status_id');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();

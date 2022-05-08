@@ -15,8 +15,8 @@ class CreatePsIntakeBeneficiariesTable extends Migration
     {
         Schema::create('ps_intake_beneficiaries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('ps_intake_id');
-            $table->unsignedInteger('beneficiary_id');
+            $table->unsignedBigInteger('ps_intake_id');
+            $table->unsignedBigInteger('beneficiary_id');
             $table->boolean('is_direct')->default(0);
             $table->timestamps();
 

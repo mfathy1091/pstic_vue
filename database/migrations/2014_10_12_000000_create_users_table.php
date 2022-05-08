@@ -28,8 +28,8 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('budget_id')->references('id')->on('budgets')->onDelete('cascade');
-            $table->foreign('direct_manager_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('budget_id')->references('id')->on('budgets');
+            $table->foreign('direct_manager_id')->references('id')->on('users');
         });
     }
 

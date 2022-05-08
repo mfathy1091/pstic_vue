@@ -15,13 +15,13 @@ class CreateReferralReasonsTable extends Migration
     {
         Schema::create('referral_reasons', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('referral_id');
-            $table->unsignedInteger('reason_id');
+            $table->unsignedBigInteger('ps_intake_id');
+            $table->unsignedBigInteger('reason_id');
             $table->timestamps();
 
 
 
-            $table->foreign('referral_id')->references('id')->on('referrals')->onDelete('cascade');
+            $table->foreign('ps_intake_id')->references('id')->on('ps_intakes')->onDelete('cascade');
             $table->foreign('reason_id')->references('id')->on('reasons')->onDelete('cascade');
         });
     }

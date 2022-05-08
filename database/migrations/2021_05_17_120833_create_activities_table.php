@@ -17,10 +17,10 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('beneficiary_id');
             // $table->unsignedBigInteger('ps_intake_beneficiary_id');
-            $table->unsignedInteger('ps_intake_id');
+            $table->unsignedBigInteger('ps_intake_id');
             $table->date('activity_date')->nullable();
             $table->text('comment');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->boolean('is_emergency');
             $table->timestamps();
 

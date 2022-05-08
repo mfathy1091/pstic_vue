@@ -20,7 +20,7 @@ class CreateServicesTable extends Migration
             $table->unsignedBigInteger('service_type_id');
             $table->date('service_date')->nullable();
             $table->unsignedBigInteger('activity_id')->nullable();
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
             // foreign keys
