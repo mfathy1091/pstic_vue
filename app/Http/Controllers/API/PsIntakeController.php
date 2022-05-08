@@ -22,9 +22,20 @@ class PsIntakeController extends Controller
 {
     public function index(Request $request)
     {
-        $psIntakes = PsIntake::latest();
+        $query = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
+        ->select('ps_intakes.*');
+        
+        if($request->status_id != ''){
+            if($request->status_id == '1+2'){
+                $query->where('current_status_id', '1')->OrWhere('current_status_id', '2');
+            }
+            else
+            {
+                $query->where('current_status_id', $request->status_id);
+            }
+        }
 
-        $psIntakes->with(
+        $query->with(
             //'referral.casee',
             // 'referral.beneficiaries',
             // 'referral.emergencies',
@@ -42,7 +53,7 @@ class PsIntakeController extends Controller
         );
 
         $data = [
-            'data' => $psIntakes->get(),
+            'data' => $query->get(),
         ];
 
         return response($data, 200);

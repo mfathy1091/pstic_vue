@@ -302,7 +302,6 @@ export default {
 		this.getPsIntake(this.$route.params.psIntakeId)
         this.getServiceTypes();
 		this.getEmergencyTypes();
-		this.getActiveReferralBeneficiaries(this.$route.params.psIntakeId);
 		
     },
     computed:{

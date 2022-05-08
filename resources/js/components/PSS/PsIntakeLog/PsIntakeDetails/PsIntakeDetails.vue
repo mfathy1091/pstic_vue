@@ -18,7 +18,7 @@
 
         <div class="card-body" v-if="this.psIntake">
             <h5>PS Intake Details 
-                <span @click="showEditReferralModal"
+                <span @click="showEditPsIntakeModal"
                     id='clickableAwesomeFont' class="ml-3 clickable">
                         <i class="fas fa-pencil-alt blue"></i>
                 </span>
@@ -48,7 +48,7 @@
             </div>
             <hr>
             <h5>Affected Beneficiaries
-                <span @click="showEditReferralModal"
+                <span @click="showEditPsIntakeModal"
                     id='clickableAwesomeFont' class="ml-3 clickable">
                         <i class="fas fa-pencil-alt blue"></i>
                 </span>
@@ -58,20 +58,16 @@
                 <div class="col mb-4" >
                     <h6 class="card-subtitle mb-2 text-muted">Direct Beneficiaries</h6>
                     <div class="ml-4">
-                        <li v-for="directBeneficiary in this.psIntake.direct_referral_beneficiaries" :key="directBeneficiary.id">
-                            <div>
-                                <!-- <span>{{ directBeneficiary.name }}</span> -->
-                            </div>
-                        </li>
+
                     </div>
                     <br>
                     <h6 class="card-subtitle mb-2 text-muted">Indirect Beneficiaries</h6>
                     <div class="ml-4">
-                        <li v-for="indirectBeneficiary in this.psIntake.indirect_referral_beneficiaries" :key="indirectBeneficiary.id">
-                            <div>
+                        <!-- <li v-for="indirectBeneficiary in this.psIntake.indirect_referral_beneficiaries" :key="indirectBeneficiary.id">
+                            <div> -->
                                 <!-- <span>{{ indirectBeneficiary.name }}</span> -->
-                            </div>
-                        </li>
+                            <!-- </div>
+                        </li> -->
                     </div>
                 </div>
             </div>
@@ -311,7 +307,6 @@ export default {
     data(){
         return {
             psIntake: "",
-            referralBeneficiaries: [],
             caseeBeneficiaries: [],
             selectedEmergency: {},
             selectedActivity: {},
@@ -347,10 +342,10 @@ export default {
                 .then((result) => {
                     if (result.isConfirmed) {
                         this.$Progress.start();
-                        axios.put('/api/referrals/'+this.psIntake.id + '/close')
+                        axios.put('/api/ps-intakes/'+this.psIntake.id + '/close')
                         .then(() => {
                             // success
-                            Fire.$emit('referralChanged');
+                            Fire.$emit('psIntakeChanged');
                             Swal.fire(
                                 'Case Closed!',
                                 'success'
@@ -366,7 +361,7 @@ export default {
             }
         },
 
-        showEditReferralModal(){
+        showEditPsIntakeModal(){
 
         },
         showCreateEmergencyModal(){
@@ -397,7 +392,7 @@ export default {
 					axios.delete('/api/emergencies/'+emergency.id)
 					.then(() => {
 						// success
-						Fire.$emit('referralChanged');
+						Fire.$emit('psIntakeChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -438,10 +433,10 @@ export default {
 			.then((result) => {
 				if (result.isConfirmed) {
 					this.$Progress.start();
-					axios.delete('/api/activities/'+activity.id)
+					axios.delete('/api/activities/' + activity.id)
 					.then(() => {
 						// success
-						Fire.$emit('referralChanged');
+						Fire.$emit('psIntakeChanged');
 						Swal.fire(
 							'Deleted!',
 							'It has been deleted.',
@@ -467,7 +462,6 @@ export default {
         Fire.$on('psIntakeChanged', () => {
 			this.getPsIntake(this.psIntakeId);
 		});
-        this.getActiveReferralBeneficiaries(this.$route.params.psIntakeId);
     }
 }
 </script>

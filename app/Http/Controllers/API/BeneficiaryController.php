@@ -625,6 +625,49 @@ class BeneficiaryController extends Controller
         // return response()->json($data); 
     }
 
+    public function beneficiariesServices()
+    {
+        $result = Beneficiary::join('nationalities', 'beneficiaries.nationality_id', '=', 'nationalities.id');
+
+        $data = [
+            'data' => $result->get(),
+        ];
+
+        return response($data, 200);
+    }
+
+    public function psBeneficiaries(Request $request)
+    {
+        $query = Beneficiary::select(
+            'nationalities.name as nationality', 
+            'beneficiaries.name', 
+            'beneficiaries.age', 
+            'ps_intake_beneficiaries.is_direct',
+            'ps_intakes.referral_date',
+            'statuses.name as intake_status',
+            DB::raw('users.first_name || " " || users.last_name as assigned_worker')
+            )
+        ->join('nationalities', 'beneficiaries.nationality_id', '=', 'nationalities.id')
+        ->join('ps_intake_beneficiaries', 'beneficiaries.id', '=', 'ps_intake_beneficiaries.beneficiary_id')
+        ->join('ps_intakes', 'ps_intake_beneficiaries.ps_intake_id', '=', 'ps_intakes.id')
+        ->join('statuses', 'ps_intakes.current_status_id', '=', 'statuses.id')
+        ->join('users', 'ps_intakes.current_assigned_psw_id', '=', 'users.id');
+        if($request->status_id != ''){
+            if($request->status_id == '1+2'){
+                $query->where('current_status_id', '1')->OrWhere('current_status_id', '2');
+            }
+            else
+            {
+                $query->where('current_status_id', $request->status_id);
+            }
+        }
+
+        $data = [
+            'data' => $query->get(),
+        ];
+
+        return response($data, 200);
+    }
 }
 
 

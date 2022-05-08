@@ -15,17 +15,18 @@ class CreatePsIntakesTable extends Migration
     {
         Schema::create('ps_intakes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('referral_source_id');
-            $table->date('referral_date')->nullable();
+            $table->unsignedInteger('referral_source_id')->nullable();
+            $table->date('referral_date');
             $table->date('close_date')->nullable();
             // $table->unsignedBigInteger('elapsed_months_since_intake');
-            $table->string('referring_person_name');
-            $table->string('referring_person_email');
-            $table->text('referral_narrative_reason');
+            $table->string('referring_person_name')->nullable();
+            $table->string('referring_person_email')->nullable();
+            $table->text('referral_narrative_reason')->nullable();
             $table->unsignedBigInteger('casee_id')->nullable();
 
             $table->unsignedBigInteger('current_status_id')->nullable();
             $table->unsignedBigInteger('current_assigned_psw_id')->nullable();
+            // $table->unsignedBigInteger('budget_id')->nullable();
             
             $table->timestamps();
 

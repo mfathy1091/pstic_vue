@@ -86,7 +86,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('records/search', 'API\RecordController@search');
     Route::get('records/{record}', 'API\RecordController@show');
    
-
+    // beneficiaries stats
+    Route::get('beneficiaries/services/', 'API\BeneficiaryController@beneficiariesServices');
+    Route::get('ps/beneficiaries/', 'API\BeneficiaryController@psBeneficiaries');
 
     // beneficiaries
     Route::get('beneficiaries/search/', 'API\BeneficiaryController@search');

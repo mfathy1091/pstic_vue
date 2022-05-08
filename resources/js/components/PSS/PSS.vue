@@ -14,16 +14,30 @@
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'psIntakeLog2' }"
+                            :to="{ name: 'psIntakeLog' }"
                             class="nav-link tab-header" active-class="active">   
-                            Intake Log 2
+                            Intake Log
                         </router-link>
                     </li>
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'psIntakeLog' }"
+                            :to="{ name: 'psIntakeLogHistory' }"
                             class="nav-link tab-header" active-class="active">   
-                            Intake Log
+                            Intake Log History
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'ps-beneficiaries' }"
+                            class="nav-link tab-header" active-class="active">   
+                            Beneficiaries
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'disabilities' }"
+                            class="nav-link tab-header" active-class="active">   
+                            Services
                         </router-link>
                     </li>
                     <li class="nav-item">

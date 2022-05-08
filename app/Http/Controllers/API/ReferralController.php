@@ -113,7 +113,7 @@ class ReferralController extends Controller
 
     public function index(Request $request)
     {
-        $query = Referral::join('records', 'records.referral_id', 'referrals.id')
+        $query = PsIntake::join('records', 'records.referral_id', 'referrals.id')
         ->join('casees', 'referrals.casee_id', 'casees.id')
         ->join('statuses', 'records.status_id', 'statuses.id')
         ->select('referrals.*', 'records.month_id', 'records.status_id');

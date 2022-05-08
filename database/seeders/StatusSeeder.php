@@ -18,29 +18,33 @@ class StatusSeeder extends Seeder
         // DB::table('statuses')->delete();
         $statuses = [
             [
-                'name' => 'Active',
-                'type' => 'Psychosocial',
+                'name' => 'New',
+                'type' => 'PS Intake',
             ],
             [
-                'name' => 'Inactive',
-                'type' => 'Psychosocial',
+                'name' => 'Ongoing',
+                'type' => 'PS Intake',
             ],
             [
                 'name' => 'Closed',
-                'type' => 'Psychosocial',
+                'type' => 'PS Intake',
+            ],
+            [
+                'name' => 'Inactive',
+                'type' => 'PS Intake',
             ],
 
             [
                 'name' => 'Accepted',
-                'type' => 'Housing Grant',
+                'type' => 'Housing Intake',
             ],
             [
                 'name' => 'Rejected',
-                'type' => 'Housing Grant',
+                'type' => 'Housing Intake',
             ],
             [
                 'name' => 'Pending',
-                'type' => 'Housing Grant',
+                'type' => 'Housing Intake',
             ],
             [
                 'name' => 'Active',

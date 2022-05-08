@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ReasonSeeder::class);
         $this->call(ServiceTypeSeeder::class);
         $this->call(StatusSeeder::class);
-        $this->call(PsStatusSeeder::class);
 
         // $this->call(RoleTableSeeder::class);
 
@@ -47,7 +46,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EmergencyTypeSeeder::class);
         
         //$this->call(PssCaseSeeder::class);
-        //$this->call(ReferralSeeder::class);
+        $this->call(PsIntakeSeeder::class);
 
 
 
@@ -58,7 +57,6 @@ class DatabaseSeeder extends Seeder
 
         // $this->call(CaseTypeSeeder::class);
         // $this->call(VulnerabilitySeeder::class);
-        //$this->call(FollowUpSeeder::class);
         //$this->call(ServiceSeeder::class);
     }
 }
