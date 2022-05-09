@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use App\Models\Activity;
 use App\Models\Emergency;
 use App\Models\Record;
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
         // Activity::created(function($activity){
 
         //     $records = $activity->referral->records;
