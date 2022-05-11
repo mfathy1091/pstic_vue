@@ -64,6 +64,14 @@
             
             <br>
 
+            <div class="form-inline mr-2 ml-2 mt-3">
+                New Intakes: {{ PsIntakesCountsByStatuses.new }}
+                <br>
+                New Intakes: {{ PsIntakesCountsByStatuses.ongoing }}
+                <br>
+                New Intakes: {{ PsIntakesCountsByStatuses.closed }}
+            </div>
+
             <div class="card-header bg-white">
                 <div class="row mt-3 table-responsive m-0">
                     <p v-show="!psIntakes.length" class="font-italic ml-5">You have no Cases!</p>
@@ -139,6 +147,11 @@ export default {
 			selectedPsIntake: {},
             users: [],
             psIntakes: [],
+            PsIntakesCountsByStatuses: {
+                new: '1',
+                ongoing: '2',
+                closed: '3',
+            },
             loading:true,
             currentMonth: '',
             statusesCount: '',
@@ -177,6 +190,26 @@ export default {
 				console.log(e);
 			})
 		},
+
+        getPsIntakesCountsByStatuses()
+        {
+            this.$Progress.start();
+            this.$store.state.main.showLoading = true;
+			axios.get('/api/ps-intakes/countsByStatuses')
+			.then((response) => {
+				// success
+				this.PsIntakesCountsByStatuses = response.data.data;
+                // this.statusesCount = response.data.statusesCount;
+				this.$Progress.finish();
+                this.$store.state.main.showLoading = false;
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                this.$store.state.main.showLoading = false;
+				console.log(e);
+			})
+        },
 
 
         filterByStatus(status_id){

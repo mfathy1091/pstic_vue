@@ -14,6 +14,13 @@
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <router-link
+                            :to="{ name: 'psDashboard' }"
+                            class="nav-link tab-header" active-class="active">   
+                            Dashboard
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link
                             :to="{ name: 'psIntakeLog' }"
                             class="nav-link tab-header" active-class="active">   
                             Intake Log
@@ -31,6 +38,13 @@
                             :to="{ name: 'ps-beneficiaries' }"
                             class="nav-link tab-header" active-class="active">   
                             Beneficiaries
+                        </router-link>
+                    </li>
+                        <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'ps-stats' }"
+                            class="nav-link tab-header" active-class="active">   
+                            Stats
                         </router-link>
                     </li>
                     <li class="nav-item">

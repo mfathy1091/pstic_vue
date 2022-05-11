@@ -5,8 +5,6 @@
     "/js/pss.js": "/js/pss.js",
     "/js/pssIntake.js": "/js/pssIntake.js",
     "/js/psIntakeLog.js": "/js/psIntakeLog.js",
-    "/js/services.js": "/js/services.js",
-    "/js/beneficiaries.js": "/js/beneficiaries.js",
     "/js/pssEmergencies.js": "/js/pssEmergencies.js",
     "/js/pssServices.js": "/js/pssServices.js",
     "/js/pssBeneficiaries.js": "/js/pssBeneficiaries.js",
@@ -34,5 +32,11 @@
     "/js/serviceTypes.js": "/js/serviceTypes.js",
     "/js/create-activity.js": "/js/create-activity.js",
     "/js/create-emergency.js": "/js/create-emergency.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/js/disabilities.js": "/js/disabilities.js",
+    "/js/Services.js": "/js/Services.js",
+    "/js/services.js": "/js/services.js",
+    "/js/beneficiaries.js": "/js/beneficiaries.js",
+    "/js/stats.js": "/js/stats.js",
+    "/js/psDashboard.js": "/js/psDashboard.js"
 }

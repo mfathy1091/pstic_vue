@@ -23,12 +23,15 @@ const routes = [
     { path: '/beneficiaries', name: "beneficiaries", props: true, component: () => import(/* webpackChunkName: "home" */ '../components/Cases/Beneficiaries.vue'), children: [] },
 
     { path: '/pss', name: "pss", props: true, component: () => import(/* webpackChunkName: "pss" */ '../components/PSS/PSS.vue'), children: [
+        { path: "ps-dashboard", name: "psDashboard", props: true, component: () => import(/* webpackChunkName: "psDashboard" */ '../components/PSS/PsDashboard/PsDashboard.vue') },
         { path: "pss-intake", name: "pssIntake", props: true, component: () => import(/* webpackChunkName: "pssIntake" */ '../components/PSS/PssIntake.vue') },
         // { path: "intake-log", name: "psIntakeLog", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog.vue') },
         { path: "intake-log", name: "psIntakeLog", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog/PsIntakeLog.vue') },
         { path: "intake-log-history", name: "psIntakeLogHistory", props: true, component: () => import(/* webpackChunkName: "psIntakeLog" */ '../components/PSS/PsIntakeLog/PsIntakeLog.vue') },
         { path: "disabilities", name: "disabilities", props: true, component: () => import(/* webpackChunkName: "services" */ '../components/PSS/Services/Services.vue') },
         { path: "beneficiaries", name: "ps-beneficiaries", props: true, component: () => import(/* webpackChunkName: "beneficiaries" */ '../components/PSS/PsBeneficiaries/PsBeneficiaries.vue') },
+        { path: "stats", name: "ps-stats", props: true, component: () => import(/* webpackChunkName: "stats" */ '../components/PSS/Stats/Stats.vue') },
+
         { path: "pss-emergencies", name: "pssEmergencies", props: true, component: () => import(/* webpackChunkName: "pssEmergencies" */ '../components/PSS/PssEmergencies.vue') },
         { path: "pss-services", name: "pssServices", props: true, component: () => import(/* webpackChunkName: "pssServices" */ '../components/PSS/PssServices.vue') },
         { path: "pss-beneficiaries", name: "pssBeneficiaries", props: true, component: () => import(/* webpackChunkName: "pssBeneficiaries" */ '../components/PSS/PssBeneficiaries.vue') },

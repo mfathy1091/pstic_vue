@@ -59,6 +59,32 @@ class PsIntakeController extends Controller
         return response($data, 200);
     }
 
+    public function getCountsByStatuses(Request $request)
+    {
+        $queryNew = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
+        ->select('ps_intakes.*')
+        ->where('current_status_id', '1')
+        ->count();
+
+        $queryOngoing = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
+        ->select('ps_intakes.*')
+        ->where('current_status_id', '2')
+        ->count();
+
+        $queryClosed = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
+        ->select('ps_intakes.*')
+        ->where('current_status_id', '3')
+        ->count();
+
+        $data = [
+            'new' => $queryNew,
+            'ongoing' => $queryOngoing,
+            'closed' => $queryClosed,
+        ];
+
+        return response($data, 200);
+    }
+
     public function show($id)
     {
         $psIntake = PsIntake::with(
