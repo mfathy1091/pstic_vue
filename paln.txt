@@ -20,6 +20,195 @@ Activities
 - it has activity_date field - use it to filter without using records and referrals
 
 
+intakes
+===========
+select
+    pi.referral_date,
+    s.name
+from ps_intakes pi
+Join
+    statuses s on pi.current_status_id = s.id
+where
+    s.name = 'Ongoing' Or s.name = 'New'
+
+
+=================================
+Intake HISTORY
+=============
+
+select
+    pi.id as "intake id",
+    pi.referral_date,
+    rs.name as 'source',
+    pis.status_id,
+    s.name,
+    pis.start_date,
+    pis.end_date
+from ps_intakes pi
+Join
+    ps_intake_statuses pis on pi.id = pis.ps_intake_id
+Join
+    statuses s on pis.status_id = s.id
+Join
+    referral_sources rs on pi.referral_source_id = rs.id
+Where 
+    start_date <= '2022-03-30'
+    And end_date >= '2022-03-1'
+    And (s.name = 'Ongoing' Or s.name = 'New')
+
+
+===========================
+
+
+
+
+
+=====================
+STATUS
+============
+select
+    n.name,
+    sum (case when b.age > 0 and b.age <= 5 and b.gender_id = '1' then 1 else 0 end) as "age_0_5_m",
+        sum (case when b.age > 0 and b.age <= 5 and b.gender_id = '2' then 1 else 0 end) as age_0_5_f,
+        sum (case when b.age >= 6 and b.age <= 9 and b.gender_id = '1' then 1 else 0 end) as age_6_9_m, 
+        sum (case when b.age >= 6 and b.age <= 9 and b.gender_id = '2' then 1 else 0 end) as age_6_9_f,
+        sum (case when b.age >= 10 and b.age <= 14 and b.gender_id = '1' then 1 else 0 end) as age_10_14_m, 
+        sum (case when b.age >= 10 and b.age <= 14 and b.gender_id = '2' then 1 else 0 end) as age_10_14_f,
+        sum (case when b.age >= 15 and b.age <= 17 and b.gender_id = '1' then 1 else 0 end) as age_15_17_m, 
+        sum (case when b.age >= 15 and b.age <= 17 and b.gender_id = '2' then 1 else 0 end) as age_15_17_f,
+        sum (case when b.age >= 18 and b.age <= 24 and b.gender_id = '1' then 1 else 0 end) as age_18_24_m, 
+        sum (case when b.age >= 18 and b.age <= 24 and b.gender_id = '2' then 1 else 0 end) as age_18_24_f,
+        sum (case when b.age >= 25 and b.age <= 49 and b.gender_id = '1' then 1 else 0 end) as age_25_49_m, 
+        sum (case when b.age >= 25 and b.age <= 49 and b.gender_id = '2' then 1 else 0 end) as age_25_49_f,
+        sum (case when b.age >= 50 and b.age <= 59 and b.gender_id = '1' then 1 else 0 end) as age_50_59_m, 
+        sum (case when b.age >= 50 and b.age <= 59 and b.gender_id = '2' then 1 else 0 end) as age_50_59_f,
+        sum (case when b.age >= 60 and b.gender_id = '1' then 1 else 0 end) as age_gt_60_m, 
+        sum (case when b.age >= 60 and b.gender_id = '2' then 1 else 0 end) as age_gt_60_f,
+        count(b.id) as total
+from beneficiaries b
+join ps_intake_beneficiaries ib
+    on b.id = ib.beneficiary_id
+join ps_intakes i
+    on ib.ps_intake_id = i.id
+join nationalities n
+    on b.nationality_id = n.id
+Group by nationality_id
+
+==============================
+
+
+
+SERVICES CLIENTS
+================
+select
+    n.name as "nationality",    
+    b.name,
+    pib.is_direct as 'is direct',
+    b.age,
+    pi.id as "intake id",
+    pi.referral_date as "referral date",
+    s.name as "status",
+    sum(case when services.service_type_id = 1 then 1 else 0 end) as "PSS",
+    sum(case when services.service_type_id = 2 then 1 else 0 end) as "Info Sharing",
+    sum(case when services.service_type_id = 3 then 1 else 0 end) as "Basic Needs",
+    sum(case when services.service_type_id = 4 then 1 else 0 end) as "Community Support",
+    sum(case when services.service_type_id = 5 then 1 else 0 end) as "Housing Advocacy",
+    users.first_name || " " || users.last_name as 'assigned worker'
+
+From beneficiaries b
+Join nationalities n
+    On b.nationality_id = n.id
+Join ps_intake_beneficiaries as pib 
+    On b.id = pib.beneficiary_id
+Join ps_intakes as pi 
+    on pib.ps_intake_id = pi.id
+Join statuses as s 
+    on pi.current_Status_id = s.id
+Left join services
+    on b.id = services.beneficiary_id
+    and pi.id = services.ps_intake_id
+    And services.service_date between '2022-0-01' and '2022-04-30'
+Left join service_types 
+    on services.service_type_id = service_types.id
+Join users
+    on pi.current_assigned_psw_id = users.id
+Where
+    s.name in ('New', 'Ongoing')
+    And pib.is_direct in (1, 0)
+    And pi.current_assigned_psw_id  in (1,2,3)
+group by
+    pib.id
+
+
+==========================
+
+
+SERVICES CLIENTS HISTORY
+==================
+
+select
+    n.name as "nationality",    
+    b.name,
+    pib.is_direct as 'is direct',
+    b.age,
+    pi.id as "intake id",
+    pi.referral_date as "referral date",
+    statuses.name as "status",
+    sum(case when services.service_type_id = 1 then 1 else 0 end) as "PSS",
+    sum(case when services.service_type_id = 2 then 1 else 0 end) as "Info Sharing",
+    sum(case when services.service_type_id = 3 then 1 else 0 end) as "Basic Needs",
+    sum(case when services.service_type_id = 4 then 1 else 0 end) as "Community Support",
+    sum(case when services.service_type_id = 5 then 1 else 0 end) as "Housing Advocacy",
+    users.last_name as 'assigned worker'
+
+From beneficiaries b
+
+Join nationalities n
+    On b.nationality_id = n.id
+    
+Join ps_intake_beneficiaries as pib 
+    On b.id = pib.beneficiary_id
+    
+Join ps_intakes as pi 
+    on pib.ps_intake_id = pi.id
+    
+Join ps_intake_statuses as pis
+    On pi.id = pis.ps_intake_id
+    
+Join statuses as statuses 
+    on pis.status_id = statuses.id
+
+Left join services
+    on b.id = services.beneficiary_id
+    and pi.id = services.ps_intake_id
+    And services.service_date between '2022-0-01' and '2022-04-30'
+Left join service_types 
+    on services.service_type_id = service_types.id
+    
+Join users
+    on pi.current_assigned_psw_id = users.id
+    
+Where
+    start_date <= '2022-02-30'
+    And end_date >= '2022-02-1'
+    And statuses.name in ('New', 'Ongoing')
+    And pib.is_direct in (1, 0)
+    And pi.current_assigned_psw_id  in (1,2,3)
+
+    
+group by
+    pib.id
+
+
+
+
+
+===========================
+
+
+
+
+
 
 
 ----
