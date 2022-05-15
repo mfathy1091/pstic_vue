@@ -83,7 +83,7 @@ class UserSeeder extends Seeder
             User::create($n);
         }
 
-        $ahmedAlrajeh = User::where('name', 'Ahmed Alrajeh')->first();
+        $ahmedAlrajeh = User::where('last_name', 'Alrajeh')->first();
 
 
 

@@ -25,7 +25,7 @@ class CreatebeneficiariesTable extends Migration
             $table->unsignedInteger('is_active')->default(1);
 
             $table->boolean('is_registered')->nullable();
-            $table->unsignedbigInteger('file_individual_number')->nullable();
+            $table->string('file_individual_number')->nullable();
             $table->unsignedbigInteger('relationship_id')->nullable();
             $table->timestamps();
 

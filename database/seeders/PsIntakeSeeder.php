@@ -21,31 +21,31 @@ class PsIntakeSeeder extends Seeder
         // PS Intakes
         $psIntakes = [
             [    
-                'referral_date' => '2022-02-01',
+                'referral_date' => '2022-03-01',
                 'current_status_id' => 2,
                 'referral_source_id' => '1',
                 'current_assigned_psw_id' => '1',
             ],
             [    
-                'referral_date' => '2022-03-01',
+                'referral_date' => '2022-04-01',
                 'current_status_id' => 2,
                 'referral_source_id' => '2',
                 'current_assigned_psw_id' => '2',
             ],
             [
-                'referral_date' => '2022-03-02',
+                'referral_date' => '2022-04-02',
                 'current_status_id' => 2,
                 'referral_source_id' => '3',
                 'current_assigned_psw_id' => '3',
             ],
             [
-                'referral_date' => '2022-04-01',
+                'referral_date' => '2022-05-01',
                 'current_status_id' => 1,
                 'referral_source_id' => '2',
                 'current_assigned_psw_id' => '3',
             ],
             [
-                'referral_date' => '2022-04-02',
+                'referral_date' => '2022-05-02',
                 'current_status_id' => 1,
                 'referral_source_id' => '3',
                 'current_assigned_psw_id' => '3',
@@ -61,50 +61,47 @@ class PsIntakeSeeder extends Seeder
             [
                 'ps_intake_id' => '1',
                 'status_id' => '1',
-                'start_date' => '2022-02-01',
-                'end_date' => '2022-02-30',
+                'month' => '2022-03-01',
             ],
             [
                 'ps_intake_id' => '1',
                 'status_id' => '2',
-                'start_date' => '2022-03-01',
-                'end_date' => '2022-04-30',
+                'month' => '2022-04-01',
+            ],
+            [
+                'ps_intake_id' => '1',
+                'status_id' => '2',
+                'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '2',
                 'status_id' => '1',
-                'start_date' => '2022-03-01',
-                'end_date' => '2022-03-30',
+                'month' => '2022-04-01',
             ],
             [
                 'ps_intake_id' => '2',
                 'status_id' => '2',
-                'start_date' => '2022-04-01',
-                'end_date' => '2022-04-30',
+                'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '3',
                 'status_id' => '1',
-                'start_date' => '2022-03-01',
-                'end_date' => '2022-03-30',
+                'month' => '2022-04-01',
             ],
             [
                 'ps_intake_id' => '3',
                 'status_id' => '2',
-                'start_date' => '2022-04-01',
-                'end_date' => '2022-04-30',
+                'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '4',
                 'status_id' => '1',
-                'start_date' => '2022-04-01',
-                'end_date' => '2022-04-30',
+                'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '5',
                 'status_id' => '1',
-                'start_date' => '2022-04-01',
-                'end_date' => '2022-04-30',
+                'month' => '2022-05-01',
             ],
 
         ];

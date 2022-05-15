@@ -59,7 +59,7 @@ class PsIntakeController extends Controller
         return response($data, 200);
     }
 
-    public function getCountsByStatuses(Request $request)
+    public function getCurrentCountsByStatuses(Request $request)
     {
         $queryNew = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
         ->select('ps_intakes.*')
@@ -80,6 +80,46 @@ class PsIntakeController extends Controller
             'new' => $queryNew,
             'ongoing' => $queryOngoing,
             'closed' => $queryClosed,
+        ];
+
+        return response($data, 200);
+    }
+    public function getMonthlyCountsByStatuses(Request $request)
+    {
+        $query = DB::table('ps_intakes')
+            ->select(
+                DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
+                'statuses.name as status',
+                DB::raw("count(statuses.name) as count")
+            )
+        ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
+        ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id')
+        ->where('ps_intake_statuses.month', '>=', '2022-01-01')
+        ->where('ps_intake_statuses.month', '<=', '2022-12-31')
+        ->groupBy('ps_intake_statuses.month', 'statuses.name');        
+
+        $result = $query->get();
+
+        $monthlyCounts = $result->mapToGroups(function($item, $key){
+            return [$item->status => [$item->month => $item->count]];
+            
+        });
+
+        $newData = [
+            'name' => 'New',
+            'data' => $monthlyCounts['New']->collapse()
+        ];
+
+        $ongoingData = [
+            'name' => 'Ongoing',
+            'data' => $monthlyCounts['Ongoing']->collapse()
+        ];
+
+
+
+        $data = [
+            $newData,
+            $ongoingData,
         ];
 
         return response($data, 200);
@@ -127,9 +167,7 @@ class PsIntakeController extends Controller
     {
 
         /* validate if referradate is in future (reject it - it must be today or older) */
-        $this->validate(
-            $request,
-            [
+        $this->validate($request, [
             'referral_source_id' => 'required',
             'referral_date' => 'required',
             'referring_person_name' => 'required',
@@ -155,7 +193,7 @@ class PsIntakeController extends Controller
             'casee_id' => $request->casee_id,
         ]);
 
-
+        // Sync beneficiaries
         $ps_intake_beneficiaries = collect($request->ps_intake_beneficiaries);
         
         $ps_intake_beneficiaries = $ps_intake_beneficiaries->mapWithKeys(function($item, $key){
@@ -167,6 +205,31 @@ class PsIntakeController extends Controller
         });
 
         $psIntake->beneficiaries()->sync($ps_intake_beneficiaries);
+
+        // sync statuses
+        $referralMonth = date("Y-m", strtotime($request->referral_date));
+        $currentMonth = date("Y-m");
+
+        $period = \Carbon\CarbonPeriod::create($referralMonth, '1 month', $currentMonth);
+
+        $months = collect($period)->map(function($dt){
+            return $dt->format("Y-m");
+        });
+
+        
+        $n = 0;
+        $ps_intake_statuses = $months->mapWithKeys(function($month, $key){
+
+            // return ['New' => ['month' => $month]];
+            return [$key => ['month' => $month]];
+            
+        });
+        
+        dd($ps_intake_statuses);
+
+
+
+
 
         $data = [
             'psIntake' => $psIntake,

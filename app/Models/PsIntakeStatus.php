@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PsIntakeStatus extends Model
 {
     use HasFactory;
+
+    public $timestamps = FALSE;
 }
