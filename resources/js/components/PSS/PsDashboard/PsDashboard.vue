@@ -5,7 +5,7 @@
                 <div class="row mt-3 table-responsive m-0">
                     <div class="card-body bg-white">
                         <h5>History</h5>
-                            <column-chart :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="chartData" />
+                            <column-chart :colors="['#6cb2eb', '#ffed4a']" :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="chartData" />
                     </div>
                 </div>
             </div>

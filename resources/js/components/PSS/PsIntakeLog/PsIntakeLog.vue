@@ -52,12 +52,20 @@
 					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
 
-                <select v-model="filter.status_id" @change="getPsIntakes" class="custom-select m-1" id="inlineFormCustomSelectPref">
-                    <option value='1+2'>New + Ongoing</option>
-                    <option value='1'>New</option>
-                    <option value='2'>Ongoing</option>
-                    <option value='3'>Inactive</option>
-                    <option value='4'>Closed</option>
+                <select v-model="filter.month" @change="getPsIntakes" class="custom-select m-1">
+                    <option value='2022-01-01'>January 2022</option>
+                    <option value='2022-02-01'>February 2022</option>
+                    <option value='2022-03-01'>March 2022</option>
+                    <option value='2022-04-01'>April 2022</option>
+                    <option value='2022-05-01'>May 2022</option>
+                    <option value='2022-06-01'>June 2022</option>
+                </select>
+                <select v-model="filter.status_id" @change="getPsIntakes" class="custom-select m-1">
+                    <option value='New + Ongoing'>New + Ongoing</option>
+                    <option value='New'>New</option>
+                    <option value='Ongoing'>Ongoing</option>
+                    <option value='Inactive'>Inactive</option>
+                    <option value='Closed'>Closed</option>
                 </select>
                 
             </div>
@@ -67,9 +75,9 @@
             <div class="form-inline mr-2 ml-2 mt-3">
                 New Intakes: {{ PsIntakesCountsByStatuses.new }}
                 <br>
-                New Intakes: {{ PsIntakesCountsByStatuses.ongoing }}
+                Ongoing Intakes: {{ PsIntakesCountsByStatuses.ongoing }}
                 <br>
-                New Intakes: {{ PsIntakesCountsByStatuses.closed }}
+                Inactive Intakes: {{ PsIntakesCountsByStatuses.closed }}
             </div>
 
             <div class="card-header bg-white">
@@ -79,17 +87,26 @@
                     <table v-show="psIntakes.length" class="border table table-hover table-sm">
                         <thead>
                             <tr>
+                                <th>Month</th>
+                                <th>Status</th>
+                                <th>Referral Date</th>
                                 <th>Case Number</th>
                                 <th>Beneficiaries</th>
                                 <th>Source</th>
-                                <th>Referral Date</th>
-                                <th>Status</th>
                                 <th>Assigned Worker</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody v-if="psIntakes">
                             <tr v-for="psIntake in this.psIntakes" :key="psIntake.id">
+                                <td>{{ psIntake.month }}</td>
+                                <td>
+                                    <span v-show="psIntake.status == 'New'" class="badge badge-pill badge-info">New</span>
+                                    <span v-show="psIntake.status == 'Ongoing'" class="badge badge-pill badge-warning">Ongoing</span>
+                                    <span v-show="psIntake.status == 'Closed'" class="badge badge-pill badge-dark">Closed</span>
+                                    <span v-show="psIntake.status == 'Inactive'" class="badge badge-pill badge-secondary">Inactive</span>
+                                </td>
+                                <td>{{ psIntake.referral_date | myDateShort }}</td>
                                 <td>{{ psIntakes.file_number }}</td>
                                 <td>
                                     <div class="list-unstyled">
@@ -101,13 +118,6 @@
                                     </div>
                                 </td>
                                 <td>{{ psIntake.referral_source.name  }}</td>
-                                <td>{{ psIntake.referral_date | myDateShort }}</td>
-                                <td>
-                                    <span v-show="psIntake.current_status_id == '2'" class="badge badge-pill badge-warning">Ongoing</span>
-                                    <span v-show="psIntake.current_status_id == '1'" class="badge badge-pill badge-info">New</span>
-                                    <span v-show="psIntake.current_status_id == '3'" class="badge badge-pill badge-dark">Closed</span>
-                                    <span v-show="psIntake.current_status_id == '4'" class="badge badge-pill badge-secondary">Inactive</span>
-                                </td>
                                 <td>{{ psIntake.current_assigned_psw.full_name }}</td>
 
                                 <td>
@@ -165,7 +175,8 @@ export default {
             regex: '^',
             mask: 'XXX-XXCXXXXX',
             filter: {
-                status_id: '1+2',
+                month: '2022-05-01',
+                status_id: 'New + Ongoing',
                 user_id: 'current_user' 
             }
 
@@ -175,7 +186,7 @@ export default {
         getPsIntakes(){
 			this.$Progress.start();
             this.$store.state.main.showLoading = true;
-			axios.get('/api/ps-intakes', { params: { status_id: this.filter.status_id } })
+			axios.get('/api/ps-intakes', { params: { month: this.filter.month, status_id: this.filter.status_id } })
 			.then((response) => {
 				// success
 				this.psIntakes = response.data.data;
@@ -212,41 +223,17 @@ export default {
         },
 
 
-        filterByStatus(status_id){
-            this.filter.status_id = status_id;
-            this.getPsIntakes()
-        },
-
-        getCurrentMonth(){
-            this.$Progress.start();
-			axios.get('/api/months/current' )
-			.then((response) => {
-				this.currentMonth = response.data.data;
-                this.filter.month =response.data.data;
-				this.$Progress.finish();
-			})
-			.catch((e) => {
-				this.$Progress.fail();
-				console.log(e);
-			})
-        }
-
-
 	},
         watch: {
         currentUser (n, o) {
             // this.filter.user_id = _.cloneDeep(n).id;
         },
-        'filter.month_id'(next, prev) {
-            this.currentMonth = 1;
-        }
+
     },
 
 	created() {
         this.getUsers();
         this.getPsIntakes();
-		this.getMonths();
-        this.getCurrentMonth();
 
         Fire.$on('psIntakesChanged', () => {
             this.getPsIntakes();

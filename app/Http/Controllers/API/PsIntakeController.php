@@ -11,6 +11,7 @@ use App\Models\Month;
 use App\Models\PsIntake;
 use App\Models\Record;
 use App\Models\PsIntakeBeneficiary;
+use App\Models\PsIntakeStatus;
 use App\Models\Beneficiary;
 use App\Models\Reason;
 use App\Models\Casee;
@@ -22,18 +23,35 @@ class PsIntakeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
-        ->select('ps_intakes.*');
-        
-        if($request->status_id != ''){
-            if($request->status_id == '1+2'){
-                $query->where('current_status_id', '1')->OrWhere('current_status_id', '2');
-            }
-            else
-            {
-                $query->where('current_status_id', $request->status_id);
-            }
+    $query = PsIntake::select(
+            DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
+            'ps_intakes.referral_date',
+            'ps_intake_statuses.status_id',
+            'statuses.name as status',
+            'ps_intakes.id',
+            'ps_intakes.referral_source_id',
+            'ps_intakes.current_assigned_psw_id',
+
+            // 'referral_sources.name as "referral_source"'
+            // DB::raw("count(statuses.name) as count")
+        )
+        ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
+        ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id');
+        // ->join('referral_sources', 'ps_intakes.referral_source_id', 'referral_sources.id');
+
+        if($request->month != ''){
+            $query->where('ps_intake_statuses.month', '=', $request->month);
         }
+        
+        // if($request->status_id != ''){
+        //     if($request->status_id == 'New + Ongoing'){
+        //         $query->where('statuses.name', 'New')->OrWhere('statuses.name', 'Ongoing');
+        //     }
+        //     else
+        //     {
+        //         $query->where('statuses.name', $request->status);
+        //     }
+        // }
 
         $query->with(
             //'referral.casee',
@@ -169,7 +187,7 @@ class PsIntakeController extends Controller
         /* validate if referradate is in future (reject it - it must be today or older) */
         $this->validate($request, [
             'referral_source_id' => 'required',
-            'referral_date' => 'required',
+            'referral_date' => 'required|date',
             'referring_person_name' => 'required',
             'referring_person_email' => 'required|email',
             'referral_narrative_reason' => 'required',
@@ -206,29 +224,30 @@ class PsIntakeController extends Controller
 
         $psIntake->beneficiaries()->sync($ps_intake_beneficiaries);
 
-        // sync statuses
+        // Add PsIntakeStatuses
         $referralMonth = date("Y-m", strtotime($request->referral_date));
-        $currentMonth = date("Y-m");
 
-        $period = \Carbon\CarbonPeriod::create($referralMonth, '1 month', $currentMonth);
+        $period = \Carbon\CarbonPeriod::create($referralMonth, '1 month', date("Y-m"));
 
         $months = collect($period)->map(function($dt){
-            return $dt->format("Y-m");
+            return $dt->format("Y-m-d");
         });
 
-        
-        $n = 0;
-        $ps_intake_statuses = $months->mapWithKeys(function($month, $key){
-
-            // return ['New' => ['month' => $month]];
-            return [$key => ['month' => $month]];
-            
-        });
-        
-        dd($ps_intake_statuses);
-
-
-
+        $i = 0;
+        foreach($months as $month)
+        {
+            $i++;
+            if($i == 1){
+                $status_id = 1;
+            }else{
+                $status_id = 2;
+            }
+            PsIntakeStatus::create([
+                'month' => $month,
+                'ps_intake_id' => $psIntake->id,
+                'status_id' => '2',
+            ]);
+        }
 
 
         $data = [
