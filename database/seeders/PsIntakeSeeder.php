@@ -22,31 +22,26 @@ class PsIntakeSeeder extends Seeder
         $psIntakes = [
             [    
                 'referral_date' => '2022-03-01',
-                'current_status_id' => 2,
                 'referral_source_id' => '1',
                 'current_assigned_psw_id' => '1',
             ],
             [    
                 'referral_date' => '2022-04-01',
-                'current_status_id' => 2,
                 'referral_source_id' => '2',
                 'current_assigned_psw_id' => '2',
             ],
             [
                 'referral_date' => '2022-04-02',
-                'current_status_id' => 2,
                 'referral_source_id' => '3',
                 'current_assigned_psw_id' => '3',
             ],
             [
                 'referral_date' => '2022-05-01',
-                'current_status_id' => 1,
                 'referral_source_id' => '2',
                 'current_assigned_psw_id' => '3',
             ],
             [
                 'referral_date' => '2022-05-02',
-                'current_status_id' => 1,
                 'referral_source_id' => '3',
                 'current_assigned_psw_id' => '3',
             ],
@@ -61,46 +56,55 @@ class PsIntakeSeeder extends Seeder
             [
                 'ps_intake_id' => '1',
                 'status_id' => '1',
+                'is_new' => '1',
                 'month' => '2022-03-01',
             ],
             [
                 'ps_intake_id' => '1',
-                'status_id' => '2',
+                'status_id' => '1',
+                'is_new' => '0',
                 'month' => '2022-04-01',
             ],
             [
                 'ps_intake_id' => '1',
-                'status_id' => '2',
+                'status_id' => '1',
+                'is_new' => '0',
                 'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '2',
                 'status_id' => '1',
+                'is_new' => '1',
                 'month' => '2022-04-01',
             ],
             [
                 'ps_intake_id' => '2',
-                'status_id' => '2',
+                'status_id' => '1',
+                'is_new' => '0',
                 'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '3',
                 'status_id' => '1',
+                'is_new' => '1',
                 'month' => '2022-04-01',
             ],
             [
                 'ps_intake_id' => '3',
-                'status_id' => '2',
+                'status_id' => '1',
+                'is_new' => '0',
                 'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '4',
                 'status_id' => '1',
+                'is_new' => '1',
                 'month' => '2022-05-01',
             ],
             [
                 'ps_intake_id' => '5',
                 'status_id' => '1',
+                'is_new' => '1',
                 'month' => '2022-05-01',
             ],
 

@@ -28,13 +28,6 @@
                     </li>
                     <li class="nav-item">
                         <router-link
-                            :to="{ name: 'psIntakeLogHistory' }"
-                            class="nav-link tab-header" active-class="active">   
-                            Intake Log History
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link
                             :to="{ name: 'ps-beneficiaries' }"
                             class="nav-link tab-header" active-class="active">   
                             Beneficiaries

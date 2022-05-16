@@ -1,41 +1,53 @@
-<style scoped>
-
-.tab-header.active{
-    border-color: #2196F3 !important;
-    border-bottom-style: solid;
-    font-weight: bold;
-    color: #2196F3 !important;
-    /* background-color: #f7f7f7 !important; */
-}
-.cases-active.active{
-    border-color: #38c172 !important;
-    border-bottom-style: solid;
-    font-weight: bold;
-    color: #38c172 !important;
-}
-.cases-inactive.active{
-    border-color: #e3342f !important;
-    border-bottom-style: solid;
-    font-weight: bold;
-    color: #e3342f !important;
-}
-.cases-closed.active{
-    border-color: #000000 !important;
-    border-bottom-style: solid;
-    font-weight: bold;
-    color: #000000 !important;
-}
-
-.tab-header{
-    color: #000000 !important;
-}
-</style>
-
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <template>
 	<div class="p-0">
         <div class="card-body">
+            
+            <div class="row">
+                <div class="card text-center col bg-white m-1 p-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <span class="card-text">Active</span>
+                                <br>
+                                <span class="info-box-number font-weight-bold">{{ statusesCounts.countActive }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="badge badge-pill badge-info">New</span>
+                                <br>
+                                <span class="info-box-number font-weight-bold">{{ statusesCounts.countNew }}</span>
+                            </div>
+                            <div class="border-right"></div>
+                            <div class="col">
+                                <span class="badge badge-pill badge-warning">Ongoing</span>
+                                <br>
+                                <span class="info-box-number font-weight-bold">{{ statusesCounts.countOngoing }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card text-center col bg-secondary m-1 p-0">
+                    <div class="card-body">
+                        <span class="card-text">Inactive</span>
+                        <br>
+                        <span class="info-box-number font-weight-bold">{{ statusesCounts.countInactive }}</span>
+                    </div>
+                </div>
+
+                <div class="card text-center col bg-dark m-1 p-0">
+                    <div class="card-body">
+                        <span class="card-text">Closed</span>
+                        <br>
+                        <span class="info-box-number font-weight-bold">{{ statusesCounts.countClosed }}</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-inline mr-2 ml-2 mt-3">
                 
                 <router-link class="btn btn-success btn-sm mr-2"
@@ -47,12 +59,7 @@
 					<i class="fas fa-sync-alt"></i>
 				</button>
 
-                <select v-model="filter.user_id" @change="getPsIntakes" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value='-1' disabled>Worker...</option>
-					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
-                </select>
-
-                <select v-model="filter.month" @change="getPsIntakes" class="custom-select m-1">
+                <select v-model="psIntakesFilter.month" @change="getPsIntakes" class="custom-select m-1">
                     <option value='2022-01-01'>January 2022</option>
                     <option value='2022-02-01'>February 2022</option>
                     <option value='2022-03-01'>March 2022</option>
@@ -60,25 +67,45 @@
                     <option value='2022-05-01'>May 2022</option>
                     <option value='2022-06-01'>June 2022</option>
                 </select>
-                <select v-model="filter.status_id" @change="getPsIntakes" class="custom-select m-1">
-                    <option value='New + Ongoing'>New + Ongoing</option>
-                    <option value='New'>New</option>
-                    <option value='Ongoing'>Ongoing</option>
+
+                <select v-model="psIntakesFilter.status" @change="getPsIntakes" class="custom-select m-1">
+                    <option value='All'>All</option>
+                    <option value='Active'>Active</option>
                     <option value='Inactive'>Inactive</option>
                     <option value='Closed'>Closed</option>
                 </select>
-                
+
+                <select v-model="psIntakesFilter.is_new" @change="getPsIntakes" class="custom-select m-1">
+                    <option value='All'>All</option>
+                    <option value='1'>New</option>
+                    <option value='0'>Ongoing</option>
+                </select>
+
+                <br>
+
+                <multiselect 
+                    v-model="psIntakesFilter.users" 
+                    :options="users" 
+                    :multiple="true" 
+                    :close-on-select="true" 
+                    :clear-on-select="true" 
+                    :preserve-search="false" 
+                    placeholder="Pick some" 
+                    label="full_name" 
+                    track-by="full_name" 
+                    :preselect-first="true">
+                    <!-- <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template> -->
+                </multiselect>
+                <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+
+                <select v-model="psIntakesFilter.user_id" @change="getPsIntakes" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+					<option value='-1' disabled>PS Worker...</option>
+					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
+                </select>
+
             </div>
             
             <br>
-
-            <div class="form-inline mr-2 ml-2 mt-3">
-                New Intakes: {{ PsIntakesCountsByStatuses.new }}
-                <br>
-                Ongoing Intakes: {{ PsIntakesCountsByStatuses.ongoing }}
-                <br>
-                Inactive Intakes: {{ PsIntakesCountsByStatuses.closed }}
-            </div>
 
             <div class="card-header bg-white">
                 <div class="row mt-3 table-responsive m-0">
@@ -101,10 +128,11 @@
                             <tr v-for="psIntake in this.psIntakes" :key="psIntake.id">
                                 <td>{{ psIntake.month }}</td>
                                 <td>
-                                    <span v-show="psIntake.status == 'New'" class="badge badge-pill badge-info">New</span>
-                                    <span v-show="psIntake.status == 'Ongoing'" class="badge badge-pill badge-warning">Ongoing</span>
                                     <span v-show="psIntake.status == 'Closed'" class="badge badge-pill badge-dark">Closed</span>
-                                    <span v-show="psIntake.status == 'Inactive'" class="badge badge-pill badge-secondary">Inactive</span>
+                                    <span v-show="psIntake.status == 'Active'&& psIntake.is_new == '0'" class="badge badge-pill badge-success">Active</span>
+                                    <span v-show="psIntake.status == 'Active' && psIntake.is_new == '1'" class="badge badge-pill badge-success">Active: NEW</span>
+                                    <span v-show="psIntake.status == 'Inactive'&& psIntake.is_new == '0'" class="badge badge-pill badge-secondary">Inactive</span>
+                                    <span v-show="psIntake.status == 'Inactive' && psIntake.is_new == '1'" class="badge badge-pill badge-secondary">Inactive: NEW</span>
                                 </td>
                                 <td>{{ psIntake.referral_date | myDateShort }}</td>
                                 <td>{{ psIntakes.file_number }}</td>
@@ -144,6 +172,7 @@ import Form from 'vform'
 import Multiselect from 'vue-multiselect'
 import router from '../../../router'
 import axiosMixin from '../../../mixins/axiosMixin'
+import moment from 'moment'
 
 export default {
 	components: { 
@@ -156,29 +185,20 @@ export default {
             psIntakeEditMode: false,
 			selectedPsIntake: {},
             users: [],
-            psIntakes: [],
-            PsIntakesCountsByStatuses: {
-                new: '1',
-                ongoing: '2',
-                closed: '3',
-            },
-            loading:true,
-            currentMonth: '',
-            statusesCount: '',
             months: [],
-            searchText: '',
-            activeCount: '',
-            searchForm: {
-                fileNumber: '',
+
+            psIntakes: [],
+            statusesCounts: {},
+            psIntakesFilter: {
+                month: moment().startOf('month').format('YYYY-MM-DD'),
+                status: 'All',
+                is_new: 'All',
+                user_id: 'All' 
             },
-            format: '',
-            regex: '^',
-            mask: 'XXX-XXCXXXXX',
-            filter: {
-                month: '2022-05-01',
-                status_id: 'New + Ongoing',
-                user_id: 'current_user' 
-            }
+
+            loading:true,
+            
+
 
 		}
 	},
@@ -186,11 +206,11 @@ export default {
         getPsIntakes(){
 			this.$Progress.start();
             this.$store.state.main.showLoading = true;
-			axios.get('/api/ps-intakes', { params: { month: this.filter.month, status_id: this.filter.status_id } })
+			axios.get('/api/ps-intakes', { params: this.psIntakesFilter })
 			.then((response) => {
 				// success
-				this.psIntakes = response.data.data;
-                // this.statusesCount = response.data.statusesCount;
+				this.psIntakes = response.data.psIntakes;
+                this.statusesCounts = response.data.statusesCounts;
 				this.$Progress.finish();
                 this.$store.state.main.showLoading = false;
 			})
@@ -202,32 +222,15 @@ export default {
 			})
 		},
 
-        getPsIntakesCountsByStatuses()
-        {
-            this.$Progress.start();
-            this.$store.state.main.showLoading = true;
-			axios.get('/api/ps-intakes/countsByStatuses')
-			.then((response) => {
-				// success
-				this.PsIntakesCountsByStatuses = response.data.data;
-                // this.statusesCount = response.data.statusesCount;
-				this.$Progress.finish();
-                this.$store.state.main.showLoading = false;
-			})
-			.catch((e) => {
-				// error
-				this.$Progress.fail();
-                this.$store.state.main.showLoading = false;
-				console.log(e);
-			})
-        },
-
 
 	},
         watch: {
         currentUser (n, o) {
-            // this.filter.user_id = _.cloneDeep(n).id;
+            // this.psIntakesFilter.user_id = _.cloneDeep(n).id;
         },
+
+    },
+    mounted() {
 
     },
 

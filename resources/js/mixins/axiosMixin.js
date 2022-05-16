@@ -241,9 +241,9 @@ export default {
 			})
 		},
 
-		getUsers(){
+		getUsers(filter){
 			this.$Progress.start();
-			axios.get('/api/users/', { params: { name: this.filter.name, role_id: this.filter.role_id, is_active: this.filter.is_active, budget_id: this.filter.budget_id } } )
+			axios.get('/api/users/', { params: filter } )
 			.then((response) => {
 				this.users = response.data.data.data;
 				this.$Progress.finish();

@@ -17,6 +17,7 @@ class CreatePsIntakeStatusesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('ps_intake_id');
             $table->unsignedBigInteger('status_id');
+            $table->boolean('is_new');
             $table->date('month')->nullable();
 
             $table->foreign('ps_intake_id')->references('id')->on('ps_intakes')->onDelete('cascade');

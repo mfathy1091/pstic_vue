@@ -18,19 +18,15 @@ class StatusSeeder extends Seeder
         // DB::table('statuses')->delete();
         $statuses = [
             [
-                'name' => 'New',
-                'type' => 'PS Intake',
-            ],
-            [
-                'name' => 'Ongoing',
-                'type' => 'PS Intake',
-            ],
-            [
-                'name' => 'Closed',
+                'name' => 'Active',
                 'type' => 'PS Intake',
             ],
             [
                 'name' => 'Inactive',
+                'type' => 'PS Intake',
+            ],
+            [
+                'name' => 'Closed',
                 'type' => 'PS Intake',
             ],
 

@@ -26,6 +26,7 @@ class PsIntakeController extends Controller
     $query = PsIntake::select(
             DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
             'ps_intakes.referral_date',
+            'ps_intake_statuses.is_new',
             'ps_intake_statuses.status_id',
             'statuses.name as status',
             'ps_intakes.id',
@@ -39,39 +40,41 @@ class PsIntakeController extends Controller
         ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id');
         // ->join('referral_sources', 'ps_intakes.referral_source_id', 'referral_sources.id');
 
+        if($request->user_id != 'All'){
+            $query->where('ps_intakes.current_assigned_psw_id', '=', $request->user_id);
+        }
+
         if($request->month != ''){
             $query->where('ps_intake_statuses.month', '=', $request->month);
         }
+
+        $statusesCounts = [
+            'countActive' => $query->clone()->where('statuses.name', '=', 'Active')->count(),
+            'countClosed' => $query->clone()->where('statuses.name', '=', 'Closed')->count(),
+            'countInactive' => $query->clone()->where('statuses.name', '=', 'Inactive')->count(),
+        ];
         
-        // if($request->status_id != ''){
-        //     if($request->status_id == 'New + Ongoing'){
-        //         $query->where('statuses.name', 'New')->OrWhere('statuses.name', 'Ongoing');
-        //     }
-        //     else
-        //     {
-        //         $query->where('statuses.name', $request->status);
-        //     }
-        // }
+        if($request->status != 'All'){
+            $query->where('statuses.name', $request->status);
+        }
+
+        if($request->is_new != 'All'){
+            $query->where('is_new', $request->is_new);
+        }
 
         $query->with(
             //'referral.casee',
-            // 'referral.beneficiaries',
-            // 'referral.emergencies',
-            // 'activities.providedServices.serviceType',
             'referralSource',
             'current_assigned_psw',
             'psIntakeBeneficiaries',
             'beneficiaries'
             // 'directReferralBeneficiaries',
             // 'inDirectReferralBeneficiaries',
-            // 'records', 
-            // 'records.month', 
-            // 'records.status',
-            // 'currentRecord.status' 
         );
 
         $data = [
-            'data' => $query->get(),
+            'psIntakes' => $query->get(),
+            'statusesCounts' => $statusesCounts,
         ];
 
         return response($data, 200);
