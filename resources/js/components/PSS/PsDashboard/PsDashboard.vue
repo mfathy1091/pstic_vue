@@ -5,10 +5,10 @@
                 <div class="row mt-3 table-responsive m-0">
                     <div class="card-body bg-white">
                         <h5>History</h5>
-                            <column-chart :colors="['#6cb2eb', '#ffed4a']" :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="chartData" />
+                            <column-chart :colors="['#6cb2eb', '#ffed4a']" :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="activeChart" />
                             <br>
                             <h5>Commulative</h5>
-                            <column-chart :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="commulativeData" />
+                            <line-chart :messages="{empty: 'No data'}" max="20" :download="true" :legend="false" :stacked='true' :data="commulativeChart" />
                     </div>
                 </div>
             </div>
@@ -28,34 +28,20 @@ export default {
 
 	data() {
 		return {
-            chartData : [
-                // {name: 'New', data: {'Jan': 3, 'Feb': 4}},
-                // {name: 'Ongoing', data: {'Jan': 5, 'Feb': 3}},
+            activeChart : [
+                    {
+                        name: 'New',
+                        data: {} // {'Jan': 3, 'Feb': 4}
+                    },
+                    {
+                        name: 'Ongoing', 
+                        data: {}
+                    },
                 ],
-            commulativeData : {'Jan': 3, 'Feb': 4},
+            commulativeChart : {},
 		}
 	},
 	methods: {  
-
-        getPsIntakesCommulative()
-        {
-            this.$Progress.start();
-            this.$store.state.main.showLoading = true;
-			axios.get('/api/ps-intakes/commulative')
-			.then((response) => {
-				// success
-				//this.PsIntakesCountsByStatuses = response.data;
-                this.commulativeData = response.data.result2;
-				this.$Progress.finish();
-                this.$store.state.main.showLoading = false;
-			})
-			.catch((e) => {
-				// error
-				this.$Progress.fail();
-                this.$store.state.main.showLoading = false;
-				console.log(e);
-			})
-        },
 
         getPsIntakesMonthlyCountsByStatuses()
         {
@@ -64,8 +50,9 @@ export default {
 			axios.get('/api/ps-intakes/monthly-counts-by-statuses')
 			.then((response) => {
 				// success
-				//this.PsIntakesCountsByStatuses = response.data;
-                this.chartData = response.data;
+                this.activeChart[0].data = response.data.activeNewCounts;
+                this.activeChart[1].data = response.data.activOngoingCounts;
+                this.commulativeChart = response.data.commulativeCounts;
 				this.$Progress.finish();
                 this.$store.state.main.showLoading = false;
 			})
@@ -80,7 +67,6 @@ export default {
 
 	created() {
         this.getPsIntakesMonthlyCountsByStatuses();
-        this.getPsIntakesCommulative();
 	}
 }
 </script>

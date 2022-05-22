@@ -80,7 +80,9 @@ class PsIntakeController extends Controller
         return response($data, 200);
     }
 
-    public function commulative(Request $request){
+    public function getMonthlyCountsByStatuses(Request $request)
+    {
+        // (1) Create Months
         $startMonth = '2022-01-01';
         $endMonth = '2022-12-01';
 
@@ -94,149 +96,82 @@ class PsIntakeController extends Controller
             return $dt->format("F Y");
         })->toArray();
 
-        // dd($months2);
-
-        $secondMonth = $months[1];
-
+        // (2) create query
         $query = DB::table('ps_intakes')
-        ->select(
-            DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
-            'statuses.name as status',
-            // 'ps_intake_statuses.is_new',
-            DB::raw("count(statuses.name) as count")
-        )
-        ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
-        ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id');
-
-        $firstMonthResult = $query->clone()
-            ->where('ps_intake_statuses.month', '=', $months[0])
-            ->groupBy('ps_intake_statuses.month', 'statuses.name')
-            ->get();
-
-        // dd($firstMonthResult);
-
-        $restMonthsResult = $query->where('ps_intake_statuses.month', '>=', $secondMonth)
+            ->select(
+                DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
+                DB::raw("sum(case when ps_intake_statuses.is_new = 1 then 1 else 0 end) as activeNewCount"),
+                DB::raw("sum(case when ps_intake_statuses.is_new = 0 then 1 else 0 end) as activeOngoingCount"),
+                DB::raw("count(statuses.name) as activeCount"),
+            )
+            ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
+            ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id')
+            ->where('statuses.name', '=', 'Active')
+            ->where('ps_intake_statuses.month', '>=', $months[0])
             ->where('ps_intake_statuses.month', '<=', $months[array_key_last($months)])
-            ->where('ps_intake_statuses.is_new', '=', 1)
-            ->groupBy('ps_intake_statuses.month', 'statuses.name')
-            ->get();
+            ->groupBy('ps_intake_statuses.month')
+            ->orderBy('ps_intake_statuses.month');      
 
-        $result = $firstMonthResult->merge($restMonthsResult);
-        $countArray2 = [];
-        
+        $resultWithoutEmptyMonths = $query->get();
+        // dd($resultWithoutEmptyMonths);
+
+        // (3) Add empty months
+        $result = [];
         $i = 0;
         foreach($months2 as $month)
         {
-            if($result->where('month', $month)->first()){
-                $foundItem = $result->where('month', $month)->first();
-                $countArray2[$i]['month'] = $foundItem->month;
-                $countArray2[$i]['countNew'] = $foundItem->count;
+            if($resultWithoutEmptyMonths->where('month', $month)->first()){
+                $foundItem = $resultWithoutEmptyMonths->where('month', $month)->first();
+                $result[$i]['month'] = $foundItem->month;
+                $result[$i]['activeCount'] = $foundItem->activeCount;
+                $result[$i]['activeNewCount'] = $foundItem->activeNewCount;
+                $result[$i]['activeOngoingCount'] = $foundItem->activeOngoingCount;
             }
             else{
-                $countArray2[$i]['month'] = $month;
-                $countArray2[$i]['countNew'] = 0;
+                $result[$i]['month'] = $month;
+                $result[$i]['activeCount'] = "0";
+                $result[$i]['activeNewCount'] = "0";
+                $result[$i]['activeOngoingCount'] = "0";
             }
             $i++;
-            // if(!empty($result[$i]['month'])){
-
-            // }else{
-                // $countsArray[$month] = 0;
-            // }
         }
 
-        
-        dd($countArray2);
+        // dd($result);
 
-        $result2 = $result->mapWithKeys(function($item, $key){
-            return [$item->month => $item->count];
-        });
-        
-        // dd($result2['March 2022']);
-
-        $countsArray = [];
-
-        foreach($months2 as $month){
-            if(!empty($result2[$month])){
-                $countsArray[$month] = $result2[$month];
-            }else{
-                $countsArray[$month] = 0;
-            }
-        }
-
-        $commulativeArray = [];
-        for($i=0; $i <= count($countsArray); $i++){
-            $commulativeArray[$i] = $countsArray[$i];
-        }
-
-        dd($commulativeArray);
-
-    $data = [
-        'result2' => $countsArray,
-    ];
-
-    return response($data, 200);
-}
-
-    public function getMonthlyCountsByStatuses(Request $request)
-    {
-        $startMonth = '2022-01-01';
-        $endMonth = '2022-05-01';
-
-        $period = \Carbon\CarbonPeriod::create($startMonth, '1 month', $endMonth);
-
-
-        $months = collect($period)->map(function($dt){
-            return $dt->format("Y-m-d");
-        })->toArray();
-
-        $query = DB::table('ps_intakes')
-            ->select(
-                // DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
-                DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%Y-%m') as month"),
-                'statuses.name as status',
-                'ps_intake_statuses.is_new',
-                DB::raw("count(statuses.name) as count")
-            )
-        ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
-        ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id')
-        ->where('ps_intake_statuses.month', '>=', $months[0])
-        ->where('ps_intake_statuses.month', '<=', $months[array_key_last($months)])
-        ->groupBy('ps_intake_statuses.month', 'ps_intake_statuses.is_new', 'statuses.name')
-        ->orderBy('ps_intake_statuses.month');      
-
-        $result = $query->get();
-
-        $monthlyCounts = $result->mapToGroups(function($item, $key){
-            return [$item->is_new => [$item->month => $item->count]];
+        // (5) calculate New
+        // $activeNewCounts = $result->mapToGroups(function($item, $key){
+        //     return [$item->is_new => [$item->month => $item->count]];
             
-        });
-
-        $new = $monthlyCounts['1']->collapse();
-
-        // $new2 = $months->mapWithKeys(function($item, $key)  use($months){
-        //     if(in_array($item, $months)){
-        //         return true;
-        //     }else{
-        //         return false;
-        //     }
         // });
 
+        $activeNewCounts = collect($result)->mapWithKeys(function($item, $key){
+            return [$item['month'] => $item['activeNewCount']];
+        });
 
-        $newData = [
-            'name' => 'New',
-            'data' => $new,
-        ];
+        $activOngoingCounts = collect($result)->mapWithKeys(function($item, $key){
+            return [$item['month'] => $item['activeOngoingCount']];
+        });
 
-        $ongoingData = [
-            'name' => 'Ongoing',
-            'data' => $monthlyCounts['0']->collapse()
-        ];
-
+        $commulativeCount = 0;
+        $commulativeCounts = collect($result)->mapWithKeys(function($item, $key) use(&$commulativeCount, $months){        
+            if(date("Y-m", strtotime($item['month'])) == date('Y-m', strtotime($months[0]))){
+                $commulativeCount = $commulativeCount + $item['activeNewCount'] + $item['activeOngoingCount'];
+                return [$item['month'] => $commulativeCount];
+            }
+            elseif(date("Y-m", strtotime($item['month'])) <= date('Y-m')){
+                $commulativeCount = $commulativeCount + $item['activeNewCount'];
+                return [$item['month'] => $commulativeCount];
+            }
+            else{
+                return [$item['month'] => ''];
+            }
+        });
 
 
         $data = [
-            $newData,
-            $ongoingData,
+            'activeNewCounts' => $activeNewCounts,
+            'activOngoingCounts' => $activOngoingCounts,
+            'commulativeCounts' => $commulativeCounts,
         ];
 
         return response($data, 200);

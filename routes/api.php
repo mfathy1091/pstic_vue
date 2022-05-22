@@ -56,9 +56,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('casees/exists/{n}', 'API\CaseeController@exists');
     
     // PS Intakes
-    Route::get('ps-intakes/current-counts-by-statuses', 'API\PsIntakeController@getCurrentCountsByStatuses');
     Route::get('ps-intakes/monthly-counts-by-statuses', 'API\PsIntakeController@getMonthlyCountsByStatuses');
-    Route::get('ps-intakes/commulative', 'API\PsIntakeController@commulative');
     Route::get('ps-intakes', 'API\PsIntakeController@index');
     Route::post('ps-intakes', 'API\PsIntakeController@store');
     Route::get('ps-intakes/{id}', 'API\PsIntakeController@show')->where('id', '[0-9]+');
