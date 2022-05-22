@@ -83,8 +83,8 @@ class PsIntakeController extends Controller
     public function getMonthlyCountsByStatuses(Request $request)
     {
         // (1) Create Months
-        $startMonth = '2022-01-01';
-        $endMonth = '2022-12-01';
+        $startMonth = $request->startMonth;
+        $endMonth = $request->endMonth;
 
         $period = \Carbon\CarbonPeriod::create($startMonth, '1 month', $endMonth);
 
@@ -110,7 +110,10 @@ class PsIntakeController extends Controller
             ->where('ps_intake_statuses.month', '>=', $months[0])
             ->where('ps_intake_statuses.month', '<=', $months[array_key_last($months)])
             ->groupBy('ps_intake_statuses.month')
-            ->orderBy('ps_intake_statuses.month');      
+            ->orderBy('ps_intake_statuses.month');
+            if($request->budget_id != ''){
+                $query->where('ps_intake_statuses.budget_id', '=', $request->budget_id);
+            }    
 
         $resultWithoutEmptyMonths = $query->get();
         // dd($resultWithoutEmptyMonths);
@@ -200,12 +203,6 @@ class PsIntakeController extends Controller
         'activities.record.month',
         'activities.user',
         'activities.beneficiary',
-        // 'records', 
-        // 'records.month', 
-        // 'records.status', 
-        // 'records.recordBeneficiaries',
-        // 'records.recordBeneficiaries.individual',
-        // 'currentRecord.status' 
         )->findOrFail($id);
 
         if($psIntake){
@@ -265,6 +262,7 @@ class PsIntakeController extends Controller
             return $dt->format("Y-m-d");
         });
 
+        $budget_id = Auth::budget()->id;
         $i = 0;
         foreach($months as $month)
         {
@@ -279,6 +277,7 @@ class PsIntakeController extends Controller
                 'ps_intake_id' => $psIntake->id,
                 'status_id' => '1',
                 'is_new' => $is_new,
+                'budget_id'=> $budget_id,
             ]);
         }
 

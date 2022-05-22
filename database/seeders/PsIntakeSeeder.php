@@ -25,7 +25,7 @@ class PsIntakeSeeder extends Seeder
                 'referral_source_id' => '1',
                 'current_assigned_psw_id' => '1',
             ],
-            [    
+            [
                 'referral_date' => '2022-04-01',
                 'referral_source_id' => '2',
                 'current_assigned_psw_id' => '2',
@@ -58,54 +58,63 @@ class PsIntakeSeeder extends Seeder
                 'status_id' => '1',
                 'is_new' => '1',
                 'month' => '2022-03-01',
+                'budget_id' => '1'
             ],
             [
                 'ps_intake_id' => '1',
                 'status_id' => '1',
                 'is_new' => '0',
                 'month' => '2022-04-01',
+                'budget_id' => '1'
             ],
             [
                 'ps_intake_id' => '1',
                 'status_id' => '1',
                 'is_new' => '0',
                 'month' => '2022-05-01',
+                'budget_id' => '1'
             ],
             [
                 'ps_intake_id' => '2',
                 'status_id' => '1',
                 'is_new' => '1',
                 'month' => '2022-04-01',
+                'budget_id' => '3'
             ],
             [
                 'ps_intake_id' => '2',
                 'status_id' => '1',
                 'is_new' => '0',
                 'month' => '2022-05-01',
+                'budget_id' => '3'
             ],
             [
                 'ps_intake_id' => '3',
                 'status_id' => '1',
                 'is_new' => '1',
                 'month' => '2022-04-01',
+                'budget_id' => '3'
             ],
             [
                 'ps_intake_id' => '3',
                 'status_id' => '1',
                 'is_new' => '0',
                 'month' => '2022-05-01',
+                'budget_id' => '3'
             ],
             [
                 'ps_intake_id' => '4',
                 'status_id' => '1',
                 'is_new' => '1',
                 'month' => '2022-05-01',
+                'budget_id' => '1'
             ],
             [
                 'ps_intake_id' => '5',
                 'status_id' => '1',
                 'is_new' => '1',
                 'month' => '2022-05-01',
+                'budget_id' => '1'
             ],
 
         ];
