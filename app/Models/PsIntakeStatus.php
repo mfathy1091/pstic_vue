@@ -12,6 +12,7 @@ class PsIntakeStatus extends Model
         'ps_intake_id',
         'status_id',
         'month',
+        'is_new'
     ];
 
     public $timestamps = FALSE;

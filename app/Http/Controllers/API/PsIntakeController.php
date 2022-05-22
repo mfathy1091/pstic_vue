@@ -80,60 +80,156 @@ class PsIntakeController extends Controller
         return response($data, 200);
     }
 
-    public function getCurrentCountsByStatuses(Request $request)
-    {
-        $queryNew = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
-        ->select('ps_intakes.*')
-        ->where('current_status_id', '1')
-        ->count();
+    public function commulative(Request $request){
+        $startMonth = '2022-01-01';
+        $endMonth = '2022-12-01';
 
-        $queryOngoing = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
-        ->select('ps_intakes.*')
-        ->where('current_status_id', '2')
-        ->count();
+        $period = \Carbon\CarbonPeriod::create($startMonth, '1 month', $endMonth);
 
-        $queryClosed = PsIntake::join('statuses', 'ps_intakes.current_status_id', 'statuses.id')
-        ->select('ps_intakes.*')
-        ->where('current_status_id', '3')
-        ->count();
+        $months = collect($period)->map(function($dt){
+            return $dt->format("Y-m-d");
+        })->toArray();
 
-        $data = [
-            'new' => $queryNew,
-            'ongoing' => $queryOngoing,
-            'closed' => $queryClosed,
-        ];
+        $months2 = collect($period)->map(function($dt){
+            return $dt->format("F Y");
+        })->toArray();
 
-        return response($data, 200);
-    }
+        // dd($months2);
+
+        $secondMonth = $months[1];
+
+        $query = DB::table('ps_intakes')
+        ->select(
+            DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
+            'statuses.name as status',
+            // 'ps_intake_statuses.is_new',
+            DB::raw("count(statuses.name) as count")
+        )
+        ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
+        ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id');
+
+        $firstMonthResult = $query->clone()
+            ->where('ps_intake_statuses.month', '=', $months[0])
+            ->groupBy('ps_intake_statuses.month', 'statuses.name')
+            ->get();
+
+        // dd($firstMonthResult);
+
+        $restMonthsResult = $query->where('ps_intake_statuses.month', '>=', $secondMonth)
+            ->where('ps_intake_statuses.month', '<=', $months[array_key_last($months)])
+            ->where('ps_intake_statuses.is_new', '=', 1)
+            ->groupBy('ps_intake_statuses.month', 'statuses.name')
+            ->get();
+
+        $result = $firstMonthResult->merge($restMonthsResult);
+        $countArray2 = [];
+        
+        $i = 0;
+        foreach($months2 as $month)
+        {
+            if($result->where('month', $month)->first()){
+                $foundItem = $result->where('month', $month)->first();
+                $countArray2[$i]['month'] = $foundItem->month;
+                $countArray2[$i]['countNew'] = $foundItem->count;
+            }
+            else{
+                $countArray2[$i]['month'] = $month;
+                $countArray2[$i]['countNew'] = 0;
+            }
+            $i++;
+            // if(!empty($result[$i]['month'])){
+
+            // }else{
+                // $countsArray[$month] = 0;
+            // }
+        }
+
+        
+        dd($countArray2);
+
+        $result2 = $result->mapWithKeys(function($item, $key){
+            return [$item->month => $item->count];
+        });
+        
+        // dd($result2['March 2022']);
+
+        $countsArray = [];
+
+        foreach($months2 as $month){
+            if(!empty($result2[$month])){
+                $countsArray[$month] = $result2[$month];
+            }else{
+                $countsArray[$month] = 0;
+            }
+        }
+
+        $commulativeArray = [];
+        for($i=0; $i <= count($countsArray); $i++){
+            $commulativeArray[$i] = $countsArray[$i];
+        }
+
+        dd($commulativeArray);
+
+    $data = [
+        'result2' => $countsArray,
+    ];
+
+    return response($data, 200);
+}
+
     public function getMonthlyCountsByStatuses(Request $request)
     {
+        $startMonth = '2022-01-01';
+        $endMonth = '2022-05-01';
+
+        $period = \Carbon\CarbonPeriod::create($startMonth, '1 month', $endMonth);
+
+
+        $months = collect($period)->map(function($dt){
+            return $dt->format("Y-m-d");
+        })->toArray();
+
         $query = DB::table('ps_intakes')
             ->select(
-                DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
+                // DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%M %Y') as month"),
+                DB::raw("DATE_FORMAT(ps_intake_statuses.month, '%Y-%m') as month"),
                 'statuses.name as status',
+                'ps_intake_statuses.is_new',
                 DB::raw("count(statuses.name) as count")
             )
         ->join('ps_intake_statuses', 'ps_intakes.id', 'ps_intake_statuses.ps_intake_id')
         ->join('statuses', 'ps_intake_statuses.status_id', 'statuses.id')
-        ->where('ps_intake_statuses.month', '>=', '2022-01-01')
-        ->where('ps_intake_statuses.month', '<=', '2022-12-31')
-        ->groupBy('ps_intake_statuses.month', 'statuses.name');        
+        ->where('ps_intake_statuses.month', '>=', $months[0])
+        ->where('ps_intake_statuses.month', '<=', $months[array_key_last($months)])
+        ->groupBy('ps_intake_statuses.month', 'ps_intake_statuses.is_new', 'statuses.name')
+        ->orderBy('ps_intake_statuses.month');      
 
         $result = $query->get();
 
         $monthlyCounts = $result->mapToGroups(function($item, $key){
-            return [$item->status => [$item->month => $item->count]];
+            return [$item->is_new => [$item->month => $item->count]];
             
         });
 
+        $new = $monthlyCounts['1']->collapse();
+
+        // $new2 = $months->mapWithKeys(function($item, $key)  use($months){
+        //     if(in_array($item, $months)){
+        //         return true;
+        //     }else{
+        //         return false;
+        //     }
+        // });
+
+
         $newData = [
             'name' => 'New',
-            'data' => $monthlyCounts['New']->collapse()
+            'data' => $new,
         ];
 
         $ongoingData = [
             'name' => 'Ongoing',
-            'data' => $monthlyCounts['Ongoing']->collapse()
+            'data' => $monthlyCounts['0']->collapse()
         ];
 
 
@@ -194,7 +290,6 @@ class PsIntakeController extends Controller
             'referring_person_name' => 'required',
             'referring_person_email' => 'required|email',
             'referral_narrative_reason' => 'required',
-            'current_status_id' => '',
             'current_assigned_psw_id' => '',
             'ps_intake_beneficiaries' => 'required|array|min:1',
         ],
@@ -209,7 +304,6 @@ class PsIntakeController extends Controller
             'referring_person_name' => $request->referring_person_name,
             'referring_person_email' => $request->referring_person_email,
             'referral_narrative_reason' => $request->referral_narrative_reason,
-            'current_status_id' => $request->current_status_id,
             'current_assigned_psw_id' => Auth::id(),
             'casee_id' => $request->casee_id,
         ]);
@@ -241,14 +335,15 @@ class PsIntakeController extends Controller
         {
             $i++;
             if($i == 1){
-                $status_id = 1;
+                $is_new = 1;
             }else{
-                $status_id = 2;
+                $is_new = 0;
             }
             PsIntakeStatus::create([
                 'month' => $month,
                 'ps_intake_id' => $psIntake->id,
-                'status_id' => '2',
+                'status_id' => '1',
+                'is_new' => $is_new,
             ]);
         }
 

@@ -6,6 +6,9 @@
                     <div class="card-body bg-white">
                         <h5>History</h5>
                             <column-chart :colors="['#6cb2eb', '#ffed4a']" :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="chartData" />
+                            <br>
+                            <h5>Commulative</h5>
+                            <column-chart :messages="{empty: 'No data'}" :download="true" :legend="true" :stacked='true' :data="commulativeData" />
                     </div>
                 </div>
             </div>
@@ -29,9 +32,31 @@ export default {
                 // {name: 'New', data: {'Jan': 3, 'Feb': 4}},
                 // {name: 'Ongoing', data: {'Jan': 5, 'Feb': 3}},
                 ],
+            commulativeData : {'Jan': 3, 'Feb': 4},
 		}
 	},
 	methods: {  
+
+        getPsIntakesCommulative()
+        {
+            this.$Progress.start();
+            this.$store.state.main.showLoading = true;
+			axios.get('/api/ps-intakes/commulative')
+			.then((response) => {
+				// success
+				//this.PsIntakesCountsByStatuses = response.data;
+                this.commulativeData = response.data.result2;
+				this.$Progress.finish();
+                this.$store.state.main.showLoading = false;
+			})
+			.catch((e) => {
+				// error
+				this.$Progress.fail();
+                this.$store.state.main.showLoading = false;
+				console.log(e);
+			})
+        },
+
         getPsIntakesMonthlyCountsByStatuses()
         {
             this.$Progress.start();
@@ -55,6 +80,7 @@ export default {
 
 	created() {
         this.getPsIntakesMonthlyCountsByStatuses();
+        this.getPsIntakesCommulative();
 	}
 }
 </script>

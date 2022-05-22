@@ -69,14 +69,14 @@
                 </select>
 
                 <select v-model="psIntakesFilter.status" @change="getPsIntakes" class="custom-select m-1">
-                    <option value='All'>All</option>
+                    <option value='All'>All statuses</option>
                     <option value='Active'>Active</option>
                     <option value='Inactive'>Inactive</option>
                     <option value='Closed'>Closed</option>
                 </select>
 
                 <select v-model="psIntakesFilter.is_new" @change="getPsIntakes" class="custom-select m-1">
-                    <option value='All'>All</option>
+                    <option value='All'>All (New + Ongoing)</option>
                     <option value='1'>New</option>
                     <option value='0'>Ongoing</option>
                 </select>
@@ -99,7 +99,7 @@
                 <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
 
                 <select v-model="psIntakesFilter.user_id" @change="getPsIntakes" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					<option value='-1' disabled>PS Worker...</option>
+					<option value='-1'>PS Worker...</option>
 					<option v-for='user in users' :value='user.id' :key="user.id">{{ user.full_name }}</option>
                 </select>
 
@@ -129,10 +129,9 @@
                                 <td>{{ psIntake.month }}</td>
                                 <td>
                                     <span v-show="psIntake.status == 'Closed'" class="badge badge-pill badge-dark">Closed</span>
-                                    <span v-show="psIntake.status == 'Active'&& psIntake.is_new == '0'" class="badge badge-pill badge-success">Active</span>
-                                    <span v-show="psIntake.status == 'Active' && psIntake.is_new == '1'" class="badge badge-pill badge-success">Active: NEW</span>
-                                    <span v-show="psIntake.status == 'Inactive'&& psIntake.is_new == '0'" class="badge badge-pill badge-secondary">Inactive</span>
-                                    <span v-show="psIntake.status == 'Inactive' && psIntake.is_new == '1'" class="badge badge-pill badge-secondary">Inactive: NEW</span>
+                                    <span v-show="psIntake.status == 'Active'" class="badge badge-pill badge-success">Active</span>
+                                    <span v-show="psIntake.status == 'Inactive'" class="badge badge-pill badge-secondary">Inactive</span>
+                                    <span v-show="psIntake.is_new == '1'" class="badge badge-pill badge-primary">New</span>
                                 </td>
                                 <td>{{ psIntake.referral_date | myDateShort }}</td>
                                 <td>{{ psIntakes.file_number }}</td>
