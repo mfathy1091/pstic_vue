@@ -262,7 +262,10 @@ class PsIntakeController extends Controller
             return $dt->format("Y-m-d");
         });
 
-        $budget_id = Auth::budget()->id;
+        $budget_id = Auth::user()->budget->id;
+
+        dd($budget_id);
+
         $i = 0;
         foreach($months as $month)
         {
